@@ -33,7 +33,7 @@
 
 	<scm>
 		<connection>scm:git:https://github.com/ziccardi/jnrpe</connection>
-		<url>hhttps://github.com/ziccardi/jnrpe/tree/master/jnrpe-lib</url>
+		<url>https://github.com/ziccardi/jnrpe/tree/master/jnrpe-lib</url>
 		<developerConnection>scm:git:git@github.com:ziccardi/jnrpe.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
