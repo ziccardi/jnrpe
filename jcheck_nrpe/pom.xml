@@ -2,10 +2,18 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+		<relativePath/>
+	</parent>
+
 	<groupId>net.sf.jnrpe</groupId>
 	<artifactId>jcheck_nrpe</artifactId>
+	<version>2.0.3-RC6-SNAPSHOT</version>	
 	<packaging>jar</packaging>
-	<version>2.0.3-RC6-SNAPSHOT</version>
+	
 	<name>jcheck_nrpe</name>
 	<description>jcheck_nrpe is a java implementation of the check_nrpe Nagios plugin. It can be easily embedded inside your code to talk to JNRPE or NRPE.
 Both plain socket and SSL are supported.</description>
@@ -18,13 +26,20 @@ Both plain socket and SSL are supported.</description>
 		</license>
 	</licenses>
 
-	<parent>
-		<groupId>org.sonatype.oss</groupId>
-		<artifactId>oss-parent</artifactId>
-		<version>7</version>
-		<relativePath></relativePath>
-	</parent>
+	<developers>
+		<developer>
+			<id>mziccardi</id>
+			<name>Massimiliano Ziccardi</name>
+			<email>massimiliano.ziccardi@gmail.com</email>
+		</developer>
+	</developers>
 
+	<scm>
+		<connection>scm:git:https://github.com/ziccardi/jnrpe</connection>
+		<url>https://github.com/ziccardi/jnrpe/tree/master/jcheck_nrpe</url>
+		<developerConnection>scm:git:git@github.com:ziccardi/jnrpe.git</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
 
 	<dependencies>
 		<dependency>
@@ -44,13 +59,6 @@ Both plain socket and SSL are supported.</description>
 			<version>2.0.3</version>
 		</dependency>
 	</dependencies>
-
-	<scm>
-		<connection>scm:git:https://github.com/ziccardi/jnrpe</connection>
-		<url>https://github.com/ziccardi/jnrpe/tree/master/jcheck_nrpe</url>
-		<developerConnection>scm:git:git@github.com:ziccardi/jnrpe.git</developerConnection>
-		<tag>HEAD</tag>
-	</scm>
 
 	<profiles>
 		<profile>
