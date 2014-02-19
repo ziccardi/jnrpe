@@ -194,4 +194,10 @@
 			</plugin>			
 		</plugins>
 	</build>
+	<distributionManagement>
+		<site>
+			<id>jnrpe-web</id>
+			<url>scp://shell.sourceforge.net/home/project-web/jnrpe/htdocs/jnrpe-osgi-core</url>
+		</site>
+	</distributionManagement>
 </project>
