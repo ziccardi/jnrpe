@@ -176,7 +176,22 @@
 		</pluginManagement>
 	
 		<plugins>
-		
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.2.1</version>
+				<executions>
+					<execution>
+						<id>default</id>
+						<goals>
+							<goal>perform</goal>
+						</goals>
+						<configuration>
+							<pomFileName>jnrpe-plugins/pom.xml</pomFileName>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<configuration>
@@ -184,6 +199,7 @@
 						<descriptorRef>src</descriptorRef>
 						<descriptorRef>bin</descriptorRef>
 					</descriptorRefs>
+					<attach>false</attach>
 				</configuration>
 				<executions>
 					<execution>
