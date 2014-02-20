@@ -1,0 +1,219 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>net.sf.jnrpe</groupId>
+		<artifactId>jnrpe-parent</artifactId>
+		<version>2.0.3-RC6-SNAPSHOT</version>
+	</parent>
+	<artifactId>jnrpe-debian</artifactId>
+	<name>jnrpe-debian</name>
+	<url>http://maven.apache.org</url>
+	
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<id>mziccardi</id>
+			<name>Massimiliano Ziccardi</name>
+			<email>massimiliano.ziccardi@gmail.com</email>
+		</developer>
+		<developer>
+			<id>fcampos</id>
+			<name>Frederico Campos</name>
+			<email>frederico.campos@gmail.com</email>
+		</developer>
+	</developers>
+	
+	<properties>
+		<project.parentbuild.sourceEncoding>UTF-8</project.parentbuild.sourceEncoding>
+		<debian.install.path>/usr/local/jnrpe</debian.install.path>
+		<debian.conf.path>/etc/jnrpe</debian.conf.path>
+		<debian.log.path>/var/log/jnrpe</debian.log.path>
+		<main_dir>${basedir}/..</main_dir>
+
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>net.sf.jnrpe</groupId>
+			<artifactId>jnrpe-lib</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.jnrpe</groupId>
+			<artifactId>jnrpe-server</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.jnrpe</groupId>
+			<artifactId>jnrpe-plugins</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.jnrpe</groupId>
+			<artifactId>jcheck_nrpe</artifactId>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>jdeb</artifactId>
+				<groupId>org.vafer</groupId>
+				<version>1.0</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>jdeb</goal>
+						</goals>
+
+						<configuration>
+							<submodules>true</submodules>
+							<verbose>true</verbose>
+							<dataSet>
+
+
+								<!-- ${debian.install.path}/lib -->
+								<data>
+									<src>${main_dir}/jnrpe-install/target/staging/dependency</src>
+									<type>directory</type>
+									<mapper>
+										<type>perm</type>
+										<prefix>${debian.install.path}/lib</prefix>
+										<group>loader</group>
+									</mapper>
+								</data>
+								<!-- ${debian.install.path}/bin -->
+								<data>
+									<src>${main_dir}/jnrpe-server/target/appassembler/bin/jnrpe</src>
+									<type>file</type>
+									<mapper>
+										<type>perm</type>
+										<filemode>744</filemode>
+										<prefix>${debian.install.path}/bin</prefix>
+									</mapper>
+								</data>
+
+								<!-- /etc/jnrpe -->
+								<data>
+									<src>${main_dir}/jnrpe-install/src/config/jnrpe.ini</src>
+									<type>file</type>
+									<mapper>
+										<type>perm</type>
+										<prefix>${debian.conf.path}</prefix>
+									</mapper>
+								</data>
+								<data>
+									<src>${main_dir}/jnrpe-install/src/config/log4j.properties</src>
+									<type>file</type>
+									<mapper>
+										<type>perm</type>
+										<prefix>${debian.conf.path}</prefix>
+									</mapper>
+								</data>
+								<data>
+									<src>${basedir}/src/wrapper/wrapper.conf</src>
+									<type>file</type>
+									<mapper>
+										<type>perm</type>
+										<prefix>${debian.conf.path}</prefix>
+									</mapper>
+
+								</data>
+								<!-- ${debian.install.path}/plugins -->
+								<data>
+									<src>${main_dir}/jnrpe-install/target/plugins-staging/dependency</src>
+									<type>directory</type>
+									<mapper>
+										<type>perm</type>
+										<prefix>${debian.install.path}/plugins/base</prefix>
+									</mapper>
+								</data>
+								<data>
+									<src>${main_dir}/jnrpe-install/target/plugins-staging/dependency/jnrpe-plugins-${jnrpe-plugins.version}.jar</src>
+									<type>file</type>
+									<mapper>
+										<type>perm</type>
+										<prefix>${debian.install.path}/plugins/base</prefix>
+									</mapper>
+								</data>
+
+								<!-- ${debian.install.path}/wrapper -->
+								<data>
+									<src>${main_dir}/jnrpe-install/src/wrapper/wrapper.jar</src>
+									<type>file</type>
+									<mapper>
+										<type>perm</type>
+										<prefix>${debian.install.path}/wrapper</prefix>
+									</mapper>
+								</data>
+								<data>
+									<src>${main_dir}/jnrpe-install/src/wrapper/wrapperApp.jar</src>
+									<type>file</type>
+									<mapper>
+										<type>perm</type>
+										<prefix>${debian.install.path}/wrapper</prefix>
+									</mapper>
+								</data>
+
+								<data>
+									<src>${main_dir}/jnrpe-install/src/wrapper/deps</src>
+									<type>directory</type>
+									<mapper>
+										<type>perm</type>
+										<prefix>${debian.install.path}/wrapper/lib</prefix>
+									</mapper>
+								</data>
+								<data>
+									<src>${main_dir}/jnrpe-install/src/wrapper/unix_deps/</src>
+									<type>directory</type>
+									<mapper>
+										<type>perm</type>
+										<prefix>${debian.install.path}/wrapper/lib</prefix>
+									</mapper>
+								</data>
+								<data>
+									<src>${main_dir}/jnrpe-install/src/wrapper/templates</src>
+									<type>directory</type>
+									<mapper>
+										<type>perm</type>
+										<prefix>${debian.install.path}/wrapper/templates</prefix>
+									</mapper>
+								</data>
+								<!-- /var/log/jnrpe -->
+								<data>
+									<src>${main_dir}/jnrpe-install/src/wrapper/jnrpeservice.log</src>
+									<type>file</type>
+									<mapper>
+										<type>perm</type>
+										<prefix>${debian.log.path}</prefix>
+									</mapper>
+								</data>
+
+								<!-- /etc/init.d/ -->
+								<data>
+									<src>${basedir}/src/deb/init.d</src>
+									<type>directory</type>
+									<mapper>
+										<type>perm</type>
+										<filemode>744</filemode>
+										<prefix>/etc/init.d</prefix>
+										<group>loader</group>
+									</mapper>
+								</data>
+							</dataSet>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+	</build>
+</project>
