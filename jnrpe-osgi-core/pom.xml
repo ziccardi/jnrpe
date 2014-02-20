@@ -1,13 +1,14 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
+
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
 		<artifactId>oss-parent</artifactId>
 		<version>7</version>
 		<relativePath />
 	</parent>
-	
+
 	<groupId>net.sf.jnrpe</groupId>
 	<artifactId>jnrpe-osgi-core</artifactId>
 	<version>2.0.4-SNAPSHOT</version>
@@ -46,17 +47,17 @@
 			<artifactId>jnrpe-lib</artifactId>
 			<version>2.0.3</version>
 		</dependency>
-		
+
 		<!-- Other dependencies -->
-		
+
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>1.7.5</version>
 		</dependency>
-		
+
 		<!-- OSGI dependencies -->
-		
+
 		<dependency>
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.core</artifactId>
@@ -119,7 +120,7 @@
 					</execution>
 				</executions>
 			</plugin>
-		
+
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
@@ -133,17 +134,17 @@
 						<Bundle-Activator>it.jnrpe.osgi.JNRPEBundleActivator</Bundle-Activator>
 
 						<Import-Package>org.osgi.framework
-										,org.osgi.service.cm
-										,org.osgi.service.log
-										,org.osgi.util.tracker
-										,javax.net.*
-										,javax.xml.*
-										,org.w3c.dom
-										,!*
+							,org.osgi.service.cm
+							,org.osgi.service.log
+							,org.osgi.util.tracker
+							,javax.net.*
+							,javax.xml.*
+							,org.w3c.dom
+							,!*
 						</Import-Package>
 						<Export-Package>it.jnrpe,it.jnrpe.plugins,it.jnrpe.plugins.annotations
-										,it.jnrpe.utils,it.jnrpe.utils.thresholds
-										,it.jnrpe.events,it.jnrpe.osgi.plugins</Export-Package>
+							,it.jnrpe.utils,it.jnrpe.utils.thresholds
+							,it.jnrpe.events,it.jnrpe.osgi.plugins</Export-Package>
 
 						<Embed-Dependency>!org.osgi*,!xml-apis,*</Embed-Dependency>
 						<Embed-Transitive>true</Embed-Transitive>
@@ -190,7 +191,7 @@
 				<configuration>
 					<siteDirectory>${project.basedir}/src/site</siteDirectory>
 				</configuration>
-			</plugin>			
+			</plugin>
 		</plugins>
 	</build>
 	<distributionManagement>
