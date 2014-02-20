@@ -124,6 +124,7 @@
 						<descriptorRef>src</descriptorRef>
 						<descriptorRef>bin</descriptorRef>
 					</descriptorRefs>
+					<attach>false</attach>
 				</configuration>
 				<executions>
 					<execution>
