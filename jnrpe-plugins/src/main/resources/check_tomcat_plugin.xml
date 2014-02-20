@@ -1,0 +1,52 @@
+<plugin name="CHECK_TOMCAT" class="it.jnrpe.plugin.CheckTomcat">
+  <description>
+<![CDATA[
+    Checks the tomcat /manager/status page for excessive memory usage or an excessive number of threads in use.
+    This plugin does a HTTP GET of the tomcat status page:
+
+  /manager/status?XML=true
+
+  It checks the resulting XML for:
+
+  * Low free memory
+  * Excessive thread usage
+
+    In order to use this, you must provide a username and password that has a 'manager-gui' role in the
+    CATALINA_HOME/conf/tomcat-users.xml file.
+]]>
+  </description>
+  <command-line>
+    <options>
+      <option shortName="h" longName="hostname" description="Hostname or IP address"
+        required="true" hasArgs="true" argName="hostname" optionalArgs="false" />
+        
+      <option shortName="p" longName="port" description="Port number; default is 8080"
+        required="false" hasArgs="true" argName="port" optionalArgs="false" />
+        
+      <option shortName="l" longName="username"
+        description="Username for authentication" required="true" hasArgs="true" argName="username" optionalArgs="false" />
+        
+      <option shortName="a" longName="password"
+        description="Password for authentication" required="true" hasArgs="true" argName="password" optionalArgs="false" />
+        
+	  <option shortName="m" longName="memory"	  	
+        description="Check memory" required="false" hasArgs="false" argName="memory"  />
+        
+      <option shortName="t" longName="threads"
+        description="Check threads" required="false" hasArgs="false" argName="threads"/> 
+        
+      <option shortName="w" longName="warning" description="Warning threshold value for threads or memory (in MB or %). Must be used with either the 'memory' or 'threads' option."
+        required="false" hasArgs="true" argName="warning" optionalArgs="false" />
+        
+      <option shortName="c" longName="critical" description="Critical threshold value for threads or memory (in MB or %). Must be used with either the 'memory' or 'threads' option."
+        required="false" hasArgs="true" argName="critical" optionalArgs="false" />
+        
+      <option shortName="S" longName="ssl" description="Use ssl"
+        required="false" hasArgs="false" argName="ssl" optionalArgs="false" />
+        
+      <option shortName="T" longName="timeout" description="Connection timeout in seconds. Default is 10."
+        required="false" hasArgs="true" argName="ssl" optionalArgs="false" />
+
+    </options>
+  </command-line>
+</plugin>

@@ -1,0 +1,119 @@
+The CHECK_TOMCAT plugin
+    
+	Checks the tomcat /manager/status page for excessive memory usage or an excessive number of threads in use.
+	This plugin does a HTTP GET of the tomcat status page:
+	
+	  /manager/status?XML=true
+	
+	It checks the resulting XML for:
+	
+	  * Low free memory
+	  
+	  * Excessive thread usage
+	
+    In order to use this, you must provide a username and password that has a 'manager-gui' role in the
+    CATALINA_HOME/conf/tomcat-users.xml file.
+    
+	
+	Supported parameters are:
+	
+	* <<--hostname/-H [HOSTNAME]>>: Host name or IP Address 
+
+	* <<--port/-p [PORT]>>: Port number; default is 8080
+    
+	* <<--username/-l [USERNAME]>>: Username for authentication
+    
+	* <<--password/-a [PASSWORD]>>: Password for authentication
+    
+	* <<--threads/-t >>: Check threads. Used instead of the --memory option.
+	
+	* <<--memory/-m >>: Check memory. Used instead of the --threads option.
+	
+	* <<--warning/-w [WARNING]>>: Warning threshold value for threads or memory (in MB or %). 
+	Must be used with either the 'memory' or 'threads' option.
+	
+	* <<--critical/-c [CRITICAL]>>: Critical threshold value for threads or memory (in MB or %). 
+	Must be used with either the 'memory' or 'threads' option.
+	
+* Usage Example
+	
+	In the following example we will check for the amount of jvm memory in use. 
+
+** Configuring using the XML configuration style
+
++----------+
+
+  <command name="CHECK_TOMCAT" plugin_name="CHECK_TOMCAT">
+  <arg name="memory"/>
+	<arg name="hostname"  value="$ARG1$" />
+	<arg name="port"  value="$ARG2$" />
+	<arg name="database"  value="$ARG3$" />
+	<arg name="user"  value="$ARG4$" />
+	<arg name="password"  value="$ARG5$" />
+	<arg name="warning"  value="$ARG6$" />
+	<arg name="critical"  value="$ARG7$" />
+  </command>
+
++----------+  
+  
+** Configuring using the INI configuration style
+  
++----------+
+
+  CHECK_TOMCAT : CHECK_TOMCAT --memory --hostname $ARG1$ --port $ARG2$ --database $ARG3$ --user $ARG4$ --password $ARG5$ --warning $ARG6$ --critical $ARG7$
+   
++----------+
+
+  Any of the parameters ($ARG?$ macros) could be hardcoded inside the JNRPE configuration.
+  
+** Invocation
+
+ The following will throw a warning if 50% or less of the maximum memory less is available and a critical if 10% or less of the maximum memory is available.
+ 
++----------+
+
+  check_nrpe -n -H 127.0.0.1 -c CHECK_TOMCAT -a localhost 8080 username password :50% :10% 
+
++----------+
+
+
+	In the following example we will check for the amount of threads available.
+
+** Configuring using the XML configuration style
+
++----------+
+
+  <command name="CHECK_TOMCAT" plugin_name="CHECK_TOMCAT">
+  	<arg name="threads"/>
+	<arg name="hostname"  value="$ARG1$" />
+	<arg name="port"  value="$ARG2$" />
+	<arg name="database"  value="$ARG3$" />
+	<arg name="user"  value="$ARG4$" />
+	<arg name="password"  value="$ARG5$" />
+	<arg name="warning"  value="$ARG6$" />
+	<arg name="critical"  value="$ARG7$" />
+  </command>
+
++----------+  
+  
+** Configuring using the INI configuration style
+  
++----------+
+
+  CHECK_TOMCAT : CHECK_TOMCAT --threads --hostname $ARG1$ --port $ARG2$ --database $ARG3$ --user $ARG4$ --password $ARG5$ --warning $ARG6$ --critical $ARG7$
+   
++----------+
+
+  Any of the parameters ($ARG?$ macros) could be hardcoded inside the JNRPE configuration.
+  
+** Invocation
+
+	The following will throw a warning if there are 10 or less threads available and a critical if there are 5 or less availble threads.
+ 
++----------+
+
+  check_nrpe -n -H 127.0.0.1 -c CHECK_TOMCAT -a localhost 8080 username password :10 :5  
+
++----------+
+
+
