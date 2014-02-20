@@ -171,6 +171,7 @@ Both plain socket and SSL are supported.</description>
 					<descriptorRefs>
 						<descriptorRef>src</descriptorRef>
 					</descriptorRefs>
+					<attach>false</attach>
 				</configuration>
 				<executions>
 					<execution>
