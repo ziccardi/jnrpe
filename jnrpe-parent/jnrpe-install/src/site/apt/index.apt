@@ -1,0 +1,136 @@
+ -----
+ JNRPE Package
+ -----
+ Massimiliano Ziccardi
+ -----
+ 2013/02/18
+ -----
+
+JNRPE Installation package
+ 
+   To JNRPE installation package is an application that will guide you through the process of installing
+   the JNRPE Server.
+
+   To run the application you must have a JVM 1.5+ installed.
+
+   The installer can be used on both unix and windows and will perform the following steps:
+   
+     * Install the JNRPE server
+     
+     * Install a sample jnrpe.ini configuration file
+     
+     * Configure the JNRPE server logging
+     
+     * Install the JNRPE bundled plugins (Optional)
+     
+     * Install JNRPE as Windows Service (Optional. Only on Windows operating systems)
+     
+     * Install JNRPE as Unix Daemon (Optional. Only on unix operating systems. The user that runs the installer must have write permission on /etc/init.d)
+   
+     * Creates an uninstaller to completely remote JNRPE (Optional)
+
+* Perform the installation
+    
+** Run the installer
+  
+   On windows, you can simply double-click on your installer file.
+   Otherwise, you can run the installer with the following command:
+   
++--------------------------------------------------+
+
+java -jar jnrpe-server-install-{your-jnrpe-version}.jar
+
++--------------------------------------------------+
+   
+** The welcome page
+
+[./images/welcome.png]
+   
+   The installation starts with a welcome page listing all the project contributors. Click next: 
+   the overview page will be visualized.
+   
+** The overview page
+
+[./images/overview.png]
+   
+   This page contains a brief description of what JNRPE can offer to you. Click next:
+   the License Agreements page will appear.
+   
+** The License Agreement page
+
+[./images/license.png]
+
+   The Apache License 2.0 is visualized. You must read and accept it to keep on with the
+   installation.
+   Accept and click next: The target path window will be visualized.
+   
+** The target path panel
+
+[./images/targetpath.png]
+
+   Here you have to choice to change the directory where JNRPE will be installed.
+   If you are happy with the default settings, simply press next, otherwise
+   change the path as you prefer. When you are happy, click next: the installation packages panel
+   will appear.
+   
+** The Installation Packages panel
+
+[./images/packages.png]
+
+  This panel allows the selection of the packages you want to install. The available choices are:
+  
+   * Core : you can't unselect this package as it is the heart of JNRPE
+   
+   * Sample Config : a base jnrpe.ini file configuring JNRPE with just the test command.
+   
+   * Base Plugins : the plugins package bundled with JNRPE.
+   
+   * Unix Daemon/Windows Service : you can choose if you want JNRPE to be installed as Unix Daemon on Unix or
+   as a Windows Service on Windows
+   
+  When you are happy with the installation, click next: the summary panel will appear.
+
+** The Summary panel
+
+[./images/summary.png]
+
+  This is your last chance to cancel the installation. A summary of your decisions is visualized.
+  If you want to change something, click 'Previous', otherwise click next: the Installation Panel
+  will be visualized.
+  
+** The Installation Panel
+
+[./images/installation.png]
+
+  Here you can look at the installation progress.
+  When it has finished, you can click on next.
+  
+** The Finished Panel
+
+[./images/finished.png]
+
+  Here you can see a message saying if the installation has been successful and see where the uninstaller
+  has been created.
+  
+* The installed directory structure
+
+  When the installer will end, you'll find the following structure inside the JNRPE directory:
+  
+------------------------------------------------
+
+  JNRPE
+    |- bin				----> Contains the script to be used to run JNRPE
+    |- etc				----> Contains the JNRPE configuration files
+    |- lib				----> Contains the libraries required by JNRPE
+    |- plugins			----> Contains all the plugin packages
+    |     |
+    |     |- base		----> Contains the plugin package bundled with JNRPE
+    |- Uninstaller		----> Contains the generated uninstaller
+    |- wrapper			----> Contains the YAJSW binaries
+          |- etc		----> Contains the YAJSW configuration
+          |- lib        ----> Contains the YAJSW dependencies
+
+------------------------------------------------
+
+  On windows you will find a Service called JNRPE Server, while on unix you will find a script named jnrpe inside
+  the /etc/init.d directory.

@@ -1,0 +1,270 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>net.sf.jnrpe</groupId>
+	<artifactId>jnrpe-parent</artifactId>
+	<version>2.0.3-RC6-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>Jnrpe Package</name>
+	<description>JNRPE is a Nagios addon that makes simple the implementation of Nagios plugins using the Java Language.
+
+It is fully compatible with check_nrpe and can be used to execute both old native Nagios plugins and the new Java Nagios Plugins.</description>
+	<url>http://jnrpe.sourceforge.net</url>
+
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<issueManagement>
+		<system>sourceforge</system>
+		<url>http://sourceforge.net/p/jnrpe/_list/tickets</url>
+	</issueManagement>
+
+	<mailingLists>
+		<mailingList>
+			<name>User List</name>
+			<subscribe>https://lists.sourceforge.net/lists/listinfo/jnrpe-users</subscribe>
+			<unsubscribe>https://lists.sourceforge.net/lists/listinfo/jnrpe-users</unsubscribe>
+			<post>jnrpe-users@lists.sourceforge.net</post>
+			<archive>http://sourceforge.net/mailarchive/forum.php?forum_name=jnrpe-users</archive>
+		</mailingList>
+		<mailingList>
+			<name>Development List</name>
+			<subscribe>https://lists.sourceforge.net/lists/listinfo/jnrpe-devel</subscribe>
+			<unsubscribe>https://lists.sourceforge.net/lists/listinfo/jnrpe-devel</unsubscribe>
+			<post>jnrpe-devel@lists.sourceforge.net</post>
+			<archive>http://sourceforge.net/mailarchive/forum.php?forum_name=jnrpe-devel</archive>
+		</mailingList>
+		<mailingList>
+			<name>Announce List</name>
+			<subscribe>https://lists.sourceforge.net/lists/listinfo/jnrpe-announce</subscribe>
+			<unsubscribe>https://lists.sourceforge.net/lists/listinfo/jnrpe-announce</unsubscribe>
+			<post>jnrpe-announce@lists.sourceforge.net</post>
+			<archive>http://sourceforge.net/mailarchive/forum.php?forum_name=jnrpe-announce</archive>
+		</mailingList>
+	</mailingLists>
+
+	<developers>
+		<developer>
+			<id>mziccardi</id>
+			<name>Massimiliano Ziccardi</name>
+			<email>massimiliano.ziccardi@gmail.com</email>
+		</developer>
+	</developers>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<!-- Ignore/Execute plugin execution -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<!-- copy-dependency plugin -->
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-dependency-plugin</artifactId>
+										<versionRange>[1.0.0,)</versionRange>
+										<goals>
+											<goal>copy-dependencies</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.1</version>
+					<configuration>
+						<encoding>${project.build.sourceEncoding}</encoding>
+						<source>1.5</source>
+						<target>1.5</target>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>2.3.2</version>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>2.2.1</version>
+				</plugin>
+
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>findbugs-maven-plugin</artifactId>
+					<version>2.5.2</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>2.7</version>
+					<configuration>
+						<skip>true</skip>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.4.1</version>
+				<configuration>
+					<tagNameFormat>@{project.version}</tagNameFormat>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>2.10</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.2</version>
+				<dependencies>
+					<dependency><!-- add support for ssh/scp -->
+						<groupId>org.apache.maven.wagon</groupId>
+						<artifactId>wagon-ssh</artifactId>
+						<version>1.0</version>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<siteDirectory>${project.basedir}/src/site</siteDirectory>
+				</configuration>
+			</plugin>
+		</plugins>
+
+	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>2.4</version>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>dependencies</report>
+							<report>issue-tracking</report>
+							<report>index</report>
+							<report>project-team</report>
+							<report>modules</report>
+							<report>mailing-list</report>
+							<report>summary</report>
+							<report>license</report>
+							<report>scm</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9</version>
+				<configuration>
+					<show>public</show>
+				</configuration>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>javadoc</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>findbugs-maven-plugin</artifactId>
+				<version>2.5.2</version>
+				<configuration>
+					<effort>Max</effort>
+					<threshold>Low</threshold>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>2.10</version>
+			</plugin>
+
+		</plugins>
+
+	</reporting>
+
+	<distributionManagement>
+		<site>
+			<id>jnrpe-web</id>
+			<url>scp://shell.sourceforge.net/home/project-web/jnrpe/htdocs</url>
+		</site>
+	</distributionManagement>
+	<modules>
+		<module>jnrpe-server</module>
+		<module>jnrpe-install</module>
+		<module>jnrpe-debian</module>
+	</modules>
+	<!-- <parent> <groupId>org.sonatype.oss</groupId> <version>7</version> <artifactId>oss-parent</artifactId> 
+		</parent> -->
+	<scm>
+		<connection>scm:git:https://github.com/ziccardi/jnrpe.git</connection>
+		<url>http://github.com/ziccardi/jnrpe/tree/master/jnrpe-parent</url>
+		<developerConnection>scm:git:git@github.com:ziccardi/jnrpe.git</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<jnrpe-lib.version>2.0.3</jnrpe-lib.version>
+		<jnrpe-server.version>2.0.3-RC6-SNAPSHOT</jnrpe-server.version>
+		<jnrpe-plugins.version>0.7.2</jnrpe-plugins.version>
+		<jcheck_nrpe.version>2.0.3</jcheck_nrpe.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>net.sf.jnrpe</groupId>
+				<artifactId>jnrpe-lib</artifactId>
+				<version>${jnrpe-lib.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.sf.jnrpe</groupId>
+				<artifactId>jnrpe-server</artifactId>
+				<version>${jnrpe-server.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.sf.jnrpe</groupId>
+				<artifactId>jnrpe-plugins</artifactId>
+				<version>${jnrpe-plugins.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.sf.jnrpe</groupId>
+				<artifactId>jcheck_nrpe</artifactId>
+				<version>${jcheck_nrpe.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+</project>
