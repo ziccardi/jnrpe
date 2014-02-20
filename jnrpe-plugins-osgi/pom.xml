@@ -10,7 +10,7 @@
 
 	<groupId>net.sf.jnrpe</groupId>
 	<artifactId>jnrpe-plugins-osgi</artifactId>
-	<version>2.0.3</version>
+	<version>2.0.4-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 	
 	<name>jnrpe-plugins-osgi</name>
