@@ -1,0 +1,111 @@
+The CHECK_FILE plugin
+  
+  This plugin is able to perform simple checks against files :
+
+    * Checks that a file exists (-f parameter )
+
+    * Checks that a file do not exists (-F parameter )
+
+    * Checks if file age falls inside a range
+
+    * Checks if file size falls inside a range
+
+    * Checks that a file contains a string
+
+    * Checks that a file do not contain a string
+
+  Supported parameters are :
+
+    * <<--file/-f [FILENAME]>>: Tells the plugin to return a critical status if the file FILENAME do not exists (do not use with --FILE)
+
+    * <<--FILE/-F [FILENAME]>>: Tells the plugin to return a critical status if the file FILENAME exists (do not use with --file)
+
+    * <<--critical/-c [AGE-RANGE]>>: Tells the plugin to return a critical status if the file age (in seconds) falls inside the AGE-RANGE range. Do not use with --sizecritical.
+
++--------+
+
+Example ranges :
+300: - Critical status if file is older than 300 seconds
+ :300 - Critical status if the file is younger that 301 seconds.
+50:200 - Critical status if file age is between 50 and 200 seconds.
+
++--------+
+
+    Requires the following parameter:
+      
+      * --file/-f
+  
+    * <<--warning/-w>> : same as --critical/-c, but returns a WARNING status. 
+     Do not use with -W.
+
+     Requires the following parameters :
+
+     * --file/-f  
+  
+    * <<--sizecritical/-C [SIZE-RANGE]>>: Tells the plugin to return a critical status if 
+      the file size falls inside the SIZE-RANGE range. 
+      
+      Do not use with --critical.
+
+      Requires the following parameters :
+      
+      * --file/-f
+  
+    * <<--sizewarning/-W>>: same as sizecritical/-C, but returns a WARNING status. 
+      Do not use with -w.
+
+      Requires the following parameters :
+
+      * --file/-f  
+      
+    * <<--contains/-O [STRING,WARNINGRANGE,CRITICALRANGE]>>: Checks how many time 
+      STRING is found inside the file, than returns WARNING, OK or ERROR, 
+      according to the WARNINGRANGE and CRITICALRANGE.
+
+      Requires the following parameters :
+
+      * --file/-f
+      
+    * <<--notcontains/-N [STRING]>>: Tells the plugin to return a critical status if the file contains the string [STRING].
+
+      Requires the following parameters:
+
+      * --file/-f
+
+* Usage Example
+
+  In the following example, we will monitor the age of a generic file.
+  
+** Configuring using the XML configuration style
+
++----------+
+
+  <command name="check_file" plugin_name="CHECK_FILE">
+     <arg name="file"  value="$ARG1$" />
+     <arg name="warning"  value="$ARG2$" />
+     <arg name="critical"  value="$ARG3$" />
+  </command>
+
++----------+  
+  
+** Configuring using the INI configuration style
+  
++----------+
+
+  check_file : CHECK_FILE --file $ARG1$ --warning $ARG2$ --critical $ARG3$
+   
++----------+
+
+  Any of the parameters ($ARG?$ macros) could be hardcoded inside the JNRPE configuration.
+  
+** Invocation
+
+ The following invocation example will raise a warning if the file age is between 500 and 1000 seconds and a critical if the file
+ is older than 1000 seconds
+ 
++----------+
+
+  check_nrpe -n -H my.jnrpe.server -c check_file -a /path/to/my/file 500:1000 1000:
+
++----------+
+      
