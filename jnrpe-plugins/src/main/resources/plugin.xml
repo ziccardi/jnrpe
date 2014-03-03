@@ -16,7 +16,6 @@
     <plugin name="CHECK_SSH" class="it.jnrpe.plugin.CheckSsh" />
     <plugin name="CHECK_PING" class="it.jnrpe.plugin.CheckPing" />
     <plugin name="CHECK_PROCS" class="it.jnrpe.plugin.CheckProcs" />
-    <plugin name="CHECK_DNS" class="it.jnrpe.plugin.CheckDns" />
     <plugin name="CHECK_TIME" class="it.jnrpe.plugin.CheckTime" />
 
 </plugins>
