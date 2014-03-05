@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package it.jnrpe.plugins.test;
+package it.jnrpe.plugins.test.it;
 
 import it.jnrpe.JNRPE;
 import it.jnrpe.commands.CommandRepository;
@@ -31,7 +31,7 @@ import org.testng.annotations.BeforeSuite;
  * @author Massimiliano Ziccardi
  *
  */
-public class SetupTest implements Constants {
+public class ITSetup implements ITConstants {
 
     private static JNRPE m_jnrpeServer;
 
@@ -48,7 +48,7 @@ public class SetupTest implements Constants {
         m_jnrpeServer.addEventListener(new IJNRPEEventListener() {
 
             public void receive(final Object sender, final IJNRPEEvent event) {
-                System.out.println(event.getEventParams().get("MESSAGE"));
+                //System.out.println(event.getEventParams().get("MESSAGE"));
             }
         });
 

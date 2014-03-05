@@ -1,7 +1,7 @@
 /**
  * 
  */
-package it.jnrpe.plugins.test;
+package it.jnrpe.plugins.test.it;
 
 import it.jnrpe.ReturnValue;
 import it.jnrpe.Status;
@@ -25,19 +25,19 @@ import org.testng.annotations.Test;
  *
  */
 @Test
-public class CheckProcsTest implements Constants{
+public class CheckProcsIT implements ITConstants{
 
 
     @BeforeTest
     public void setup() throws Exception {
         PluginDefinition checkProcs = 
                 PluginRepositoryUtil.loadFromPluginAnnotation(CheckProcs.class);
-        SetupTest.getPluginRepository().addPluginDefinition(checkProcs);
+        ITSetup.getPluginRepository().addPluginDefinition(checkProcs);
     }
     
     @Test
     public final void checkProcsBasic() throws JNRPEClientException {
-		CommandRepository cr = SetupTest.getCommandRepository();
+		CommandRepository cr = ITSetup.getCommandRepository();
 		CommandDefinition cd = new CommandDefinition("CHECK_PROCS_BASIC", "CHECK_PROCS");
 		cd.addArgument(new CommandOption("warning", "$ARG1$"));
 		cr.addCommandDefinition(cd);
@@ -53,7 +53,7 @@ public class CheckProcsTest implements Constants{
     	if (System.getProperty("os.name").toLowerCase().contains("windows")){
     		command = "java.exe";
     	}
-		CommandRepository cr = SetupTest.getCommandRepository();
+		CommandRepository cr = ITSetup.getCommandRepository();
 		
 		CommandDefinition cd = new CommandDefinition("CHECK_PROCS_COMMAND", "CHECK_PROCS");
 		cd.addArgument(new CommandOption("command", "$ARG1$"));

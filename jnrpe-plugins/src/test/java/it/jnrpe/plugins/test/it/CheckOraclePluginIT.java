@@ -1,4 +1,4 @@
-package it.jnrpe.plugins.test;
+package it.jnrpe.plugins.test.it;
 
 import it.jnrpe.ReturnValue;
 import it.jnrpe.Status;
@@ -15,7 +15,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-public class CheckOraclePluginTest implements Constants {
+public class CheckOraclePluginIT implements ITConstants {
 
     @BeforeTest
     public void setup() throws Exception {
@@ -25,9 +25,9 @@ public class CheckOraclePluginTest implements Constants {
                 PluginRepositoryUtil.parseXmlPluginDefinition(cl,
                         cl.getResourceAsStream("check_oracle_plugin.xml"));
 
-        SetupTest.getPluginRepository().addPluginDefinition(checkFile);
+        ITSetup.getPluginRepository().addPluginDefinition(checkFile);
 
-        CommandRepository cr = SetupTest.getCommandRepository();
+        CommandRepository cr = ITSetup.getCommandRepository();
 
         cr.addCommandDefinition(new CommandDefinition("CHECK_ORACLE_ALIVE",
                 "CHECK_ORACLE")

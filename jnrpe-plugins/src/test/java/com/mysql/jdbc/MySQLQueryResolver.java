@@ -15,7 +15,7 @@ public class MySQLQueryResolver implements ISQLQueryResolver {
     public List<ResultSetMockRow> resolveSQL(String sSQL) {
         List<ResultSetMockRow> vResult = new ArrayList<ResultSetMockRow>();
 
-        System.out.println("QUERY : " + sSQL);
+        //System.out.println("QUERY : " + sSQL);
 
         if (sSQL.equalsIgnoreCase("show slave status;")) {
             vResult.add(new ResultSetMockRowBuilder()

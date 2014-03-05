@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and 
  * limitations under the License.
  */
-package it.jnrpe.plugins.test;
+package it.jnrpe.plugins.test.it;
 
-public interface Constants {
+public interface ITConstants {
     public final static String BIND_ADDRESS = "127.0.0.1";
     public final static int JNRPE_PORT = 5667;
 }

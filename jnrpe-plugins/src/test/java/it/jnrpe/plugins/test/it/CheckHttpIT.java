@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package it.jnrpe.plugins.test;
+package it.jnrpe.plugins.test.it;
 
 import it.jnrpe.ReturnValue;
 import it.jnrpe.Status;
@@ -37,7 +37,7 @@ import org.testng.annotations.Test;
  */
 
 @Test
-public class CheckHttpTest implements Constants {
+public class CheckHttpIT implements ITConstants {
 
 	private SimpleHttpServer server = null;
 	
@@ -50,25 +50,22 @@ public class CheckHttpTest implements Constants {
 
 	@BeforeClass
 	public void setup() throws Exception {
-		if (SetupTest.getPluginRepository() == null){
-			SetupTest.setUp();
+		if (ITSetup.getPluginRepository() == null){
+			ITSetup.setUp();
 			this.single = true;
 		}
-		try {
-			ClassLoader cl = CheckHttpTest.class.getClassLoader();
-			PluginDefinition checkHttp = PluginRepositoryUtil.parseXmlPluginDefinition(cl, 
-					cl.getResourceAsStream("check_http_plugin.xml"));
-			SetupTest.getPluginRepository().addPluginDefinition(checkHttp);
-			server = new SimpleHttpServer();
-			server.start();
-		}catch(Exception e){
-			e.printStackTrace();
-		}
+		
+		ClassLoader cl = CheckHttpIT.class.getClassLoader();
+		PluginDefinition checkHttp = PluginRepositoryUtil.parseXmlPluginDefinition(cl, 
+				cl.getResourceAsStream("check_http_plugin.xml"));
+		ITSetup.getPluginRepository().addPluginDefinition(checkHttp);
+		server = new SimpleHttpServer();
+		server.start();
 	}
 
 	@Test
 	public final void checkHttpOK() throws JNRPEClientException {
-		CommandRepository cr = SetupTest.getCommandRepository();
+		CommandRepository cr = ITSetup.getCommandRepository();
 		cr.addCommandDefinition(new CommandDefinition("CHECK_HTTP_OK", "CHECK_HTTP")
 		.addArgument(new CommandOption("hostname", "$ARG1$"))
 		.addArgument(new CommandOption("port", "$ARG2$")));
@@ -85,7 +82,7 @@ public class CheckHttpTest implements Constants {
 	 */
 	@Test
 	public final void checkExpected() throws JNRPEClientException {
-		CommandRepository cr = SetupTest.getCommandRepository();
+		CommandRepository cr = ITSetup.getCommandRepository();
 		cr.addCommandDefinition(new CommandDefinition("CHECK_EXPECTED", "CHECK_HTTP")
 		.addArgument(new CommandOption("hostname", "$ARG1$"))
 		.addArgument(new CommandOption("port", "$ARG2$"))
@@ -120,7 +117,7 @@ public class CheckHttpTest implements Constants {
 	 */
 	@Test
 	public final void checkRegex() throws JNRPEClientException {
-		CommandRepository cr = SetupTest.getCommandRepository();
+		CommandRepository cr = ITSetup.getCommandRepository();
 		cr.addCommandDefinition(new CommandDefinition("CHECK_REGEX", "CHECK_HTTP")
 		.addArgument(new CommandOption("hostname", "$ARG1$"))
 		.addArgument(new CommandOption("port", "$ARG2$"))
@@ -136,7 +133,7 @@ public class CheckHttpTest implements Constants {
 
 	@Test
 	public final void checkPost() throws JNRPEClientException {
-		CommandRepository cr = SetupTest.getCommandRepository();
+		CommandRepository cr = ITSetup.getCommandRepository();
 		cr.addCommandDefinition(new CommandDefinition("CHECK_POST", "CHECK_HTTP")
 		.addArgument(new CommandOption("hostname", "$ARG1$"))
 		.addArgument(new CommandOption("port", "$ARG2$"))
@@ -160,7 +157,7 @@ public class CheckHttpTest implements Constants {
 	 */
 	@Test
 	public final void checkOutsideOK() throws JNRPEClientException {
-		CommandRepository cr = SetupTest.getCommandRepository();
+		CommandRepository cr = ITSetup.getCommandRepository();
 		cr.addCommandDefinition(new CommandDefinition("CHECK_OUTSIDE_OK", "CHECK_HTTP")
 		.addArgument(new CommandOption("hostname", "$ARG1$")));
 		JNRPEClient client = new JNRPEClient(BIND_ADDRESS, JNRPE_PORT, false);
@@ -171,7 +168,7 @@ public class CheckHttpTest implements Constants {
 
 	@Test
 	public final void checkNobody() throws JNRPEClientException {
-		CommandRepository cr = SetupTest.getCommandRepository();
+		CommandRepository cr = ITSetup.getCommandRepository();
 		cr.addCommandDefinition(new CommandDefinition("CHECK_NOBODY", "CHECK_HTTP")
 		.addArgument(new CommandOption("hostname", "$ARG1$"))
 		.addArgument(new CommandOption("port", "$ARG2$"))
@@ -199,7 +196,7 @@ public class CheckHttpTest implements Constants {
 	public void tearDown() throws Exception{
 		server.stop();
 		if (single){
-			SetupTest.shutDown();
+			ITSetup.shutDown();
 		}
 	}
 
