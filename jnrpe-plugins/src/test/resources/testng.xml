@@ -1,9 +1,0 @@
-<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-
-<suite name="Core Plugins Suite" verbose="4" >
-  <test name="Core Plugins"   >
-    <packages>
-      <package name="it.jnrpe.plugins.test" />
-   </packages>
- </test>
-</suite>

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package it.jnrpe.plugins.test;
+package it.jnrpe.plugins.test.it;
 
 import it.jnrpe.ReturnValue;
 import it.jnrpe.Status;
@@ -31,7 +31,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-public class CheckFilePluginTest implements Constants {
+public class CheckFilePluginIT implements ITConstants {
 
     private final static File m_testFile = new File(
             "src/test/resources/check_file/testfile.txt");
@@ -47,12 +47,12 @@ public class CheckFilePluginTest implements Constants {
 //                PluginRepositoryUtil.parseXmlPluginDefinition(cl,
 //                        cl.getResourceAsStream("check_file_plugin.xml"));
 
-        SetupTest.getPluginRepository().addPluginDefinition(checkFile);
+        ITSetup.getPluginRepository().addPluginDefinition(checkFile);
     }
 
     @Test
     public void checkFileExists() throws Exception {
-        CommandRepository cr = SetupTest.getCommandRepository();
+        CommandRepository cr = ITSetup.getCommandRepository();
 
         cr.addCommandDefinition(new CommandDefinition("CHECK_FILE_EXISTS",
                 "CHECK_FILE").addArgument(new CommandOption("file", "$ARG1$")));
@@ -67,7 +67,7 @@ public class CheckFilePluginTest implements Constants {
 
     @Test
     public void checkFileExistsCritical() throws Exception {
-        CommandRepository cr = SetupTest.getCommandRepository();
+        CommandRepository cr = ITSetup.getCommandRepository();
 
         cr.addCommandDefinition(new CommandDefinition("CHECK_FILE_EXISTS",
                 "CHECK_FILE").addArgument(new CommandOption("file", "$ARG1$")));
@@ -80,7 +80,7 @@ public class CheckFilePluginTest implements Constants {
 
     @Test
     public void checkFileNotExists() throws Exception {
-        CommandRepository cr = SetupTest.getCommandRepository();
+        CommandRepository cr = ITSetup.getCommandRepository();
 
         cr.addCommandDefinition(new CommandDefinition("CHECK_FILE_NOT_EXISTS",
                 "CHECK_FILE").addArgument(new CommandOption("FILE", "$ARG1$")));
@@ -93,7 +93,7 @@ public class CheckFilePluginTest implements Constants {
 
     @Test
     public void checkFileNotExistsCritical() throws Exception {
-        CommandRepository cr = SetupTest.getCommandRepository();
+        CommandRepository cr = ITSetup.getCommandRepository();
 
         cr.addCommandDefinition(new CommandDefinition("CHECK_FILE_NOT_EXISTS",
                 "CHECK_FILE").addArgument(new CommandOption("FILE", "$ARG1$")));
@@ -108,7 +108,7 @@ public class CheckFilePluginTest implements Constants {
 
     @Test
     public void checkFileNotContainsOk() throws Exception {
-        CommandRepository cr = SetupTest.getCommandRepository();
+        CommandRepository cr = ITSetup.getCommandRepository();
 
         cr.addCommandDefinition(new CommandDefinition("CHECK_FILE_NOT_CONTAIN",
                 "CHECK_FILE").addArgument(new CommandOption("file", "$ARG1$"))
@@ -124,7 +124,7 @@ public class CheckFilePluginTest implements Constants {
 
     @Test
     public void checkFileNotContainsCritical() throws Exception {
-        CommandRepository cr = SetupTest.getCommandRepository();
+        CommandRepository cr = ITSetup.getCommandRepository();
 
         cr.addCommandDefinition(new CommandDefinition("CHECK_FILE_NOT_CONTAIN",
                 "CHECK_FILE").addArgument(new CommandOption("file", "$ARG1$"))
@@ -140,7 +140,7 @@ public class CheckFilePluginTest implements Constants {
 
     @Test
     public void checkFileContainsOk() throws Exception {
-        CommandRepository cr = SetupTest.getCommandRepository();
+        CommandRepository cr = ITSetup.getCommandRepository();
 
         cr.addCommandDefinition(new CommandDefinition("CHECK_FILE_CONTAIN",
                 "CHECK_FILE").addArgument(new CommandOption("file", "$ARG1$"))
@@ -156,7 +156,7 @@ public class CheckFilePluginTest implements Constants {
 
     @Test
     public void checkFileContainsWarning() throws Exception {
-        CommandRepository cr = SetupTest.getCommandRepository();
+        CommandRepository cr = ITSetup.getCommandRepository();
 
         cr.addCommandDefinition(new CommandDefinition("CHECK_FILE_CONTAIN",
                 "CHECK_FILE").addArgument(new CommandOption("file", "$ARG1$"))
@@ -172,7 +172,7 @@ public class CheckFilePluginTest implements Constants {
 
     @Test
     public void checkFileContainsCritical() throws Exception {
-        CommandRepository cr = SetupTest.getCommandRepository();
+        CommandRepository cr = ITSetup.getCommandRepository();
 
         cr.addCommandDefinition(new CommandDefinition("CHECK_FILE_CONTAIN",
                 "CHECK_FILE").addArgument(new CommandOption("file", "$ARG1$"))

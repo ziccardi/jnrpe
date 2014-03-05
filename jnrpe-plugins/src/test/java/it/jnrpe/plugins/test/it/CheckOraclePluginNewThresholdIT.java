@@ -1,8 +1,7 @@
-package it.jnrpe.plugins.test;
+package it.jnrpe.plugins.test.it;
 
 import it.jnrpe.ReturnValue;
 import it.jnrpe.Status;
-import it.jnrpe.ReturnValue.UnitOfMeasure;
 import it.jnrpe.client.JNRPEClient;
 import it.jnrpe.client.JNRPEClientException;
 import it.jnrpe.commands.CommandDefinition;
@@ -11,14 +10,13 @@ import it.jnrpe.commands.CommandRepository;
 import it.jnrpe.plugin.CCheckOracle;
 import it.jnrpe.plugins.PluginDefinition;
 import it.jnrpe.utils.PluginRepositoryUtil;
-
 import oracle.jdbc.driver.OracleDriver;
 
 import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-public class CheckOraclePluginNewThresholdTest implements Constants {
+public class CheckOraclePluginNewThresholdIT implements ITConstants {
 
     @BeforeTest
     public void setup() throws Exception {
@@ -31,9 +29,9 @@ public class CheckOraclePluginNewThresholdTest implements Constants {
                 PluginRepositoryUtil.parseXmlPluginDefinition(cl,
                         cl.getResourceAsStream("check_oracle_plugin.xml"));
 
-        SetupTest.getPluginRepository().addPluginDefinition(checkFile);
+        ITSetup.getPluginRepository().addPluginDefinition(checkFile);
 
-        CommandRepository cr = SetupTest.getCommandRepository();
+        CommandRepository cr = ITSetup.getCommandRepository();
 
         cr.addCommandDefinition(new CommandDefinition("CHECK_ORACLE_ALIVE_NEW",
                 "CHECK_ORACLE")

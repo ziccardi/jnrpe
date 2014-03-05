@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package it.jnrpe.plugins.test;
+package it.jnrpe.plugins.test.it;
 
 import it.jnrpe.ReturnValue;
 import it.jnrpe.Status;
@@ -35,19 +35,19 @@ import org.testng.annotations.Test;
  * @author Frederico Campos
  *
  */
-public class CheckUsersPluginTest implements Constants {
+public class CheckUsersPluginIT implements ITConstants {
 
     @BeforeTest
     public void setup() throws Exception {
         PluginDefinition checkUsers =
                 PluginRepositoryUtil.loadFromPluginAnnotation(CheckUsers.class);
 
-        SetupTest.getPluginRepository().addPluginDefinition(checkUsers);
+        ITSetup.getPluginRepository().addPluginDefinition(checkUsers);
     }
 
     @Test
     public void checkUsersOk() throws Exception {
-        CommandRepository cr = SetupTest.getCommandRepository();
+        CommandRepository cr = ITSetup.getCommandRepository();
         cr.addCommandDefinition(new CommandDefinition("CHECK_USERS",
                 "CHECK_USERS").addArgument(new CommandOption("w", "$ARG1$"))
                 .addArgument(new CommandOption("c", "$ARG2$")));
@@ -58,7 +58,7 @@ public class CheckUsersPluginTest implements Constants {
 
     @Test
     public void checkUsersWarning() throws Exception {
-        CommandRepository cr = SetupTest.getCommandRepository();
+        CommandRepository cr = ITSetup.getCommandRepository();
         cr.addCommandDefinition(new CommandDefinition("CHECK_USERS",
                 "CHECK_USERS").addArgument(new CommandOption("w", "$ARG1$"))
                 .addArgument(new CommandOption("c", "$ARG2$")));
@@ -69,8 +69,8 @@ public class CheckUsersPluginTest implements Constants {
 
     @Test
     public void checkUsersCritical() throws Exception {
-        System.out.println("Running checkUsers");
-        CommandRepository cr = SetupTest.getCommandRepository();
+        //System.out.println("Running checkUsers");
+        CommandRepository cr = ITSetup.getCommandRepository();
         cr.addCommandDefinition(new CommandDefinition("CHECK_USERS",
                 "CHECK_USERS").addArgument(new CommandOption("w", "$ARG1$"))
                 .addArgument(new CommandOption("c", "$ARG2$")));

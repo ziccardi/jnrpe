@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and 
  * limitations under the License.
  */
-package it.jnrpe.plugins.test;
+package it.jnrpe.plugins.test.it;
 
 import it.jnrpe.ReturnValue;
 import it.jnrpe.Status;
@@ -28,9 +28,9 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-public class TestPluginTest implements Constants {
+public class TstPluginIT implements ITConstants {
 
-    public TestPluginTest() {
+    public TstPluginIT() {
 
     }
 
@@ -40,13 +40,13 @@ public class TestPluginTest implements Constants {
                 PluginRepositoryUtil.
                     loadFromPluginAnnotation(CTestPlugin.class);
 
-        SetupTest.getPluginRepository().addPluginDefinition(pd);
+        ITSetup.getPluginRepository().addPluginDefinition(pd);
 
         CommandDefinition cd =
                 new CommandDefinition("TESTCOMMAND", "TEST").addArgument(
                         new CommandOption("text", "$ARG1$")).addArgument(
                         new CommandOption("status", "$ARG2$"));
-        SetupTest.getCommandRepository().addCommandDefinition(cd);
+        ITSetup.getCommandRepository().addCommandDefinition(cd);
     }
 
     @Test

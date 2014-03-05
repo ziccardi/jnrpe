@@ -1,4 +1,4 @@
-package it.jnrpe.plugins.test;
+package it.jnrpe.plugins.test.it;
 
 import it.jnrpe.ReturnValue;
 import it.jnrpe.Status;
@@ -16,7 +16,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-public class CheckPGSQLPluginTest implements Constants {
+public class CheckPGSQLPluginIT implements ITConstants {
 
     @BeforeTest
     public void setup() throws Exception {
@@ -26,9 +26,9 @@ public class CheckPGSQLPluginTest implements Constants {
                 PluginRepositoryUtil.parseXmlPluginDefinition(cl,
                         cl.getResourceAsStream("check_pgsql_plugin.xml"));
 
-        SetupTest.getPluginRepository().addPluginDefinition(checkFile);
+        ITSetup.getPluginRepository().addPluginDefinition(checkFile);
 
-        CommandRepository cr = SetupTest.getCommandRepository();
+        CommandRepository cr = ITSetup.getCommandRepository();
         // --database $ARG1$ --hostname $ARG2$ --port $ARG3$ --logname $ARG4$
         // --password $ARG5$ --warning $ARG6$ --critical $ARG7$
         cr.addCommandDefinition(new CommandDefinition("CHECK_PGSQL_ALIVE",

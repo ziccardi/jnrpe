@@ -1,4 +1,4 @@
-package it.jnrpe.plugins.test;
+package it.jnrpe.plugins.test.it;
 
 import it.jnrpe.ReturnValue;
 import it.jnrpe.Status;
@@ -11,18 +11,8 @@ import it.jnrpe.utils.PluginRepositoryUtil;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 
 import org.apache.commons.io.FileUtils;
-import org.codehaus.cargo.container.ContainerType;
-import org.codehaus.cargo.container.InstalledLocalContainer;
-import org.codehaus.cargo.container.configuration.ConfigurationType;
-import org.codehaus.cargo.container.configuration.LocalConfiguration;
-import org.codehaus.cargo.container.installer.ZipURLInstaller;
-import org.codehaus.cargo.container.property.ServletPropertySet;
-import org.codehaus.cargo.container.tomcat.TomcatPropertySet;
-import org.codehaus.cargo.generic.DefaultContainerFactory;
-import org.codehaus.cargo.generic.configuration.DefaultConfigurationFactory;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -34,7 +24,7 @@ import org.testng.annotations.Test;
  * @author Massimiliano Ziccardi
  */
 @Test
-public class CheckTomcatTest implements Constants {
+public class CheckTomcatIT implements ITConstants {
 
     /**
      * The port where tomcat listens.
@@ -42,121 +32,26 @@ public class CheckTomcatTest implements Constants {
     private static final String TOMCAT_PORT = "7070";
 
     /**
-     * The full path to the already existing tomcat installation.
-     * If this variable is null, than tomcat gets automatically
-     * downloaded during test execution phase.
-     */
-    private String existingTomcatInstance = null;
-
-    /**
-     * The tomcat download url.
-     */
-    private static final String TOMCAT_DOWNLOAD_URL =
-            "https://archive.apache.org/dist/tomcat/"
-            + "tomcat-7/v7.0.40/bin/apache-tomcat-7.0.40.zip";
-
-    /**
-     * The tomcat container.
-     */
-    private InstalledLocalContainer container = null;
-
-
-    /**
      * running single unit test.
      */
     private boolean single = false;
 
 
-    /**
-     * Writes the tomcat-users.xml giving all the privileges to the user
-     * tomcat/tomcat.
-     *
-     * @param f
-     *            The destination file
-     * @throws IOException
-     *             -
-     */
-    private void enableTomcatConsole(final File f) throws IOException {
-        String xml =
-                "<?xml version='1.0' encoding='utf-8'?>"
-                        + "<tomcat-users>"
-                        + "<role rolename=\"manager-gui\"/>"
-                        + "<role rolename=\"manager-script\"/>"
-                        + "<role rolename=\"manager-jmx\"/>"
-                        + "<role rolename=\"manager-status\"/>"
-                        + "<user username=\"tomcat\" password=\"tomcat\" "
-                        + "roles=\"manager-gui,manager-script,manager-jmx,"
-                        + "manager-status\"/>"
-                        + "</tomcat-users>";
-
-        FileUtils.writeStringToFile(f, xml);
-    }
-
-    /**
-     * Starts tomcat.
-     */
     @BeforeClass
     public final void setup() {
         try {
-            if (SetupTest.getPluginRepository() == null){
-                SetupTest.setUp();
+            if (ITSetup.getPluginRepository() == null){
+                ITSetup.setUp();
                 this.single = true;
             }
 
-            ClassLoader cl = CheckTomcatTest.class.getClassLoader();
+            ClassLoader cl = CheckTomcatIT.class.getClassLoader();
 
             PluginDefinition checkTomcat =
                     PluginRepositoryUtil.parseXmlPluginDefinition(cl,
                             cl.getResourceAsStream("check_tomcat_plugin.xml"));
 
-            SetupTest.getPluginRepository().addPluginDefinition(checkTomcat);
-
-
-            String tomcatHome = null;
-
-            if (existingTomcatInstance == null) {
-                File tomcatDir = new File("./target/tomcat");
-
-                tomcatDir.mkdirs();
-
-                ZipURLInstaller installer =
-                        new ZipURLInstaller(new URL(TOMCAT_DOWNLOAD_URL));
-                installer.setExtractDir(tomcatDir.getAbsolutePath());
-                installer.install();
-                tomcatHome = installer.getHome();
-            } else {
-                tomcatHome = existingTomcatInstance;
-            }
-
-            DefaultConfigurationFactory factory =
-                    new DefaultConfigurationFactory();
-            factory.registerConfiguration("tomcat7xJnrpeTest",
-                    ContainerType.INSTALLED,
-                    ConfigurationType.STANDALONE, Tomcat7xConf.class);
-
-            LocalConfiguration configuration =
-                    (LocalConfiguration) factory
-                            .createConfiguration(
-                                    "tomcat7xJnrpeTest",
-                                    ContainerType.INSTALLED,
-                                    ConfigurationType.STANDALONE);
-
-            configuration.setProperty("cargo.servlet.port", "7070");
-            configuration.setProperty(TomcatPropertySet.AJP_PORT, "7009");
-
-            container =
-                    (InstalledLocalContainer) new DefaultContainerFactory()
-                            .createContainer(
-                                    "tomcat7x", ContainerType.INSTALLED,
-                                    configuration);
-
-            container.setHome(tomcatHome);
-
-            ((Tomcat7xConf) configuration).realConfigure(container);
-            enableTomcatConsole(new File(new File(configuration.getHome(),
-                    "conf"), "tomcat-users.xml"));
-
-            container.start();
+            ITSetup.getPluginRepository().addPluginDefinition(checkTomcat);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -169,7 +64,7 @@ public class CheckTomcatTest implements Constants {
      */
     @Test
     public final void checkTomcatOK() throws Exception {
-        CommandRepository cr = SetupTest.getCommandRepository();
+        CommandRepository cr = ITSetup.getCommandRepository();
 
         cr.addCommandDefinition(new CommandDefinition("CHECK_TOMCAT",
                 "CHECK_TOMCAT")
@@ -193,7 +88,7 @@ public class CheckTomcatTest implements Constants {
      * void
      */
     public final void checkTomcatThreadsWarning() throws Exception {
-        CommandRepository cr = SetupTest.getCommandRepository();
+        CommandRepository cr = ITSetup.getCommandRepository();
 
         cr.addCommandDefinition(new CommandDefinition("CHECK_THREAD_WARN", "CHECK_TOMCAT")
                 .addArgument(new CommandOption("threads"))
@@ -218,7 +113,7 @@ public class CheckTomcatTest implements Constants {
      */
     public final void checkTomcatThreadsCritical() throws Exception {
         try{
-            CommandRepository cr = SetupTest.getCommandRepository();
+            CommandRepository cr = ITSetup.getCommandRepository();
 
             cr.addCommandDefinition(new CommandDefinition("CHECK_THREAD_CRIT", "CHECK_TOMCAT")
                     .addArgument(new CommandOption("threads"))
@@ -244,7 +139,7 @@ public class CheckTomcatTest implements Constants {
      * void
      */
     public final void checkTomcatThreadsWarningPercentage() throws Exception {
-        CommandRepository cr = SetupTest.getCommandRepository();
+        CommandRepository cr = ITSetup.getCommandRepository();
 
         cr.addCommandDefinition(new CommandDefinition("CHECK_THREAD_PERC_WARN", "CHECK_TOMCAT")
                 .addArgument(new CommandOption("threads"))
@@ -267,7 +162,7 @@ public class CheckTomcatTest implements Constants {
      * void
      */
     public final void checkTomcatThreadsCriticalPercentage() throws Exception {
-        CommandRepository cr = SetupTest.getCommandRepository();
+        CommandRepository cr = ITSetup.getCommandRepository();
 
         cr.addCommandDefinition(new CommandDefinition("CHECK_THREAD_PERC_CRIT", "CHECK_TOMCAT")
                 .addArgument(new CommandOption("threads"))
@@ -286,7 +181,7 @@ public class CheckTomcatTest implements Constants {
 
 
     public final void checkTomcatMemoryWarningPercentage() throws Exception {
-        CommandRepository cr = SetupTest.getCommandRepository();
+        CommandRepository cr = ITSetup.getCommandRepository();
 
         cr.addCommandDefinition(new CommandDefinition("CHECK_MEM_PERC_WARNING", "CHECK_TOMCAT")
                 .addArgument(new CommandOption("memory"))
@@ -309,7 +204,7 @@ public class CheckTomcatTest implements Constants {
      * void
      */
     public final void checkTomcatMemoryCriticalPercentage() throws Exception {
-        CommandRepository cr = SetupTest.getCommandRepository();
+        CommandRepository cr = ITSetup.getCommandRepository();
 
         cr.addCommandDefinition(new CommandDefinition("CHECK_MEM_PERC_WARNING", "CHECK_TOMCAT")
                 .addArgument(new CommandOption("memory"))
@@ -331,7 +226,7 @@ public class CheckTomcatTest implements Constants {
      * void
      */
     public final void checkTomcatMemoryOKPercentage() throws Exception {
-        CommandRepository cr = SetupTest.getCommandRepository();
+        CommandRepository cr = ITSetup.getCommandRepository();
 
         cr.addCommandDefinition(new CommandDefinition("CHECK_MEM_PERC_OK", "CHECK_TOMCAT")
                 .addArgument(new CommandOption("memory"))
@@ -354,11 +249,8 @@ public class CheckTomcatTest implements Constants {
      */
     @AfterClass
     public final void tearDown() throws Exception {
-        if (container != null) {
-            container.stop();
-        }
         if (single){
-            SetupTest.shutDown();
+            ITSetup.shutDown();
         }
     }
 

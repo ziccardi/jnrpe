@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package it.jnrpe.plugins.test;
+package it.jnrpe.plugins.test.it;
 
 import it.jnrpe.ReturnValue;
 import it.jnrpe.Status;
@@ -30,22 +30,22 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-public class CheckDiskPluginTest implements Constants {
+public class CheckDiskPluginIT implements ITConstants {
 
     private final static File m_testPath = new File(
             "/");
 
     @BeforeTest
     public void setup() throws Exception {
-        ClassLoader cl = CheckDiskPluginTest.class.getClassLoader();
+        ClassLoader cl = CheckDiskPluginIT.class.getClassLoader();
 
         PluginDefinition checkDist =
                 PluginRepositoryUtil.parseXmlPluginDefinition(cl,
                         cl.getResourceAsStream("check_disk_plugin.xml"));
 
-        SetupTest.getPluginRepository().addPluginDefinition(checkDist);
+        ITSetup.getPluginRepository().addPluginDefinition(checkDist);
 
-        CommandRepository cr = SetupTest.getCommandRepository();
+        CommandRepository cr = ITSetup.getCommandRepository();
         cr.addCommandDefinition(
                 new CommandDefinition("CHECK_DISK",
                         "CHECK_DISK")

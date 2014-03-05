@@ -1,4 +1,4 @@
-package it.jnrpe.plugins.test;
+package it.jnrpe.plugins.test.it;
 
 import it.jnrpe.ReturnValue;
 import it.jnrpe.Status;
@@ -16,19 +16,19 @@ import org.testng.annotations.Test;
 
 import com.mysql.jdbc.Driver;
 
-public class CheckMySQLPluginTest implements Constants {
+public class CheckMySQLPluginIT implements ITConstants {
 
     @BeforeTest
     public void setup() throws Exception {
-        ClassLoader cl = CheckMySQLPluginTest.class.getClassLoader();
+        ClassLoader cl = CheckMySQLPluginIT.class.getClassLoader();
 
         PluginDefinition checkFile =
                 PluginRepositoryUtil.parseXmlPluginDefinition(cl,
                         cl.getResourceAsStream("check_mysql_plugin.xml"));
 
-        SetupTest.getPluginRepository().addPluginDefinition(checkFile);
+        ITSetup.getPluginRepository().addPluginDefinition(checkFile);
 
-        CommandRepository cr = SetupTest.getCommandRepository();
+        CommandRepository cr = ITSetup.getCommandRepository();
 
         cr.addCommandDefinition(new CommandDefinition("CHECK_MYSQL_SLAVE",
                 "CHECK_MYSQL")
