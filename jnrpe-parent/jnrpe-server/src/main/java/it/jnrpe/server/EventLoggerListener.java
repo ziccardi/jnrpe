@@ -56,6 +56,11 @@ public class EventLoggerListener implements IJNRPEEventListener {
 
         Throwable error = (Throwable) event.getEventParams().get("EXCEPTION");
 
+        System.out.println((String) event.getEventParams().get("MESSAGE"));
+        if (error != null) {
+            error.printStackTrace();
+        }
+
         String sEventName = event.getEventName();
 
         if (sEventName.equals("TRACE")) {
