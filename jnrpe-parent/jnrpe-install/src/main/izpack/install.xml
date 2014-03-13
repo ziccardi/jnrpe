@@ -159,7 +159,7 @@
 
     <pack name="Base Plugins" required="no">
       <description>The plugins provided with JNRPE</description>
-      <fileset dir="${izpack.staging.dir}/dependency" targetdir="$INSTALL_PATH/plugins/base"
+      <fileset dir="${izpack.staging.plugins.dir}/dependency" targetdir="$INSTALL_PATH/plugins/base"
         unpack="false">
         <include name="*.jar" />
       </fileset>
