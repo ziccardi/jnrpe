@@ -10,7 +10,7 @@
 
 	<groupId>net.sf.jnrpe</groupId>
 	<artifactId>jnrpe-plugins</artifactId>
-	<version>0.7.3</version>
+	<version>0.7.4-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>jnrpe-plugins</name>
