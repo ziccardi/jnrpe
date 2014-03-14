@@ -35,7 +35,7 @@ import com.google.common.io.Files;
 
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerClass.class)
-public class ExampleIT {
+public class JnrpeOsgiCoreInstallationTest {
 
 	@Inject
 	BundleContext context;
