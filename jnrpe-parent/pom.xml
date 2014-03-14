@@ -237,7 +237,6 @@ It is fully compatible with check_nrpe and can be used to execute both old nativ
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jnrpe-lib.version>2.0.3</jnrpe-lib.version>
-		<jnrpe-server.version>${project.version}</jnrpe-server.version>
 		<jnrpe-plugins.version>0.7.3</jnrpe-plugins.version>
 		<jcheck_nrpe.version>2.0.3</jcheck_nrpe.version>
 	</properties>
@@ -252,7 +251,7 @@ It is fully compatible with check_nrpe and can be used to execute both old nativ
 			<dependency>
 				<groupId>net.sf.jnrpe</groupId>
 				<artifactId>jnrpe-server</artifactId>
-				<version>${jnrpe-server.version}</version>
+				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>net.sf.jnrpe</groupId>
