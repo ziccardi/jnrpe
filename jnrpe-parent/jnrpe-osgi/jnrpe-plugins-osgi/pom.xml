@@ -10,7 +10,7 @@
 
 	<groupId>net.sf.jnrpe</groupId>
 	<artifactId>jnrpe-plugins-osgi</artifactId>
-	<version>2.0.4-SNAPSHOT</version>
+	<version>2.0.4</version>
 	<packaging>bundle</packaging>
 	
 	<name>jnrpe-plugins-osgi</name>
@@ -36,7 +36,7 @@
 		<connection>scm:git:https://github.com/ziccardi/jnrpe</connection>
 		<url>https://github.com/ziccardi/jnrpe/tree/master/jnrpe-plugins-osgi</url>
 		<developerConnection>scm:git:git@github.com:ziccardi/jnrpe.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>2.0.4</tag>
 	</scm>
 	
 	<dependencies>
@@ -50,14 +50,14 @@
 		<dependency>
 			<groupId>net.sf.jnrpe</groupId>
 			<artifactId>jnrpe-lib</artifactId>
-			<version>2.0.4-SNAPSHOT</version>
+			<version>2.0.4</version>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>net.sf.jnrpe</groupId>
 			<artifactId>jnrpe-osgi-core</artifactId>
-			<version>2.0.4-SNAPSHOT</version>
+			<version>2.0.4</version>
 			<type>bundle</type>
 			<scope>provided</scope>
 		</dependency>
