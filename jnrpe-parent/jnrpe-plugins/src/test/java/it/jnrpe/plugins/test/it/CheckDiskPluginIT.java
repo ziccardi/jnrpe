@@ -32,116 +32,89 @@ import org.testng.annotations.Test;
 
 public class CheckDiskPluginIT implements ITConstants {
 
-    private final static File m_testPath = new File(
-            "/");
+	private final static File m_testPath = new File("/");
 
-    @BeforeTest
-    public void setup() throws Exception {
-        ClassLoader cl = CheckDiskPluginIT.class.getClassLoader();
+	@BeforeTest
+	public void setup() throws Exception {
+		ClassLoader cl = CheckDiskPluginIT.class.getClassLoader();
 
-        PluginDefinition checkDist =
-                PluginRepositoryUtil.parseXmlPluginDefinition(cl,
-                        cl.getResourceAsStream("check_disk_plugin.xml"));
+		PluginDefinition checkDist = PluginRepositoryUtil
+				.parseXmlPluginDefinition(cl,
+						cl.getResourceAsStream("check_disk_plugin.xml"));
 
-        ITSetup.getPluginRepository().addPluginDefinition(checkDist);
+		ITSetup.getPluginRepository().addPluginDefinition(checkDist);
 
-        CommandRepository cr = ITSetup.getCommandRepository();
-        cr.addCommandDefinition(
-                new CommandDefinition("CHECK_DISK",
-                        "CHECK_DISK")
-                        .addArgument(new CommandOption("path", "$ARG1$"))
-                        .addArgument(new CommandOption("warning", "$ARG2$"))
-                        .addArgument(new CommandOption("critical", "$ARG3$"))
-                );
+		CommandRepository cr = ITSetup.getCommandRepository();
+		cr.addCommandDefinition(new CommandDefinition("CHECK_DISK",
+				"CHECK_DISK").addArgument(new CommandOption("path", "$ARG1$"))
+				.addArgument(new CommandOption("warning", "$ARG2$"))
+				.addArgument(new CommandOption("critical", "$ARG3$")));
 
-        cr.addCommandDefinition(
-                new CommandDefinition("CHECK_DISK_NEW",
-                        "CHECK_DISK")
-                        .addArgument(new CommandOption("path", "$ARG1$"))
-                        .addArgument(
-                                new CommandOption("th",
-                                        "metric=freepct,ok=$ARG2$,warn=$ARG3$,crit=$ARG4$,unit=%"))
-                );
-    }
+		cr.addCommandDefinition(new CommandDefinition("CHECK_DISK_NEW",
+				"CHECK_DISK")
+				.addArgument(new CommandOption("path", "$ARG1$"))
+				.addArgument(
+						new CommandOption("th",
+								"metric=freepct,ok=$ARG2$,warn=$ARG3$,crit=$ARG4$,unit=%")));
+	}
 
-    @Test(enabled=false)
-    public void checkDiskOldThresholdsOK() throws Exception {
+	@Test(enabled = false)
+	public void checkDiskOldThresholdsOK() throws Exception {
 
-        JNRPEClient client = new JNRPEClient(BIND_ADDRESS, JNRPE_PORT, false);
-        ReturnValue ret =
-                client.sendCommand("CHECK_DISK",
-                        m_testPath.getAbsolutePath(),
-                        "5:10",
-                        ":5");
+		JNRPEClient client = new JNRPEClient(BIND_ADDRESS, JNRPE_PORT, false);
+		ReturnValue ret = client.sendCommand("CHECK_DISK",
+				m_testPath.getAbsolutePath(), "5:10", ":5");
 
-        Assert.assertEquals(ret.getStatus(), Status.OK, ret.getMessage());
-    }
+		Assert.assertEquals(ret.getStatus(), Status.OK, ret.getMessage());
+	}
 
-    @Test(enabled=false)
-    public void checkDiskNewThresholdsPctOK() throws Exception {
+	@Test(enabled = false)
+	public void checkDiskNewThresholdsPctOK() throws Exception {
 
-        JNRPEClient client = new JNRPEClient(BIND_ADDRESS, JNRPE_PORT, false);
-        ReturnValue ret =
-                client.sendCommand("CHECK_DISK_NEW",
-                        m_testPath.getAbsolutePath(),
-                        "15..inf",
-                        "10..15",
-                        "inf..10");
+		JNRPEClient client = new JNRPEClient(BIND_ADDRESS, JNRPE_PORT, false);
+		ReturnValue ret = client.sendCommand("CHECK_DISK_NEW",
+				m_testPath.getAbsolutePath(), "15..inf", "10..15", "inf..10");
 
-        Assert.assertEquals(ret.getStatus(), Status.OK, ret.getMessage());
-    }
+		Assert.assertEquals(ret.getStatus(), Status.OK, ret.getMessage());
+	}
 
-    @Test(enabled=false)
-    public void checkDiskOldThresholdsWarning() throws Exception {
+	@Test(enabled = false)
+	public void checkDiskOldThresholdsWarning() throws Exception {
 
-        JNRPEClient client = new JNRPEClient(BIND_ADDRESS, JNRPE_PORT, false);
-        ReturnValue ret =
-                client.sendCommand("CHECK_DISK",
-                        m_testPath.getAbsolutePath(),
-                        "5:30",
-                        ":5");
+		JNRPEClient client = new JNRPEClient(BIND_ADDRESS, JNRPE_PORT, false);
+		ReturnValue ret = client.sendCommand("CHECK_DISK",
+				m_testPath.getAbsolutePath(), "5:30", ":5");
 
-        Assert.assertEquals(ret.getStatus(), Status.WARNING, ret.getMessage());
-    }
+		Assert.assertEquals(ret.getStatus(), Status.WARNING, ret.getMessage());
+	}
 
-    @Test(enabled=false)
-    public void checkDiskNewThresholdsPctWarning() throws Exception {
+	@Test(enabled = false)
+	public void checkDiskNewThresholdsPctWarning() throws Exception {
 
-        JNRPEClient client = new JNRPEClient(BIND_ADDRESS, JNRPE_PORT, false);
-        ReturnValue ret =
-                client.sendCommand("CHECK_DISK_NEW",
-                        m_testPath.getAbsolutePath(),
-                        "30.1..inf",
-                        "5..30",
-                        "inf..5");
+		JNRPEClient client = new JNRPEClient(BIND_ADDRESS, JNRPE_PORT, false);
+		ReturnValue ret = client.sendCommand("CHECK_DISK_NEW",
+				m_testPath.getAbsolutePath(), "30.1..inf", "5..30", "inf..5");
 
-        Assert.assertEquals(ret.getStatus(), Status.WARNING, ret.getMessage());
-    }
+		Assert.assertEquals(ret.getStatus(), Status.WARNING, ret.getMessage());
+	}
 
-    @Test(enabled=false)
-    public void checkDiskOldThresholdsCritical() throws Exception {
+	@Test(enabled = false)
+	public void checkDiskOldThresholdsCritical() throws Exception {
 
-        JNRPEClient client = new JNRPEClient(BIND_ADDRESS, JNRPE_PORT, false);
-        ReturnValue ret =
-                client.sendCommand("CHECK_DISK",
-                        m_testPath.getAbsolutePath(),
-                        "30:",
-                        ":30");
+		JNRPEClient client = new JNRPEClient(BIND_ADDRESS, JNRPE_PORT, false);
+		ReturnValue ret = client.sendCommand("CHECK_DISK",
+				m_testPath.getAbsolutePath(), "30:", ":30");
 
-        Assert.assertEquals(ret.getStatus(), Status.CRITICAL, ret.getMessage());
-    }
+		Assert.assertEquals(ret.getStatus(), Status.CRITICAL, ret.getMessage());
+	}
 
-    @Test(enabled=false)
-    public void checkDiskNewThresholdsPctCritical() throws Exception {
+	@Test(enabled = false)
+	public void checkDiskNewThresholdsPctCritical() throws Exception {
 
-        JNRPEClient client = new JNRPEClient(BIND_ADDRESS, JNRPE_PORT, false);
-        ReturnValue ret =
-                client.sendCommand("CHECK_DISK_NEW",
-                        m_testPath.getAbsolutePath(),
-                        "50.1..inf",
-                        "30..50",
-                        "inf..30");
+		JNRPEClient client = new JNRPEClient(BIND_ADDRESS, JNRPE_PORT, false);
+		ReturnValue ret = client.sendCommand("CHECK_DISK_NEW",
+				m_testPath.getAbsolutePath(), "50.1..inf", "30..50", "inf..30");
 
-        Assert.assertEquals(ret.getStatus(), Status.CRITICAL, ret.getMessage());
-    }
+		Assert.assertEquals(ret.getStatus(), Status.CRITICAL, ret.getMessage());
+	}
 }
