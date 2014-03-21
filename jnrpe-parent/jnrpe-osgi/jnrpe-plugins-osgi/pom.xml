@@ -34,7 +34,7 @@
 	
 	<scm>
 		<connection>scm:git:https://github.com/ziccardi/jnrpe</connection>
-		<url>https://github.com/ziccardi/jnrpe/tree/master/jnrpe-plugins-osgi</url>
+		<url>https://github.com/ziccardi/jnrpe/tree/master/jnrpe-parent/jnrpe-osgi/jnrpe-plugins-osgi</url>
 		<developerConnection>scm:git:git@github.com:ziccardi/jnrpe.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>

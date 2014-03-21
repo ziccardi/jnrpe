@@ -35,7 +35,7 @@ Both plain socket and SSL are supported.</description>
 
 	<scm>
 		<connection>scm:git:https://github.com/ziccardi/jnrpe</connection>
-		<url>https://github.com/ziccardi/jnrpe/tree/master/jcheck_nrpe</url>
+		<url>https://github.com/ziccardi/jnrpe/tree/master/jnrpe-parent/jcheck_nrpe</url>
 		<developerConnection>scm:git:git@github.com:ziccardi/jnrpe.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
@@ -235,4 +235,8 @@ Both plain socket and SSL are supported.</description>
 			<url>scp://shell.sourceforge.net/home/project-web/jnrpe/htdocs/jcheck_nrpe</url>
 		</site>
 	</distributionManagement>
+	<issueManagement>
+		<system>jira</system>
+		<url>https://jnrpe-tracker.atlassian.net/</url>
+	</issueManagement>
 </project>
