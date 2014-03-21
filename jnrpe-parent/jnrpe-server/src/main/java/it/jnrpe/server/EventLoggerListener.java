@@ -26,102 +26,101 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The JNRPE Server uses this event listener to populate the log files.
- *
+ * 
  * @author Massimiliano Ziccardi
- *
+ * 
  */
 public class EventLoggerListener implements IJNRPEEventListener {
-    /**
-     * All the loggers.
-     */
-    private Map<String, Logger> loggersMap = new HashMap<String, Logger>();
+	/**
+	 * All the loggers.
+	 */
+	private final Map<String, Logger> loggersMap = new HashMap<String, Logger>();
 
-    /**
-     * This method receives the log event and logs it.
-     *
-     * @param sender
-     *            The source of the event
-     * @param event
-     *            The event
-     */
-    public final void receive(final Object sender, final IJNRPEEvent event) {
-        String sClassName = sender.getClass().getName();
+	/**
+	 * This method receives the log event and logs it.
+	 * 
+	 * @param sender
+	 *            The source of the event
+	 * @param event
+	 *            The event
+	 */
+	public final void receive(final Object sender, final IJNRPEEvent event) {
+		String sClassName = sender.getClass().getName();
 
-        Logger logger = loggersMap.get(sClassName);
+		Logger logger = loggersMap.get(sClassName);
 
-        if (logger == null) {
-            logger = LoggerFactory.getLogger(sender.getClass());
-            loggersMap.put(sClassName, logger);
-        }
+		if (logger == null) {
+			logger = LoggerFactory.getLogger(sender.getClass());
+			loggersMap.put(sClassName, logger);
+		}
 
-        Throwable error = (Throwable) event.getEventParams().get("EXCEPTION");
+		Throwable error = (Throwable) event.getEventParams().get("EXCEPTION");
 
-        System.out.println((String) event.getEventParams().get("MESSAGE"));
-        if (error != null) {
-            error.printStackTrace();
-        }
+		if (error != null) {
+			error.printStackTrace();
+		}
 
-        String sEventName = event.getEventName();
+		String sEventName = event.getEventName();
 
-        if (sEventName.equals("TRACE")) {
-            if (error != null) {
-                logger.trace((String) event.getEventParams().get("MESSAGE"),
-                        error);
-            } else {
-                logger.trace((String) event.getEventParams().get("MESSAGE"));
-            }
-            return;
-        }
+		if (sEventName.equals("TRACE")) {
+			if (error != null) {
+				logger.trace((String) event.getEventParams().get("MESSAGE"),
+						error);
+			} else {
+				logger.trace((String) event.getEventParams().get("MESSAGE"));
+			}
+			return;
+		}
 
-        if (sEventName.equals("DEBUG")) {
-            if (error != null) {
-                logger.debug((String) event.getEventParams().get("MESSAGE"),
-                        error);
-            } else {
-                logger.debug((String) event.getEventParams().get("MESSAGE"));
-            }
-            return;
-        }
+		if (sEventName.equals("DEBUG")) {
+			if (error != null) {
+				logger.debug((String) event.getEventParams().get("MESSAGE"),
+						error);
+			} else {
+				logger.debug((String) event.getEventParams().get("MESSAGE"));
+			}
+			return;
+		}
 
-        if (sEventName.equals("INFO")) {
-            if (error != null) {
-                logger.info((String) event.getEventParams().get("MESSAGE"),
-                        error);
-            } else {
-                logger.info((String) event.getEventParams().get("MESSAGE"));
-            }
-            return;
-        }
+		if (sEventName.equals("INFO")) {
+			if (error != null) {
+				logger.info((String) event.getEventParams().get("MESSAGE"),
+						error);
+			} else {
+				logger.info((String) event.getEventParams().get("MESSAGE"));
+			}
+			return;
+		}
 
-        if (sEventName.equals("WARNING")) {
-            if (error != null) {
-                logger.warn((String) event.getEventParams().get("MESSAGE"),
-                        error);
-            } else {
-                logger.warn((String) event.getEventParams().get("MESSAGE"));
-            }
-            return;
-        }
+		if (sEventName.equals("WARNING")) {
+			if (error != null) {
+				logger.warn((String) event.getEventParams().get("MESSAGE"),
+						error);
+			} else {
+				logger.warn((String) event.getEventParams().get("MESSAGE"));
+			}
+			return;
+		}
 
-        if (sEventName.equals("ERROR")) {
-            if (error != null) {
-                logger.error((String) event.getEventParams().get("MESSAGE"),
-                        error);
-            } else {
-                logger.error((String) event.getEventParams().get("MESSAGE"));
-            }
-            return;
-        }
+		if (sEventName.equals("ERROR")) {
+			if (error != null) {
+				logger.error((String) event.getEventParams().get("MESSAGE"),
+						error);
+			} else {
+				logger.error((String) event.getEventParams().get("MESSAGE"));
+			}
+			return;
+		}
 
-        if (sEventName.equals("FATAL")) {
-            if (error != null) {
-                logger.error((String) event.getEventParams().get("MESSAGE"),
-                        (Throwable) (event.getEventParams().get("EXCEPTION")));
-            } else {
-                logger.error((String) event.getEventParams().get("MESSAGE"));
-            }
-            return;
-        }
-    }
+		if (sEventName.equals("FATAL")) {
+			if (error != null) {
+				logger.error((String) event.getEventParams().get("MESSAGE"),
+						(Throwable) (event.getEventParams().get("EXCEPTION")));
+			} else {
+				logger.error((String) event.getEventParams().get("MESSAGE"));
+			}
+			return;
+		}
+	}
 
 }

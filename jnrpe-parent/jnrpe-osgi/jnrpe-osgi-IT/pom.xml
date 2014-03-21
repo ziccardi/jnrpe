@@ -168,4 +168,5 @@
 	<scm>
 		<url>https://github.com/ziccardi/jnrpe/tree/master/jnrpe-parent/jnrpe-osgi/jnrpe-osgi-IT</url>
 	</scm>
+	<name>JNRPE OSGI Integration Tests</name>
 </project>

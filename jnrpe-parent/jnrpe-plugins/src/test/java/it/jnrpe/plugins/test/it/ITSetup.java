@@ -27,59 +27,59 @@ import org.testng.annotations.BeforeSuite;
 /**
  * This test class just starts the JNRPE server before running the tests stops
  * it as soon as the tests have finished.
- *
+ * 
  * @author Massimiliano Ziccardi
- *
+ * 
  */
 public class ITSetup implements ITConstants {
 
-    private static JNRPE m_jnrpeServer;
+	private static JNRPE m_jnrpeServer;
 
-    private static PluginRepository m_pluginRepository;
-    private static CommandRepository m_commandRepository;
+	private static PluginRepository m_pluginRepository;
+	private static CommandRepository m_commandRepository;
 
-    @BeforeSuite
-    public static void setUp() throws Exception {
-        m_pluginRepository = new PluginRepository();
-        m_commandRepository = new CommandRepository();
+	@BeforeSuite
+	public static void setUp() throws Exception {
+		m_pluginRepository = new PluginRepository();
+		m_commandRepository = new CommandRepository();
 
-        m_jnrpeServer = new JNRPE(m_pluginRepository, m_commandRepository);
+		m_jnrpeServer = new JNRPE(m_pluginRepository, m_commandRepository);
 
-        m_jnrpeServer.addEventListener(new IJNRPEEventListener() {
+		m_jnrpeServer.addEventListener(new IJNRPEEventListener() {
 
-            public void receive(final Object sender, final IJNRPEEvent event) {
-                //System.out.println(event.getEventParams().get("MESSAGE"));
-            }
-        });
+			public void receive(final Object sender, final IJNRPEEvent event) {
+				// System.out.println(event.getEventParams().get("MESSAGE"));
+			}
+		});
 
-        m_jnrpeServer.addAcceptedHost(BIND_ADDRESS);
+		m_jnrpeServer.addAcceptedHost(BIND_ADDRESS);
 
-        m_jnrpeServer.listen(BIND_ADDRESS, JNRPE_PORT, false);
-    }
+		m_jnrpeServer.listen(BIND_ADDRESS, JNRPE_PORT, false);
+	}
 
-    @AfterSuite
-    public static void shutDown() throws Exception {
-        Thread.sleep(5000);
-        if (m_jnrpeServer != null)
-            m_jnrpeServer.shutdown();
-    }
+	@AfterSuite
+	public static void shutDown() throws Exception {
+		Thread.sleep(5000);
+		if (m_jnrpeServer != null)
+			m_jnrpeServer.shutdown();
+	}
 
-    public static JNRPE getServer() {
-        return m_jnrpeServer;
-    }
+	public static JNRPE getServer() {
+		return m_jnrpeServer;
+	}
 
-    public static PluginRepository getPluginRepository() {
-        if (m_pluginRepository == null) {
-            try {
-                setUp();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return m_pluginRepository;
-    }
+	public static PluginRepository getPluginRepository() {
+		if (m_pluginRepository == null) {
+			try {
+				setUp();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
+		return m_pluginRepository;
+	}
 
-    public static CommandRepository getCommandRepository() {
-        return m_commandRepository;
-    }
+	public static CommandRepository getCommandRepository() {
+		return m_commandRepository;
+	}
 }
