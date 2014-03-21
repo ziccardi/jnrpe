@@ -1,5 +1,5 @@
-/*
- * Copyright (c) 2012 Massimiliano Ziccardi
+/*******************************************************************************
+ * Copyright (c) 2007, 2014 Massimiliano Ziccardi
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *******************************************************************************/
 package it.jnrpe.osgi;
 
 import java.io.IOException;
@@ -23,26 +23,28 @@ import org.osgi.framework.Bundle;
 
 public class BundleDelegatingClassLoader extends ClassLoader {
 
-    private final Bundle bundle;
+	private final Bundle bundle;
 
-    public BundleDelegatingClassLoader(final Bundle b) {
-        bundle = b;
-    }
+	public BundleDelegatingClassLoader(final Bundle b) {
+		bundle = b;
+	}
 
-    @Override
-    protected Class<?> findClass(final String className) throws ClassNotFoundException {
-        return bundle.loadClass(className);
-    }
+	@Override
+	protected Class<?> findClass(final String className)
+			throws ClassNotFoundException {
+		return bundle.loadClass(className);
+	}
 
-    @Override
-    protected URL findResource(final String resName) {
-        return bundle.getResource(resName);
-    }
+	@Override
+	protected URL findResource(final String resName) {
+		return bundle.getResource(resName);
+	}
 
-    @SuppressWarnings("unchecked")
-    @Override
-    protected Enumeration<URL> findResources(final String resName) throws IOException {
-        return bundle.getResources(resName);
-    }
+	@SuppressWarnings("unchecked")
+	@Override
+	protected Enumeration<URL> findResources(final String resName)
+			throws IOException {
+		return bundle.getResources(resName);
+	}
 
 }
