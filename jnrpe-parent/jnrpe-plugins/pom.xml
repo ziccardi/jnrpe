@@ -307,7 +307,7 @@
 					<container>
 						<containerId>tomcat7x</containerId>
 						<zipUrlInstaller>
-							<url>http://mirror.nohup.it/apache/tomcat/tomcat-7/v7.0.52/bin/apache-tomcat-7.0.52.zip</url>
+							<url>http://apache.fastbull.org/tomcat/tomcat-7/v7.0.53/bin/apache-tomcat-7.0.53.zip</url>
 							<extractDir>${basedir}/target/tomcat/</extractDir>
 							<downloadDir>${basedir}/target/tomcat/</downloadDir>
 						</zipUrlInstaller>
