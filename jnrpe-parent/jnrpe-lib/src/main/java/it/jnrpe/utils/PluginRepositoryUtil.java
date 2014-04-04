@@ -46,8 +46,6 @@ import org.dom4j.io.DOMReader;
  */
 public final class PluginRepositoryUtil {
 
-	private final static LoadedClassCache CLASS_CACHE = new LoadedClassCache();
-
 	/**
      *
      */
@@ -75,6 +73,7 @@ public final class PluginRepositoryUtil {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public static Collection<PluginDefinition> loadFromXmlPluginPackageDefinitions(
 			final ClassLoader cl, final InputStream in)
 			throws PluginConfigurationException {
@@ -83,7 +82,6 @@ public final class PluginRepositoryUtil {
 
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
-		// SAXReader reader = new SAXReader();
 		Document document;
 
 		try {
@@ -104,7 +102,6 @@ public final class PluginRepositoryUtil {
 			Element plugin = i.next();
 
 			PluginDefinition pd = parsePluginDefinition(cl, plugin);
-			// repo.addPluginDefinition(pd);
 			res.add(pd);
 		}
 
@@ -173,6 +170,7 @@ public final class PluginRepositoryUtil {
 	 * @throws PluginConfigurationException
 	 *             -
 	 */
+	@SuppressWarnings("rawtypes")
 	private static PluginDefinition parsePluginDefinition(final ClassLoader cl,
 			final Element plugin) throws PluginConfigurationException {
 
@@ -191,12 +189,11 @@ public final class PluginRepositoryUtil {
 			}
 		}
 
-		String pluginName = getAttributeValue(plugin, "name", true);
 		String pluginClass = getAttributeValue(plugin, "class", true);
 
 		Class c;
 		try {
-			c = CLASS_CACHE.getClass(cl, pluginClass);
+			c = LoadedClassCache.getClass(cl, pluginClass);
 
 			if (!IPluginInterface.class.isAssignableFrom(c)) {
 				throw new PluginConfigurationException("Specified class '"
@@ -257,6 +254,7 @@ public final class PluginRepositoryUtil {
 	 *            The plugin class
 	 * @return <code>true</code> if the class contains plugin
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private static boolean isAnnotated(final Class clazz) {
 		Plugin plugin = (Plugin) clazz.getAnnotation(Plugin.class);
 		return plugin != null;
@@ -269,6 +267,7 @@ public final class PluginRepositoryUtil {
 	 *            the plugin class
 	 * @return PluginDefinition
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static PluginDefinition loadFromPluginAnnotation(final Class clazz) {
 		Plugin plugin = (Plugin) clazz.getAnnotation(Plugin.class);
 		PluginOptions options = (PluginOptions) clazz
