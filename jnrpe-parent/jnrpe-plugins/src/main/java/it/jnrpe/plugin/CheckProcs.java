@@ -451,7 +451,8 @@ public class CheckProcs extends PluginBase {
 
     private int convertToMemoryInt(String mem) {
         char[] replace = new char[]{160};
-        mem = mem.replaceAll(" ", "").replace("K", "").replace(new String(replace), "");
+        // @TODO use a regex, this is kinda ugly
+        mem = mem.replaceAll(" ", "").replace("K", "").replace("B", "").replace(new String(replace), "");
         return Integer.parseInt(mem);
     }
 
