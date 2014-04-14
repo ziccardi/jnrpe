@@ -35,312 +35,270 @@ import java.util.Properties;
 import java.util.concurrent.Executor;
 
 public class DbConnectionMock implements Connection {
-    private final ISQLQueryResolver m_queryResolver;
+	private final ISQLQueryResolver m_queryResolver;
 
-    private boolean open = true;
+	private boolean open = true;
 
-    public DbConnectionMock(ISQLQueryResolver queryResolver) {
-        m_queryResolver = queryResolver;
-    }
-
-    public <T> T unwrap(Class<T> iface) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public boolean isWrapperFor(Class<?> iface) throws SQLException {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    public Statement createStatement() throws SQLException {
-        return new StatementMock(m_queryResolver);
-    }
-
-    public PreparedStatement prepareStatement(String sql) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public CallableStatement prepareCall(String sql) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public String nativeSQL(String sql) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public void setAutoCommit(boolean autoCommit) throws SQLException {
-        // TODO Auto-generated method stub
-
-    }
-
-    public boolean getAutoCommit() throws SQLException {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    public void commit() throws SQLException {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void rollback() throws SQLException {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void close() throws SQLException {
-        open = false;
-    }
-
-    public boolean isClosed() throws SQLException {
-        return !open;
-    }
-
-    public DatabaseMetaData getMetaData() throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public void setReadOnly(boolean readOnly) throws SQLException {
-        // TODO Auto-generated method stub
-
-    }
-
-    public boolean isReadOnly() throws SQLException {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    public void setCatalog(String catalog) throws SQLException {
-        // TODO Auto-generated method stub
-
-    }
-
-    public String getCatalog() throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public void setTransactionIsolation(int level) throws SQLException {
-        // TODO Auto-generated method stub
-
-    }
-
-    public int getTransactionIsolation() throws SQLException {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    public SQLWarning getWarnings() throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public void clearWarnings() throws SQLException {
-        // TODO Auto-generated method stub
-
-    }
-
-    public Statement
-            createStatement(int resultSetType, int resultSetConcurrency)
-                    throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public PreparedStatement prepareStatement(String sql, int resultSetType,
-            int resultSetConcurrency) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public CallableStatement prepareCall(String sql, int resultSetType,
-            int resultSetConcurrency) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public Map<String, Class<?>> getTypeMap() throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public void setTypeMap(Map<String, Class<?>> map) throws SQLException {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void setHoldability(int holdability) throws SQLException {
-        // TODO Auto-generated method stub
-
-    }
-
-    public int getHoldability() throws SQLException {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    public Savepoint setSavepoint() throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public Savepoint setSavepoint(String name) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public void rollback(Savepoint savepoint) throws SQLException {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void releaseSavepoint(Savepoint savepoint) throws SQLException {
-        // TODO Auto-generated method stub
-
-    }
-
-    public Statement createStatement(int resultSetType,
-            int resultSetConcurrency, int resultSetHoldability)
-            throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public PreparedStatement prepareStatement(String sql, int resultSetType,
-            int resultSetConcurrency, int resultSetHoldability)
-            throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public CallableStatement prepareCall(String sql, int resultSetType,
-            int resultSetConcurrency, int resultSetHoldability)
-            throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public PreparedStatement
-            prepareStatement(String sql, int autoGeneratedKeys)
-                    throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public PreparedStatement prepareStatement(String sql, int[] columnIndexes)
-            throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public PreparedStatement prepareStatement(String sql, String[] columnNames)
-            throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public Clob createClob() throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public Blob createBlob() throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public NClob createNClob() throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public SQLXML createSQLXML() throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public boolean isValid(int timeout) throws SQLException {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    public void setClientInfo(String name, String value)
-            throws SQLClientInfoException {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void setClientInfo(Properties properties)
-            throws SQLClientInfoException {
-        // TODO Auto-generated method stub
-
-    }
-
-    public String getClientInfo(String name) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public Properties getClientInfo() throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public Array createArrayOf(String typeName, Object[] elements)
-            throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public Struct createStruct(String typeName, Object[] attributes)
-            throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-	/* (non-Javadoc)
-	 * @see java.sql.Connection#setSchema(java.lang.String)
-	 */
-	public void setSchema(String schema) throws SQLException {
-		// TODO Auto-generated method stub
-		
+	public DbConnectionMock(ISQLQueryResolver queryResolver) {
+		m_queryResolver = queryResolver;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.sql.Connection#getSchema()
-	 */
-	public String getSchema() throws SQLException {
-		// TODO Auto-generated method stub
+	public <T> T unwrap(Class<T> iface) throws SQLException {
 		return null;
 	}
 
-	/* (non-Javadoc)
+	public boolean isWrapperFor(Class<?> iface) throws SQLException {
+		return false;
+	}
+
+	public Statement createStatement() throws SQLException {
+		return new StatementMock(m_queryResolver);
+	}
+
+	public PreparedStatement prepareStatement(String sql) throws SQLException {
+		return null;
+	}
+
+	public CallableStatement prepareCall(String sql) throws SQLException {
+		return null;
+	}
+
+	public String nativeSQL(String sql) throws SQLException {
+		return null;
+	}
+
+	public void setAutoCommit(boolean autoCommit) throws SQLException {
+
+	}
+
+	public boolean getAutoCommit() throws SQLException {
+		return false;
+	}
+
+	public void commit() throws SQLException {
+
+	}
+
+	public void rollback() throws SQLException {
+
+	}
+
+	public void close() throws SQLException {
+		open = false;
+	}
+
+	public boolean isClosed() throws SQLException {
+		return !open;
+	}
+
+	public DatabaseMetaData getMetaData() throws SQLException {
+		return null;
+	}
+
+	public void setReadOnly(boolean readOnly) throws SQLException {
+
+	}
+
+	public boolean isReadOnly() throws SQLException {
+		return false;
+	}
+
+	public void setCatalog(String catalog) throws SQLException {
+
+	}
+
+	public String getCatalog() throws SQLException {
+		return null;
+	}
+
+	public void setTransactionIsolation(int level) throws SQLException {
+
+	}
+
+	public int getTransactionIsolation() throws SQLException {
+		return 0;
+	}
+
+	public SQLWarning getWarnings() throws SQLException {
+		return null;
+	}
+
+	public void clearWarnings() throws SQLException {
+
+	}
+
+	public Statement createStatement(int resultSetType, int resultSetConcurrency)
+			throws SQLException {
+		return null;
+	}
+
+	public PreparedStatement prepareStatement(String sql, int resultSetType,
+			int resultSetConcurrency) throws SQLException {
+		return null;
+	}
+
+	public CallableStatement prepareCall(String sql, int resultSetType,
+			int resultSetConcurrency) throws SQLException {
+		return null;
+	}
+
+	public Map<String, Class<?>> getTypeMap() throws SQLException {
+		return null;
+	}
+
+	public void setTypeMap(Map<String, Class<?>> map) throws SQLException {
+
+	}
+
+	public void setHoldability(int holdability) throws SQLException {
+
+	}
+
+	public int getHoldability() throws SQLException {
+		return 0;
+	}
+
+	public Savepoint setSavepoint() throws SQLException {
+		return null;
+	}
+
+	public Savepoint setSavepoint(String name) throws SQLException {
+		return null;
+	}
+
+	public void rollback(Savepoint savepoint) throws SQLException {
+
+	}
+
+	public void releaseSavepoint(Savepoint savepoint) throws SQLException {
+
+	}
+
+	public Statement createStatement(int resultSetType,
+			int resultSetConcurrency, int resultSetHoldability)
+			throws SQLException {
+		return null;
+	}
+
+	public PreparedStatement prepareStatement(String sql, int resultSetType,
+			int resultSetConcurrency, int resultSetHoldability)
+			throws SQLException {
+		return null;
+	}
+
+	public CallableStatement prepareCall(String sql, int resultSetType,
+			int resultSetConcurrency, int resultSetHoldability)
+			throws SQLException {
+		return null;
+	}
+
+	public PreparedStatement prepareStatement(String sql, int autoGeneratedKeys)
+			throws SQLException {
+		return null;
+	}
+
+	public PreparedStatement prepareStatement(String sql, int[] columnIndexes)
+			throws SQLException {
+		return null;
+	}
+
+	public PreparedStatement prepareStatement(String sql, String[] columnNames)
+			throws SQLException {
+		return null;
+	}
+
+	public Clob createClob() throws SQLException {
+		return null;
+	}
+
+	public Blob createBlob() throws SQLException {
+		return null;
+	}
+
+	public NClob createNClob() throws SQLException {
+		return null;
+	}
+
+	public SQLXML createSQLXML() throws SQLException {
+		return null;
+	}
+
+	public boolean isValid(int timeout) throws SQLException {
+		return false;
+	}
+
+	public void setClientInfo(String name, String value)
+			throws SQLClientInfoException {
+
+	}
+
+	public void setClientInfo(Properties properties)
+			throws SQLClientInfoException {
+
+	}
+
+	public String getClientInfo(String name) throws SQLException {
+		return null;
+	}
+
+	public Properties getClientInfo() throws SQLException {
+		return null;
+	}
+
+	public Array createArrayOf(String typeName, Object[] elements)
+			throws SQLException {
+		return null;
+	}
+
+	public Struct createStruct(String typeName, Object[] attributes)
+			throws SQLException {
+		return null;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.sql.Connection#setSchema(java.lang.String)
+	 */
+	public void setSchema(String schema) throws SQLException {
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.sql.Connection#getSchema()
+	 */
+	public String getSchema() throws SQLException {
+		return null;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.sql.Connection#abort(java.util.concurrent.Executor)
 	 */
 	public void abort(Executor executor) throws SQLException {
-		// TODO Auto-generated method stub
-		
+
 	}
 
-	/* (non-Javadoc)
-	 * @see java.sql.Connection#setNetworkTimeout(java.util.concurrent.Executor, int)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.sql.Connection#setNetworkTimeout(java.util.concurrent.Executor,
+	 * int)
 	 */
 	public void setNetworkTimeout(Executor executor, int milliseconds)
 			throws SQLException {
-		// TODO Auto-generated method stub
-		
+
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.sql.Connection#getNetworkTimeout()
 	 */
 	public int getNetworkTimeout() throws SQLException {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
