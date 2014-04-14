@@ -27,11 +27,9 @@ import it.jnrpe.utils.BadThresholdException;
 import it.jnrpe.utils.ThresholdUtil;
 
 import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -453,7 +451,8 @@ public class CheckProcs extends PluginBase {
 
     private int convertToMemoryInt(String mem) {
         char[] replace = new char[]{160};
-        mem = mem.replaceAll(" ", "").replace("K", "").replace(new String(replace), "");
+        // @TODO use a regex, this is kinda ugly
+        mem = mem.replaceAll(" ", "").replace("K", "").replace("B", "").replace(new String(replace), "");
         return Integer.parseInt(mem);
     }
 
