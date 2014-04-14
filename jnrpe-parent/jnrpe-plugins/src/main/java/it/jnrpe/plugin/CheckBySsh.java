@@ -16,6 +16,7 @@
 package it.jnrpe.plugin;
 
 import it.jnrpe.ICommandLine;
+import it.jnrpe.Status;
 import it.jnrpe.plugin.utils.SshUtils;
 import it.jnrpe.plugin.utils.Utils;
 import it.jnrpe.plugins.Metric;
@@ -69,12 +70,12 @@ public class CheckBySsh extends PluginBase {
 	 * command not found
 	 */
 	private static final int ERR_CMD_NOT_FOUND = 127;
-	
+
 	/**
 	 * no permision
 	 */
 	private static final int ERR_NO_PERMISSION = 126;
-	
+
 	@Override
 	protected String getPluginName() {
 		return "CHECK_BY_SSH";
@@ -85,7 +86,8 @@ public class CheckBySsh extends PluginBase {
 			final ThresholdsEvaluatorBuilder thrb, final ICommandLine cl)
 			throws BadThresholdException {
 		thrb.withLegacyThreshold("session", "1", null, "0");
-		thrb.withLegacyThreshold("response", null, cl.getOptionValue("warning"), cl.getOptionValue("critical"));
+		thrb.withLegacyThreshold("response", null,
+				cl.getOptionValue("warning"), cl.getOptionValue("critical"));
 		thrb.withLegacyThreshold("result", "1", null, "0");
 
 	}
@@ -107,9 +109,12 @@ public class CheckBySsh extends PluginBase {
 			hasSession = true;
 			metrics.add(new Metric("session", "", new BigDecimal(1), null, null));
 		} catch (Exception e) {
-			metrics.add(new Metric("session", "SSH not started, permission denied. " + e.getMessage(), new BigDecimal(
-					0), null, null));
+			// metrics.add(new Metric("session",
+			// "SSH not started, permission denied. " + e.getMessage(),
+			// new BigDecimal(0), null, null));
 			log.debug(e.getMessage(), e);
+			throw new MetricGatheringException(
+					"SSH not started, permission denied.", Status.UNKNOWN, e);
 		}
 		try {
 			if (hasSession) {
@@ -117,11 +122,13 @@ public class CheckBySsh extends PluginBase {
 				channel.setInputStream(null);
 				((ChannelExec) channel).setErrStream(System.err);
 				in = channel.getInputStream();
-			}else{
+			} else {
 				return metrics;
 			}
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			// e1.printStackTrace();
+			throw new MetricGatheringException(e1.getMessage(), Status.UNKNOWN,
+					e1);
 		}
 
 		try {
@@ -129,7 +136,9 @@ public class CheckBySsh extends PluginBase {
 			metrics.add(new Metric("connected", "", new BigDecimal(1), null,
 					null));
 		} catch (JSchException e2) {
-			e2.printStackTrace();
+			// e2.printStackTrace();
+			throw new MetricGatheringException(e2.getMessage(), Status.UNKNOWN,
+					e2);
 		}
 
 		StringBuffer sb = new StringBuffer();
@@ -144,7 +153,8 @@ public class CheckBySsh extends PluginBase {
 					sb.append(new String(tmp, 0, i));
 				}
 			} catch (IOException e1) {
-				e1.printStackTrace();
+				throw new MetricGatheringException(e1.getMessage(),
+						Status.UNKNOWN, e1);
 			}
 			if (channel.isClosed()) {
 				exitStatus = channel.getExitStatus();
@@ -156,28 +166,30 @@ public class CheckBySsh extends PluginBase {
 				e.printStackTrace();
 			}
 		}
-		if (channel != null){
+		if (channel != null) {
 			channel.disconnect();
 		}
-		if (session != null){
+		if (session != null) {
 			session.disconnect();
 		}
-		long response = (System.currentTimeMillis() - then)/1000;
-		metrics.add(new Metric("response", "", new BigDecimal(response), null, null));
-//		sb.append("\nexit-status: " + channel.getExitStatus());
+		long response = (System.currentTimeMillis() - then) / 1000;
+		metrics.add(new Metric("response", "", new BigDecimal(response), null,
+				null));
+		// sb.append("\nexit-status: " + channel.getExitStatus());
 		String msg = "";
 		switch (channel.getExitStatus()) {
-			case ERR_CMD_NOT_FOUND:
-				msg = "Command not found.";
-				break;
-			case ERR_NO_PERMISSION:
-				msg = "Not enough permission to execute command.";
-				break;
-			default:
-				break;
+		case ERR_CMD_NOT_FOUND:
+			msg = "Command not found.";
+			break;
+		case ERR_NO_PERMISSION:
+			msg = "Not enough permission to execute command.";
+			break;
+		default:
+			break;
 		}
 
-		metrics.add(new Metric("result", msg + " " + sb.toString(), new BigDecimal(Utils.getIntValue(exitStatus == 0)), null, null));
+		metrics.add(new Metric("result", msg + " " + sb.toString(),
+				new BigDecimal(Utils.getIntValue(exitStatus == 0)), null, null));
 		return metrics;
 	}
 }
