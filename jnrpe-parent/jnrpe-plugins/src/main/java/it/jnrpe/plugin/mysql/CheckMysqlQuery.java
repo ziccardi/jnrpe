@@ -16,14 +16,11 @@
 package it.jnrpe.plugin.mysql;
 
 import it.jnrpe.ICommandLine;
-import it.jnrpe.ReturnValue;
-import it.jnrpe.ReturnValue.UnitOfMeasure;
 import it.jnrpe.Status;
 import it.jnrpe.plugins.Metric;
 import it.jnrpe.plugins.MetricGatheringException;
 import it.jnrpe.plugins.PluginBase;
 import it.jnrpe.utils.BadThresholdException;
-import it.jnrpe.utils.ThresholdUtil;
 import it.jnrpe.utils.thresholds.ThresholdsEvaluatorBuilder;
 
 import java.math.BigDecimal;
@@ -31,7 +28,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -92,7 +88,7 @@ public class CheckMysqlQuery extends PluginBase {
 			}
 
 			metrics.add(new Metric("rows", "CHECK_MYSQL_QUERY - Returned value is " + 
-					value.longValue(), 
+					(value != null ? value.longValue() : null) , 
 					value, 
 					null, 
 					null));
