@@ -109,7 +109,7 @@ public class HttpUtils {
 		}
 		if (encodedData != null){
 			if (conn.getRequestProperty("Content-Length") == null) {
-				conn.setRequestProperty("Content-Length", "" + encodedData.getBytes().length);
+				conn.setRequestProperty("Content-Length", "" + encodedData.getBytes("UTF-8").length);
 			}
 			DataOutputStream out = new DataOutputStream(conn.getOutputStream());
 			out.write(encodedData.getBytes());

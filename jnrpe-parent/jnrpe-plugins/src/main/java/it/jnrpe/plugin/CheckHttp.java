@@ -25,6 +25,7 @@ import it.jnrpe.plugins.PluginBase;
 import it.jnrpe.utils.BadThresholdException;
 import it.jnrpe.utils.thresholds.ThresholdsEvaluatorBuilder;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -95,6 +96,8 @@ public class CheckHttp extends PluginBase {
             "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 "
                     + "(KHTML, like Gecko) Chrome/27.0.1453.94 Safari/537.36";
 
+    private static final String CHARSET = "UTF-8";
+    
     /**
      * Configures the threshold evaluator. This plugin supports both the legacy
      * threshold format and the new format specification.
@@ -198,7 +201,9 @@ public class CheckHttp extends PluginBase {
                         metrics);
         int elapsed =
                 (int) Utils.milliToSec(System.currentTimeMillis() - then);
-        metrics.addAll(analyzeResponse(cl, response, elapsed));
+        if (response != null){
+        	metrics.addAll(analyzeResponse(cl, response, elapsed));
+        }
         return metrics;
     }
 
@@ -234,7 +239,12 @@ public class CheckHttp extends PluginBase {
             final int timeout,
             final boolean ssl,
             final List<Metric> metrics) throws MetricGatheringException {
-        Properties props = getRequestProperties(cl, method);
+        Properties props = null;
+        try {
+			props = getRequestProperties(cl, method);
+		} catch (UnsupportedEncodingException e) {
+			throw new MetricGatheringException("Error occurred: " + e.getMessage(), Status.CRITICAL, e);
+		}
         String response = null;
         String redirect = cl.getOptionValue("onredirect");
         boolean ignoreBody = false;
@@ -429,9 +439,10 @@ public class CheckHttp extends PluginBase {
      * @param method
      *            The HTTP method
      * @return Properties
+     * @throws UnsupportedEncodingException 
      */
     private Properties getRequestProperties(final ICommandLine cl,
-            final String method) {
+            final String method) throws UnsupportedEncodingException {
         Properties props = new Properties();
         if (cl.getOptionValue("useragent") != null) {
             props.put("User-Agent", cl.getOptionValue("useragent"));
@@ -454,14 +465,14 @@ public class CheckHttp extends PluginBase {
         String auth = null;
         String encoded = null;
         if (cl.hasOption("authorization")) {
-            encoded =
+        	encoded =
                     Base64.encodeBase64String(cl
-                            .getOptionValue("authorization").getBytes());
+                            .getOptionValue("authorization").getBytes(CHARSET));
             auth = "Authorization";
         } else if (cl.hasOption("proxy-authorization")) {
             encoded =
                     Base64.encodeBase64String(cl.getOptionValue(
-                            "proxy-authorization").getBytes());
+                            "proxy-authorization").getBytes(CHARSET));
             auth = "Proxy-Authorization";
         }
         if (auth != null && encoded != null) {

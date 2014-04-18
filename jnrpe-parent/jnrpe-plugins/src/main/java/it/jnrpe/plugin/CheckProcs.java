@@ -325,9 +325,7 @@ public class CheckProcs extends PluginBase {
 
 			ByteArrayOutputStream bout = new ByteArrayOutputStream();
 			IOUtils.copy(input, bout);
-
-			// output = FileUtils.readFileToString(new File(outputFile));
-			output = getFormattedOutput(new String(bout.toByteArray()));
+			output = getFormattedOutput(new String(bout.toByteArray(), "UTF-8"));
 			input.close();
 
 		} else {
