@@ -142,7 +142,7 @@ public class CheckUsers extends PluginBase {
         Process proc = null;
         proc = builder.command(command).start();
         InputStream stdin = proc.getInputStream();
-        InputStreamReader isr = new InputStreamReader(stdin);
+        InputStreamReader isr = new InputStreamReader(stdin, "UTF-8");
         BufferedReader br = new BufferedReader(isr);
         String line = null;
         while ((line = br.readLine()) != null) {
