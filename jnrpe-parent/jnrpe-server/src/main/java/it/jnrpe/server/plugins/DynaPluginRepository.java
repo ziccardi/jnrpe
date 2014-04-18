@@ -100,10 +100,10 @@ public class DynaPluginRepository extends PluginRepository {
 
 		for (int j = 0; j < vfJars.length; j++) {
 			try {
-				// urls[j] = vfJars[j].toURI().toURL();
 				vUrls.add(vfJars[j].toURI().toURL());
 			} catch (MalformedURLException e) {
 				// should never happen
+				throw new IllegalStateException(e);
 			}
 		}
 
@@ -116,7 +116,12 @@ public class DynaPluginRepository extends PluginRepository {
 					jarFile = new JarFile(file);
 					JarEntry entry = jarFile.getJarEntry("plugin.xml");
 					if (entry == null) {
-						// The jar do not contain a plugin.xml file...
+						entry = jarFile.getJarEntry("jnrpe_plugins.xml");
+					}
+
+					if (entry == null) {
+						// The jar do not contain a jnrpe_plugins.xml nor a
+						// plugin.xml file...
 						continue;
 					}
 
@@ -135,6 +140,7 @@ public class DynaPluginRepository extends PluginRepository {
 					try {
 						jarFile.close();
 					} catch (Exception e) {
+						// Intentionally ignored...
 					}
 				}
 			}

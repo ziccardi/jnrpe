@@ -115,8 +115,9 @@ public class CCheckOracle extends PluginBase {
 
 		} finally {
 			try {
-				stmt.close();
-				rs.close();
+				if (stmt != null) {
+					stmt.close();
+				}
 			} catch (Exception e) {
 				// Intentionally ignored...
 			}
@@ -185,7 +186,9 @@ public class CCheckOracle extends PluginBase {
 
 		} finally {
 			try {
-				stmt.close();
+				if (stmt != null) {
+					stmt.close();
+				}
 			} catch (Exception e) {
 				// Intentionally ignored...
 			}
@@ -248,7 +251,9 @@ public class CCheckOracle extends PluginBase {
 			return metricList;
 		} finally {
 			try {
-				stmt.close();
+				if (stmt != null) {
+					stmt.close();
+				}
 			} catch (Exception e) {
 				// Intentionally ignored...
 			}
