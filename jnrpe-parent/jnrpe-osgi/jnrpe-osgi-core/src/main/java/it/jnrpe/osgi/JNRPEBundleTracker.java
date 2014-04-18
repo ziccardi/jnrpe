@@ -34,103 +34,117 @@ import org.slf4j.LoggerFactory;
 
 public class JNRPEBundleTracker extends BundleTracker {
 
-    private final static String JNRPE_PLUGIN_PACKAGE_NAME =
-            "JNRPE-PluginPackage-Name";
+	private final static String JNRPE_PLUGIN_PACKAGE_NAME = "JNRPE-PluginPackage-Name";
 
-    /**
-     * The logger.
-     */
-    private static final Logger LOG = LoggerFactory
-            .getLogger(JNRPEBundleTracker.class);
+	/**
+	 * The logger.
+	 */
+	private static final Logger LOG = LoggerFactory
+			.getLogger(JNRPEBundleTracker.class);
 
-    private final IPluginRepository pluginRepository;
-    private final CommandRepository commandRepository;
+	private final IPluginRepository pluginRepository;
+	private final CommandRepository commandRepository;
 
-    public JNRPEBundleTracker(final BundleContext context,
-            final IPluginRepository pluginRepo,
-            final CommandRepository commandRepo) {
-        super(context, Bundle.ACTIVE | Bundle.STOPPING, null);
-        pluginRepository = pluginRepo;
-        commandRepository = commandRepo;
-    }
+	public JNRPEBundleTracker(final BundleContext context,
+			final IPluginRepository pluginRepo,
+			final CommandRepository commandRepo) {
+		super(context, Bundle.ACTIVE | Bundle.STOPPING, null);
+		pluginRepository = pluginRepo;
+		commandRepository = commandRepo;
+	}
 
-    @Override
-    public Object addingBundle(final Bundle bundle, final BundleEvent event) {
+	private InputStream getPluginConfigStream(ClassLoader cl) {
+		InputStream in = null;
 
-        String pluginPackageClassName =
-                (String) bundle.getHeaders().get(JNRPE_PLUGIN_PACKAGE_NAME);
+		in = cl.getResourceAsStream("jnrpe_plugins.xml");
 
-        if (pluginPackageClassName != null) {
-            LOG.info("Plugin package found: {} " + pluginPackageClassName);
+		if (in == null) {
+			// fallback to the old plugin.xml file...
+			in = cl.getResourceAsStream("plugin.xml");
+		}
 
-            StreamManager sm = new StreamManager();
-            // The bundle is a plugin package...
-            try {
-                BundleDelegatingClassLoader bdc =
-                        new BundleDelegatingClassLoader(bundle);
-                InputStream in =
-                        sm.handle(bdc.getResourceAsStream("plugin.xml"));
+		return in;
+	}
 
-                Collection<PluginDefinition> pdList =
-                        PluginRepositoryUtil
-                        .loadFromXmlPluginPackageDefinitions(bdc, in);
+	@Override
+	public Object addingBundle(final Bundle bundle, final BundleEvent event) {
 
-                for (PluginDefinition pd : pdList) {
-                    LOG.info("Adding plugin '{}' to the repository",
-                            pd.getName());
-                    pluginRepository.addPluginDefinition(pd);
-                }
+		String pluginPackageClassName = (String) bundle.getHeaders().get(
+				JNRPE_PLUGIN_PACKAGE_NAME);
 
-            } catch (Exception e) {
-                LOG.error("Error adding plugin to the repository", e);
-            } finally {
-                sm.closeAll();
-            }
-        }
+		if (pluginPackageClassName != null) {
+			LOG.info("Plugin package found: {} ", pluginPackageClassName);
 
-        return bundle;
-    }
+			StreamManager sm = new StreamManager();
+			// The bundle is a plugin package...
+			try {
+				BundleDelegatingClassLoader bdc = new BundleDelegatingClassLoader(
+						bundle);
 
-    @Override
-    public void remove(final Bundle bundle) {
-        String pluginPackageClassName =
-                (String) bundle.getHeaders().get(JNRPE_PLUGIN_PACKAGE_NAME);
+				// the 'plugin.xml' file is deprecated. Search for the new
+				// jnrpe_plugins.xml file and then fallback to the old
+				// plugin.xml
 
-        if (pluginPackageClassName != null) {
+				InputStream in = sm.handle(getPluginConfigStream(bdc));
 
-            StreamManager sm = new StreamManager();
+				// FIXME: check that 'in' is not null
 
-            // The bundle is a plugin package...
-            try {
-                BundleDelegatingClassLoader bdc =
-                        new BundleDelegatingClassLoader(bundle);
-                InputStream in =
-                        sm.handle(bdc.getResourceAsStream("plugin.xml"));
+				Collection<PluginDefinition> pdList = PluginRepositoryUtil
+						.loadFromXmlPluginPackageDefinitions(bdc, in);
 
-                Collection<PluginDefinition> pdList =
-                        PluginRepositoryUtil
-                        .loadFromXmlPluginPackageDefinitions(bdc,
-                                in);
+				for (PluginDefinition pd : pdList) {
+					LOG.info("Adding plugin '{}' to the repository",
+							pd.getName());
+					pluginRepository.addPluginDefinition(pd);
+				}
 
-                for (PluginDefinition pd : pdList) {
-                    // First remove all the commands using the plugin...
-                    for (CommandDefinition cd : commandRepository
-                            .getAllCommandDefinition(pd.getName())) {
-                        LOG.info(
-                                "Removing command '{}' from the repository",
-                                cd.getName());
-                        commandRepository.removeCommandDefinition(cd);
-                    }
+			} catch (Exception e) {
+				LOG.error("Error adding plugin to the repository", e);
+			} finally {
+				sm.closeAll();
+			}
+		}
 
-                    LOG.info("Removing plugin '{}' from the repository",
-                            pd.getName());
-                    pluginRepository.removePluginDefinition(pd);
-                }
-            } catch (Exception e) {
-                LOG.error("Error removing plugin from the repository", e);
-            } finally {
-                sm.closeAll();
-            }
-        }
-    }
+		return bundle;
+	}
+
+	@Override
+	public void remove(final Bundle bundle) {
+		String pluginPackageClassName = (String) bundle.getHeaders().get(
+				JNRPE_PLUGIN_PACKAGE_NAME);
+
+		if (pluginPackageClassName != null) {
+
+			StreamManager sm = new StreamManager();
+
+			// The bundle is a plugin package...
+			try {
+				BundleDelegatingClassLoader bdc = new BundleDelegatingClassLoader(
+						bundle);
+
+				InputStream in = sm.handle(getPluginConfigStream(bdc));
+
+				Collection<PluginDefinition> pdList = PluginRepositoryUtil
+						.loadFromXmlPluginPackageDefinitions(bdc, in);
+
+				for (PluginDefinition pd : pdList) {
+					// First remove all the commands using the plugin...
+					for (CommandDefinition cd : commandRepository
+							.getAllCommandDefinition(pd.getName())) {
+						LOG.info("Removing command '{}' from the repository",
+								cd.getName());
+						commandRepository.removeCommandDefinition(cd);
+					}
+
+					LOG.info("Removing plugin '{}' from the repository",
+							pd.getName());
+					pluginRepository.removePluginDefinition(pd);
+				}
+			} catch (Exception e) {
+				LOG.error("Error removing plugin from the repository", e);
+			} finally {
+				sm.closeAll();
+			}
+		}
+	}
 }

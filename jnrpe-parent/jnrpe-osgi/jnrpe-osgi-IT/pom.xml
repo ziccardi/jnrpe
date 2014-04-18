@@ -17,9 +17,9 @@
 	<profiles>
 		<profile>
 			<id>felix</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
 
 			<dependencies>
 				<dependency>
@@ -34,38 +34,58 @@
 					<version>3.2.2</version>
 					<scope>test</scope>
 				</dependency>
+				<dependency>
+					<groupId>org.ops4j.pax.url</groupId>
+					<artifactId>pax-url-wrap</artifactId>
+					<version>${url.version}</version>
+					<scope>test</scope>
+					<exclusions>
+						<exclusion>
+							<artifactId>org.osgi.core</artifactId>
+							<groupId>org.osgi</groupId>
+						</exclusion>
+					</exclusions>
+				</dependency>
 			</dependencies>
 		</profile>
 
 		<profile>
-            <id>equinox-juno</id>
-            <properties>
-                <pax.exam.framework>equinox-juno</pax.exam.framework>
-            </properties>
-            <dependencies>
-            <dependency>
+			<id>equinox-juno</id>
+			<properties>
+				<pax.exam.framework>equinox-juno</pax.exam.framework>
+			</properties>
+			<dependencies>
+				<dependency>
 					<groupId>org.ops4j.pax.exam</groupId>
 					<artifactId>pax-exam-container-native</artifactId>
 					<version>${pax.exam.version}</version>
 					<scope>test</scope>
 				</dependency>
-                <dependency>
-                    <groupId>org.eclipse.tycho</groupId>
-                    <artifactId>org.eclipse.osgi</artifactId>
-                    <version>3.8.1.v20120830-144521</version>
-                    <scope>test</scope>
-                </dependency>
-            </dependencies>
-        </profile>
+				<dependency>
+					<groupId>org.eclipse.osgi</groupId>
+					<artifactId>org.eclipse.osgi</artifactId>
+					<version>3.7.1</version>
+					<scope>test</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.ops4j.pax.url</groupId>
+					<artifactId>pax-url-wrap</artifactId>
+					<version>${url.version}</version>
+					<scope>test</scope>
+					<exclusions>
+						<exclusion>
+							<artifactId>org.osgi.core</artifactId>
+							<groupId>org.osgi</groupId>
+						</exclusion>
+					</exclusions>
+				</dependency>
+
+			</dependencies>
+
+		</profile>
 	</profiles>
 
 	<dependencies>
-		<dependency>
-			<groupId>biz.aQute.bnd</groupId>
-			<artifactId>bndlib</artifactId>
-			<version>2.2.0</version>
-		</dependency>
-
 		<!-- <dependency> <groupId>org.ops4j.pax.exam</groupId> <artifactId>pax-exam-container-native</artifactId> 
 			<version>${exam.version}</version> <scope>test</scope> </dependency> -->
 
@@ -86,14 +106,6 @@
 		<dependency>
 			<groupId>org.ops4j.pax.url</groupId>
 			<artifactId>pax-url-aether</artifactId>
-			<version>${url.version}</version>
-			<scope>test</scope>
-		</dependency>
-
-
-		<dependency>
-			<groupId>org.ops4j.pax.url</groupId>
-			<artifactId>pax-url-wrap</artifactId>
 			<version>${url.version}</version>
 			<scope>test</scope>
 		</dependency>

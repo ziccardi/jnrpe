@@ -23,60 +23,73 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This object manages all the configured commands.
- *
+ * 
  * @author Massimiliano Ziccardi
  */
 public final class CommandRepository {
-    /**
-     * Contains all the commands. The KEY is the command name, while the value.
-     * is the {@link CommandDefinition}.
-     */
-    private final Map<String, CommandDefinition> commandDefinitionsMap =
-            new ConcurrentHashMap<String, CommandDefinition>();
+	/**
+	 * Contains all the commands. The KEY is the command name, while the value.
+	 * is the {@link CommandDefinition}.
+	 */
+	private final Map<String, CommandDefinition> commandDefinitionsMap = new ConcurrentHashMap<String, CommandDefinition>();
 
-    /**
-     * Adds a new command definition to the repository.
-     *
-     * @param commandDef
-     *            The command definition to be added
-     */
-    public void addCommandDefinition(final CommandDefinition commandDef) {
-        commandDefinitionsMap.put(commandDef.getName(), commandDef);
-    }
+	/**
+	 * Adds a new command definition to the repository.
+	 * 
+	 * @param commandDef
+	 *            The command definition to be added
+	 */
+	public void addCommandDefinition(final CommandDefinition commandDef) {
+		commandDefinitionsMap.put(commandDef.getName(), commandDef);
+	}
 
-    public void removeCommandDefinition(final CommandDefinition commandDef) {
-        commandDefinitionsMap.remove(commandDef.getName());
-    }
+	/**
+	 * Remove the given command definition from the command repository object.
+	 * 
+	 * @param commandDef
+	 *            the command definition to be removed
+	 */
+	public void removeCommandDefinition(final CommandDefinition commandDef) {
+		commandDefinitionsMap.remove(commandDef.getName());
+	}
 
-    public Set<CommandDefinition> getAllCommandDefinition(final String pluginName) {
+	/**
+	 * Returns all the command definition that involves the given plugin.
+	 * 
+	 * @param pluginName
+	 *            the name of the plugin we are interested in
+	 * @return all the command definition that involves the given plugin
+	 */
+	public Set<CommandDefinition> getAllCommandDefinition(
+			final String pluginName) {
 
-        Set<CommandDefinition> res = new HashSet<CommandDefinition>();
+		Set<CommandDefinition> res = new HashSet<CommandDefinition>();
 
-        for (CommandDefinition cd : commandDefinitionsMap.values()) {
-            if (cd.getPluginName().equals(pluginName)) {
-                res.add(cd);
-            }
-        }
+		for (CommandDefinition cd : commandDefinitionsMap.values()) {
+			if (cd.getPluginName().equals(pluginName)) {
+				res.add(cd);
+			}
+		}
 
-        return res;
-    }
+		return res;
+	}
 
-    /**
-     * Returns the named command definition.
-     *
-     * @param commandName
-     *            The command name
-     * @return The command definition associated with <code>sName</code>.
-     *         <code>null</code> if not found.
-     */
-    public CommandDefinition getCommand(final String commandName) {
-        return commandDefinitionsMap.get(commandName);
-    }
+	/**
+	 * Returns the named command definition.
+	 * 
+	 * @param commandName
+	 *            The command name
+	 * @return The command definition associated with <code>sName</code>.
+	 *         <code>null</code> if not found.
+	 */
+	public CommandDefinition getCommand(final String commandName) {
+		return commandDefinitionsMap.get(commandName);
+	}
 
-    /**
-     * @return all the installed commands.
-     */
-    public Collection<CommandDefinition> getAllCommands() {
-        return commandDefinitionsMap.values();
-    }
+	/**
+	 * @return all the installed commands.
+	 */
+	public Collection<CommandDefinition> getAllCommands() {
+		return commandDefinitionsMap.values();
+	}
 }

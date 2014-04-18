@@ -153,6 +153,7 @@ public final class PluginRepositoryUtil {
 				throw new PluginConfigurationException(
 						"Error loading plugin package : mandatory attribute "
 								+ attributeName + " not found");
+
 			}
 		}
 
@@ -224,8 +225,8 @@ public final class PluginRepositoryUtil {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private final static void parseCommandLine(PluginDefinition pluginDef,
-			Element xmlPluginElement) {
+	private final static void parseCommandLine(
+			final PluginDefinition pluginDef, final Element xmlPluginElement) {
 		Element commandLine = xmlPluginElement.element("command-line");
 
 		if (commandLine != null) {

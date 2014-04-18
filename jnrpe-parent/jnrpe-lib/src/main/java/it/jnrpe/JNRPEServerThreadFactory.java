@@ -22,59 +22,59 @@ import java.net.Socket;
 /**
  * This class is a system level thread factory. In later version, it will be
  * used to define the behavior of thread creation at the whole server scope.
- *
+ * 
  * @author Massimiliano Ziccardi
- *
+ * 
  */
 final class JNRPEServerThreadFactory {
-    /**
-     * The singleton thread factory instance.
-     */
-    private static volatile JNRPEServerThreadFactory instance = null;
-    /**
-     * The command invoker.
-     */
-    private final CommandInvoker commandInvoker;
+	/**
+	 * The singleton thread factory instance.
+	 */
+	private static volatile JNRPEServerThreadFactory instance;
+	/**
+	 * The command invoker.
+	 */
+	private final CommandInvoker commandInvoker;
 
-    /**
-     * Builds the object and initializes it with the given command invoker.
-     *
-     * @param cmdInvoker
-     *            The command invoker
-     */
-    private JNRPEServerThreadFactory(final CommandInvoker cmdInvoker) {
-        this.commandInvoker = cmdInvoker;
-    }
+	/**
+	 * Builds the object and initializes it with the given command invoker.
+	 * 
+	 * @param cmdInvoker
+	 *            The command invoker
+	 */
+	private JNRPEServerThreadFactory(final CommandInvoker cmdInvoker) {
+		this.commandInvoker = cmdInvoker;
+	}
 
-    /**
-     * In this version thread are always created.
-     *
-     * @param socket
-     *            The socked served by the thread
-     * @return The newly created thread
-     */
-    public JNRPEServerThread createNewThread(final Socket socket) {
-        return new JNRPEServerThread(socket, commandInvoker);
-    }
+	/**
+	 * In this version thread are always created.
+	 * 
+	 * @param socket
+	 *            The socked served by the thread
+	 * @return The newly created thread
+	 */
+	public JNRPEServerThread createNewThread(final Socket socket) {
+		return new JNRPEServerThread(socket, commandInvoker);
+	}
 
-    /**
-     * Return an instance of the system level thread factory.
-     *
-     * @param commandInvoker
-     *            The command Invoker instance.
-     * @return The thread factory
-     */
-    public static JNRPEServerThreadFactory getInstance(
-            final CommandInvoker commandInvoker) {
-        if (instance == null) {
-            synchronized (JNRPEServerThread.class) {
-                if (instance == null) {
-                    instance = new JNRPEServerThreadFactory(commandInvoker);
-                }
-            }
+	/**
+	 * Return an instance of the system level thread factory.
+	 * 
+	 * @param commandInvoker
+	 *            The command Invoker instance.
+	 * @return The thread factory
+	 */
+	public static JNRPEServerThreadFactory getInstance(
+			final CommandInvoker commandInvoker) {
+		if (instance == null) {
+			synchronized (JNRPEServerThread.class) {
+				if (instance == null) {
+					instance = new JNRPEServerThreadFactory(commandInvoker);
+				}
+			}
 
-        }
+		}
 
-        return instance;
-    }
+		return instance;
+	}
 }

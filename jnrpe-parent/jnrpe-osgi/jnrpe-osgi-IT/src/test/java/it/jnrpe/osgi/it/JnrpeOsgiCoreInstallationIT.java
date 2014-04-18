@@ -39,18 +39,15 @@ import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
 import org.ops4j.pax.exam.spi.reactors.PerClass;
+import org.ops4j.pax.exam.util.PathUtils;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.slf4j.LoggerFactory;
-
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.Logger;
 
 import com.google.common.io.Files;
 
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerClass.class)
-public class JnrpeOsgiCoreInstallationTest {
+public class JnrpeOsgiCoreInstallationIT {
 
 	@Inject
 	BundleContext context;
@@ -75,13 +72,6 @@ public class JnrpeOsgiCoreInstallationTest {
 	private void createConfFile(File confDir, Map<String, String> conf)
 			throws Exception {
 
-		// Logger root = (Logger)
-		// LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
-		// root.setLevel(Level.ALL);
-
-		Logger log = (Logger) LoggerFactory.getLogger("it.jnrpe.osgi");
-		log.setLevel(Level.ALL);
-
 		File confFile = new File(confDir, "it.jnrpe.osgi.cfg");
 		confFile.deleteOnExit();
 
@@ -102,7 +92,11 @@ public class JnrpeOsgiCoreInstallationTest {
 
 	private Option[] felix() {
 		return options(
-				systemProperty("osgi.console").value("6666"),
+				systemProperty("logback.configurationFile").value(
+						"file:" + PathUtils.getBaseDir()
+								+ "/src/test/resources/logback.xml"),
+
+				// systemProperty("osgi.console").value("6666"),
 				systemProperty("felix.fileinstall.dir").value(
 						confDir.getAbsolutePath()),
 				systemProperty("felix.fileinstall.filter").value(".*\\.cfg"),
@@ -139,16 +133,29 @@ public class JnrpeOsgiCoreInstallationTest {
 
 	private Option[] equinox() {
 		return options(
-				systemProperty("osgi.console").value("6666"),
+				systemProperty("felix.fileinstall.dir").value(
+						confDir.getAbsolutePath()),
+				systemProperty("felix.fileinstall.filter").value(".*\\.cfg"),
+				systemProperty("felix.fileinstall.poll").value("1000"),
+				systemProperty("felix.fileinstall.noInitialDelay")
+						.value("true"),
+
 				mavenBundle("net.sf.jnrpe", "jnrpe-plugins-osgi",
 						"2.0.4-SNAPSHOT").startLevel(2),
 
 				mavenBundle("net.sf.jnrpe", "jnrpe-osgi-core", "2.0.4-SNAPSHOT"),
 
+				mavenBundle("org.slf4j", "osgi-over-slf4j"),
 				mavenBundle("org.slf4j", "slf4j-api"),
 				mavenBundle("ch.qos.logback", "logback-core"),
 				mavenBundle("ch.qos.logback", "logback-classic"),
 
+				mavenBundle("org.eclipse.equinox", "cm", "3.2.0-v20070116")
+						.startLevel(1),
+				mavenBundle("org.apache.felix", "org.apache.felix.fileinstall",
+						"3.2.8").startLevel(2),
+				mavenBundle("org.eclipse.equinox", "log", "1.0.100-v20070226")
+						.startLevel(1),
 				// jcheck_nrpe dependencies...
 				wrappedBundle(mavenBundle("net.sf.jnrpe", "jcheck_nrpe",
 						"2.0.3")),
@@ -169,6 +176,7 @@ public class JnrpeOsgiCoreInstallationTest {
 		createConfFile(confDir, getInitialConfiguration());
 
 		return felix();
+		// return equinox();
 	}
 
 	@Test

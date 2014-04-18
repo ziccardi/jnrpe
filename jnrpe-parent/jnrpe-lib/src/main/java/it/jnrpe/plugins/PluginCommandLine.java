@@ -32,7 +32,7 @@ class PluginCommandLine implements ICommandLine {
 	/**
 	 * The Apache Commons Cli {@link CommandLine} object.
 	 */
-	private CommandLine commandLine = null;
+	private final CommandLine commandLine;
 
 	/**
 	 * Incapsulate the given command line.
