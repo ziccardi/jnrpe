@@ -29,10 +29,14 @@ import java.util.WeakHashMap;
 @SuppressWarnings("rawtypes")
 class LoadedClassCache {
 
+	private LoadedClassCache() {
+
+	}
+
 	/**
 	 * Stores data about each created class loader.
 	 */
-	private static final Map<ClassLoader, ClassesData> alreadyLodedPlugins = new WeakHashMap<ClassLoader, ClassesData>();
+	private final static Map<ClassLoader, ClassesData> LOADED_PLUGINS = new WeakHashMap<ClassLoader, ClassesData>();
 
 	/**
 	 * This class stores data about all the classes loaded by a classloader.
@@ -52,7 +56,7 @@ class LoadedClassCache {
 		 *            the class name
 		 * @return the cached class object (if any)
 		 */
-		public Class getClass(String name) {
+		public Class getClass(final String name) {
 			return loadedClasses.get(name);
 		}
 
@@ -62,7 +66,7 @@ class LoadedClassCache {
 		 * @param clazz
 		 *            the class to be added
 		 */
-		public void addClass(Class clazz) {
+		public void addClass(final Class clazz) {
 			loadedClasses.put(clazz.getName(), clazz);
 		}
 	}
@@ -76,11 +80,11 @@ class LoadedClassCache {
 	 *            the class to be stored
 	 */
 	private static void saveClass(ClassLoader cl, Class c) {
-		if (alreadyLodedPlugins.get(cl) == null) {
-			alreadyLodedPlugins.put(cl, new ClassesData());
+		if (LOADED_PLUGINS.get(cl) == null) {
+			LOADED_PLUGINS.put(cl, new ClassesData());
 		}
 
-		ClassesData cd = alreadyLodedPlugins.get(cl);
+		ClassesData cd = LOADED_PLUGINS.get(cl);
 		cd.addClass(c);
 	}
 
@@ -98,11 +102,11 @@ class LoadedClassCache {
 	 */
 	public static Class getClass(ClassLoader cl, String className)
 			throws ClassNotFoundException {
-		if (alreadyLodedPlugins.get(cl) == null) {
-			alreadyLodedPlugins.put(cl, new ClassesData());
+		if (LOADED_PLUGINS.get(cl) == null) {
+			LOADED_PLUGINS.put(cl, new ClassesData());
 		}
 
-		ClassesData cd = alreadyLodedPlugins.get(cl);
+		ClassesData cd = LOADED_PLUGINS.get(cl);
 		Class clazz = cd.getClass(className);
 		if (clazz == null) {
 			clazz = cl.loadClass(className);

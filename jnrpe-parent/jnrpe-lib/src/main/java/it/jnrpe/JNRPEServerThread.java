@@ -38,246 +38,242 @@ import org.apache.commons.lang.StringUtils;
 
 /**
  * Thread used to server client request.
- *
+ * 
  * @author Massimiliano Ziccardi
  */
 class JNRPEServerThread extends Thread {
-    /**
-     * The socket used by this thread to read the request and write the answer.
-     */
-    private Socket attachedSocket = null;
+	/**
+	 * The socket used by this thread to read the request and write the answer.
+	 */
+	private final Socket attachedSocket;
 
-    /**
-     * <code>true</code> if this thread must stop working as soon as possible.
-     */
-    private Boolean stopTriggered = Boolean.FALSE;
+	/**
+	 * <code>true</code> if this thread must stop working as soon as possible.
+	 */
+	private Boolean stopTriggered = Boolean.FALSE;
 
-    /**
-     * The command invoker to be used to serve the request.
-     */
-    private final CommandInvoker commandInvoker;
+	/**
+	 * The command invoker to be used to serve the request.
+	 */
+	private final CommandInvoker commandInvoker;
 
-    /**
-     * The source of the events (I.e. the JNRPE listeners that received the
-     * request).
-     */
-    private JNRPEListenerThread parent = null;
+	/**
+	 * The source of the events (I.e. the JNRPE listeners that received the
+	 * request).
+	 */
+	private JNRPEListenerThread parent = null;
 
-    /**
-     * The list of event listeners.
-     */
-    private Set<IJNRPEEventListener> listenersList = null;
+	/**
+	 * The list of event listeners.
+	 */
+	private Set<IJNRPEEventListener> listenersList;
 
-    /**
-     * Builds and initializes a new server thread.
-     *
-     * @param socket
-     *            The socket to be used to read and write
-     * @param cmdInvoker
-     *            The command invoker that will serve the request
-     */
-    public JNRPEServerThread(final Socket socket,
-            final CommandInvoker cmdInvoker) {
-        super("JNRPEServerThread");
-        this.attachedSocket = socket;
-        this.commandInvoker = cmdInvoker;
-    }
+	/**
+	 * Builds and initializes a new server thread.
+	 * 
+	 * @param socket
+	 *            The socket to be used to read and write
+	 * @param cmdInvoker
+	 *            The command invoker that will serve the request
+	 */
+	public JNRPEServerThread(final Socket socket,
+			final CommandInvoker cmdInvoker) {
+		super("JNRPEServerThread");
+		this.attachedSocket = socket;
+		this.commandInvoker = cmdInvoker;
+	}
 
-    /**
-     * Configures this server thread.
-     *
-     * @param listenerThread
-     *            The listener that received the request
-     * @param vListeners
-     *            The event listeners
-     */
-    void configure(final JNRPEListenerThread listenerThread,
-            final Set<IJNRPEEventListener> vListeners) {
-        parent = listenerThread;
-        listenersList = vListeners;
-    }
+	/**
+	 * Configures this server thread.
+	 * 
+	 * @param listenerThread
+	 *            The listener that received the request
+	 * @param vListeners
+	 *            The event listeners
+	 */
+	void configure(final JNRPEListenerThread listenerThread,
+			final Set<IJNRPEEventListener> vListeners) {
+		parent = listenerThread;
+		listenersList = vListeners;
+	}
 
-    /**
-     * Utility method that splits using the '!' character and handling quoting
-     * by "'" and '"'.
-     *
-     * @param sCommandLine
-     *            The command line string
-     * @return The splitted string
-     */
-    private String[] split(final String sCommandLine) {
-        return it.jnrpe.utils.StringUtils.split(sCommandLine, '!', false);
-    }
+	/**
+	 * Utility method that splits using the '!' character and handling quoting
+	 * by "'" and '"'.
+	 * 
+	 * @param sCommandLine
+	 *            The command line string
+	 * @return The splitted string
+	 */
+	private String[] split(final String sCommandLine) {
+		return it.jnrpe.utils.StringUtils.split(sCommandLine, '!', false);
+	}
 
-    /**
-     * Serve the request.
-     *
-     * @param req
-     *            The request
-     * @return The Response
-     */
-    public JNRPEResponse handleRequest(final JNRPERequest req) {
-        // extracting command name and params
-        String[] partsAry = split(req.getStringMessage());
+	/**
+	 * Serve the request.
+	 * 
+	 * @param req
+	 *            The request
+	 * @return The Response
+	 */
+	public JNRPEResponse handleRequest(final JNRPERequest req) {
+		// extracting command name and params
+		String[] partsAry = split(req.getStringMessage());
 
-        String commandName = partsAry[0];
-        String[] argsAry = new String[partsAry.length - 1];
+		String commandName = partsAry[0];
+		String[] argsAry = new String[partsAry.length - 1];
 
-        System.arraycopy(partsAry, 1, argsAry, 0, argsAry.length);
+		System.arraycopy(partsAry, 1, argsAry, 0, argsAry.length);
 
-        ReturnValue ret = commandInvoker.invoke(commandName, argsAry);
+		ReturnValue ret = commandInvoker.invoke(commandName, argsAry);
 
-        if (ret == null) {
-            String args = StringUtils.join(argsAry, ",");
+		if (ret == null) {
+			String args = StringUtils.join(argsAry, ',');
 
-            ret =
-                    new ReturnValue(Status.UNKNOWN, "Command [" + commandName
-                            + "] with args [" + args + "] returned null");
-        }
+			ret = new ReturnValue(Status.UNKNOWN, "Command [" + commandName
+					+ "] with args [" + args + "] returned null");
+		}
 
-        JNRPEResponse res = new JNRPEResponse();
-        res.setPacketVersion(PacketVersion.VERSION_2);
+		JNRPEResponse res = new JNRPEResponse();
+		res.setPacketVersion(PacketVersion.VERSION_2);
 
-        res.setResultCode(ret.getStatus().intValue());
-        res.setMessage(ret.getMessage());
-        res.updateCRC();
+		res.setResultCode(ret.getStatus().intValue());
+		res.setMessage(ret.getMessage());
+		res.updateCRC();
 
-        String messageInvokedLog =
-                MessageFormat.format("Invoked command {0} - Status : "
-                        + "{1} - Return Message : ''{2}''", commandName, ret
-                        .getStatus().name(), ret.getMessage());
-        String paramTraceLog =
-                MessageFormat.format("Arguments : ''{0}''",
-                        argsToString(argsAry));
+		String messageInvokedLog = MessageFormat.format(
+				"Invoked command {0} - Status : "
+						+ "{1} - Return Message : ''{2}''", commandName, ret
+						.getStatus().name(), ret.getMessage());
+		String paramTraceLog = MessageFormat.format("Arguments : ''{0}''",
+				argsToString(argsAry));
 
-        EventsUtil.sendEvent(listenersList, parent, LogEvent.DEBUG,
-                messageInvokedLog);
-        EventsUtil.sendEvent(listenersList, parent, LogEvent.TRACE,
-                paramTraceLog);
+		EventsUtil.sendEvent(listenersList, parent, LogEvent.DEBUG,
+				messageInvokedLog);
+		EventsUtil.sendEvent(listenersList, parent, LogEvent.TRACE,
+				paramTraceLog);
 
-        return res;
-    }
+		return res;
+	}
 
-    /**
-     * Utility to convert the arguments to a printable string.
-     *
-     * @param args
-     *            The arguments array
-     * @return The printable string
-     */
-    private String argsToString(final String[] args) {
-        StringBuffer sb = new StringBuffer();
-        sb.append("[");
-        sb.append(StringUtils.join(args, ","));
-        sb.append("]");
-        return sb.toString();
-    }
+	/**
+	 * Utility to convert the arguments to a printable string.
+	 * 
+	 * @param args
+	 *            The arguments array
+	 * @return The printable string
+	 */
+	private String argsToString(final String[] args) {
+		return new StringBuffer().append('[')
+				.append(StringUtils.join(args, ',')).append(']').toString();
+	}
 
-    /**
-     * Runs the thread.
-     */
-    public void run() {
-        StreamManager streamMgr = new StreamManager();
+	/**
+	 * Runs the thread.
+	 */
+	@Override
+	public void run() {
+		StreamManager streamMgr = new StreamManager();
 
-        try {
-            InputStream in = streamMgr.handle(attachedSocket.getInputStream());
-            JNRPEResponse res = null;
-            JNRPERequest req = null;
+		try {
+			InputStream in = streamMgr.handle(attachedSocket.getInputStream());
+			JNRPEResponse res;
+			JNRPERequest req;
 
-            try {
-                req = new JNRPERequest(in);
+			try {
+				req = new JNRPERequest(in);
 
-                switch (req.getPacketType()) {
-                case QUERY:
-                    res = handleRequest(req);
-                    break;
-                default:
-                    res = new JNRPEResponse();
-                    res.setPacketVersion(req.getPacketVersion());
-                    res.setResultCode(Status.UNKNOWN.intValue());
-                    res.setMessage("Invalid Packet Type");
-                    res.updateCRC();
+				switch (req.getPacketType()) {
+				case QUERY:
+					res = handleRequest(req);
+					break;
+				default:
+					res = new JNRPEResponse();
+					res.setPacketVersion(req.getPacketVersion());
+					res.setResultCode(Status.UNKNOWN.intValue());
+					res.setMessage("Invalid Packet Type");
+					res.updateCRC();
 
-                }
+				}
 
-            } catch (BadCRCException e) {
-                res = new JNRPEResponse();
-                res.setPacketVersion(PacketVersion.VERSION_2);
-                res.setResultCode(Status.UNKNOWN.intValue());
-                res.setMessage("BAD REQUEST CRC");
-                res.updateCRC();
+			} catch (BadCRCException e) {
+				res = new JNRPEResponse();
+				res.setPacketVersion(PacketVersion.VERSION_2);
+				res.setResultCode(Status.UNKNOWN.intValue());
+				res.setMessage("BAD REQUEST CRC");
+				res.updateCRC();
 
-            }
+			}
 
-            synchronized (this) {
-                if (!stopTriggered.booleanValue()) {
-                    OutputStream out =
-                            streamMgr.handle(attachedSocket.getOutputStream());
-                    out.write(res.toByteArray());
-                }
-            }
-        } catch (IOException e) {
-            // if (!m_bStopped.booleanValue())
-            // m_Logger.error("ERROR DURING SOCKET OPERATION.", e);
-            EventsUtil.sendEvent(listenersList, parent, LogEvent.ERROR,
-                    "Error during socket operation", e);
-        } finally {
-            try {
-                if (attachedSocket != null && !attachedSocket.isClosed()) {
-                    if (!(attachedSocket instanceof SSLSocket)) {
-                        attachedSocket.shutdownInput();
-                        attachedSocket.shutdownOutput();
-                    }
-                    attachedSocket.close();
-                }
-            } catch (IOException e) {
-                // Ignore...
-                // m_Logger.error("ERROR CLOSING SOCKET", e);
-            }
+			synchronized (this) {
+				if (!stopTriggered.booleanValue()) {
+					OutputStream out = streamMgr.handle(attachedSocket
+							.getOutputStream());
+					out.write(res.toByteArray());
+				}
+			}
+		} catch (IOException e) {
+			// if (!m_bStopped.booleanValue())
+			// m_Logger.error("ERROR DURING SOCKET OPERATION.", e);
+			EventsUtil.sendEvent(listenersList, parent, LogEvent.ERROR,
+					"Error during socket operation", e);
+		} finally {
+			try {
+				if (attachedSocket != null && !attachedSocket.isClosed()) {
+					if (!(attachedSocket instanceof SSLSocket)) {
+						attachedSocket.shutdownInput();
+						attachedSocket.shutdownOutput();
+					}
+					attachedSocket.close();
+				}
+			} catch (IOException e) {
+				// Ignore...
+				// m_Logger.error("ERROR CLOSING SOCKET", e);
+			}
 
-            streamMgr.closeAll();
-        }
+			streamMgr.closeAll();
+		}
 
-    }
+	}
 
-    /**
-     * Tries to stop the thread.
-     */
-    public void stopNow() {
-        StreamManager streamMgr = new StreamManager();
-        try {
-            synchronized (this) {
-                // If the socket is closed, the thread has finished...
-                if (!attachedSocket.isClosed()) {
-                    stopTriggered = Boolean.TRUE;
+	/**
+	 * Tries to stop the thread.
+	 */
+	public void stopNow() {
+		StreamManager streamMgr = new StreamManager();
+		try {
+			synchronized (this) {
+				// If the socket is closed, the thread has finished...
+				if (!attachedSocket.isClosed()) {
+					stopTriggered = Boolean.TRUE;
 
-                    try {
-                        JNRPEResponse res = new JNRPEResponse();
-                        res.setPacketVersion(PacketVersion.VERSION_2);
-                        res.setResultCode(Status.UNKNOWN.intValue());
-                        res.setMessage("Command execution timeout");
-                        res.updateCRC();
+					try {
+						JNRPEResponse res = new JNRPEResponse();
+						res.setPacketVersion(PacketVersion.VERSION_2);
+						res.setResultCode(Status.UNKNOWN.intValue());
+						res.setMessage("Command execution timeout");
+						res.updateCRC();
 
-                        OutputStream out =
-                                streamMgr.handle(attachedSocket
-                                        .getOutputStream());
-                        out.write(res.toByteArray());
+						OutputStream out = streamMgr.handle(attachedSocket
+								.getOutputStream());
+						out.write(res.toByteArray());
 
-                        // This is just to stop any socket operations...
-                        attachedSocket.close();
-                    } catch (IOException e) {
-                    }
+						// This is just to stop any socket operations...
+						attachedSocket.close();
+					} catch (IOException e) {
+						// Intentionally ignored..
+					}
 
-                    // Let's try to interrupt all other operations...
-                    if (this.isAlive()) {
-                        this.interrupt();
-                    }
+					// Let's try to interrupt all other operations...
+					if (this.isAlive()) {
+						this.interrupt();
+					}
 
-                    // We can exit now..
-                }
-            }
-        } finally {
-            streamMgr.closeAll();
-        }
-    }
+					// We can exit now..
+				}
+			}
+		} finally {
+			streamMgr.closeAll();
+		}
+	}
 }
