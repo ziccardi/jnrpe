@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
@@ -293,18 +294,23 @@ public class CheckProcs extends PluginBase {
 	 * @return
 	 */
 	private String getMessage(Map<String, String> filterAndValue) {
-		String msg = "";
+
+		String msgString = "";
 		if (!filterAndValue.isEmpty()) {
-			msg += "with ";
-			for (String key : filterAndValue.keySet()) {
-				msg += key + " = " + filterAndValue.get(key) + ", ";
+			StringBuilder msg = new StringBuilder();
+			msg.append("with ");
+
+			for (Entry<String, String> entry : filterAndValue.entrySet()) {
+				msg.append(entry.getKey()).append(" = ")
+						.append(entry.getValue()).append(", ");
 			}
-			msg = msg.trim();
-			if (msg.endsWith(", ")) {
-				msg = msg.substring(0, msg.length() - 2);
+
+			msgString = msg.toString().trim();
+			if (msgString.endsWith(", ")) {
+				msgString = msgString.substring(0, msgString.length() - 2);
 			}
 		}
-		return msg;
+		return msgString;
 	}
 
 	/**
@@ -475,8 +481,9 @@ public class CheckProcs extends PluginBase {
 		List<Map<String, String>> filtered = new ArrayList<Map<String, String>>();
 		for (Map<String, String> map : values) {
 			boolean matchesAll = true;
-			for (String filter : filterAndValue.keySet()) {
-				String filterValue = filterAndValue.get(filter);
+			for (Entry<String, String> entry : filterAndValue.entrySet()) {
+				String filter = entry.getKey();
+				String filterValue = entry.getValue();
 				if (filter.contains(FILTER_COMMAND)
 						|| filter.contains(FILTER_USER)
 						|| filter.equals(FILTER_ARG_ARRAY)

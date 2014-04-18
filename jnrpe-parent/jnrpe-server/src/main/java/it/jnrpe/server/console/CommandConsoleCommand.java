@@ -25,57 +25,67 @@ import it.jnrpe.plugins.IPluginRepository;
 
 import java.io.IOException;
 
-import org.apache.commons.lang.StringUtils;
-
 import jline.console.ConsoleReader;
+
+import org.apache.commons.lang.StringUtils;
 
 public class CommandConsoleCommand extends ConsoleCommand {
 
-    public final static String NAME="command:";
-    
-    private final String commandName;
-    private final CommandRepository commandRepository;
-    private final IPluginRepository pluginRepository;
-    
-    public CommandConsoleCommand(ConsoleReader consoleReader, JNRPE jnrpe, String commandName, IPluginRepository pr, CommandRepository cr) {
-        super(consoleReader, jnrpe);
-        this.commandName = commandName;
-        this.pluginRepository = pr;
-        this.commandRepository = cr;
-    }
+	public final static String NAME = "command:";
 
-    public boolean execute(String[] args) throws Exception {
-        ReturnValue retVal = new CommandInvoker(pluginRepository, commandRepository, null).invoke(commandName, args);
-        getConsole().println(retVal.getMessage());
-        return false;
-    }
+	private final String commandName;
+	private final CommandRepository commandRepository;
+	private final IPluginRepository pluginRepository;
 
-    public String getCommandLine() {
-        CommandDefinition commandDef = commandRepository.getCommand(commandName);
-        StringBuffer opts;
-        
-        if (commandDef.getArgs() != null) {
-            opts = new StringBuffer(commandDef.getArgs()).append(" ");
-        } else {
-            opts = new StringBuffer(" ");
-        }
-       
-        
-        for (CommandOption opt : commandDef.getOptions()) {
-            opts.append(opt.getValue());
-        }
-        
-        String params = opts + StringUtils.join(commandDef.getOptions(), " ");
-        
-        return getName() + " " + params;
-    }
+	public CommandConsoleCommand(ConsoleReader consoleReader, JNRPE jnrpe,
+			String commandName, IPluginRepository pr, CommandRepository cr) {
+		super(consoleReader, jnrpe);
+		this.commandName = commandName;
+		this.pluginRepository = pr;
+		this.commandRepository = cr;
+	}
 
-    public void printHelp() throws IOException {
-        getConsole().println("Command Line : " + getCommandLine());
-    }
+	public boolean execute(String[] args) throws Exception {
+		ReturnValue retVal = new CommandInvoker(pluginRepository,
+				commandRepository, null).invoke(commandName, args);
 
-    public String getName() {
-        return NAME + commandName;
-    }
+		if (retVal == null) {
+			getConsole()
+					.println(
+							"An error has occurred executing the plugin. Null result received.");
+		} else {
+			getConsole().println(retVal.getMessage());
+		}
+
+		return false;
+	}
+
+	public String getCommandLine() {
+		CommandDefinition commandDef = commandRepository
+				.getCommand(commandName);
+		StringBuffer opts;
+
+		if (commandDef.getArgs() != null) {
+			opts = new StringBuffer(commandDef.getArgs()).append(" ");
+		} else {
+			opts = new StringBuffer(" ");
+		}
+
+		for (CommandOption opt : commandDef.getOptions()) {
+			opts.append(opt.getValue());
+		}
+
+		String params = opts + StringUtils.join(commandDef.getOptions(), " ");
+
+		return getName() + " " + params;
+	}
+
+	public void printHelp() throws IOException {
+		getConsole().println("Command Line : " + getCommandLine());
+	}
+
+	public String getName() {
+		return NAME + commandName;
+	}
 
 }
