@@ -50,6 +50,11 @@ public class CheckProcsIT implements ITConstants{
         ITSetup.getPluginRepository().addPluginDefinition(checkProcs);
     }
     
+    /**
+     * Test basic usage
+     * 
+     * @throws JNRPEClientException
+     */
     @Test
     public final void checkProcsBasic() throws JNRPEClientException {
 		CommandRepository cr = ITSetup.getCommandRepository();
@@ -58,16 +63,18 @@ public class CheckProcsIT implements ITConstants{
 		cr.addCommandDefinition(cd);
 		JNRPEClient client = new JNRPEClient(BIND_ADDRESS, JNRPE_PORT, false);
 		ReturnValue ret = client.sendCommand("CHECK_PROCS_BASIC", "1:");
-		Assert.assertEquals(ret.getStatus(), Status.WARNING);
+		Assert.assertEquals(ret.getStatus(), Status.WARNING);		
 	}
     
+    /**
+     * Test scan matches for a command
+     *  
+     * @throws JNRPEClientException
+     */
     @Test
 	public final void checkProcsCommand() throws JNRPEClientException {
     	// surely a java process must be running?
-    	String command = "java";
-    	if (System.getProperty("os.name").toLowerCase().contains("windows")){
-    		command = "java.exe";
-    	}
+    	String command = getCommand();
 		CommandRepository cr = ITSetup.getCommandRepository();
 		
 		CommandDefinition cd = new CommandDefinition("CHECK_PROCS_COMMAND", "CHECK_PROCS");
@@ -78,6 +85,34 @@ public class CheckProcsIT implements ITConstants{
 		ReturnValue ret = client.sendCommand("CHECK_PROCS_COMMAND", command, "1:");
 		Assert.assertEquals(ret.getStatus(), Status.WARNING);
 	}
-
     
+    /**
+     * Test proc ellapsed time
+     * 
+     * @throws JNRPEClientException
+     */
+    @Test
+	public final void checkProcsTimeEllapsed() throws JNRPEClientException {
+    	String command = getCommand();    	
+		CommandRepository cr = ITSetup.getCommandRepository();		
+		CommandDefinition cd = new CommandDefinition("CHECK_PROCS_ELLAPSED", "CHECK_PROCS");
+		cd.addArgument(new CommandOption("command", "$ARG1$"));
+		cd.addArgument(new CommandOption("warning", "$ARG2$"));
+		cd.addArgument(new CommandOption("metric", ""));
+		cr.addCommandDefinition(cd);
+		JNRPEClient client = new JNRPEClient(BIND_ADDRESS, JNRPE_PORT, false);
+		ReturnValue ret = client.sendCommand("CHECK_PROCS_COMMAND", command, ":10", "ELLAPSED");
+		System.out.println(ret.getMessage());	
+		Assert.assertEquals(ret.getStatus(), Status.WARNING);
+		
+	}
+    
+    
+    private String getCommand(){
+    	String command = "java";
+    	if (System.getProperty("os.name").toLowerCase().contains("windows")){
+    		command = "java.exe";
+    	}
+    	return command;
+    }
 }
