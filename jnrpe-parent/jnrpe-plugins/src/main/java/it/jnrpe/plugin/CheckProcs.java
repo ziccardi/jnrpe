@@ -393,15 +393,16 @@ public class CheckProcs extends PluginBase {
 			values.put(FILTER_MEMORY, "" + convertToMemoryInt(line[4]));
 			values.put(FILTER_USER, line[6]);
 			int seconds = convertToSeconds(line[7].trim());
-			if (line[0].contains("System Idle Process")) {
+			if (line[0].trim().toLowerCase().contains("System Idle Process") ||
+					line[0].contains("inactiv") ||
+					line[0].trim().toLowerCase().equals("system")) {
 				seconds = 0;
 			}
 			totalRunTime += seconds;
 			values.put(cpu, seconds + "");
-
 			info.add(values);
-
 		}
+		
 		for (Map<String, String> map : info) {
 			int secs = Integer.parseInt(map.get(cpu));
 			log.debug("secs " + secs + "");
@@ -541,10 +542,11 @@ public class CheckProcs extends PluginBase {
 		int seconds = 0;
 		int hyphenCount = StringUtils.countMatches(input, "-");
 		int colonCount = StringUtils.countMatches(input, ":");
+
 		if (hyphenCount > 0) {
-			String day = input.split("-")[0];
-			days = Integer.parseInt(day);
-			String[] time = input.split("-")[0].split(":");
+			int hyphenIndex = input.indexOf("-");
+			days = Integer.parseInt(input.substring(0, hyphenIndex));
+			String[] time = input.substring(hyphenIndex + 1).split(":");
 			hours = Integer.parseInt(time[0]);
 			minutes = Integer.parseInt(time[1]);
 			seconds = Integer.parseInt(time[2]);
