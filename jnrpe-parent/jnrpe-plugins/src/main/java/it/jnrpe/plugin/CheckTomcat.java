@@ -26,6 +26,7 @@ import it.jnrpe.utils.ThresholdUtil;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.Properties;
 
@@ -114,8 +115,13 @@ public class CheckTomcat extends PluginBase {
 
 		String url = protocol + credentials + "@" + hostname + ":" + port + uri;
 
-		String encoded = Base64.encodeBase64String((username + ":" + password)
-				.getBytes());
+		String encoded = null;
+		try {
+			encoded = Base64.encodeBase64String((username + ":" + password)
+					.getBytes("UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			throw new BadThresholdException("Error: " + e.getMessage(), e);
+		}
 		Properties props = new Properties();
 		props.put("Authorization", "Basic " + encoded);
 		String response = null;

@@ -98,13 +98,12 @@ public class CCheckOracle extends PluginBase {
 
 		List<Metric> metricList = new ArrayList<Metric>();
 		Statement stmt = null;
-		ResultSet rs = null;
 
 		long lStart = System.currentTimeMillis();
 
 		try {
 			stmt = c.createStatement();
-			rs = stmt.executeQuery("SELECT SYSDATE FROM DUAL");
+			stmt.executeQuery("SELECT SYSDATE FROM DUAL");
 
 			long elapsed = (System.currentTimeMillis() - lStart) / 1000L;
 

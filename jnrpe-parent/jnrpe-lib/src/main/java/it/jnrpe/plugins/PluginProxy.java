@@ -29,6 +29,7 @@ import org.apache.commons.cli2.OptionException;
 import org.apache.commons.cli2.builder.GroupBuilder;
 import org.apache.commons.cli2.commandline.Parser;
 import org.apache.commons.cli2.util.HelpFormatter;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * This class was intended to abstract the kind of plugin to execute. Hides
@@ -119,7 +120,17 @@ public final class PluginProxy extends PluginBase {
 			Thread.currentThread().setContextClassLoader(
 					proxiedPlugin.getClass().getClassLoader());
 
-			return proxiedPlugin.execute(new PluginCommandLine(cl));
+			ReturnValue retValue = proxiedPlugin.execute(new PluginCommandLine(
+					cl));
+
+			if (retValue == null) {
+				String msg = "Plugin [" + getPluginName() + "] with args ["
+						+ StringUtils.join(argsAry) + "] returned null";
+
+				retValue = new ReturnValue(Status.UNKNOWN, msg);
+			}
+
+			return retValue;
 		} catch (OptionException e) {
 			// m_Logger.error("ERROR PARSING PLUGIN ARGUMENTS", e);
 			return new ReturnValue(Status.UNKNOWN, e.getMessage());

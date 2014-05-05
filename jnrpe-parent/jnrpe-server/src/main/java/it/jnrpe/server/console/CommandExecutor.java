@@ -20,6 +20,7 @@ import it.jnrpe.commands.CommandDefinition;
 import it.jnrpe.commands.CommandRepository;
 import it.jnrpe.plugins.IPluginRepository;
 import it.jnrpe.plugins.PluginDefinition;
+import it.jnrpe.plugins.UnknownPluginException;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -52,9 +53,14 @@ public class CommandExecutor {
 					consoleReader, jnrpe, instance.commandMap));
 
 			for (PluginDefinition pd : pluginRepository.getAllPlugins()) {
-				instance.commandMap.put(PluginCommand.NAME
-						+ pd.getName().toLowerCase(), new PluginCommand(
-						consoleReader, jnrpe, pd.getName(), pluginRepository));
+				try {
+					instance.commandMap.put(PluginCommand.NAME
+							+ pd.getName().toLowerCase(), new PluginCommand(
+							consoleReader, jnrpe, pd.getName(),
+							pluginRepository));
+				} catch (UnknownPluginException e) {
+					// Skip the plugin...
+				}
 			}
 
 			for (CommandDefinition cd : commandRepository.getAllCommands()) {
