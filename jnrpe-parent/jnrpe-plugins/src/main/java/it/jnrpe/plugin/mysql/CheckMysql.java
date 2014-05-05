@@ -182,17 +182,24 @@ public class CheckMysql extends PluginBase {
             throws SQLException {
         Map<String, Integer> map = new HashMap<String, Integer>();
         String query = "show slave status;";
-        Statement statement;
+        Statement statement = null;
         ResultSet rs = null;
-        statement = conn.createStatement();
-        rs = statement.executeQuery(query);
-        while (rs.next()) {
-            map.put("Slave_IO_Running", rs.getInt("Slave_IO_Running"));
-            map.put("Slave_SQL_Running", rs.getInt("Slave_SQL_Running"));
-            map.put("Seconds_Behind_Master",
-                    rs.getInt("Seconds_Behind_Master"));
+        if (conn != null){
+        	statement = conn.createStatement();
+	        rs = statement.executeQuery(query);
+	        while (rs.next()) {
+	            map.put("Slave_IO_Running", rs.getInt("Slave_IO_Running"));
+	            map.put("Slave_SQL_Running", rs.getInt("Slave_SQL_Running"));
+	            map.put("Seconds_Behind_Master",
+	                    rs.getInt("Seconds_Behind_Master"));
+	        }
+	        if (rs != null){
+	        	rs.close();
+	        }
+	        if (statement != null){
+	        	statement.close();
+	        }
         }
-        rs.close();
         return map;
     }
 

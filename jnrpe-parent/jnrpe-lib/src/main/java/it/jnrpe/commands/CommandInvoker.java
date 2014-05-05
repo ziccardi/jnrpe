@@ -116,41 +116,38 @@ public final class CommandInvoker {
 	 */
 	public ReturnValue invoke(final CommandDefinition cd, final String[] argsAry) {
 		String pluginName = cd.getPluginName();
+		try {
 
-		String[] commandLine = cd.getCommandLine();
+			String[] commandLine = cd.getCommandLine();
 
-		if (acceptParams) {
-			for (int j = 0; commandLine != null && j < commandLine.length; j++) {
-				for (int i = 0; i < argsAry.length; i++) {
-					commandLine[j] = commandLine[j].replaceAll(
-							"\\$[Aa][Rr][Gg]" + (i + 1) + "\\$",
-							Matcher.quoteReplacement(argsAry[i]));
+			if (acceptParams) {
+				for (int j = 0; commandLine != null && j < commandLine.length; j++) {
+					for (int i = 0; i < argsAry.length; i++) {
+						commandLine[j] = commandLine[j].replaceAll(
+								"\\$[Aa][Rr][Gg]" + (i + 1) + "\\$",
+								Matcher.quoteReplacement(argsAry[i]));
+					}
 				}
 			}
-		}
 
-		PluginProxy plugin = (PluginProxy) pluginRepository
-				.getPlugin(pluginName);
+			PluginProxy plugin = (PluginProxy) pluginRepository
+					.getPlugin(pluginName);
 
-		if (plugin == null) {
-			EventsUtil.sendEvent(listenersList, this, LogEvent.INFO,
-					"Unable to instantiate plugin named " + pluginName);
-			return new ReturnValue(Status.UNKNOWN,
-					"Error instantiating plugin '" + pluginName
-							+ "' : bad plugin name?");
-		}
+			if (plugin == null) {
+				EventsUtil.sendEvent(listenersList, this, LogEvent.INFO,
+						"Unable to instantiate plugin named " + pluginName);
+				return new ReturnValue(Status.UNKNOWN,
+						"Error instantiating plugin '" + pluginName
+								+ "' : bad plugin name?");
+			}
 
-		plugin.addListeners(listenersList);
+			plugin.addListeners(listenersList);
 
-		try {
 			if (commandLine != null) {
 				return plugin.execute(commandLine);
 			} else {
 				return plugin.execute(new String[0]);
 			}
-		} catch (RuntimeException re) {
-			return new ReturnValue(Status.UNKNOWN, "Plugin [" + pluginName
-					+ "] execution error: " + re.getMessage());
 		} catch (Throwable thr) {
 			return new ReturnValue(Status.UNKNOWN, "Plugin [" + pluginName
 					+ "] execution error: " + thr.getMessage());

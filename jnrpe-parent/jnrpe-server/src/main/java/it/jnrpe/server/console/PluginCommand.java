@@ -17,9 +17,11 @@ package it.jnrpe.server.console;
 
 import it.jnrpe.JNRPE;
 import it.jnrpe.ReturnValue;
+import it.jnrpe.plugins.IPluginInterface;
 import it.jnrpe.plugins.IPluginRepository;
 import it.jnrpe.plugins.PluginOption;
 import it.jnrpe.plugins.PluginProxy;
+import it.jnrpe.plugins.UnknownPluginException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -42,11 +44,15 @@ public class PluginCommand extends ConsoleCommand {
 	private final String pluginName;
 	private final IPluginRepository pluginRepository;
 
+	private final IPluginInterface plugin;
+
 	public PluginCommand(ConsoleReader consoleReader, JNRPE jnrpe,
-			String pluginName, IPluginRepository pr) {
+			String pluginName, IPluginRepository pr)
+			throws UnknownPluginException {
 		super(consoleReader, jnrpe);
 		this.pluginName = pluginName;
 		this.pluginRepository = pr;
+		this.plugin = pr.getPlugin(pluginName);
 	}
 
 	public boolean execute(String[] args) throws Exception {
@@ -119,7 +125,7 @@ public class PluginCommand extends ConsoleCommand {
 	}
 
 	private Group getCommandLineGroup() {
-		PluginProxy pp = (PluginProxy) pluginRepository.getPlugin(pluginName);
+		PluginProxy pp = (PluginProxy) plugin;
 		GroupBuilder gBuilder = new GroupBuilder();
 
 		for (PluginOption po : pp.getOptions()) {

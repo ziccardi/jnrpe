@@ -21,69 +21,69 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This class represent the repository of all the installed plugins.
- *
+ * 
  * @author Massimiliano Ziccardi
- *
+ * 
  */
 public class PluginRepository implements IPluginRepository {
-    /**
-     * Contains all the plugins declared inside this {@link PluginRepository}
-     * instance. The key of the map is the plugin name, while the value is the.
-     * plugin definition itself.
-     */
-    private final Map<String, PluginDefinition> pluginsDefinitionsMap =
-            new ConcurrentHashMap<String, PluginDefinition>();
+	/**
+	 * Contains all the plugins declared inside this {@link PluginRepository}
+	 * instance. The key of the map is the plugin name, while the value is the.
+	 * plugin definition itself.
+	 */
+	private final Map<String, PluginDefinition> pluginsDefinitionsMap = new ConcurrentHashMap<String, PluginDefinition>();
 
-    /**
-     * Adds a plugin definition to this repository.
-     *
-     * @param pluginDef
-     *            The plugin definition to be added.
-     */
-    public final void addPluginDefinition(final PluginDefinition pluginDef) {
-        pluginsDefinitionsMap.put(pluginDef.getName(), pluginDef);
-    }
+	/**
+	 * Adds a plugin definition to this repository.
+	 * 
+	 * @param pluginDef
+	 *            The plugin definition to be added.
+	 */
+	public final void addPluginDefinition(final PluginDefinition pluginDef) {
+		pluginsDefinitionsMap.put(pluginDef.getName(), pluginDef);
+	}
 
-    /**
-     * Removes a plugin definition from the repository.
-     * @param pluginDef
-     *            The plugin to be removed
-     */
-    public final void removePluginDefinition(final PluginDefinition pluginDef) {
-        pluginsDefinitionsMap.remove(pluginDef.getName());
-    }
+	/**
+	 * Removes a plugin definition from the repository.
+	 * 
+	 * @param pluginDef
+	 *            The plugin to be removed
+	 */
+	public final void removePluginDefinition(final PluginDefinition pluginDef) {
+		pluginsDefinitionsMap.remove(pluginDef.getName());
+	}
 
-    /**
-     * @param name The plugin name
-     * @return the plugin identified by the given name
-     */
-    public final IPluginInterface getPlugin(final String name) {
-        PluginDefinition pluginDef = pluginsDefinitionsMap.get(name);
-        if (pluginDef == null) {
-            return null;
-        }
+	/**
+	 * @param name
+	 *            The plugin name
+	 * @return the plugin identified by the given name
+	 */
+	public final IPluginInterface getPlugin(final String name)
+			throws UnknownPluginException {
+		PluginDefinition pluginDef = pluginsDefinitionsMap.get(name);
+		if (pluginDef == null) {
+			throw new UnknownPluginException(name);
+		}
 
-        try {
-            IPluginInterface pluginInterface = pluginDef.getPluginInterface();
+		try {
+			IPluginInterface pluginInterface = pluginDef.getPluginInterface();
 
-            if (pluginInterface == null) {
-                pluginInterface =
-                        pluginDef.getPluginClass()
-                        .newInstance();
-            }
-            return new PluginProxy(pluginInterface, pluginDef);
-        } catch (Exception e) {
-            // FIXME : handle this exception
-            e.printStackTrace();
-        }
+			if (pluginInterface == null) {
+				pluginInterface = pluginDef.getPluginClass().newInstance();
+			}
+			return new PluginProxy(pluginInterface, pluginDef);
+		} catch (Exception e) {
+			// FIXME : handle this exception
+			e.printStackTrace();
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    /**
-     * @return all the configured plugins
-     */
-    public final Collection<PluginDefinition> getAllPlugins() {
-        return pluginsDefinitionsMap.values();
-    }
+	/**
+	 * @return all the configured plugins
+	 */
+	public final Collection<PluginDefinition> getAllPlugins() {
+		return pluginsDefinitionsMap.values();
+	}
 }

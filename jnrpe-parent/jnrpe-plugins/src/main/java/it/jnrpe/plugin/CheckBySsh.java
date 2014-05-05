@@ -150,7 +150,7 @@ public class CheckBySsh extends PluginBase {
 					int i = in.read(tmp, 0, 1024);
 					if (i < 0)
 						break;
-					sb.append(new String(tmp, 0, i));
+					sb.append(new String(tmp, 0, i, "UTF-8"));
 				}
 			} catch (IOException e1) {
 				throw new MetricGatheringException(e1.getMessage(),
