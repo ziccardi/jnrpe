@@ -169,6 +169,7 @@ public final class PluginProxy extends PluginBase {
 	/**
 	 * Prints the help related to the plugin to standard output.
 	 */
+	// FIXME : the output should be a parameter
 	public void printHelp() {
 		printHelp(new PrintWriter(System.out));
 	}

@@ -13,37 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.installer;
+package it.jnrpe;
 
-import java.io.InputStream;
+import it.jnrpe.events.IJNRPEEventListener;
+
 import java.nio.charset.Charset;
+import java.util.Set;
 
-public class InstallerUtil {
+public class JNRPEExecutionContext {
 
-	public final static boolean ROOT = _init();
+	private final Set<IJNRPEEventListener> eventListenersList;
 
-	private static boolean _init() {
+	private final Charset charset;
 
-		try {
-			Process p = Runtime.getRuntime().exec("id -u");
-			p.waitFor();
+	JNRPEExecutionContext(Set<IJNRPEEventListener> eventListeners,
+			Charset charset) {
+		this.eventListenersList = eventListeners;
+		this.charset = charset;
+	}
 
-			byte[] buff = new byte[50];
-			InputStream in = p.getInputStream();
+	public Set<IJNRPEEventListener> getListeners() {
+		return eventListenersList;
+	}
 
-			StringBuffer res = new StringBuffer();
-			int iCount;
-
-			while ((iCount = in.read(buff)) > 0) {
-				// The default charset must be used...
-				res.append(new String(buff, 0, iCount, Charset.defaultCharset()));
-			}
-
-			return res.toString().trim().equals("0");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return false;
+	public Charset getCharset() {
+		return charset;
 	}
 }

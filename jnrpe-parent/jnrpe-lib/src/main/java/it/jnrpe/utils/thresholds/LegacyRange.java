@@ -17,9 +17,9 @@ package it.jnrpe.utils.thresholds;
 
 import it.jnrpe.utils.BadThresholdException;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.PushbackInputStream;
+import java.io.PushbackReader;
+import java.io.StringReader;
 import java.math.BigDecimal;
 
 /**
@@ -93,16 +93,16 @@ public class LegacyRange {
 	 *             -
 	 */
 	private void parseRange() throws BadThresholdException {
-		byte[] bytesAry = thresholdString.getBytes();
-		ByteArrayInputStream bin = new ByteArrayInputStream(bytesAry);
-		PushbackInputStream pb = new PushbackInputStream(bin);
+
+		PushbackReader reader = new PushbackReader(new StringReader(
+				thresholdString));
 
 		StringBuffer currentParsedBuffer = new StringBuffer();
 
 		byte b = 0;
 
 		try {
-			while ((b = (byte) pb.read()) != -1) {
+			while ((b = (byte) reader.read()) != -1) {
 				currentParsedBuffer.append((char) b);
 				if (b == '@') {
 					if (curState != MINVAL) {
@@ -161,11 +161,11 @@ public class LegacyRange {
 
 				do {
 					numberBuffer.append((char) b);
-				} while (((b = (byte) pb.read()) != -1)
+				} while (((b = (byte) reader.read()) != -1)
 						&& (Character.isDigit((char) b) || b == '+' || b == '-' || b == '.'));
 
 				if (b != -1) {
-					pb.unread(b);
+					reader.unread(b);
 				}
 
 				String numberString = numberBuffer.toString();
