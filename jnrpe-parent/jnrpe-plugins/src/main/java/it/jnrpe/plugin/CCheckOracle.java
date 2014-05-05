@@ -103,7 +103,13 @@ public class CCheckOracle extends PluginBase {
 
 		try {
 			stmt = c.createStatement();
-			stmt.executeQuery("SELECT SYSDATE FROM DUAL");
+			ResultSet rs = stmt.executeQuery("SELECT SYSDATE FROM DUAL");
+
+			if (!rs.next()) {
+				// Should never happen...
+				throw new SQLException(
+						"Unable to execute a 'SELECT SYSDATE FROM DUAL' query");
+			}
 
 			long elapsed = (System.currentTimeMillis() - lStart) / 1000L;
 

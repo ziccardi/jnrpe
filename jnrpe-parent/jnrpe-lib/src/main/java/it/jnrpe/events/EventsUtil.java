@@ -15,115 +15,128 @@
  *******************************************************************************/
 package it.jnrpe.events;
 
+import it.jnrpe.JNRPEExecutionContext;
+
 import java.util.Set;
 
 /**
  * This is an utility class than can be used to send simply events to all the
  * registered listeners.
- *
+ * 
  * @author Massimiliano Ziccardi
  */
 public final class EventsUtil {
 
-    /**
-     * Private default constructor.
-     */
-    private EventsUtil() {
+	/**
+	 * Private default constructor.
+	 */
+	private EventsUtil() {
 
-    }
+	}
 
-    /**
-     * This method sends log events to the registered listeners. It is an.
-     * utility method that relieve the programmer from the need to create all.
-     * the EventParam object just to send log events. Supported event type are.
-     * TRACE, DEBUG, INFO, WARNING, ERROR, FATAL.
-     *
-     * @param listenersList
-     *            The list of all the listeners that will receive the event
-     * @param sender
-     *            The sender of the event (usually <code>this</code>)
-     * @param evt
-     *            The event type
-     * @param message
-     *            The log message
-     */
-    public static void sendEvent(final Set<IJNRPEEventListener> listenersList,
-            final Object sender, final LogEvent evt, final String message) {
-        if (listenersList == null || listenersList.isEmpty()) {
-            return;
-        }
+	/**
+	 * This method sends log events to the registered listeners. It is an.
+	 * utility method that relieve the programmer from the need to create all.
+	 * the EventParam object just to send log events. Supported event type are.
+	 * TRACE, DEBUG, INFO, WARNING, ERROR, FATAL.
+	 * 
+	 * @param listenersList
+	 *            The list of all the listeners that will receive the event
+	 * @param sender
+	 *            The sender of the event (usually <code>this</code>)
+	 * @param evt
+	 *            The event type
+	 * @param message
+	 *            The log message
+	 */
+	public static void sendEvent(final Set<IJNRPEEventListener> listenersList,
+			final Object sender, final LogEvent evt, final String message) {
+		if (listenersList == null || listenersList.isEmpty()) {
+			return;
+		}
 
-        sendEvent(listenersList, sender, evt, message, null);
-    }
+		sendEvent(listenersList, sender, evt, message, null);
+	}
 
-    /**
-     * This method sends log events to the registered listeners. It is an.
-     * utility method that relieve the programmer from the need to create all.
-     * the EventParam object just to send log events. Supported event type are.
-     * TRACE, DEBUG, INFO, WARNING, ERROR, FATAL.
-     *
-     * @param listenerList
-     *            The list of all the listeners that will receive the event
-     * @param sender
-     *            The sender of the event (usually <code>this</code>)
-     * @param evt
-     *            The event type
-     * @param message
-     *            The log message
-     * @param exception
-     *            The exception to be, eventually, logged (can be null).
-     */
-    public static void sendEvent(final Set<IJNRPEEventListener> listenerList,
-            final Object sender, final LogEvent evt, final String message,
-            final Throwable exception) {
-        if (listenerList == null || listenerList.isEmpty()) {
-            return;
-        }
+	public static void sendEvent(final JNRPEExecutionContext context,
+			final Object sender, final LogEvent evt, final String message) {
+		sendEvent(context, sender, evt, message, null);
+	}
 
-        if (sender == null || evt == null || message == null) {
-            throw new NullPointerException(
-                    "The sender, evt and message parameter can't be null");
-        }
+	public static void sendEvent(final JNRPEExecutionContext context,
+			final Object sender, final LogEvent evt, final String message,
+			final Throwable exception) {
+		sendEvent(context.getListeners(), sender, evt, message, exception);
+	}
 
-        if (exception != null) {
-            sendEvent(listenerList, sender, evt.name(), new EventMessageParam(
-                    message), new EventExceptionParam(exception));
-        } else {
-            sendEvent(listenerList, sender, evt.name(), new EventMessageParam(
-                    message));
-        }
-    }
+	/**
+	 * This method sends log events to the registered listeners. It is an.
+	 * utility method that relieve the programmer from the need to create all.
+	 * the EventParam object just to send log events. Supported event type are.
+	 * TRACE, DEBUG, INFO, WARNING, ERROR, FATAL.
+	 * 
+	 * @param listenerList
+	 *            The list of all the listeners that will receive the event
+	 * @param sender
+	 *            The sender of the event (usually <code>this</code>)
+	 * @param evt
+	 *            The event type
+	 * @param message
+	 *            The log message
+	 * @param exception
+	 *            The exception to be, eventually, logged (can be null).
+	 */
+	public static void sendEvent(final Set<IJNRPEEventListener> listenerList,
+			final Object sender, final LogEvent evt, final String message,
+			final Throwable exception) {
+		if (listenerList == null || listenerList.isEmpty()) {
+			return;
+		}
 
-    /**
-     * This method is used to send custom events to the registered listeners.
-     * The event type can be a freely chosen string. A custom listener should be
-     * instructed to handle such event with its parameters.
-     *
-     * @param listenerList
-     *            The list of all the listeners that will receive the event
-     * @param sender
-     *            The sender of the event (usually <code>this</code>)
-     * @param customEvtType
-     *            The custom event type
-     * @param paramsList
-     *            The event parameters
-     */
-    public static void sendEvent(final Set<IJNRPEEventListener> listenerList,
-            final Object sender, final String customEvtType,
-            final EventParam... paramsList) {
-        if (sender == null || customEvtType == null) {
-            throw new NullPointerException(
-                    "The sender and event type parameter can't be null");
-        }
+		if (sender == null || evt == null || message == null) {
+			throw new NullPointerException(
+					"The sender, evt and message parameter can't be null");
+		}
 
-        if (listenerList == null || listenerList.isEmpty()) {
-            return;
-        }
+		if (exception != null) {
+			sendEvent(listenerList, sender, evt.name(), new EventMessageParam(
+					message), new EventExceptionParam(exception));
+		} else {
+			sendEvent(listenerList, sender, evt.name(), new EventMessageParam(
+					message));
+		}
+	}
 
-        SimpleEvent se = new SimpleEvent(customEvtType, paramsList);
+	/**
+	 * This method is used to send custom events to the registered listeners.
+	 * The event type can be a freely chosen string. A custom listener should be
+	 * instructed to handle such event with its parameters.
+	 * 
+	 * @param listenerList
+	 *            The list of all the listeners that will receive the event
+	 * @param sender
+	 *            The sender of the event (usually <code>this</code>)
+	 * @param customEvtType
+	 *            The custom event type
+	 * @param paramsList
+	 *            The event parameters
+	 */
+	public static void sendEvent(final Set<IJNRPEEventListener> listenerList,
+			final Object sender, final String customEvtType,
+			final EventParam... paramsList) {
+		if (sender == null || customEvtType == null) {
+			throw new NullPointerException(
+					"The sender and event type parameter can't be null");
+		}
 
-        for (IJNRPEEventListener listener : listenerList) {
-            listener.receive(sender, se);
-        }
-    }
+		if (listenerList == null || listenerList.isEmpty()) {
+			return;
+		}
+
+		SimpleEvent se = new SimpleEvent(customEvtType, paramsList);
+
+		for (IJNRPEEventListener listener : listenerList) {
+			listener.receive(sender, se);
+		}
+	}
 }

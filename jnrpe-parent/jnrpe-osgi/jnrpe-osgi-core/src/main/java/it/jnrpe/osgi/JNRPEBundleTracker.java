@@ -23,6 +23,8 @@ import it.jnrpe.utils.PluginRepositoryUtil;
 import it.jnrpe.utils.StreamManager;
 
 import java.io.InputStream;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.Collection;
 
 import org.osgi.framework.Bundle;
@@ -78,8 +80,12 @@ public class JNRPEBundleTracker extends BundleTracker {
 			StreamManager sm = new StreamManager();
 			// The bundle is a plugin package...
 			try {
-				BundleDelegatingClassLoader bdc = new BundleDelegatingClassLoader(
-						bundle);
+				BundleDelegatingClassLoader bdc = AccessController
+						.doPrivileged(new PrivilegedAction<BundleDelegatingClassLoader>() {
+							public BundleDelegatingClassLoader run() {
+								return new BundleDelegatingClassLoader(bundle);
+							}
+						});
 
 				// the 'plugin.xml' file is deprecated. Search for the new
 				// jnrpe_plugins.xml file and then fallback to the old
@@ -119,8 +125,12 @@ public class JNRPEBundleTracker extends BundleTracker {
 
 			// The bundle is a plugin package...
 			try {
-				BundleDelegatingClassLoader bdc = new BundleDelegatingClassLoader(
-						bundle);
+				BundleDelegatingClassLoader bdc = AccessController
+						.doPrivileged(new PrivilegedAction<BundleDelegatingClassLoader>() {
+							public BundleDelegatingClassLoader run() {
+								return new BundleDelegatingClassLoader(bundle);
+							}
+						});
 
 				InputStream in = sm.handle(getPluginConfigStream(bdc));
 

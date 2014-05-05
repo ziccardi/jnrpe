@@ -17,7 +17,6 @@ package it.jnrpe;
 
 import it.jnrpe.commands.CommandInvoker;
 import it.jnrpe.events.EventsUtil;
-import it.jnrpe.events.IJNRPEEventListener;
 import it.jnrpe.events.LogEvent;
 import it.jnrpe.utils.StreamManager;
 
@@ -36,7 +35,6 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.net.ServerSocketFactory;
 import javax.net.ssl.KeyManagerFactory;
@@ -110,10 +108,12 @@ class JNRPEListenerThread extends Thread implements IJNRPEListener {
 	 */
 	private static final String KEYSTORE_PWD = "p@55w0rd";
 
-	/**
-	 * The set of event listeners.
-	 */
-	private final Set<IJNRPEEventListener> eventListenersList;
+	private final JNRPEExecutionContext context;
+
+	// /**
+	// * The set of event listeners.
+	// */
+	// private final Set<IJNRPEEventListener> eventListenersList;
 
 	/**
 	 * Set to true if the server is shutting down.
@@ -132,14 +132,15 @@ class JNRPEListenerThread extends Thread implements IJNRPEListener {
 	 * @param newCommandInvoker
 	 *            The command invoker to be used to serve the request
 	 */
-	JNRPEListenerThread(final Set<IJNRPEEventListener> eventListeners,
+	JNRPEListenerThread(final JNRPEExecutionContext ctx,
 			final String newBindingAddress, final int newBindingPort,
 			final CommandInvoker newCommandInvoker) {
 		super();
 		this.bindingAddress = newBindingAddress;
 		this.bindingPort = newBindingPort;
 		this.commandInvoker = newCommandInvoker;
-		this.eventListenersList = eventListeners;
+		this.context = ctx;
+		// this.eventListenersList = eventListeners;
 	}
 
 	/**
@@ -269,7 +270,7 @@ class JNRPEListenerThread extends Thread implements IJNRPEListener {
 
 			msg.append(bindingAddress).append(":").append(bindingPort);
 
-			EventsUtil.sendEvent(eventListenersList, this, LogEvent.INFO,
+			EventsUtil.sendEvent(context.getListeners(), this, LogEvent.INFO,
 					msg.toString());
 
 			while (true) {
@@ -284,12 +285,12 @@ class JNRPEListenerThread extends Thread implements IJNRPEListener {
 
 				JNRPEServerThread kk = threadFactory
 						.createNewThread(clientSocket);
-				kk.configure(this, eventListenersList);
+				kk.configure(this, context);
 				kk.start();
 			}
 		} catch (SocketException se) {
 			if (!shutdownTriggered) {
-				EventsUtil.sendEvent(eventListenersList, this, LogEvent.ERROR,
+				EventsUtil.sendEvent(context, this, LogEvent.ERROR,
 						"Unable to listen on " + bindingAddress + ":"
 								+ bindingPort + ": " + se.getMessage(), se);
 			}
@@ -298,8 +299,8 @@ class JNRPEListenerThread extends Thread implements IJNRPEListener {
 			// Ignoring
 
 		} catch (Throwable e) {
-			EventsUtil.sendEvent(eventListenersList, this, LogEvent.ERROR,
-					e.getMessage(), e);
+			EventsUtil.sendEvent(context, this, LogEvent.ERROR, e.getMessage(),
+					e);
 		}
 
 		exit();
@@ -311,8 +312,7 @@ class JNRPEListenerThread extends Thread implements IJNRPEListener {
 	private synchronized void exit() {
 		serverSocket = null;
 		notifyAll();
-		EventsUtil.sendEvent(eventListenersList, this, LogEvent.INFO,
-				"Listener Closed");
+		EventsUtil.sendEvent(context, this, LogEvent.INFO, "Listener Closed");
 	}
 
 	/**
@@ -352,7 +352,7 @@ class JNRPEListenerThread extends Thread implements IJNRPEListener {
 		}
 
 		// System.out.println ("Refusing connection to " + inetAddress);
-		EventsUtil.sendEvent(eventListenersList, this, LogEvent.INFO,
+		EventsUtil.sendEvent(context, this, LogEvent.INFO,
 				"Connection refused from : " + inetAddress);
 
 		return false;

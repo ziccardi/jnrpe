@@ -17,7 +17,6 @@ package it.jnrpe;
 
 import it.jnrpe.commands.CommandInvoker;
 import it.jnrpe.events.EventsUtil;
-import it.jnrpe.events.IJNRPEEventListener;
 import it.jnrpe.events.LogEvent;
 import it.jnrpe.net.BadCRCException;
 import it.jnrpe.net.JNRPERequest;
@@ -30,7 +29,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.text.MessageFormat;
-import java.util.Set;
 
 import javax.net.ssl.SSLSocket;
 
@@ -63,10 +61,12 @@ class JNRPEServerThread extends Thread {
 	 */
 	private JNRPEListenerThread parent = null;
 
-	/**
-	 * The list of event listeners.
-	 */
-	private Set<IJNRPEEventListener> listenersList;
+	// /**
+	// * The list of event listeners.
+	// */
+	// private Set<IJNRPEEventListener> listenersList;
+
+	private JNRPEExecutionContext context;
 
 	/**
 	 * Builds and initializes a new server thread.
@@ -92,9 +92,10 @@ class JNRPEServerThread extends Thread {
 	 *            The event listeners
 	 */
 	void configure(final JNRPEListenerThread listenerThread,
-			final Set<IJNRPEEventListener> vListeners) {
+			final JNRPEExecutionContext ctx) {
 		parent = listenerThread;
-		listenersList = vListeners;
+		// listenersList = vListeners;
+		context = ctx;
 	}
 
 	/**
@@ -148,10 +149,9 @@ class JNRPEServerThread extends Thread {
 		String paramTraceLog = MessageFormat.format("Arguments : ''{0}''",
 				argsToString(argsAry));
 
-		EventsUtil.sendEvent(listenersList, parent, LogEvent.DEBUG,
-				messageInvokedLog);
-		EventsUtil.sendEvent(listenersList, parent, LogEvent.TRACE,
-				paramTraceLog);
+		EventsUtil
+				.sendEvent(context, parent, LogEvent.DEBUG, messageInvokedLog);
+		EventsUtil.sendEvent(context, parent, LogEvent.TRACE, paramTraceLog);
 
 		return res;
 	}
@@ -164,7 +164,7 @@ class JNRPEServerThread extends Thread {
 	 * @return The printable string
 	 */
 	private String argsToString(final String[] args) {
-		return new StringBuffer().append('[')
+		return new StringBuilder().append('[')
 				.append(StringUtils.join(args, ',')).append(']').toString();
 	}
 
@@ -188,8 +188,13 @@ class JNRPEServerThread extends Thread {
 					res = handleRequest(req);
 					break;
 				default:
+					PacketVersion version = req.getPacketVersion();
+					if (version == null) {
+						version = PacketVersion.VERSION_2;
+					}
+
 					res = new JNRPEResponse();
-					res.setPacketVersion(req.getPacketVersion());
+					res.setPacketVersion(version);
 					res.setResultCode(Status.UNKNOWN.intValue());
 					res.setMessage("Invalid Packet Type");
 					res.updateCRC();
@@ -215,7 +220,7 @@ class JNRPEServerThread extends Thread {
 		} catch (IOException e) {
 			// if (!m_bStopped.booleanValue())
 			// m_Logger.error("ERROR DURING SOCKET OPERATION.", e);
-			EventsUtil.sendEvent(listenersList, parent, LogEvent.ERROR,
+			EventsUtil.sendEvent(context, parent, LogEvent.ERROR,
 					"Error during socket operation", e);
 		} finally {
 			try {
