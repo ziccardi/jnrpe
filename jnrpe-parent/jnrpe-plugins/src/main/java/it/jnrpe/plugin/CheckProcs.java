@@ -348,7 +348,7 @@ public class CheckProcs extends PluginBase {
 	 */
 	private String getFormattedOutput(String output) {
 		String out = "";
-		StringBuffer lines = new StringBuffer();
+		StringBuilder lines = new StringBuilder();
 		String[] splittedLines = output.split("\n");
 		for (int i = 0; i < splittedLines.length; i++) {
 			if (i == 0) {
@@ -358,15 +358,10 @@ public class CheckProcs extends PluginBase {
 			if (splittedLine.contains("<defunct>")) {
 				continue;
 			}
-			String[] splitted = splittedLine.split("\\s+", 9);
-			String line = "";
-			for (String str : splitted) {
-				line += str + ",";
-			}
-			if (line.endsWith(",")) {
-				line = line.substring(0, line.length() - 1);
-			}
-			lines.append(line).append("\n");
+
+			String line = splittedLine.replaceAll("\\s+", ",");
+
+			lines.append(line).append('\n');
 		}
 		out = lines.toString();
 		return out;
@@ -398,22 +393,25 @@ public class CheckProcs extends PluginBase {
 			values.put("pid", line[1]);
 			values.put(FILTER_MEMORY, "" + convertToMemoryInt(line[4]));
 			values.put(FILTER_USER, line[6]);
-			int seconds = convertToSeconds(line[7].trim());
-			if (line[0].trim().toLowerCase().contains("System Idle Process") ||
-					line[0].contains("inactiv") ||
-					line[0].trim().toLowerCase().equals("system")) {
-				seconds = 0;
+
+			String tmp = line[0].trim().toLowerCase();
+
+			int seconds = 0;
+			// int seconds = convertToSeconds(line[7].trim());
+			if (!(tmp.contains("system idle process") || tmp
+					.contains("inactiv")) || tmp.equals("system")) {
+				seconds = convertToSeconds(line[7].trim());
 			}
 			totalRunTime += seconds;
-			values.put(cpu, seconds + "");
+			values.put(cpu, Integer.toString(seconds));
 			info.add(values);
 		}
-		
+
 		for (Map<String, String> map : info) {
 			int secs = Integer.parseInt(map.get(cpu));
-			log.debug("secs " + secs + "");
-			double perc = ((double) secs / (double) totalRunTime) * 100;
-			map.put(cpu, (int) perc + "");
+			log.debug("secs " + secs);
+			double perc = ((double) secs / (double) totalRunTime) * 100.0;
+			map.put(cpu, Integer.toString((int) perc));
 		}
 
 		log.debug(info + "");
@@ -492,7 +490,7 @@ public class CheckProcs extends PluginBase {
 						break;
 					}
 				} else if (filter.contains(FILTER_EREG_ARG_ARRAY)
-						&& !patternMatches(filterValue,
+						&& !Pattern.matches(filterValue,
 								map.get(FILTER_ARG_ARRAY))) {
 					matchesAll = false;
 					break;
@@ -512,18 +510,6 @@ public class CheckProcs extends PluginBase {
 			}
 		}
 		return filtered;
-	}
-
-	/**
-	 * Apply regex
-	 * 
-	 * @param regex
-	 * @param input
-	 * @return
-	 */
-	private boolean patternMatches(String regex, String input) {
-		// Pattern p = Pattern.compile(regex);
-		return Pattern.matches(regex, input);
 	}
 
 	private Map<String, String> getFilterAndValue(ICommandLine cl) {
