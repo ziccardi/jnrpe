@@ -393,14 +393,9 @@ public class CheckProcs extends PluginBase {
 			values.put("pid", line[1]);
 			values.put(FILTER_MEMORY, "" + convertToMemoryInt(line[4]));
 			values.put(FILTER_USER, line[6]);
-
-			String tmp = line[0].trim().toLowerCase();
-
 			int seconds = 0;
-			// int seconds = convertToSeconds(line[7].trim());
-			if (!(tmp.contains("system idle process") || tmp
-					.contains("inactiv")) || tmp.equals("system")) {
-				seconds = convertToSeconds(line[7].trim());
+			if (!ShellUtils.isWindowsIdleProc(line[0])){
+				seconds = convertToSeconds(line[7].trim()); 
 			}
 			totalRunTime += seconds;
 			values.put(cpu, Integer.toString(seconds));

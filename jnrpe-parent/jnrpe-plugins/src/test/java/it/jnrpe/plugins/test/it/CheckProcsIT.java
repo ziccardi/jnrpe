@@ -26,6 +26,7 @@ import it.jnrpe.commands.CommandDefinition;
 import it.jnrpe.commands.CommandOption;
 import it.jnrpe.commands.CommandRepository;
 import it.jnrpe.plugin.CheckProcs;
+import it.jnrpe.plugin.utils.ShellUtils;
 import it.jnrpe.plugins.PluginDefinition;
 import it.jnrpe.utils.PluginRepositoryUtil;
 import junit.framework.Assert;
@@ -76,7 +77,6 @@ public class CheckProcsIT implements ITConstants{
     	// surely a java process must be running?
     	String command = getCommand();
 		CommandRepository cr = ITSetup.getCommandRepository();
-		
 		CommandDefinition cd = new CommandDefinition("CHECK_PROCS_COMMAND", "CHECK_PROCS");
 		cd.addArgument(new CommandOption("command", "$ARG1$"));
 		cd.addArgument(new CommandOption("warning", "$ARG2$"));
@@ -106,11 +106,28 @@ public class CheckProcsIT implements ITConstants{
 		Assert.assertEquals(ret.getStatus(), Status.WARNING);
 		
 	}
-    
+
+    /**
+     * Test windows idle process
+     * 
+     * @throws JNRPEClientException
+     */
+    @Test
+    public final void checIsWindowsIdleProc() throws JNRPEClientException {
+    	if (ShellUtils.isWindows()){
+    		String str = "\"System Idle Process\",\"0\",\"Services\",\"0\",\"24 K\",\"Unknown\",\"NT AUTHORITY\\SYSTEM\",\"2:05:59\",\"N/A\"";
+    		String proc = str.replaceAll("\"", "").split(",")[0];
+        	Assert.assertEquals(true, ShellUtils.isWindowsIdleProc(proc));
+        	str = "\"System\",\"4\",\"Services\",\"0\",\"1 224 K\",\"Unknown\",\"N/A\",\"0:00:40\",\"N/A\"";
+        	proc = str.replaceAll("\"", "").split(",")[0];
+        	Assert.assertEquals(true, ShellUtils.isWindowsIdleProc(proc));
+    	}
+    	    	
+    }
     
     private String getCommand(){
     	String command = "java";
-    	if (System.getProperty("os.name").toLowerCase().contains("windows")){
+    	if (ShellUtils.isWindows()){
     		command = "java.exe";
     	}
     	return command;
