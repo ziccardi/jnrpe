@@ -15,19 +15,46 @@
  *******************************************************************************/
 package it.jnrpe;
 
+import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.EventLoopGroup;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.ssl.SslHandler;
 import it.jnrpe.commands.CommandInvoker;
 import it.jnrpe.commands.CommandRepository;
+import it.jnrpe.events.EventsUtil;
 import it.jnrpe.events.IJNRPEEventListener;
+import it.jnrpe.events.LogEvent;
+import it.jnrpe.net.JNRPERequestDecoder;
+import it.jnrpe.net.JNRPEResponseEncoder;
+import it.jnrpe.net.JNRPEServerHandler;
 import it.jnrpe.plugins.IPluginRepository;
+import it.jnrpe.utils.StreamManager;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
+
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLEngine;
+import javax.net.ssl.SSLException;
 
 /**
  * This class is the real JNRPE worker. It must be used to start listening for
@@ -36,10 +63,13 @@ import java.util.Set;
  * @author Massimiliano Ziccardi
  */
 public final class JNRPE {
-	/**
-	 * How many ms to wait for joining a thread.
-	 */
-	private static final int THREAD_JOIN_TIMEOUT = 3000;
+
+	private final EventLoopGroup bossGroup = new NioEventLoopGroup();
+	private final EventLoopGroup workerGroup = new NioEventLoopGroup();
+
+	private static final String KEYSTORE_NAME = "keys.jks";
+
+	private static final String KEYSTORE_PWD = "p@55w0rd";
 
 	/**
 	 * The plugin repository to be used to find the requested plugin.
@@ -54,11 +84,6 @@ public final class JNRPE {
 	 * The list of accepted clients.
 	 */
 	private final List<String> acceptedHostsList = new ArrayList<String>();
-
-	/**
-	 * All the listeners.
-	 */
-	private final Map<String, IJNRPEListener> listenersMap = new HashMap<String, IJNRPEListener>();
 
 	/**
 	 * All the listeners.
@@ -133,6 +158,93 @@ public final class JNRPE {
 	}
 
 	/**
+	 * Creates, configures and returns the SSL engine.
+	 * 
+	 * @return the SSL Engine
+	 * @throws KeyStoreException
+	 * @throws CertificateException
+	 * @throws IOException
+	 * @throws UnrecoverableKeyException
+	 * @throws KeyManagementException
+	 */
+	private SSLEngine getSSLEngine() throws KeyStoreException,
+			CertificateException, IOException, UnrecoverableKeyException,
+			KeyManagementException {
+
+		// Open the KeyStore Stream
+		StreamManager h = new StreamManager();
+
+		SSLContext ctx;
+		KeyManagerFactory kmf;
+
+		try {
+			InputStream ksStream = getClass().getClassLoader()
+					.getResourceAsStream(KEYSTORE_NAME);
+			h.handle(ksStream);
+			ctx = SSLContext.getInstance("SSLv3");
+
+			kmf = KeyManagerFactory.getInstance(KeyManagerFactory
+					.getDefaultAlgorithm());
+
+			KeyStore ks = KeyStore.getInstance("JKS");
+			char[] passphrase = KEYSTORE_PWD.toCharArray();
+			ks.load(ksStream, passphrase);
+
+			kmf.init(ks, passphrase);
+			ctx.init(kmf.getKeyManagers(), null,
+					new java.security.SecureRandom());
+		} catch (NoSuchAlgorithmException e) {
+			throw new SSLException("Unable to initialize SSLSocketFactory.\n"
+					+ e.getMessage());
+		} finally {
+			h.closeAll();
+		}
+
+		return ctx.createSSLEngine();
+	}
+
+	/**
+	 * Creates and returns a configured NETTY ServerBootstrap object.
+	 * 
+	 * @param useSSL
+	 *            <code>true</code> if SSL must be used.
+	 * @return the server bootstrap object
+	 */
+	private ServerBootstrap getServerBootstrap(final boolean useSSL) {
+
+		final CommandInvoker invoker = new CommandInvoker(pluginRepository,
+				commandRepository, eventListenersSet);
+
+		ServerBootstrap b = new ServerBootstrap();
+		b.group(bossGroup, workerGroup)
+				.channel(NioServerSocketChannel.class)
+				.childHandler(new ChannelInitializer<SocketChannel>() {
+					@Override
+					public void initChannel(SocketChannel ch) throws Exception {
+
+						if (useSSL) {
+							SSLEngine engine = getSSLEngine();
+							engine.setEnabledCipherSuites(engine
+									.getSupportedCipherSuites());
+							engine.setUseClientMode(false);
+							engine.setNeedClientAuth(false);
+							ch.pipeline()
+									.addLast("ssl", new SslHandler(engine));
+						}
+
+						ch.pipeline().addLast(
+								new JNRPERequestDecoder(),
+								new JNRPEResponseEncoder(),
+								new JNRPEServerHandler(invoker,
+										eventListenersSet));
+					}
+				}).option(ChannelOption.SO_BACKLOG, 128)
+				.childOption(ChannelOption.SO_KEEPALIVE, true);
+
+		return b;
+	}
+
+	/**
 	 * Starts a new thread that listen for requests. The method is <b>not
 	 * blocking</b>
 	 * 
@@ -147,29 +259,27 @@ public final class JNRPE {
 	 */
 	public void listen(final String address, final int port,
 			final boolean useSSL) throws UnknownHostException {
-		JNRPEExecutionContext ctx = new JNRPEExecutionContext(
-				eventListenersSet, charset);
 
-		JNRPEListenerThread bt = new JNRPEListenerThread(ctx, address, port,
-				new CommandInvoker(pluginRepository, commandRepository,
-						eventListenersSet));
+		// Bind and start to accept incoming connections.
+		ChannelFuture cf = getServerBootstrap(useSSL).bind(address, port);
+		cf.addListener(new ChannelFutureListener() {
 
-		for (String sAddr : acceptedHostsList) {
-			bt.addAcceptedHosts(sAddr);
-		}
-		if (useSSL) {
-			bt.enableSSL();
-		}
-		bt.start();
+			public void operationComplete(ChannelFuture future)
+					throws Exception {
+				if (future.isSuccess()) {
+					EventsUtil.sendEvent(eventListenersSet, this,
+							LogEvent.INFO, "Listening on "
+									+ (useSSL ? "SSL/" : "") + address + ":"
+									+ port);
+				} else {
+					EventsUtil.sendEvent(eventListenersSet, this,
+							LogEvent.ERROR, "Unable to listen on "
+									+ (useSSL ? "SSL/" : "") + address + ":"
+									+ port, future.cause());
+				}
+			}
+		});
 
-		try {
-			// Give time to check if the IP/port configuration ar correctly
-			// configured
-			bt.join(THREAD_JOIN_TIMEOUT);
-		} catch (InterruptedException e) {
-			throw new IllegalStateException(e);
-		}
-		listenersMap.put(address + port, bt);
 	}
 
 	/**
@@ -183,15 +293,10 @@ public final class JNRPE {
 	}
 
 	/**
-	 * Shuts down all the listener handled by this instance.
+	 * Shuts down the server.
 	 */
 	public void shutdown() {
-		if (listenersMap.isEmpty()) {
-			return;
-		}
-
-		for (IJNRPEListener listener : listenersMap.values()) {
-			listener.shutdown();
-		}
+		workerGroup.shutdownGracefully().syncUninterruptibly();
+		bossGroup.shutdownGracefully().syncUninterruptibly();
 	}
 }

@@ -37,7 +37,6 @@ import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 
 /**
  * Checks system processes and does check against threshold metrics.
@@ -394,8 +393,8 @@ public class CheckProcs extends PluginBase {
 			values.put(FILTER_MEMORY, "" + convertToMemoryInt(line[4]));
 			values.put(FILTER_USER, line[6]);
 			int seconds = 0;
-			if (!ShellUtils.isWindowsIdleProc(line[0])){
-				seconds = convertToSeconds(line[7].trim()); 
+			if (!ShellUtils.isWindowsIdleProc(line[0])) {
+				seconds = convertToSeconds(line[7].trim());
 			}
 			totalRunTime += seconds;
 			values.put(cpu, Integer.toString(seconds));
@@ -523,30 +522,34 @@ public class CheckProcs extends PluginBase {
 	 * @param input
 	 * @return
 	 */
-	private int convertToSeconds(String input) {
+	private int convertToSeconds(final String input) {
 		int days = 0;
 		int hours = 0;
 		int minutes = 0;
 		int seconds = 0;
-		int hyphenCount = StringUtils.countMatches(input, "-");
-		int colonCount = StringUtils.countMatches(input, ":");
 
-		if (hyphenCount > 0) {
-			int hyphenIndex = input.indexOf("-");
-			days = Integer.parseInt(input.substring(0, hyphenIndex));
-			String[] time = input.substring(hyphenIndex + 1).split(":");
-			hours = Integer.parseInt(time[0]);
-			minutes = Integer.parseInt(time[1]);
-			seconds = Integer.parseInt(time[2]);
-		} else {
-			String[] split = input.split(":");
-			if (colonCount == 2) {
-				hours = Integer.parseInt(split[0]);
-				minutes = Integer.parseInt(split[1]);
-				seconds = Integer.parseInt(split[2]);
-			} else if (colonCount == 1) {
-				minutes = Integer.parseInt(split[0]);
-				seconds = Integer.parseInt(split[1]);
+		String remainingTokens = input;
+
+		if (input.indexOf('-') != -1) {
+			String[] parts = remainingTokens.split("-");
+			days = Integer.parseInt(parts[0]);
+			remainingTokens = parts[1];
+		}
+
+		String[] timeParts = remainingTokens.split(":");
+
+		for (int i = timeParts.length - 1, partType = 0; i >= 0; i--, partType++) {
+			switch (partType) {
+			case 0: // Seconds
+				seconds = Integer.parseInt(timeParts[i]);
+				break;
+			case 1: // Minutes
+				minutes = Integer.parseInt(timeParts[i]);
+				break;
+			case 2: // Hours
+				hours = Integer.parseInt(timeParts[i]);
+				break;
+			default: // bad input
 			}
 		}
 

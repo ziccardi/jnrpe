@@ -119,11 +119,18 @@ public class JnrpeParamTest {
 			});
 			instance2.listen("127.0.0.1", 5666);
 
+			try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			Assert.assertNotNull(m_sEventMessage, "No event message received");
 			Assert.assertNotNull(m_sEventType, "No event type received");
 			Assert.assertEquals(
 					m_sEventMessage.contains("Unable to listen on"), true,
-					"'No Unable to listen on error' received");
+					"No 'Unable to listen on' error received");
 		} finally {
 			if (instance1 != null)
 				instance1.shutdown();

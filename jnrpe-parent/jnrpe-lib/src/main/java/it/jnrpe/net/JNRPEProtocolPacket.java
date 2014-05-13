@@ -25,6 +25,8 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.zip.CRC32;
 
+import org.apache.commons.lang.ArrayUtils;
+
 /**
  * This class represent a generic NRPE protocol packet.
  * 
@@ -74,7 +76,7 @@ class JNRPEProtocolPacket {
 	 * 
 	 * @return the CRC value
 	 */
-	public int getCRC() {
+	int getCRC() {
 		return crcValue;
 	}
 
@@ -83,7 +85,7 @@ class JNRPEProtocolPacket {
 	 * 
 	 * @return The packet type
 	 */
-	public PacketType getPacketType() {
+	PacketType getPacketType() {
 		return PacketType.fromIntValue(packetTypeCode);
 	}
 
@@ -102,7 +104,7 @@ class JNRPEProtocolPacket {
 	 * @param crc
 	 *            The new CRC value
 	 */
-	public void setCRC(final int crc) {
+	void setCRC(final int crc) {
 		crcValue = crc;
 	}
 
@@ -150,24 +152,6 @@ class JNRPEProtocolPacket {
 	}
 
 	/**
-	 * Initialize the object reading the data from the input stream.
-	 * 
-	 * @param in
-	 *            The stream to be read
-	 * @throws IOException
-	 *             On any I/O error
-	 */
-	protected void fromInputStream(final InputStream in) throws IOException {
-		DataInputStream din = new DataInputStream(in);
-		packetVersion = din.readShort();
-		packetTypeCode = din.readShort();
-		crcValue = din.readInt();
-		resultCode = din.readShort();
-		din.readFully(byteBufferAry);
-		din.readFully(dummyBytesAry);
-	}
-
-	/**
 	 * Validates the packet CRC.
 	 * 
 	 * @throws BadCRCException
@@ -200,6 +184,64 @@ class JNRPEProtocolPacket {
 		}
 	}
 
+	protected byte[] getBuffer() {
+		return byteBufferAry;
+	}
+
+	protected String getPacketString() {
+		byte[] buffer = getBuffer();
+		int zeroIndex = ArrayUtils.indexOf(buffer, (byte) 0);
+
+		if (zeroIndex == ArrayUtils.INDEX_NOT_FOUND) {
+			return new String(buffer);
+		} else {
+			return new String(buffer, 0, zeroIndex);
+		}
+	}
+
+	/**
+	 * Initializes the arrays with random data. Not sure it is really needed...
+	 */
+	private void initRandomBuffer() {
+		Random r = new Random(System.currentTimeMillis());
+
+		r.nextBytes(byteBufferAry);
+		r.nextBytes(dummyBytesAry);
+	}
+
+	/**
+	 * Write the command name inside the JNRPE packet.
+	 * 
+	 * @param commandName
+	 *            The command name
+	 */
+	protected void setBuffer(final String buffer) {
+		initRandomBuffer();
+		byteBufferAry = Arrays.copyOf(buffer.getBytes(charset),
+				MAX_PACKETBUFFER_LENGTH);
+	}
+
+	void setDummy(final byte[] dummyBytes) {
+		if (dummyBytes == null || dummyBytes.length != 2) {
+			throw new IllegalArgumentException(
+					"Dummy bytes array must have exactly two elements");
+		}
+
+		System.arraycopy(dummyBytes, 0, this.dummyBytesAry, 0, 2);
+	}
+
+	byte[] getDummy() {
+		return dummyBytesAry;
+	}
+
+	void updateCRC() {
+		setCRC(0);
+		CRC32 crcAlg = new CRC32();
+		crcAlg.update(toByteArray());
+
+		setCRC((int) crcAlg.getValue());
+	}
+
 	/**
 	 * Converts the packet object to its byte array representation.
 	 * 
@@ -218,78 +260,19 @@ class JNRPEProtocolPacket {
 			dout.write(dummyBytesAry);
 
 			dout.close();
-
 		} catch (IOException e) {
 			throw new IllegalStateException(e);
 		}
 		return bout.toByteArray();
 	}
 
-	/**
-	 * Returns the string message.
-	 * 
-	 * @return The string message
-	 */
-	public String getStringMessage() {
-		int zeroIndex = MAX_PACKETBUFFER_LENGTH - 1;
-
-		// find the first 0 byte
-		for (int i = 0; i < MAX_PACKETBUFFER_LENGTH; i++) {
-			if (byteBufferAry[i] == 0) {
-				zeroIndex = i;
-				break;
-			}
-		}
-
-		return new String(byteBufferAry, 0, zeroIndex, charset);
-	}
-
-	/**
-	 * Sets the packet message. If the message is longer than.
-	 * {@link JNRPEProtocolPacket#MAX_PACKETBUFFER_LENGTH} than it gets
-	 * truncated to {@link JNRPEProtocolPacket#MAX_PACKETBUFFER_LENGTH} bytes.
-	 * 
-	 * @param message
-	 *            The message
-	 */
-	protected void _setMessage(final String message) {
-		if (message == null) {
-			byteBufferAry[0] = 0;
-			return;
-		}
-
-		byte[] messageBytes = message.getBytes(charset);
-
-		System.arraycopy(messageBytes, 0, byteBufferAry, 0,
-				Math.min(messageBytes.length, MAX_PACKETBUFFER_LENGTH));
-
-		if (messageBytes.length < MAX_PACKETBUFFER_LENGTH) {
-			byteBufferAry[messageBytes.length] = 0;
-		}
-	}
-
-	/**
-	 * Initializes the arrays with random data. Not sure it is really needed...
-	 */
-	protected void initRandomBuffer() {
-		Random r = new Random(System.currentTimeMillis());
-
-		r.nextBytes(byteBufferAry);
-		r.nextBytes(dummyBytesAry);
-	}
-
-	/**
-	 * Write the command name inside the JNRPE packet.
-	 * 
-	 * @param commandName
-	 *            The command name
-	 */
-	protected void setDataBuffer(final String commandName) {
-		if (commandName == null) {
-			throw new IllegalArgumentException("Command name can't be null");
-		}
-
-		byteBufferAry = Arrays.copyOf(commandName.getBytes(charset),
-				MAX_PACKETBUFFER_LENGTH);
+	protected void fromInputStream(final InputStream in) throws IOException {
+		DataInputStream din = new DataInputStream(in);
+		packetVersion = din.readShort();
+		packetTypeCode = din.readShort();
+		crcValue = din.readInt();
+		resultCode = din.readShort();
+		din.readFully(byteBufferAry);
+		din.readFully(dummyBytesAry);
 	}
 }
