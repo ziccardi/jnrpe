@@ -17,57 +17,53 @@ package it.jnrpe.net;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.zip.CRC32;
 
 /**
  * This object represent a generic response packet.
- *
+ * 
  * @author Massimiliano Ziccardi
  */
 public final class JNRPEResponse extends JNRPEProtocolPacket {
-    /**
-     * Default constructor.
-     */
-    public JNRPEResponse() {
-        super();
-        setPacketType(PacketType.RESPONSE);
-    }
+	/**
+	 * Default constructor.
+	 */
+	public JNRPEResponse() {
+		super();
+		setPacketType(PacketType.RESPONSE);
+	}
 
-    /**
-     * Builds a JNRPE response reading the content from an InputStream.
-     *
-     * @param in
-     *            The InputStream to read from
-     * @throws IOException
-     *             on any io exception
-     */
-    public JNRPEResponse(final InputStream in) throws IOException {
-        super();
-        fromInputStream(in);
-    }
+	/*
+	 * Builds a JNRPE response reading the content from an InputStream.
+	 * 
+	 * @param in The InputStream to read from
+	 * 
+	 * @throws IOException on any io exception
+	 */
+	public JNRPEResponse(final InputStream in) throws IOException {
+		super();
+		fromInputStream(in);
+	}
 
-    /**
-     * Updates the CRC value.
-     */
-    public void updateCRC() {
-        setCRC(0);
-        int crc = 0;
+	/**
+	 * Sets the message to be included in the response.
+	 * 
+	 * @param message
+	 *            the response message
+	 */
+	public void setMessage(final String message) {
+		setBuffer(message);
+	}
 
-        CRC32 crcAlg = new CRC32();
-        crcAlg.update(toByteArray());
+	public String getMessage() {
+		return getPacketString();
+	}
 
-        crc = (int) crcAlg.getValue();
+	@Override
+	public String toString() {
+		return "JNRPEResponse [getPacketType()=" + getPacketType()
+				+ ", getPacketVersion()=" + getPacketVersion()
+				+ ", getResultCode()=" + getResultCode() + ", getBuffer()="
+				+ getBuffer() + "]";
+	}
 
-        setCRC(crc);
-    }
-
-    /**
-     * Sets the message to be included in the response.
-     *
-     * @param message the response message
-     */
-    public void setMessage(final String message) {
-        initRandomBuffer();
-        _setMessage(message);
-    }
 }

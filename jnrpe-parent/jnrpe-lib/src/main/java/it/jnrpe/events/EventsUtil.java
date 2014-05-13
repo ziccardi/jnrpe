@@ -17,7 +17,7 @@ package it.jnrpe.events;
 
 import it.jnrpe.JNRPEExecutionContext;
 
-import java.util.Set;
+import java.util.Collection;
 
 /**
  * This is an utility class than can be used to send simply events to all the
@@ -49,7 +49,8 @@ public final class EventsUtil {
 	 * @param message
 	 *            The log message
 	 */
-	public static void sendEvent(final Set<IJNRPEEventListener> listenersList,
+	public static void sendEvent(
+			final Collection<IJNRPEEventListener> listenersList,
 			final Object sender, final LogEvent evt, final String message) {
 		if (listenersList == null || listenersList.isEmpty()) {
 			return;
@@ -86,7 +87,8 @@ public final class EventsUtil {
 	 * @param exception
 	 *            The exception to be, eventually, logged (can be null).
 	 */
-	public static void sendEvent(final Set<IJNRPEEventListener> listenerList,
+	public static void sendEvent(
+			final Collection<IJNRPEEventListener> listenerList,
 			final Object sender, final LogEvent evt, final String message,
 			final Throwable exception) {
 		if (listenerList == null || listenerList.isEmpty()) {
@@ -121,7 +123,8 @@ public final class EventsUtil {
 	 * @param paramsList
 	 *            The event parameters
 	 */
-	public static void sendEvent(final Set<IJNRPEEventListener> listenerList,
+	public static void sendEvent(
+			final Collection<IJNRPEEventListener> listenerList,
 			final Object sender, final String customEvtType,
 			final EventParam... paramsList) {
 		if (sender == null || customEvtType == null) {

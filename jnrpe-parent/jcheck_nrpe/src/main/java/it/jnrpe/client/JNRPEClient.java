@@ -167,7 +167,7 @@ public class JNRPEClient {
 			JNRPEResponse res = new JNRPEResponse(in);
 
 			return new ReturnValue(Status.fromIntValue(res.getResultCode()),
-					res.getStringMessage());
+					res.getMessage());
 		} catch (Exception e) {
 			// e.printStackTrace();
 			throw new JNRPEClientException(e);
