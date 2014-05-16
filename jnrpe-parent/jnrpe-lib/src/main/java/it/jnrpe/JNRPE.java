@@ -47,9 +47,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -83,15 +82,29 @@ public final class JNRPE {
 	/**
 	 * The list of accepted clients.
 	 */
-	private final List<String> acceptedHostsList = new ArrayList<String>();
+	private Collection<String> acceptedHostsList = new ArrayList<String>();
 
 	/**
 	 * All the listeners.
 	 */
-	private final Set<IJNRPEEventListener> eventListenersSet = new HashSet<IJNRPEEventListener>();
+	private Collection<IJNRPEEventListener> eventListenersSet = new HashSet<IJNRPEEventListener>();
 
 	private final Charset charset;
 
+	private final boolean acceptParams;
+
+	/**
+	 * Instantiates the JNRPE engine.
+	 * 
+	 * @param pluginRepo
+	 *            The plugin repository object
+	 * @param commandRepo
+	 *            The command repository object
+	 * 
+	 * @deprecated This constructor will be removed as of version 2.0.5. Use
+	 *             {@link JNRPEBuilder} instead
+	 */
+	@Deprecated
 	public JNRPE(final IPluginRepository pluginRepo,
 			final CommandRepository commandRepo) {
 		if (pluginRepo == null) {
@@ -106,6 +119,7 @@ public final class JNRPE {
 		pluginRepository = pluginRepo;
 		commandRepository = commandRepo;
 		charset = Charset.forName("UTF-8");
+		this.acceptParams = true;
 	}
 
 	/**
@@ -115,9 +129,14 @@ public final class JNRPE {
 	 *            The repository containing all the installed plugins
 	 * @param commandRepo
 	 *            The repository containing all the configured commands.
+	 * 
+	 * @deprecated This constructor will be removed as of version 2.0.5. Use
+	 *             {@link JNRPEBuilder} instead
 	 */
+	@Deprecated
 	public JNRPE(final IPluginRepository pluginRepo,
-			final CommandRepository commandRepo, Charset charset) {
+			final CommandRepository commandRepo, final Charset charset,
+			final boolean acceptParams) {
 		if (pluginRepo == null) {
 			throw new IllegalArgumentException(
 					"Plugin repository cannot be null");
@@ -130,6 +149,28 @@ public final class JNRPE {
 		pluginRepository = pluginRepo;
 		commandRepository = commandRepo;
 		this.charset = charset;
+		this.acceptParams = acceptParams;
+	}
+
+	JNRPE(final IPluginRepository pluginRepo,
+			final CommandRepository commandRepo, final Charset charset,
+			final boolean acceptParams, final Collection<String> acceptedHosts,
+			final Collection<IJNRPEEventListener> eventListeners) {
+		if (pluginRepo == null) {
+			throw new IllegalArgumentException(
+					"Plugin repository cannot be null");
+		}
+
+		if (commandRepo == null) {
+			throw new IllegalArgumentException(
+					"Command repository cannot be null");
+		}
+		pluginRepository = pluginRepo;
+		commandRepository = commandRepo;
+		this.charset = charset;
+		this.acceptParams = acceptParams;
+		this.acceptedHostsList = acceptedHosts;
+		this.eventListenersSet = eventListeners;
 	}
 
 	/**
@@ -152,7 +193,11 @@ public final class JNRPE {
 	 * 
 	 * @param listener
 	 *            The event listener to be added
+	 * 
+	 * @deprecated The JNRPE object will become immutable as of version 2.0.5.
+	 *             Use {@link JNRPEBuilder} instead
 	 */
+	@Deprecated
 	public void addEventListener(final IJNRPEEventListener listener) {
 		eventListenersSet.add(listener);
 	}
@@ -213,7 +258,7 @@ public final class JNRPE {
 	private ServerBootstrap getServerBootstrap(final boolean useSSL) {
 
 		final CommandInvoker invoker = new CommandInvoker(pluginRepository,
-				commandRepository, eventListenersSet);
+				commandRepository, acceptParams, eventListenersSet);
 
 		ServerBootstrap b = new ServerBootstrap();
 		b.group(bossGroup, workerGroup)
@@ -287,7 +332,10 @@ public final class JNRPE {
 	 * 
 	 * @param address
 	 *            The address to accept
+	 * @deprecated The JNRPE object will become immutable as of version 2.0.5.
+	 *             Use {@link JNRPEBuilder} instead
 	 */
+	@Deprecated
 	public void addAcceptedHost(final String address) {
 		acceptedHostsList.add(address);
 	}

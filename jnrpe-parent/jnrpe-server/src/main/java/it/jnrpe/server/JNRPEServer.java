@@ -16,6 +16,7 @@
 package it.jnrpe.server;
 
 import it.jnrpe.JNRPE;
+import it.jnrpe.JNRPEBuilder;
 import it.jnrpe.commands.CommandRepository;
 import it.jnrpe.plugins.IPluginRepository;
 import it.jnrpe.plugins.PluginConfigurationException;
@@ -357,13 +358,21 @@ public final class JNRPEServer {
 
 		CommandRepository cr = conf.createCommandRepository();
 
-		JNRPE jnrpe = new JNRPE(pr, cr);
-		jnrpe.addEventListener(new EventLoggerListener());
+		JNRPEBuilder builder = JNRPEBuilder.forRepositories(pr, cr)
+				.acceptParams(conf.getServerSection().acceptParams())
+				.withListener(new EventLoggerListener());
+
+		// JNRPE jnrpe = new JNRPE(pr, cr, Charset.defaultCharset(), conf
+		// .getServerSection().acceptParams());
+		// jnrpe.addEventListener(new EventLoggerListener());
 
 		for (String sAcceptedAddress : conf.getServerSection()
 				.getAllowedAddresses()) {
-			jnrpe.addAcceptedHost(sAcceptedAddress);
+			builder.acceptHost(sAcceptedAddress);
+			// jnrpe.addAcceptedHost(sAcceptedAddress);
 		}
+
+		JNRPE jnrpe = builder.build();
 
 		for (BindAddress bindAddress : conf.getServerSection()
 				.getBindAddresses()) {
