@@ -47,7 +47,7 @@ public class CommandConsoleCommand extends ConsoleCommand {
 
 	public boolean execute(String[] args) throws Exception {
 		ReturnValue retVal = new CommandInvoker(pluginRepository,
-				commandRepository, null).invoke(commandName, args);
+				commandRepository, true, null).invoke(commandName, args);
 
 		if (retVal == null) {
 			getConsole()
