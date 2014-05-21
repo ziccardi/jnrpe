@@ -346,7 +346,6 @@ public final class JNRPEServer {
 					+ "the plugin packages : " + e.getMessage());
 			System.exit(-1);
 		}
-		// CJNRPEConfiguration.init(cl.getOptionValue("conf"));
 
 		if (cl.hasOption("--help") && cl.getValue("--help") != null) {
 			printHelp(pr, (String) cl.getValue("--help"));
@@ -362,14 +361,9 @@ public final class JNRPEServer {
 				.acceptParams(conf.getServerSection().acceptParams())
 				.withListener(new EventLoggerListener());
 
-		// JNRPE jnrpe = new JNRPE(pr, cr, Charset.defaultCharset(), conf
-		// .getServerSection().acceptParams());
-		// jnrpe.addEventListener(new EventLoggerListener());
-
 		for (String sAcceptedAddress : conf.getServerSection()
 				.getAllowedAddresses()) {
 			builder.acceptHost(sAcceptedAddress);
-			// jnrpe.addAcceptedHost(sAcceptedAddress);
 		}
 
 		JNRPE jnrpe = builder.build();
@@ -387,9 +381,8 @@ public final class JNRPEServer {
 				jnrpe.listen(sIp, iPort, bindAddress.isSSL());
 			} catch (UnknownHostException e) {
 				System.out.println(String.format(
-						"Error binding the server to %s:%d", sIp, iPort)
-						+ ": "
-						+ e.getMessage());
+						"Error binding the server to %s:%d : %s", sIp, iPort,
+						e.getMessage()));
 			}
 		}
 

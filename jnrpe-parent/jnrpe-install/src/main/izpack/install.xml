@@ -137,14 +137,14 @@
         <exclude name="jopt*.jar" />
       </fileset>
 
-      <file src="../../../jnrpe-server/target/appassembler/bin/jnrpe"
+      <file src="${project.basedir}/../jnrpe-server/target/appassembler/bin/jnrpe"
         targetdir="$INSTALL_PATH/bin" os="unix" unpack="false" />
       <executable targetfile="$INSTALL_PATH/bin/jnrpe" os="unix" />
 
-      <file src="../../../jnrpe-server/target/appassembler/bin/jnrpe.bat"
+      <file src="${project.basedir}/../jnrpe-server/target/appassembler/bin/jnrpe.bat"
         targetdir="$INSTALL_PATH/bin" os="windows" unpack="false" />
 
-      <file src="../../src/config/log4j.properties" targetdir="$INSTALL_PATH/etc"
+      <file src="${project.basedir}/src/config/log4j.properties" targetdir="$INSTALL_PATH/etc"
         unpack="false" />
 
       <parsable targetfile="$INSTALL_PATH/etc/log4j.properties"
@@ -153,7 +153,7 @@
 
     <pack name="Sample Config" required="yes" hidden="true">
       <description>Sample configuration file</description>
-      <file src="../../src/config/jnrpe.ini" targetdir="$INSTALL_PATH/etc"
+      <file src="${project.basedir}/src/config/jnrpe.ini" targetdir="$INSTALL_PATH/etc"
         unpack="false" />
     </pack>
 
@@ -173,7 +173,7 @@
         <include name="jopt*.jar" />
       </fileset>
 
-      <file src="${project.basedir}/src/scripts/unix/jcheck_nrpe"
+      <file src="${project.basedir}/../jcheck_nrpe/target/appassembler/bin/jcheck_nrpe"
         targetdir="$INSTALL_PATH/bin" os="unix" unpack="false" />
       <executable targetfile="$INSTALL_PATH/bin/jcheck_nrpe" os="unix" />
 
