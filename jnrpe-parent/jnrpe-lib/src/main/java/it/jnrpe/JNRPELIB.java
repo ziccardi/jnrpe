@@ -17,14 +17,22 @@ package it.jnrpe;
 
 /**
  * An interface containing only the JNRPE version number.
- *
+ * 
  * @author Massimiliano Ziccardi
- *
+ * 
  */
-public interface JNRPELIB {
-    /**
-     * The JNRPE Version as read from its manifest.
-     */
-    String VERSION = "JNRPE library V. "
-            + JNRPELIB.class.getPackage().getImplementationVersion();
+public final class JNRPELIB {
+
+	/**
+	 * Private constructor to avoid instantiation.
+	 */
+	private JNRPELIB() {
+
+	}
+
+	/**
+	 * The JNRPE Version as read from its manifest.
+	 */
+	public static final String VERSION = "JNRPE library V. "
+			+ JNRPELIB.class.getPackage().getImplementationVersion();
 }
