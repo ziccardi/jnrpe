@@ -63,6 +63,7 @@ import javax.net.ssl.SSLException;
  */
 public final class JNRPE {
 
+	final static int DEFAULT_MAX_ACCEPTED_CONNECTIONS = 128;
 	private final EventLoopGroup bossGroup = new NioEventLoopGroup();
 	private final EventLoopGroup workerGroup = new NioEventLoopGroup();
 
@@ -90,6 +91,8 @@ public final class JNRPE {
 	private Collection<IJNRPEEventListener> eventListenersSet = new HashSet<IJNRPEEventListener>();
 
 	private final Charset charset;
+
+	private final int maxAcceptedConnections;
 
 	private final boolean acceptParams;
 
@@ -120,6 +123,7 @@ public final class JNRPE {
 		commandRepository = commandRepo;
 		charset = Charset.forName("UTF-8");
 		this.acceptParams = true;
+		this.maxAcceptedConnections = DEFAULT_MAX_ACCEPTED_CONNECTIONS;
 	}
 
 	/**
@@ -150,11 +154,13 @@ public final class JNRPE {
 		commandRepository = commandRepo;
 		this.charset = charset;
 		this.acceptParams = acceptParams;
+		this.maxAcceptedConnections = DEFAULT_MAX_ACCEPTED_CONNECTIONS;
 	}
 
 	JNRPE(final IPluginRepository pluginRepo,
 			final CommandRepository commandRepo, final Charset charset,
 			final boolean acceptParams, final Collection<String> acceptedHosts,
+			final int maxConnections,
 			final Collection<IJNRPEEventListener> eventListeners) {
 		if (pluginRepo == null) {
 			throw new IllegalArgumentException(
@@ -171,6 +177,7 @@ public final class JNRPE {
 		this.acceptParams = acceptParams;
 		this.acceptedHostsList = acceptedHosts;
 		this.eventListenersSet = eventListeners;
+		this.maxAcceptedConnections = maxConnections;
 	}
 
 	/**
@@ -283,7 +290,8 @@ public final class JNRPE {
 								new JNRPEServerHandler(invoker,
 										eventListenersSet));
 					}
-				}).option(ChannelOption.SO_BACKLOG, 128)
+				})
+				.option(ChannelOption.SO_BACKLOG, this.maxAcceptedConnections)
 				.childOption(ChannelOption.SO_KEEPALIVE, true);
 
 		return b;
