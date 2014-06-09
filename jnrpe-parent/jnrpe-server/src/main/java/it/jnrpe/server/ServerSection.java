@@ -57,6 +57,16 @@ public class ServerSection {
 	private int backlogSize = DEFAULT_BACKLOG;
 
 	/**
+	 * Read timeout in seconds.
+	 */
+	private Integer readTimeout = null;
+
+	/**
+	 * Write timeout in seconds.
+	 */
+	private Integer writeTimeout = null;
+
+	/**
 	 * @return all the configured binding addresses.
 	 */
 	public final List<BindAddress> getBindAddresses() {
@@ -131,6 +141,14 @@ public class ServerSection {
 		return this.backlogSize;
 	}
 
+	public final int getReadTimeout() {
+		return readTimeout;
+	}
+
+	public final int getWriteTimeout() {
+		return writeTimeout;
+	}
+
 	/**
 	 * Sets whether this server must resolve $ARGx$ macros or not.
 	 * 
@@ -166,5 +184,13 @@ public class ServerSection {
 	 */
 	final void setBackLogSize(final int backLogSize) {
 		this.backlogSize = backLogSize;
+	}
+
+	final void setReadTimeout(final int readTimeout) {
+		this.readTimeout = readTimeout;
+	}
+
+	final void setWriteTimeout(final int writeTimeout) {
+		this.writeTimeout = writeTimeout;
 	}
 }

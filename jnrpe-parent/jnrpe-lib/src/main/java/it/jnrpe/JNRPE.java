@@ -25,11 +25,13 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.ssl.SslHandler;
+import io.netty.handler.timeout.IdleStateHandler;
 import it.jnrpe.commands.CommandInvoker;
 import it.jnrpe.commands.CommandRepository;
 import it.jnrpe.events.EventsUtil;
 import it.jnrpe.events.IJNRPEEventListener;
 import it.jnrpe.events.LogEvent;
+import it.jnrpe.net.JNRPEIdleStateHandler;
 import it.jnrpe.net.JNRPERequestDecoder;
 import it.jnrpe.net.JNRPEResponseEncoder;
 import it.jnrpe.net.JNRPEServerHandler;
@@ -94,6 +96,9 @@ public final class JNRPE {
 
 	private final int maxAcceptedConnections;
 
+	private final int readTimeout;
+	private final int writeTimeout;
+
 	private final boolean acceptParams;
 
 	/**
@@ -124,6 +129,8 @@ public final class JNRPE {
 		charset = Charset.forName("UTF-8");
 		this.acceptParams = true;
 		this.maxAcceptedConnections = DEFAULT_MAX_ACCEPTED_CONNECTIONS;
+		readTimeout = 10;
+		writeTimeout = 60;
 	}
 
 	/**
@@ -155,12 +162,15 @@ public final class JNRPE {
 		this.charset = charset;
 		this.acceptParams = acceptParams;
 		this.maxAcceptedConnections = DEFAULT_MAX_ACCEPTED_CONNECTIONS;
+		readTimeout = 10;
+		writeTimeout = 60;
 	}
 
 	JNRPE(final IPluginRepository pluginRepo,
 			final CommandRepository commandRepo, final Charset charset,
 			final boolean acceptParams, final Collection<String> acceptedHosts,
-			final int maxConnections,
+			final int maxConnections, final int readTimeout,
+			final int writeTimeout,
 			final Collection<IJNRPEEventListener> eventListeners) {
 		if (pluginRepo == null) {
 			throw new IllegalArgumentException(
@@ -178,6 +188,9 @@ public final class JNRPE {
 		this.acceptedHostsList = acceptedHosts;
 		this.eventListenersSet = eventListeners;
 		this.maxAcceptedConnections = maxConnections;
+		this.readTimeout = readTimeout;
+		this.writeTimeout = writeTimeout;
+
 	}
 
 	/**
@@ -284,11 +297,22 @@ public final class JNRPE {
 									.addLast("ssl", new SslHandler(engine));
 						}
 
-						ch.pipeline().addLast(
-								new JNRPERequestDecoder(),
-								new JNRPEResponseEncoder(),
-								new JNRPEServerHandler(invoker,
-										eventListenersSet));
+						ch.pipeline()
+								.addLast(
+										new JNRPERequestDecoder(),
+										new JNRPEResponseEncoder(),
+										new JNRPEServerHandler(invoker,
+												eventListenersSet))
+								.addLast(
+										"idleStateHandler",
+										new IdleStateHandler(readTimeout,
+												writeTimeout, 0))
+								.addLast(
+										"jnrpeIdleStateHandler",
+										new JNRPEIdleStateHandler(
+												new JNRPEExecutionContext(
+														JNRPE.this.eventListenersSet,
+														Charset.defaultCharset())));
 					}
 				})
 				.option(ChannelOption.SO_BACKLOG, this.maxAcceptedConnections)

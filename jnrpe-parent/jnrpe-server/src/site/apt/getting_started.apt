@@ -84,6 +84,9 @@ Configuring the server
  bind-address : 127.0.0.1:5666
  plugin-path : /usr/local/jnrpe/plugins
  allow-address : 127.0.0.1
+ backlog-size : 256
+ read-timeout : 5
+ write-timeout : 60
    
  [commands]
  check_disk_C : CHECK_DISK --path C: --warning $ARG1$ --critical $ARG2$
@@ -108,6 +111,15 @@ Configuring the server
  
   * <<allow-address>> : 127.0.0.1 - means that JNRPE must accept request coming from 
    127.0.0.1. You can repeat this line to accept requests from many addresses.
+   
+  * <<backlog-size>> : 256 - means that the maximum number of concurrent connection must be 
+   limited to 256.
+ 
+  * <<read-timeout>> : 5 - means that the connection will be closed if the client do not writes
+    any data in 5 seconds.
+    
+  * <<write-timeout>> : 60 - means that the connection will be closed if the server do not 
+    writes any data for more than 60 seconds. 
  
   * <<[commands]>> - means that the command section is starting
     Follows the command definition. The format is very simple:
@@ -155,7 +167,7 @@ Configuring the server
 
   <?xml version="1.0" encoding="UTF-8"?>
   <config>
-     <server accept-params="true">
+     <server accept-params="true" backlog-size="256" readTimeout="5" writeTimeout="60">
         <bind address="127.0.0.1:5666" SSL="false"/>
         <allow ip="127.0.0.1"/>
         <plugin path="/usr/local/jnrpe/plugins"/>
@@ -179,6 +191,15 @@ Configuring the server
  
   * <<accept-params>> : true - means we want JNRPE to expand the $ARG?$ macros. 
    If you set this to false, than parameters passed by check_nrpe will be ignored.
+ 
+  * <<backlog-size>> : 256 - means that the maximum number of concurrent connection must be 
+    limited to 256.
+ 
+  * <<read-timeout>> : 5 - means that the connection will be closed if the client do not writes
+    any data in 5 seconds.
+    
+  * <<write-timeout>> : 60 - means that the connection will be closed if the server do not 
+    writes any data for more than 60 seconds.
  
   * <<\<bind address="127.0.0.1:5666" SSL="false"/\>>> - means we want JNRPE to listen on the 127.0.0.1 IP 
    at port 5666. You can repeat this setting more than one time to instruct JNRPE to 

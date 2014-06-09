@@ -18,21 +18,21 @@ package it.jnrpe;
 import it.jnrpe.events.IJNRPEEventListener;
 
 import java.nio.charset.Charset;
-import java.util.Set;
+import java.util.Collection;
 
 public class JNRPEExecutionContext {
 
-	private final Set<IJNRPEEventListener> eventListenersList;
+	private final Collection<IJNRPEEventListener> eventListenersList;
 
 	private final Charset charset;
 
-	JNRPEExecutionContext(Set<IJNRPEEventListener> eventListeners,
+	JNRPEExecutionContext(Collection<IJNRPEEventListener> eventListeners,
 			Charset charset) {
 		this.eventListenersList = eventListeners;
 		this.charset = charset;
 	}
 
-	public Set<IJNRPEEventListener> getListeners() {
+	public Collection<IJNRPEEventListener> getListeners() {
 		return eventListenersList;
 	}
 

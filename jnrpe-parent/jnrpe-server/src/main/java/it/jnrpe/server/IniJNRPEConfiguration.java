@@ -59,6 +59,13 @@ class IniJNRPEConfiguration extends JNRPEConfiguration {
 			serverConf.setBackLogSize(confParser.getInt("server.backlog-size",
 					ServerSection.DEFAULT_BACKLOG));
 
+			// TODO : move this to publicly accessible constants
+			serverConf.setReadTimeout(confParser.getInteger(
+					"server.read-timeout", 10));
+			// TODO : move this to publicly accessible constants
+			serverConf.setWriteTimeout(confParser.getInteger(
+					"server.write-timeout", 60));
+
 			List<Object> vAllowedAddresses = confParser
 					.getList("server.allow-address");
 			if (vAllowedAddresses != null) {
