@@ -56,6 +56,9 @@ class IniJNRPEConfiguration extends JNRPEConfiguration {
 			serverConf.setPluginPath(confParser.getString("server.plugin-path",
 					"."));
 
+			serverConf.setBackLogSize(confParser.getInt("server.backlog-size",
+					ServerSection.DEFAULT_BACKLOG));
+
 			List<Object> vAllowedAddresses = confParser
 					.getList("server.allow-address");
 			if (vAllowedAddresses != null) {
