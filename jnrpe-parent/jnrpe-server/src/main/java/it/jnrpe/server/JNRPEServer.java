@@ -362,6 +362,8 @@ public final class JNRPEServer {
 				.acceptParams(conf.getServerSection().acceptParams())
 				.withMaxAcceptedConnections(
 						conf.getServerSection().getBacklogSize())
+				.withReadTimeout(conf.getServerSection().getReadTimeout())
+				.withWriteTimeout(conf.getServerSection().getWriteTimeout())
 				.withListener(new EventLoggerListener());
 
 		for (String sAcceptedAddress : conf.getServerSection()

@@ -23,12 +23,41 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 
+/**
+ * Builder for the {@link JNRPE} object.
+ * 
+ * @author Massimiliano Ziccardi
+ */
 public class JNRPEBuilder {
 
+	/**
+	 * Default read timeout is 10 seconds.
+	 */
+	private final int DEFAULT_READ_TIMEOUT = 10;
+
+	/**
+	 * Default write timeout is 60 seconds.
+	 */
+	private final int DEFAULT_WRITE_TIMEOUT = 60;
+
+	/**
+	 * The plugin repository.
+	 */
 	private final IPluginRepository pluginRepository;
+
+	/**
+	 * The command repository.
+	 */
 	private final CommandRepository commandRepository;
 
+	/**
+	 * The list of accepted hosts.
+	 */
 	private final Collection<String> acceptedHosts = new ArrayList<String>();
+
+	/**
+	 * All the event listeners.
+	 */
 	private final Collection<IJNRPEEventListener> eventListeners = new ArrayList<IJNRPEEventListener>();
 
 	private boolean acceptParams = false;
@@ -36,6 +65,9 @@ public class JNRPEBuilder {
 	private int maxAcceptedConnections = JNRPE.DEFAULT_MAX_ACCEPTED_CONNECTIONS;
 
 	private Charset charset = Charset.defaultCharset();
+
+	private int readTimeout = DEFAULT_READ_TIMEOUT;
+	private int writeTimeout = DEFAULT_WRITE_TIMEOUT;
 
 	private JNRPEBuilder(final IPluginRepository pluginRepository,
 			final CommandRepository commandRepository) {
@@ -120,6 +152,32 @@ public class JNRPEBuilder {
 	}
 
 	/**
+	 * Sets the read timeout in seconds. Default is
+	 * {@link #DEFAULT_READ_TIMEOUT} seconds.
+	 * 
+	 * @param readTimeout
+	 *            the new read timeout in seconds
+	 * @return this
+	 */
+	public JNRPEBuilder withReadTimeout(final int readTimeout) {
+		this.readTimeout = readTimeout;
+		return this;
+	}
+
+	/**
+	 * Sets the write timeout in seconds. Default is
+	 * {@link #DEFAULT_WRITE_TIMEOUT} seconds.
+	 * 
+	 * @param writeTimeout
+	 *            the new write timeout in seconds
+	 * @return this
+	 */
+	public JNRPEBuilder withWriteTimeout(final int writeTimeout) {
+		this.writeTimeout = writeTimeout;
+		return this;
+	}
+
+	/**
 	 * Builds the configured JNRPE instance.
 	 * 
 	 * @return the configured JNRPE instance
@@ -127,7 +185,7 @@ public class JNRPEBuilder {
 	public JNRPE build() {
 		JNRPE jnrpe = new JNRPE(pluginRepository, commandRepository, charset,
 				acceptParams, acceptedHosts, maxAcceptedConnections,
-				eventListeners);
+				readTimeout, writeTimeout, eventListeners);
 
 		return jnrpe;
 	}
