@@ -17,127 +17,154 @@ package it.jnrpe.server;
 
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * Represent the JNRPE configuration server section.
- *
+ * 
  * @author Massimiliano Ziccardi
  */
 public class ServerSection {
-    /**
-     * <code>true</code> if dynamic parameters ($ARGx$ macros)
-     * must be interpolated.
-     */
-    private boolean acceptParams;
 
-    /**
-     * The plugins directory path.
-     */
-    private String pluginPath;
+	/**
+	 * The default backlog size.
+	 */
+	public final static int DEFAULT_BACKLOG = 128;
 
-    /**
-     * The list of all the binding where JNRPE must listen on.
-     */
-    private List<BindAddress> bindingsList = new ArrayList<BindAddress>();
+	/**
+	 * <code>true</code> if dynamic parameters ($ARGx$ macros) must be
+	 * interpolated.
+	 */
+	private boolean acceptParams;
 
-    /**
-     * The list of all the addresses (IP/URL) JNRPE must
-     * accept requests from.
-     */
-    private List<String> allowedAddressesList = new ArrayList<String>();
+	/**
+	 * The plugins directory path.
+	 */
+	private String pluginPath;
 
-    /**
-     * @return all the configured binding addresses.
-     */
-    public final List<BindAddress> getBindAddresses() {
-        return bindingsList;
-    }
+	/**
+	 * The list of all the binding where JNRPE must listen on.
+	 */
+	private final List<BindAddress> bindingsList = new ArrayList<BindAddress>();
 
-    /**
-     * Adds a binding address to the list.
-     * The format of a binding address is [SSL/]address[:port]:
-     * <ul>
-     * <li>SSL/ : if present means than JNRPE must create an SSL socket
-     * <li>:port : is the port where JNRPE must listen to
-     * </ul>
-     * @param bindAddress The address to add
-     */
-    final void addBindAddress(final String bindAddress) {
+	/**
+	 * The list of all the addresses (IP/URL) JNRPE must accept requests from.
+	 */
+	private final List<String> allowedAddressesList = new ArrayList<String>();
 
-        boolean ssl = bindAddress.toUpperCase().startsWith("SSL/");
+	/**
+	 * The maximum number connections.
+	 */
+	private int backlogSize = DEFAULT_BACKLOG;
 
-        String sAddress;
+	/**
+	 * @return all the configured binding addresses.
+	 */
+	public final List<BindAddress> getBindAddresses() {
+		return bindingsList;
+	}
 
-        if (ssl) {
-            sAddress = bindAddress.substring("SSL/".length());
-        } else {
-            sAddress = bindAddress;
-        }
+	/**
+	 * Adds a binding address to the list. The format of a binding address is
+	 * [SSL/]address[:port]:
+	 * <ul>
+	 * <li>SSL/ : if present means than JNRPE must create an SSL socket
+	 * <li>:port : is the port where JNRPE must listen to
+	 * </ul>
+	 * 
+	 * @param bindAddress
+	 *            The address to add
+	 */
+	final void addBindAddress(final String bindAddress) {
 
-        addBindAddress(sAddress, ssl);
-    }
+		boolean ssl = bindAddress.toUpperCase().startsWith("SSL/");
 
-    /**
-     * Adds a binding address to the list of binding address.
-     *
-     * @param bindAddress The IP/URL
-     * @param useSSL <code>true</code> if SSL must be used
-     */
-    final void addBindAddress(final String bindAddress, final boolean useSSL) {
-        bindingsList.add(new BindAddress(bindAddress, useSSL));
-    }
+		String sAddress;
 
-    /**
-     * @return the list of allowed IP address client
-     */
-    public final List<String> getAllowedAddresses() {
-        return allowedAddressesList;
-    }
+		if (ssl) {
+			sAddress = bindAddress.substring("SSL/".length());
+		} else {
+			sAddress = bindAddress;
+		}
 
-    /**
-     * Adds an address to the list of allowed clients.
-     *
-     * @param address The IP/URL that must be accepted
-     */
-    final void addAllowedAddress(final String address) {
-        allowedAddressesList.add(address);
-    }
+		addBindAddress(sAddress, ssl);
+	}
 
-    /**
-     * Returns whether this server must resolve
-     * $ARGx$ macros or not.
-     *
-     * @return <code>true</code> if macros must be resolved
-     */
-    public final boolean acceptParams() {
-        return acceptParams;
-    }
+	/**
+	 * Adds a binding address to the list of binding address.
+	 * 
+	 * @param bindAddress
+	 *            The IP/URL
+	 * @param useSSL
+	 *            <code>true</code> if SSL must be used
+	 */
+	final void addBindAddress(final String bindAddress, final boolean useSSL) {
+		bindingsList.add(new BindAddress(bindAddress, useSSL));
+	}
 
-    /**
-     * Sets whether this server must resolve
-     * $ARGx$ macros or not.
-     * @param acceptParms pass <code>true</code>
-     * if macros must be resolved.
-     */
-    final void setAcceptParams(final boolean acceptParms) {
-        this.acceptParams = acceptParms;
-    }
+	/**
+	 * @return the list of allowed IP address client
+	 */
+	public final List<String> getAllowedAddresses() {
+		return allowedAddressesList;
+	}
 
-    /**
-     * @return the path to the directory where all plugins
-     * are istalled.
-     */
-    public final String getPluginPath() {
-        return pluginPath;
-    }
+	/**
+	 * Adds an address to the list of allowed clients.
+	 * 
+	 * @param address
+	 *            The IP/URL that must be accepted
+	 */
+	final void addAllowedAddress(final String address) {
+		allowedAddressesList.add(address);
+	}
 
-    /**
-     * Sets the path to the directory where all plugins
-     * are istalled.
-     *
-     * @param pluginDirectoryPath The path to the plugins
-     * installation directory
-     */
-    final void setPluginPath(final String pluginDirectoryPath) {
-        this.pluginPath = pluginDirectoryPath;
-    }
+	/**
+	 * Returns whether this server must resolve $ARGx$ macros or not.
+	 * 
+	 * @return <code>true</code> if macros must be resolved
+	 */
+	public final boolean acceptParams() {
+		return acceptParams;
+	}
+
+	public final int getBacklogSize() {
+		return this.backlogSize;
+	}
+
+	/**
+	 * Sets whether this server must resolve $ARGx$ macros or not.
+	 * 
+	 * @param acceptParms
+	 *            pass <code>true</code> if macros must be resolved.
+	 */
+	final void setAcceptParams(final boolean acceptParms) {
+		this.acceptParams = acceptParms;
+	}
+
+	/**
+	 * @return the path to the directory where all plugins are istalled.
+	 */
+	public final String getPluginPath() {
+		return pluginPath;
+	}
+
+	/**
+	 * Sets the path to the directory where all plugins are istalled.
+	 * 
+	 * @param pluginDirectoryPath
+	 *            The path to the plugins installation directory
+	 */
+	final void setPluginPath(final String pluginDirectoryPath) {
+		this.pluginPath = pluginDirectoryPath;
+	}
+
+	/**
+	 * Sets the maximum number of accepted connections. Default is
+	 * {@value #DEFAULT_BACKLOG}.
+	 * 
+	 * @param backLogSize
+	 */
+	final void setBackLogSize(final int backLogSize) {
+		this.backlogSize = backLogSize;
+	}
 }

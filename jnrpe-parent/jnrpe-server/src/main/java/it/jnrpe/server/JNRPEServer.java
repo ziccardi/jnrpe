@@ -357,8 +357,11 @@ public final class JNRPEServer {
 
 		CommandRepository cr = conf.createCommandRepository();
 
-		JNRPEBuilder builder = JNRPEBuilder.forRepositories(pr, cr)
+		JNRPEBuilder builder = JNRPEBuilder
+				.forRepositories(pr, cr)
 				.acceptParams(conf.getServerSection().acceptParams())
+				.withMaxAcceptedConnections(
+						conf.getServerSection().getBacklogSize())
 				.withListener(new EventLoggerListener());
 
 		for (String sAcceptedAddress : conf.getServerSection()
