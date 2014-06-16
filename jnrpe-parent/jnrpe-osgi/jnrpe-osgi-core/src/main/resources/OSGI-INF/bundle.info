@@ -1,8 +1,0 @@
-\u001B[1mSYNOPSIS\u001B[0m
-    JNRPE :: OSGI :: core
-    
-    This bundle provides the JNRPE engine
-
-\u001B[1mDESCRIPTION\u001B[0m
-    The JNRPE bundle listen to the configured port for nrpe queries and can be used with any nrpe client 
-    (for instance check_nrpe or jcheck_nrpe). 
