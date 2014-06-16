@@ -1,0 +1,15 @@
+Package: jnrpeserver
+Version: [[version]]
+Section: network
+Priority: optional
+Architecture: all
+Maintainer: JNRPE Developers <jnrpe-devel@lists.sourceforge.net>
+Uploaders: Frederico Campos <frederico.campos82@gmail.com>, Massimiliano Ziccardi <massimiliano.ziccardi@gmail.com>
+Homepage: http://www.jnrpe.it
+Depends: java5-runtime-headless
+Description:The JNRPE Server
+ JNRPE server will allow you to answer to NAGIOS query through
+ the use of check_nrpe of jcheck_nrpe. You will be able to execute
+ both native and JAVA Nagios plugins. JAVA Nagios plugins, if 
+ developed for JNRPE, will run inside the JNRPE JVM, thus avoiding
+ the start of a JVM for each check.
