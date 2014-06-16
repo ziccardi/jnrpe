@@ -1,0 +1,74 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides: jnrpe
+# Required-Start: $start_dependencies
+# Required-Stop: $stop_dependencies
+# Default-Start:  $w_start_levels
+# Default-Stop: $w_stop_levels
+# Short-Description: yajsw wrapper for jnrpe
+# Description: Java Nagios Remote Plugin Executor
+### END INIT INFO
+# config: /etc/jnrpe/wrapper.conf
+# pidfile: /run/wrapper.jnrpe.pid
+# apppidfile: /run/wrapper.$JAVA.jnrpe.pid
+#-----------------------------------------------------------------------------
+# YAJSW sh script template.  Suitable for starting and stopping
+#  wrapped daemon on POSIX platforms.
+#-----------------------------------------------------------------------------
+
+JAVA=/usr/bin/java
+WRAPPER_CONF=/etc/jnrpe/wrapper.conf
+WRAPPER_PATH=/usr/local/jnrpe/wrapper
+
+status() {
+    eval ""$JAVA" "-Dwrapper.pidfile=/run/wrapper.jnrpe.pid" "-Dwrapper.service=true" "-Dwrapper.visible=false" "-Djna_tmpdir=$WRAPPER_PATH" "-jar" "$WRAPPER_PATH/wrapper.jar" "-qx" "$WRAPPER_CONF"  > /dev/null 2>&1"
+    if [ $? -eq 0 ]
+    then
+       echo "Service jnrpe is runnning"
+    else
+       echo "Service jnrpe is not runnning"
+    fi
+}
+
+stopit() {
+    echo "Stopping jnrpe ..."
+	eval ""$JAVA" "-Dwrapper.pidfile=/run/wrapper.jnrpe.pid" "-Dwrapper.service=true" "-Dwrapper.visible=false" "-Djna_tmpdir=$WRAPPER_PATH" "-jar" "$WRAPPER_PATH/wrapper.jar" "-px" "$WRAPPER_CONF"  > /dev/null 2>&1"
+}
+startit() {
+    echo "Starting jnrpe ..."
+    eval ""$JAVA" "-Dwrapper.pidfile=/run/wrapper.jnrpe.pid" "-Dwrapper.service=true" "-Dwrapper.visible=false" "-Djna_tmpdir=$WRAPPER_PATH" "-jar" "$WRAPPER_PATH/wrapper.jar" "-tx" "$WRAPPER_CONF"  > /dev/null 2>&1"
+    
+}
+
+
+case "$1" in
+    'start')
+        startit
+        ;;
+
+    'stop')
+        stopit
+        ;;
+
+    'restart')
+        stopit
+        startit
+        ;;
+        
+        
+    'force-reload')
+        stopit
+        startit
+        ;;
+
+    'status')
+        status
+        ;;
+
+    *)
+        echo "Usage: $0 { start | stop | restart | status }"
+        exit 1
+        ;;
+esac
+
+exit $?

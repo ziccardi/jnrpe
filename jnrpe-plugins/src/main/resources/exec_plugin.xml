@@ -1,0 +1,25 @@
+<plugin name="EXEC" class="it.jnrpe.plugin.CNativePlugin">
+	<description>
+<![CDATA[
+    This plugin is used to execute external (executable) application.
+    (For example, classic Nagios plugins).
+    
+    Example Command Definition on a Windows OS (inside the server configuration, in the command section)
+    
+    <command name="check_disk" plugin_name="EXEC" 
+    params="-e C:\PROGRA~2\nag-plugins\check_pdm.exe -a '--disk --drive $ARG1$ -w $ARG2$ -c $ARG3$'"/>
+    
+    Example invocation:
+
+    ./check_nrpe -n -H myjnrpeserver -c check_disk -a 'c:!70!80'
+]]>
+	</description>
+	<command-line>
+		<options>
+			<option shortName="e" longName="executable" description="path to the executable"
+				hasArgs="true" argName="path" required="true" />
+			<option shortName="a" longName="args" description="executable arguments"
+				hasArgs="true" argName="args" />
+		</options>
+	</command-line>
+</plugin>

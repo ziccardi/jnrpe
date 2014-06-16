@@ -1,0 +1,46 @@
+ -----
+ JNRPE Plugin package
+ -----
+ Massimiliano Ziccardi
+ -----
+ 2013/02/19
+ -----
+ 
+JNRPE Plugin package
+ 
+   This package contains all the core plugin packaged with the JNRPE Server.
+   As of current version, the following plugins are included:
+   
+   * <<CheckFile>> plugin : is a plugin that is able to perform simple controls about files.
+     It could for example check for file existence, file size, file content, etc.
+   
+   * <<CheckDisk>> plugin : can check the amount of free space of any passed in path.
+   
+   * <<NativePlugin>> : can execute external executable plugins (i.e. native {{{http://www.nagios.com/#ref=maxzjnrpe}Nagios}} plugins)
+   
+   * <<CheckOracle>> plugin : can perform various checks against oracle databases (aliveness,
+   tablespace usage, etc.
+   
+   * <<CheckJMX>> : can perform JMX queries so that JMX result can be monitored with {{{http://www.nagios.com/#ref=maxzjnrpe}Nagios}}.
+   
+   * <<TestPlugin>> : a simple test plugin that can be used to check the JNRPE is correctly 
+   installed.
+   
+   * <<CheckUsers>> : checks the the number of users currently logged in on the local
+   system and generates an error if the number exceeds the thresholds specified.
+   
+   * <<CheckMysql>> : tests MySQL database connection status
+   
+   * <<CheckMysqlQuery>> : tests a Msyql query result against threshold levels.
+   
+   * <<CheckPgsql>> : tests PostgreSQL database connection status
+   
+   * <<CheckProcs>> : checks system processes and does check against metrics.
+   
+   * <<CheckTime>> :  Checks the time on a specified host.
+   
+   * <<CheckTomcat>> : checks status of a tomcat instance
+   
+   * <<CheckHttp>> : tests the HTTP service on a specified host
+   
+   * <<CheckSsh>> : tests ssh connections on a remote host.

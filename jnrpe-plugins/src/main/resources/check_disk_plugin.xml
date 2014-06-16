@@ -1,0 +1,34 @@
+<plugin name="CHECK_DISK" class="it.jnrpe.plugin.CheckDisk">
+        <description>
+<![CDATA[
+  This plugins checks the available disk space
+
+  EXAMPLES
+  The examples will be based upon the following command definition (ini file)
+
+  check_disk : CHECK_DISK --path $ARG1$ --warning $ARG2$ --critical $ARG3$
+
+  * Example 1 (Windows)
+  The following example will give a WARNING if the free space of the C disk will lower than 10% and a critical if it will be lower
+  than 5%
+
+  check_nrpe -H myjnrpeserver -c check_disk -a 'C:!:10!:5'
+
+  * Example 2 (Unix)
+  The following example will give a WARNING if the free space of the / file system will lower than 10% and a critical if it will be lower
+  than 5%
+
+  ./check_nrpe -H myjnrpeserver -c check_disk -a '/!:10!:5'
+]]>
+        </description>
+        <command-line>
+            <options>
+                <option shortName="p" longName="path" description="The path to check" required="true" hasArgs="true" argName="path" optionalArgs="false"/>
+                <option shortName="w" longName="warning" description="The used space warning threshold (percent)" required="false" hasArgs="true" argName="range" optionalArgs="false"/>
+                <option shortName="c" longName="critical" description="The used space critical threshold (percent)" required="false" hasArgs="true" argName="range" optionalArgs="false"/>
+                <option shortName="T" longName="th"
+        description="Configure a threshold. Format : metric={metric},ok={range},warn={range},crit={range},unit={unit},prefix={SI prefix}" hasArgs="true"
+        required="false" />
+            </options>
+        </command-line>
+    </plugin>

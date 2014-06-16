@@ -1,0 +1,15 @@
+ -----
+ JNRPE Server
+ -----
+ Massimiliano Ziccardi
+ -----
+ 2013/02/19
+ -----
+
+Usage Scenario
+ 
+   The typical scenario that involve the use of the JNRPE server is 
+   when you need to implement some {{{http://www.nagios.com/#ref=maxzjnrpe}Nagios}} plugin using JAVA and you don't want to
+   deal with all the threshold parsing issues, JVM overhead problems, etc.
+   
+   
