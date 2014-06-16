@@ -17,6 +17,7 @@ package it.jnrpe.net;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 
 /**
  * This object represent a generic response packet.
@@ -32,12 +33,14 @@ public final class JNRPEResponse extends JNRPEProtocolPacket {
 		setPacketType(PacketType.RESPONSE);
 	}
 
-	/*
+	/**
 	 * Builds a JNRPE response reading the content from an InputStream.
 	 * 
-	 * @param in The InputStream to read from
+	 * @param in
+	 *            The InputStream to read from
 	 * 
-	 * @throws IOException on any io exception
+	 * @throws IOException
+	 *             on any io exception
 	 */
 	public JNRPEResponse(final InputStream in) throws IOException {
 		super();
@@ -54,16 +57,22 @@ public final class JNRPEResponse extends JNRPEProtocolPacket {
 		setBuffer(message);
 	}
 
+	/**
+	 * Returns the response message.
+	 * 
+	 * @return the response message
+	 */
 	public String getMessage() {
 		return getPacketString();
 	}
 
 	@Override
 	public String toString() {
+
 		return "JNRPEResponse [getPacketType()=" + getPacketType()
 				+ ", getPacketVersion()=" + getPacketVersion()
 				+ ", getResultCode()=" + getResultCode() + ", getBuffer()="
-				+ getBuffer() + "]";
+				+ Arrays.toString(getBuffer()) + "]";
 	}
 
 }

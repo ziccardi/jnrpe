@@ -39,6 +39,9 @@ class JNRPEProtocolPacket {
 	 */
 	private static final int MAX_PACKETBUFFER_LENGTH = 1024;
 
+	/**
+	 * The charset.
+	 */
 	private Charset charset = Charset.forName("UTF-8");
 
 	/**
@@ -128,8 +131,14 @@ class JNRPEProtocolPacket {
 		packetVersion = version.intValue();
 	}
 
-	public void setCharset(final Charset charset) {
-		this.charset = charset;
+	/**
+	 * Changes the default charset.
+	 * 
+	 * @param newCharset
+	 *            the new charset,
+	 */
+	public void setCharset(final Charset newCharset) {
+		this.charset = newCharset;
 	}
 
 	/**
@@ -209,12 +218,6 @@ class JNRPEProtocolPacket {
 		r.nextBytes(dummyBytesAry);
 	}
 
-	/**
-	 * Write the command name inside the JNRPE packet.
-	 * 
-	 * @param commandName
-	 *            The command name
-	 */
 	protected void setBuffer(final String buffer) {
 		initRandomBuffer();
 		byteBufferAry = Arrays.copyOf(buffer.getBytes(charset),

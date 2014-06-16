@@ -65,12 +65,29 @@ import javax.net.ssl.SSLException;
  */
 public final class JNRPE {
 
-	final static int DEFAULT_MAX_ACCEPTED_CONNECTIONS = 128;
+	/**
+	 * Default number of accepted connections.
+	 */
+	static final int DEFAULT_MAX_ACCEPTED_CONNECTIONS = 128;
+
+	/**
+	 * The boss group (see netty documentation).
+	 */
 	private final EventLoopGroup bossGroup = new NioEventLoopGroup();
+
+	/**
+	 * The worker group (see netty documentation).
+	 */
 	private final EventLoopGroup workerGroup = new NioEventLoopGroup();
 
+	/**
+	 * The default keystore name (used to perform SSL).
+	 */
 	private static final String KEYSTORE_NAME = "keys.jks";
 
+	/**
+	 * The default keystore password.
+	 */
 	private static final String KEYSTORE_PWD = "p@55w0rd";
 
 	/**
@@ -92,13 +109,31 @@ public final class JNRPE {
 	 */
 	private Collection<IJNRPEEventListener> eventListenersSet = new HashSet<IJNRPEEventListener>();
 
+	/**
+	 * Charset that will be used by JNRPE.
+	 */
 	private final Charset charset;
 
+	/**
+	 * The maximum number of concurrent connection allowed by JNRPE.
+	 */
 	private final int maxAcceptedConnections;
 
+	/**
+	 * The maximum number of seconds that JNRPE will wait for a client to send a
+	 * command.
+	 */
 	private final int readTimeout;
+
+	/**
+	 * The maximum number of seconds that JNRPE will wait for a plugin to
+	 * produce a result.
+	 */
 	private final int writeTimeout;
 
+	/**
+	 * <code>true</code> if $ARGxx$ macros must be expanded.
+	 */
 	private final boolean acceptParams;
 
 	/**
@@ -140,14 +175,17 @@ public final class JNRPE {
 	 *            The repository containing all the installed plugins
 	 * @param commandRepo
 	 *            The repository containing all the configured commands.
-	 * 
+	 * @param newCharset
+	 *            The charset that will be used by JNRPE
+	 * @param acceptParameters
+	 *            Sets if $ARGxx$ macros should be expanded
 	 * @deprecated This constructor will be removed as of version 2.0.5. Use
 	 *             {@link JNRPEBuilder} instead
 	 */
 	@Deprecated
 	public JNRPE(final IPluginRepository pluginRepo,
-			final CommandRepository commandRepo, final Charset charset,
-			final boolean acceptParams) {
+			final CommandRepository commandRepo, final Charset newCharset,
+			final boolean acceptParameters) {
 		if (pluginRepo == null) {
 			throw new IllegalArgumentException(
 					"Plugin repository cannot be null");
@@ -159,18 +197,44 @@ public final class JNRPE {
 		}
 		pluginRepository = pluginRepo;
 		commandRepository = commandRepo;
-		this.charset = charset;
-		this.acceptParams = acceptParams;
+		this.charset = newCharset;
+		this.acceptParams = acceptParameters;
 		this.maxAcceptedConnections = DEFAULT_MAX_ACCEPTED_CONNECTIONS;
 		readTimeout = 10;
 		writeTimeout = 60;
 	}
 
+	/**
+	 * Constructor used by the {@link JNRPEBuilder} to build an immutable
+	 * instance of {@link JNRPE}.
+	 * 
+	 * @param pluginRepo
+	 *            The plugin repository object
+	 * @param commandRepo
+	 *            The command repository object
+	 * @param newCharset
+	 *            The charset that JNRPE will use
+	 * @param acceptParameters
+	 *            Sets if $ARGxx$ macros should be expanded
+	 * @param acceptedHostsCollection
+	 *            The list of accepted client hosts
+	 * @param maxConnections
+	 *            The maximum number of concurrent connections
+	 * @param readTimeoutSeconds
+	 *            The maximum number of seconds to wait for the client to send
+	 *            the command
+	 * @param writeTimeoutSeconds
+	 *            The maximum number of seconds to wait for a plugin to return a
+	 *            result
+	 * @param eventListeners
+	 *            The collection of listeners that will receive JNRPE events
+	 */
 	JNRPE(final IPluginRepository pluginRepo,
-			final CommandRepository commandRepo, final Charset charset,
-			final boolean acceptParams, final Collection<String> acceptedHosts,
-			final int maxConnections, final int readTimeout,
-			final int writeTimeout,
+			final CommandRepository commandRepo, final Charset newCharset,
+			final boolean acceptParameters,
+			final Collection<String> acceptedHostsCollection,
+			final int maxConnections, final int readTimeoutSeconds,
+			final int writeTimeoutSeconds,
 			final Collection<IJNRPEEventListener> eventListeners) {
 		if (pluginRepo == null) {
 			throw new IllegalArgumentException(
@@ -183,13 +247,13 @@ public final class JNRPE {
 		}
 		pluginRepository = pluginRepo;
 		commandRepository = commandRepo;
-		this.charset = charset;
-		this.acceptParams = acceptParams;
-		this.acceptedHostsList = acceptedHosts;
+		this.charset = newCharset;
+		this.acceptParams = acceptParameters;
+		this.acceptedHostsList = acceptedHostsCollection;
 		this.eventListenersSet = eventListeners;
 		this.maxAcceptedConnections = maxConnections;
-		this.readTimeout = readTimeout;
-		this.writeTimeout = writeTimeout;
+		this.readTimeout = readTimeoutSeconds;
+		this.writeTimeout = writeTimeoutSeconds;
 
 	}
 
@@ -285,7 +349,8 @@ public final class JNRPE {
 				.channel(NioServerSocketChannel.class)
 				.childHandler(new ChannelInitializer<SocketChannel>() {
 					@Override
-					public void initChannel(SocketChannel ch) throws Exception {
+					public void initChannel(final SocketChannel ch)
+							throws Exception {
 
 						if (useSSL) {
 							SSLEngine engine = getSSLEngine();
@@ -341,7 +406,7 @@ public final class JNRPE {
 		ChannelFuture cf = getServerBootstrap(useSSL).bind(address, port);
 		cf.addListener(new ChannelFutureListener() {
 
-			public void operationComplete(ChannelFuture future)
+			public void operationComplete(final ChannelFuture future)
 					throws Exception {
 				if (future.isSuccess()) {
 					EventsUtil.sendEvent(eventListenersSet, this,

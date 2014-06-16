@@ -19,14 +19,24 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 
+/**
+ * This object is inserted inside the NETTY pipeline to create serialize a
+ * {@link JNRPEResponse} object.
+ * 
+ * @author Massimiliano Ziccardi
+ *
+ */
 public class JNRPEResponseEncoder extends MessageToByteEncoder<JNRPEResponse> {
 
+	/**
+	 * Constructor.
+	 */
 	public JNRPEResponseEncoder() {
 	}
 
 	@Override
-	protected void encode(ChannelHandlerContext ctx, JNRPEResponse msg,
-			ByteBuf out) throws Exception {
+	protected final void encode(final ChannelHandlerContext ctx,
+			final JNRPEResponse msg, final ByteBuf out) throws Exception {
 		msg.updateCRC();
 		out.writeShort(msg.getPacketVersion().intValue());
 		out.writeShort(msg.getPacketType().intValue());

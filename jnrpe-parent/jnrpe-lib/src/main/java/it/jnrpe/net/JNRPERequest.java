@@ -15,8 +15,6 @@
  *******************************************************************************/
 package it.jnrpe.net;
 
-import java.io.IOException;
-
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -25,24 +23,10 @@ import org.apache.commons.lang.StringUtils;
  * @author Massimiliano Ziccardi
  */
 public class JNRPERequest extends JNRPEProtocolPacket {
-	/**
-	 * This constructor initializes the object with the data read from the given
-	 * input stream.
-	 * 
-	 * @param in
-	 *            The stream containing the data to be parsed
-	 * @throws IOException
-	 *             On any IO exception
-	 * @throws BadCRCException
-	 *             If the CRC can't be validated
-	 */
-	// public JNRPERequest(final InputStream in) throws IOException,
-	// BadCRCException {
-	// fromInputStream(in);
-	//
-	// validate();
-	// }
 
+	/**
+	 * Creates and empty request.
+	 */
 	public JNRPERequest() {
 		setPacketType(PacketType.QUERY);
 	}
@@ -137,14 +121,24 @@ public class JNRPERequest extends JNRPEProtocolPacket {
 		// updateCRC();
 	}
 
-	public String getCommand() {
+	/**
+	 * Returns the query command.
+	 * 
+	 * @return the query command
+	 */
+	public final String getCommand() {
 		// extracting command
 		String[] partsAry = split(getPacketString());
 
 		return partsAry[0];
 	}
 
-	public String[] getArguments() {
+	/**
+	 * Returns the command arguments.
+	 * 
+	 * @return the command arguments
+	 */
+	public final String[] getArguments() {
 		// extracting params
 		String[] partsAry = split(getPacketString());
 		String[] argsAry = new String[partsAry.length - 1];

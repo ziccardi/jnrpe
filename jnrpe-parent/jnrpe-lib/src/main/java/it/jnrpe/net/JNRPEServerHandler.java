@@ -31,20 +31,40 @@ import java.util.Collection;
 
 import org.apache.commons.lang.StringUtils;
 
+/**
+ * Receives and handles connections to the JNRPE server.
+ * 
+ * @author Massimiliano Ziccardi
+ */
 public class JNRPEServerHandler extends ChannelInboundHandlerAdapter {
 
+	/**
+	 * The command invoker.
+	 */
 	private final CommandInvoker commandInvoker;
+
+	/**
+	 * The list of listener that will receive JNRPE events.
+	 */
 	private final Collection<IJNRPEEventListener> listeners;
 
-	public JNRPEServerHandler(CommandInvoker invoker,
-			Collection<IJNRPEEventListener> eventListeners) {
+	/**
+	 * Constructor.
+	 * 
+	 * @param invoker
+	 *            the command invoker
+	 * @param eventListeners
+	 *            The list of listeners
+	 */
+	public JNRPEServerHandler(final CommandInvoker invoker,
+			final Collection<IJNRPEEventListener> eventListeners) {
 		this.commandInvoker = invoker;
 		this.listeners = eventListeners;
 	}
 
 	@Override
-	public void channelRead(ChannelHandlerContext ctx, Object msg) { // (2)
-		// Discard the received data silently.
+	public final void channelRead(final ChannelHandlerContext ctx,
+			final Object msg) {
 		try {
 			JNRPERequest req = (JNRPERequest) msg;
 
@@ -73,7 +93,8 @@ public class JNRPEServerHandler extends ChannelInboundHandlerAdapter {
 	}
 
 	@Override
-	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+	public final void exceptionCaught(final ChannelHandlerContext ctx,
+			final Throwable cause) {
 		EventsUtil.sendEvent(listeners, this, LogEvent.ERROR,
 				cause.getMessage(), cause);
 		ctx.close();

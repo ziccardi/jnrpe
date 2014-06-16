@@ -28,17 +28,17 @@ import java.util.Collection;
  * 
  * @author Massimiliano Ziccardi
  */
-public class JNRPEBuilder {
+public final class JNRPEBuilder {
 
 	/**
 	 * Default read timeout is 10 seconds.
 	 */
-	private final int DEFAULT_READ_TIMEOUT = 10;
+	private static final int DEFAULT_READ_TIMEOUT = 10;
 
 	/**
 	 * Default write timeout is 60 seconds.
 	 */
-	private final int DEFAULT_WRITE_TIMEOUT = 60;
+	private static final int DEFAULT_WRITE_TIMEOUT = 60;
 
 	/**
 	 * The plugin repository.
@@ -60,19 +60,43 @@ public class JNRPEBuilder {
 	 */
 	private final Collection<IJNRPEEventListener> eventListeners = new ArrayList<IJNRPEEventListener>();
 
+	/**
+	 * Sets if macros ($ARGxx$) should be expanded or not.
+	 */
 	private boolean acceptParams = false;
 
+	/**
+	 * Maximum number of concurrent connections.
+	 */
 	private int maxAcceptedConnections = JNRPE.DEFAULT_MAX_ACCEPTED_CONNECTIONS;
 
+	/**
+	 * The JNRPE charset.
+	 */
 	private Charset charset = Charset.defaultCharset();
 
+	/**
+	 * Read timeout in seconds.
+	 */
 	private int readTimeout = DEFAULT_READ_TIMEOUT;
+
+	/**
+	 * Write timeout in seconds.
+	 */
 	private int writeTimeout = DEFAULT_WRITE_TIMEOUT;
 
-	private JNRPEBuilder(final IPluginRepository pluginRepository,
-			final CommandRepository commandRepository) {
-		this.pluginRepository = pluginRepository;
-		this.commandRepository = commandRepository;
+	/**
+	 * Constructor.
+	 * 
+	 * @param jnrpePluginRepository
+	 *            The plugin repository
+	 * @param jnrpeCommandRepository
+	 *            The command repository
+	 */
+	private JNRPEBuilder(final IPluginRepository jnrpePluginRepository,
+			final CommandRepository jnrpeCommandRepository) {
+		this.pluginRepository = jnrpePluginRepository;
+		this.commandRepository = jnrpeCommandRepository;
 	}
 
 	/**
@@ -116,7 +140,7 @@ public class JNRPEBuilder {
 	}
 
 	/**
-	 * Adds a listener to the list of event listener
+	 * Adds a listener to the list of event listener.
 	 * 
 	 * @param listener
 	 *            the listener
@@ -130,12 +154,12 @@ public class JNRPEBuilder {
 	/**
 	 * Sets the charset to be used.
 	 * 
-	 * @param charset
-	 *            teh charset to be used
+	 * @param newCharset
+	 *            the charset to be used
 	 * @return this
 	 */
-	public JNRPEBuilder withCharset(final Charset charset) {
-		this.charset = charset;
+	public JNRPEBuilder withCharset(final Charset newCharset) {
+		this.charset = newCharset;
 		return this;
 	}
 
@@ -144,9 +168,10 @@ public class JNRPEBuilder {
 	 * 
 	 * @param maxConnections
 	 *            the maximum number of accepted connections.
-	 * @return
+	 * @return this
 	 */
-	public JNRPEBuilder withMaxAcceptedConnections(final int maxConnections) {
+	public JNRPEBuilder withMaxAcceptedConnections(
+			final int maxConnections) {
 		this.maxAcceptedConnections = maxConnections;
 		return this;
 	}
@@ -155,12 +180,12 @@ public class JNRPEBuilder {
 	 * Sets the read timeout in seconds. Default is
 	 * {@link #DEFAULT_READ_TIMEOUT} seconds.
 	 * 
-	 * @param readTimeout
+	 * @param readTimeoutSecs
 	 *            the new read timeout in seconds
 	 * @return this
 	 */
-	public JNRPEBuilder withReadTimeout(final int readTimeout) {
-		this.readTimeout = readTimeout;
+	public JNRPEBuilder withReadTimeout(final int readTimeoutSecs) {
+		this.readTimeout = readTimeoutSecs;
 		return this;
 	}
 
@@ -168,12 +193,12 @@ public class JNRPEBuilder {
 	 * Sets the write timeout in seconds. Default is
 	 * {@link #DEFAULT_WRITE_TIMEOUT} seconds.
 	 * 
-	 * @param writeTimeout
+	 * @param writeTimeoutSecs
 	 *            the new write timeout in seconds
 	 * @return this
 	 */
-	public JNRPEBuilder withWriteTimeout(final int writeTimeout) {
-		this.writeTimeout = writeTimeout;
+	public JNRPEBuilder withWriteTimeout(final int writeTimeoutSecs) {
+		this.writeTimeout = writeTimeoutSecs;
 		return this;
 	}
 
