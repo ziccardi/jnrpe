@@ -54,9 +54,13 @@ public class PluginRepository implements IPluginRepository {
 	}
 
 	/**
+	 * Returns the implementation of the plugin identified by the given name.
+	 * 
 	 * @param name
 	 *            The plugin name
 	 * @return the plugin identified by the given name
+	 * @throws UnknownPluginException
+	 *             if no plugin with the given name exists.
 	 */
 	public final IPluginInterface getPlugin(final String name)
 			throws UnknownPluginException {

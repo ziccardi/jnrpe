@@ -27,8 +27,11 @@ import java.util.WeakHashMap;
  * 
  */
 @SuppressWarnings("rawtypes")
-class LoadedClassCache {
+final class LoadedClassCache {
 
+	/**
+	 * Private constructor to avoid instantiations.
+	 */
 	private LoadedClassCache() {
 
 	}
@@ -36,7 +39,7 @@ class LoadedClassCache {
 	/**
 	 * Stores data about each created class loader.
 	 */
-	private final static Map<ClassLoader, ClassesData> LOADED_PLUGINS = new WeakHashMap<ClassLoader, ClassesData>();
+	private static final Map<ClassLoader, ClassesData> LOADED_PLUGINS = new WeakHashMap<ClassLoader, ClassesData>();
 
 	/**
 	 * This class stores data about all the classes loaded by a classloader.
@@ -44,7 +47,7 @@ class LoadedClassCache {
 	 * @author Massimiliano Ziccardi
 	 * 
 	 */
-	private final static class ClassesData {
+	private static final class ClassesData {
 
 		/**
 		 * Maps classname with corresponding Class object.
@@ -79,7 +82,7 @@ class LoadedClassCache {
 	 * @param c
 	 *            the class to be stored
 	 */
-	private static void saveClass(ClassLoader cl, Class c) {
+	private static void saveClass(final ClassLoader cl, final Class c) {
 		if (LOADED_PLUGINS.get(cl) == null) {
 			LOADED_PLUGINS.put(cl, new ClassesData());
 		}
@@ -100,7 +103,7 @@ class LoadedClassCache {
 	 * @throws ClassNotFoundException
 	 *             if the class can't be loaded
 	 */
-	public static Class getClass(ClassLoader cl, String className)
+	public static Class getClass(final ClassLoader cl, final String className)
 			throws ClassNotFoundException {
 		if (LOADED_PLUGINS.get(cl) == null) {
 			LOADED_PLUGINS.put(cl, new ClassesData());

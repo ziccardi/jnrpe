@@ -73,6 +73,17 @@ public final class PluginRepositoryUtil {
 		}
 	}
 
+	/**
+	 * Loads the plugins definitions from the jnrpe_plugins.xml file.
+	 * 
+	 * @param cl
+	 *            Classloader to be used to load classes
+	 * @param in
+	 *            InputStream to the jnrpe_plugins.xml file
+	 * @return a collection of all the declared plugins
+	 * @throws PluginConfigurationException
+	 *             on any error reading the plugin configuration
+	 */
 	@SuppressWarnings("unchecked")
 	public static Collection<PluginDefinition> loadFromXmlPluginPackageDefinitions(
 			final ClassLoader cl, final InputStream in)
@@ -143,8 +154,23 @@ public final class PluginRepositoryUtil {
 		return parsePluginDefinition(cl, plugin);
 	}
 
+	/**
+	 * Returns the value of the given attribute name of element. If mandatory is
+	 * <code>true</code> and the attribute is blank or null, an exception is
+	 * thrown.
+	 * 
+	 * @param element
+	 *            The element whose attribute must be read
+	 * @param attributeName
+	 *            The attribute name
+	 * @param mandatory
+	 *            <code>true</code> if the attribute is mandatory
+	 * @return the attribute value
+	 * @throws PluginConfigurationException
+	 *             if the attribute can't be found or is blank
+	 */
 	private static String getAttributeValue(final Element element,
-			final String attributeName, boolean mandatory)
+			final String attributeName, final boolean mandatory)
 			throws PluginConfigurationException {
 		String returnValue = element.attributeValue(attributeName);
 
@@ -224,9 +250,18 @@ public final class PluginRepositoryUtil {
 		return pluginDef;
 	}
 
+	/**
+	 * Updates the plugin definition with the commandline read from the xml
+	 * file.
+	 * 
+	 * @param pluginDef
+	 *            The plugin definition to be updated
+	 * @param xmlPluginElement
+	 *            the xml element to be parsed
+	 */
 	@SuppressWarnings("rawtypes")
-	private final static void parseCommandLine(
-			final PluginDefinition pluginDef, final Element xmlPluginElement) {
+	private static void parseCommandLine(final PluginDefinition pluginDef,
+			final Element xmlPluginElement) {
 		Element commandLine = xmlPluginElement.element("command-line");
 
 		if (commandLine != null) {

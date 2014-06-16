@@ -23,27 +23,79 @@ import java.util.List;
 
 import org.apache.commons.lang.ArrayUtils;
 
+/**
+ * The NETTY implementation of the JNRPE protocol request decoder.
+ * 
+ * @author Massimiliano Ziccardi
+ */
 public class JNRPERequestDecoder extends
 		ReplayingDecoder<JNRPERequestDecoder.STAGE> {
 
+	/**
+	 * The packet buffer length in bytes.
+	 */
 	private static final int PACKETBUFFER_LENGTH = 1024;
+
+	/**
+	 * The size of the random byte array.
+	 */
 	private static final int DUMMYLENGTH = 2;
 
+	/**
+	 * The decoded protocol packet.
+	 */
 	private JNRPEProtocolPacket packet;
 
+	/**
+	 * The decoded packet version.
+	 */
 	private PacketVersion packetVersion;
 
-	public enum STAGE {
-		PACKET_VERSION, PACKET_TYPE_CODE, CRC, RESULT_CODE, BUFFER, DUMMY
+	/**
+	 * The NETTY {@link ReplayingDecoder} will be called many times until all
+	 * the data has been received from the server. This enum will be used to
+	 * store the decoding process progress.
+	 * 
+	 * @author Massimiliano Ziccardi
+	 */
+	protected enum STAGE {
+		/**
+		 * The next data we have to receive is the PACKET_VERSION.
+		 */
+		PACKET_VERSION,
+		/**
+		 * The next data we have to receive is the REQUST TYPE CODE.
+		 */
+		PACKET_TYPE_CODE,
+		/**
+		 * The next data we have to receive is the request CRC.
+		 */
+		CRC,
+		/**
+		 * The next data we have to receive is the RESULT CODE.
+		 */
+		RESULT_CODE,
+		/**
+		 * The next data we have to receive is DATA BUFFER.
+		 */
+		BUFFER,
+		/**
+		 * The next data we have to receive is DUMMY buffer.
+		 */
+		DUMMY
 	};
 
+	/**
+	 * Creates a new {@link JNRPERequestDecoder} object and sets the initial
+	 * state at {@link STAGE#PACKET_VERSION}.
+	 */
 	public JNRPERequestDecoder() {
 		super(STAGE.PACKET_VERSION);
 	}
 
 	@Override
-	protected void decode(ChannelHandlerContext ctx, ByteBuf in,
-			List<Object> out) throws Exception {
+	protected final void decode(final ChannelHandlerContext ctx,
+			final ByteBuf in, final List<Object> out) throws Exception {
 
 		switch (state()) {
 		case PACKET_VERSION:
@@ -88,11 +140,21 @@ public class JNRPERequestDecoder extends
 		}
 	}
 
+	/**
+	 * Resets the decoder to the initial state.
+	 */
 	private void reset() {
 		checkpoint(STAGE.PACKET_VERSION);
 	}
 
-	private String ztString2String(byte[] buff) {
+	/**
+	 * Convert a '0' terminated string to a java string.
+	 * 
+	 * @param buff
+	 *            the '0' terminated string
+	 * @return the java string
+	 */
+	private String ztString2String(final byte[] buff) {
 		return new String(buff, 0, ArrayUtils.indexOf(buff, (byte) 0));
 	}
 
