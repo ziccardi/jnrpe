@@ -1,0 +1,184 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>net.sf.jnrpe</groupId>
+		<artifactId>jnrpe-osgi</artifactId>
+		<version>2.0.4-SNAPSHOT</version>
+	</parent>
+	<artifactId>jnrpe-osgi-IT</artifactId>
+
+	<properties>
+		<exam.version>3.4.0</exam.version>
+		<url.version>1.6.0</url.version>
+		<pax.exam.version>3.4.0</pax.exam.version>
+	</properties>
+
+	<profiles>
+		<profile>
+			<id>felix</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+
+			<dependencies>
+				<dependency>
+					<groupId>org.ops4j.pax.exam</groupId>
+					<artifactId>pax-exam-container-forked</artifactId>
+					<version>${exam.version}</version>
+					<scope>test</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.apache.felix</groupId>
+					<artifactId>org.apache.felix.framework</artifactId>
+					<version>3.2.2</version>
+					<scope>test</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.ops4j.pax.url</groupId>
+					<artifactId>pax-url-wrap</artifactId>
+					<version>${url.version}</version>
+					<scope>test</scope>
+					<exclusions>
+						<exclusion>
+							<artifactId>org.osgi.core</artifactId>
+							<groupId>org.osgi</groupId>
+						</exclusion>
+					</exclusions>
+				</dependency>
+			</dependencies>
+		</profile>
+
+		<profile>
+			<id>equinox-juno</id>
+			<properties>
+				<pax.exam.framework>equinox-juno</pax.exam.framework>
+			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>org.ops4j.pax.exam</groupId>
+					<artifactId>pax-exam-container-native</artifactId>
+					<version>${pax.exam.version}</version>
+					<scope>test</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.eclipse.osgi</groupId>
+					<artifactId>org.eclipse.osgi</artifactId>
+					<version>3.7.1</version>
+					<scope>test</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.ops4j.pax.url</groupId>
+					<artifactId>pax-url-wrap</artifactId>
+					<version>${url.version}</version>
+					<scope>test</scope>
+					<exclusions>
+						<exclusion>
+							<artifactId>org.osgi.core</artifactId>
+							<groupId>org.osgi</groupId>
+						</exclusion>
+					</exclusions>
+				</dependency>
+
+			</dependencies>
+
+		</profile>
+	</profiles>
+
+	<dependencies>
+		<!-- <dependency> <groupId>org.ops4j.pax.exam</groupId> <artifactId>pax-exam-container-native</artifactId> 
+			<version>${exam.version}</version> <scope>test</scope> </dependency> -->
+
+		<dependency>
+			<groupId>org.ops4j.pax.exam</groupId>
+			<artifactId>pax-exam-junit4</artifactId>
+			<version>${exam.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ops4j.pax.exam</groupId>
+			<artifactId>pax-exam-link-mvn</artifactId>
+			<version>${exam.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ops4j.pax.url</groupId>
+			<artifactId>pax-url-aether</artifactId>
+			<version>${url.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+			<version>0.9.20</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>0.9.20</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sf.jnrpe</groupId>
+			<artifactId>jcheck_nrpe</artifactId>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>2.16</version>
+				<configuration>
+					<includes>
+						<include>**/*IT.java</include>
+					</includes>
+					<forkCount>1</forkCount>
+				</configuration>
+				<executions>
+					<execution>
+						<id>integration-test</id>
+						<goals>
+							<goal>integration-test</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>verify</id>
+						<goals>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.5.1</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<scm>
+		<url>https://github.com/ziccardi/jnrpe/tree/master/jnrpe-parent/jnrpe-osgi/jnrpe-osgi-IT</url>
+	</scm>
+	<name>JNRPE OSGI Integration Tests</name>
+</project>

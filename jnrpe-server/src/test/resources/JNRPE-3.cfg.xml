@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<server accept-params="true">
+		<bind address="127.0.0.1:5666" SSL="false" />
+		<allow ip="127.0.0.1" />
+		<plugin path="/home/ziccardi/JNRPE/plugins" />
+	</server>
+	<commands>
+		<command name="CHECK_AMQ_ENQ" plugin_name="CHECK_JMX">
+			<arg name="url" value="service:jmx:rmi:///jndi/rmi://$ARG1$/karaf-root" />
+			<arg name="username" value="admin" />
+			<arg name="password" value="admin" />
+			<arg name="object"
+				value="org.apache.activemq:type=Broker,brokerName=amq,destinationType=Queue,destinationName=hin_q" />
+			<arg name="attribute" value="EnqueueCount" />
+			<arg name="warning" value="$ARG2$" />
+			<arg name="critical" value="$ARG3$" />
+		</command>
+	</commands>
+</config>

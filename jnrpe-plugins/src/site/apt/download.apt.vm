@@ -1,0 +1,34 @@
+ -----
+ JNRPE Server
+ -----
+ Massimiliano Ziccardi
+ -----
+ 25/02/2013
+ -----
+
+Download JNRPE Plugins
+
+  JNRPE plugins are distributed in several formats for your convenience. 
+  Use a source archive if you intend to build JNRPE plugins yourself. 
+  Otherwise, simply pick a ready-made binary distribution and follow 
+  the installation instructions given at the end of this document.
+
+  JNRPE plugins is distributed under the {{{http://jnrpe.sourceforge.net/license.html}Apache License}}, version 2.0.
+
+* JNRPE plugins ${project.version}
+
+*--------------------------------------------+------------------------+
+| Package                                    | Link                   |
+*--------------------------------------------+------------------------+
+| JNRPE plugins ${project.version} (Binary tar.gz) | {{{http://sourceforge.net/projects/jnrpe/files/jnrpe_plugins/jnrpe-plugins-${project.version}/jnrpe-plugins-${project.version}-bin.tar.gz/download}JNRPE plugins ${project.version} (Binary tar.gz)}} | 
+*-------------------------------------+------------------------+
+| JNRPE plugins ${project.version} (Binary zip)    | {{{http://sourceforge.net/projects/jnrpe/files/jnrpe_plugins/jnrpe-plugins-${project.version}/jnrpe-plugins-${project.version}-bin.zip/download}JNRPE plugins ${project.version} (Binary zip)}} | 
+*---------------------------------------------+------------------------+
+| JNRPE plugins ${project.version} (Source tar.gz) | {{{http://sourceforge.net/projects/jnrpe/files/jnrpe_plugins/jnrpe-plugins-${project.version}/jnrpe-plugins-${project.version}-src.tar.gz/download}JNRPE plugins ${project.version} (Source tar.gz)}} | 
+*---------------------------------------------+------------------------+
+| JNRPE plugins ${project.version} (Source zip)    | {{{http://sourceforge.net/projects/jnrpe/files/jnrpe_plugins/jnrpe-plugins-${project.version}/jnrpe-plugins-${project.version}-src.zip/download}JNRPE plugins ${project.version} (Source zip)}} | 
+*---------------------------------------------+------------------------+
+
+* Installation Instructions
+
+  Unzip the binary archive inside the plugins directory of your JNRPE server installation.
