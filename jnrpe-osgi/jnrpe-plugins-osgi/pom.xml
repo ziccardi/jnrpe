@@ -167,6 +167,25 @@
 				</executions>
 			</plugin>
 			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>src</descriptorRef>
+						<descriptorRef>bin</descriptorRef>
+					</descriptorRefs>
+					<attach>false</attach>
+				</configuration>
+				<executions>
+					<execution>
+						<id>jnrpe-plugins-osgi-zips</id>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<phase>package</phase>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>2.9</version>

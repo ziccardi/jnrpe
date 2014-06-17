@@ -119,7 +119,25 @@
 					</execution>
 				</executions>
 			</plugin>
-
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>src</descriptorRef>
+						<descriptorRef>bin</descriptorRef>
+					</descriptorRefs>
+					<attach>false</attach>
+				</configuration>
+				<executions>
+					<execution>
+						<id>jnrpe-osgi-core-zips</id>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<phase>package</phase>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
