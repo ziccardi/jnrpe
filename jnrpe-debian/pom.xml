@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>net.sf.jnrpe</groupId>
 		<artifactId>jnrpe-parent</artifactId>
-		<version>2.0.4-SNAPSHOT</version>
+		<version>2.0.4</version>
 	</parent>
 	<artifactId>jnrpe-debian</artifactId>
 	<name>jnrpe-debian</name>
@@ -220,5 +220,6 @@
 	</issueManagement>
 	<scm>
 		<url>https://github.com/ziccardi/jnrpe/tree/master/jnrpe-parent/jnrpe-debian</url>
-	</scm>
+	  <tag>2.0.4</tag>
+  </scm>
 </project>
