@@ -1,5 +1,5 @@
 <plugin name="CHECK_DISK" class="it.jnrpe.plugin.CheckDisk">
-        <description>
+	<description>
 <![CDATA[
   This plugins checks the available disk space
 
@@ -20,15 +20,20 @@
 
   ./check_nrpe -H myjnrpeserver -c check_disk -a '/!:10!:5'
 ]]>
-        </description>
-        <command-line>
-            <options>
-                <option shortName="p" longName="path" description="The path to check" required="true" hasArgs="true" argName="path" optionalArgs="false"/>
-                <option shortName="w" longName="warning" description="The used space warning threshold (percent)" required="false" hasArgs="true" argName="range" optionalArgs="false"/>
-                <option shortName="c" longName="critical" description="The used space critical threshold (percent)" required="false" hasArgs="true" argName="range" optionalArgs="false"/>
-                <option shortName="T" longName="th"
-        description="Configure a threshold. Format : metric={metric},ok={range},warn={range},crit={range},unit={unit},prefix={SI prefix}" hasArgs="true"
-        required="false" />
-            </options>
-        </command-line>
-    </plugin>
+	</description>
+	<command-line>
+		<options>
+			<option shortName="p" longName="path" description="The path to check"
+				required="true" hasArgs="true" argName="path" optionalArgs="false" />
+			<option shortName="w" longName="warning"
+				description="The used space warning threshold (percent)" required="false"
+				hasArgs="true" argName="range" optionalArgs="false" />
+			<option shortName="c" longName="critical"
+				description="The used space critical threshold (percent)" required="false"
+				hasArgs="true" argName="range" optionalArgs="false" />
+			<option shortName="T" longName="th"
+				description="Configure a threshold. Format : metric={metric},ok={range},warn={range},crit={range},unit={unit},prefix={SI prefix}"
+				hasArgs="true" required="false" />
+		</options>
+	</command-line>
+</plugin>

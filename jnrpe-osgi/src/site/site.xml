@@ -21,7 +21,7 @@
 			<item name="Getting Started - Felix" href="felix/getting_started.html" />
 			<item name="Download" href="download.html" />
 		</menu>
-		
+
 		<links>
 			<item name="Apache" href="http://www.apache.org/" />
 			<item name="JNRPE 1.x" href="jnrpe1.html" />

@@ -95,6 +95,11 @@ public final class JNRPEBuilder {
 	 */
 	private JNRPEBuilder(final IPluginRepository jnrpePluginRepository,
 			final CommandRepository jnrpeCommandRepository) {
+		
+		if (jnrpePluginRepository == null || jnrpeCommandRepository == null) {
+			throw new IllegalArgumentException("Both plugin and command repository can't be null");
+		}
+		
 		this.pluginRepository = jnrpePluginRepository;
 		this.commandRepository = jnrpeCommandRepository;
 	}

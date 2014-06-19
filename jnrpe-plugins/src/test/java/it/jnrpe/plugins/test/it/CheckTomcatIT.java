@@ -24,10 +24,6 @@ import it.jnrpe.commands.CommandRepository;
 import it.jnrpe.plugins.PluginDefinition;
 import it.jnrpe.utils.PluginRepositoryUtil;
 
-import java.io.File;
-import java.io.IOException;
-
-import org.apache.commons.io.FileUtils;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;

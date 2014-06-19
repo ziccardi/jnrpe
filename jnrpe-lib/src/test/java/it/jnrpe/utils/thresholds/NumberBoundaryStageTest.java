@@ -19,7 +19,6 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 import it.jnrpe.utils.thresholds.NumberBoundaryStage.LeftBoundaryStage;
-import it.jnrpe.utils.thresholds.NumberBoundaryStage.RightBoundaryStage;
 
 import org.testng.annotations.Test;
 
@@ -60,13 +59,13 @@ public class NumberBoundaryStageTest {
         assertFalse(stage.canParse("   "));
     }
 
-    @Test(expectedExceptions=InvalidRangeSyntaxException.class)
+    @Test(expectedExceptions = InvalidRangeSyntaxException.class)
     public void testCanParseJustSign() throws Exception {
         LeftBoundaryStage stage = new LeftBoundaryStage();
         stage.parse("+..50", new RangeConfig());
     }
 
-    @Test(expectedExceptions=RangeException.class)
+    @Test(expectedExceptions = RangeException.class)
     public void testCanParseBadSign() throws Exception {
         LeftBoundaryStage stage = new LeftBoundaryStage();
         stage.parse("50+..50", new RangeConfig());

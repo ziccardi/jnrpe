@@ -19,6 +19,7 @@ import it.jnrpe.ReturnValue;
 import it.jnrpe.Status;
 import it.jnrpe.net.JNRPERequest;
 import it.jnrpe.net.JNRPEResponse;
+import it.jnrpe.utils.TimeUnit;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -157,7 +158,7 @@ public class JNRPEClient {
 			}
 
 			s = socketFactory.createSocket();
-			s.setSoTimeout(communicationTimeout * 1000);
+			s.setSoTimeout((int) TimeUnit.SECOND.convert(communicationTimeout));
 			s.connect(new InetSocketAddress(serverIPorURL, serverPort));
 			JNRPERequest req = new JNRPERequest(sCommandName, arguments);
 

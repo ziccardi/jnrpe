@@ -17,6 +17,11 @@ package it.jnrpe.server.console;
 
 public class UnknownCommandException extends Exception {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 8556014479670410082L;
+
     public UnknownCommandException() {
         super();
     }

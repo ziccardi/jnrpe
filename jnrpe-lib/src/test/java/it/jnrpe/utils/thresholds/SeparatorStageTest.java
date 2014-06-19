@@ -15,11 +15,10 @@
  *******************************************************************************/
 package it.jnrpe.utils.thresholds;
 
-import org.testng.annotations.Test;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 
-import it.jnrpe.utils.thresholds.BracketStage.ClosedBracketStage;
-import it.jnrpe.utils.thresholds.BracketStage.OpenBracketStage;
-import static org.testng.Assert.*;
+import org.testng.annotations.Test;
 
 public class SeparatorStageTest {
 

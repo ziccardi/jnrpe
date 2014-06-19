@@ -17,8 +17,7 @@ package org.slf4j.impl;
 
 import org.slf4j.ILoggerFactory;
 
-public class StaticLoggerBinder
-{
+public class StaticLoggerBinder {
     private static OSGILogFactory s_factory = new OSGILogFactory();
 
     /**
@@ -41,18 +40,16 @@ public class StaticLoggerBinder
     }
 
     /**
-     * Declare the version of the SLF4J API this implementation is compiled against.
-     * The value of this field is usually modified with each release.
+     * Declare the version of the SLF4J API this implementation is compiled
+     * against. The value of this field is usually modified with each release.
      */
     // to avoid constant folding by the compiler, this field must *not* be final
-    public static String REQUESTED_API_VERSION = "1.7.5";  // !final
+    public static String REQUESTED_API_VERSION = "1.7.5"; // !final
 
-    private StaticLoggerBinder()
-    {
+    private StaticLoggerBinder() {
     }
 
-    public ILoggerFactory getLoggerFactory()
-    {
+    public ILoggerFactory getLoggerFactory() {
         return s_factory;
     }
 

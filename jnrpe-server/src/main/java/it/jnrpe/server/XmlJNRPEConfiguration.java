@@ -29,6 +29,7 @@ import org.apache.commons.lang.StringUtils;
  */
 class XmlJNRPEConfiguration extends JNRPEConfiguration {
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void load(final File confFile) throws ConfigurationException {
 		// Parse an ini file

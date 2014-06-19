@@ -107,7 +107,7 @@ public final class ReturnValueBuilder {
 	 * value.
 	 * 
 	 * @param pluginMetric
-	 *            The metric for wich we want to compute the result Status.
+	 *            The metric for which we want to compute the result Status.
 	 * @return this
 	 */
 	public ReturnValueBuilder withValue(final Metric pluginMetric) {

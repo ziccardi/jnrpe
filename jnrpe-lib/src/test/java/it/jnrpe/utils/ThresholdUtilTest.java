@@ -20,7 +20,9 @@ import java.math.BigDecimal;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+@SuppressWarnings("deprecation")
 public class ThresholdUtilTest {
+
     @Test
     public void testSimpleThreshold() throws BadThresholdException {
         Assert.assertTrue(ThresholdUtil.isValueInRange("10", 5));
@@ -80,26 +82,25 @@ public class ThresholdUtilTest {
         Assert.assertTrue(ThresholdUtil.isValueInRange("@10:20", -10));
     }
 
-    @Test(expectedExceptions=BadThresholdException.class)
+    @Test(expectedExceptions = BadThresholdException.class)
     public void testMalformedNegation() throws BadThresholdException {
         ThresholdUtil.isValueInRange("10:@20", 10);
     }
 
-    @Test(expectedExceptions=BadThresholdException.class)
+    @Test(expectedExceptions = BadThresholdException.class)
     public void testBadSeparator() throws BadThresholdException {
         ThresholdUtil.isValueInRange("10:20:", 10);
     }
 
-    @Test(expectedExceptions=BadThresholdException.class)
+    @Test(expectedExceptions = BadThresholdException.class)
     public void testEmptyNumbers() throws BadThresholdException {
         ThresholdUtil.isValueInRange(":", 10);
     }
 
-    @Test(expectedExceptions=BadThresholdException.class)
+    @Test(expectedExceptions = BadThresholdException.class)
     public void testEmptyNumbersJustSign() throws BadThresholdException {
         ThresholdUtil.isValueInRange("+:", 10);
     }
-
 
     @Test
     public void testMissingLeft() throws BadThresholdException {

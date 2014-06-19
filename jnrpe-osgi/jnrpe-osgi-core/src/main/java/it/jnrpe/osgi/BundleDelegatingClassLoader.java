@@ -21,30 +21,41 @@ import java.util.Enumeration;
 
 import org.osgi.framework.Bundle;
 
+/**
+ * A classloader that delegates the class loading to the bundle.
+ * 
+ * @author Massimiliano Ziccardi
+ *
+ */
 public class BundleDelegatingClassLoader extends ClassLoader {
 
-	private final Bundle bundle;
+    /**
+     * The delegate bundle.
+     */
+    private final Bundle bundle;
 
-	public BundleDelegatingClassLoader(final Bundle b) {
-		bundle = b;
-	}
+    /**
+     * Builds and initializes the classloader.
+     * @param b The bundle to be delegated
+     */
+    public BundleDelegatingClassLoader(final Bundle b) {
+        bundle = b;
+    }
 
-	@Override
-	protected Class<?> findClass(final String className)
-			throws ClassNotFoundException {
-		return bundle.loadClass(className);
-	}
+    @Override
+    protected final Class<?> findClass(final String className) throws ClassNotFoundException {
+        return bundle.loadClass(className);
+    }
 
-	@Override
-	protected URL findResource(final String resName) {
-		return bundle.getResource(resName);
-	}
+    @Override
+    protected final URL findResource(final String resName) {
+        return bundle.getResource(resName);
+    }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	protected Enumeration<URL> findResources(final String resName)
-			throws IOException {
-		return bundle.getResources(resName);
-	}
+    @SuppressWarnings("unchecked")
+    @Override
+    protected final Enumeration<URL> findResources(final String resName) throws IOException {
+        return bundle.getResources(resName);
+    }
 
 }

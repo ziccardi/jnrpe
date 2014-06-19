@@ -42,11 +42,11 @@ check_nrpe -H myjnrpeserver -c check_mysql_query -a 'test-db localhost 3306 mysq
 			<option shortName="w" longName="critical"
 				description="Exit with CRITICAL status if slave server is more than INTEGER seconds behind master. To be used with the check-slave option."
 				required="false" hasArgs="true" argName="critical" optionalArgs="false" />
-				
+
 			<option shortName="q" longName="query"
 				description="SQL query to run. Only first column in first row will be read"
 				required="false" hasArgs="true" argName="critical" optionalArgs="false" />
-				
+
 
 		</options>
 	</command-line>

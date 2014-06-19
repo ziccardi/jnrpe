@@ -1,5 +1,5 @@
 <plugin name="CHECK_ORACLE" class="it.jnrpe.plugin.CCheckOracle">
-  <description>
+	<description>
 <![CDATA[
     This plugin is used to perform various check against an Oracle Database Server.
     This version is able to perform:
@@ -66,38 +66,38 @@
     -------------------
     ./check_nrpe -t 20 -n -H myjnrpeserver -c check_oracle_cache -a 'username!password!SID!server'
 ]]>
-  </description>
-  <command-line>
-    <options>
-      <option shortName="d" longName="db" description="Orace SID"
-        hasArgs="true" argName="SID" required="true" optionalArgs="false" />
-      <option shortName="s" longName="server" description="Database Server (IP or NAME)"
-        hasArgs="true" argName="address" required="true" optionalArgs="false" />
-      <option shortName="l" longName="port"
-        description="Database Server port (default: 1521)" hasArgs="true"
-        argName="port" required="false" optionalArgs="false" />
-      <option shortName="u" longName="username" description="database username"
-        hasArgs="true" argName="username" required="true" optionalArgs="false" />
-      <option shortName="p" longName="password" description="database password"
-        hasArgs="true" argName="password" required="true" optionalArgs="false" />
-      <option shortName="t" longName="tablespace"
-        description="Check the database for tablespace capacity in ORACLE_SID"
-        hasArgs="true" argName="tablespace" required="false" optionalArgs="false" />
-      <option shortName="w" longName="warning" description="warning threshold"
-        hasArgs="true" argName="threshold" required="false" optionalArgs="false" />
-      <option shortName="c" longName="critical" description="critical threshold"
-        hasArgs="true" argName="threshold" required="false" optionalArgs="false" />
-      <option shortName="k" longName="cache"
-        description="Check the database for library and buffer cache hit ratios"
-        required="false" />
-      <option shortName="a" longName="alive"
-        description="Check if the database is alive" hasArgs="false"
-        required="false" />
+	</description>
+	<command-line>
+		<options>
+			<option shortName="d" longName="db" description="Orace SID"
+				hasArgs="true" argName="SID" required="true" optionalArgs="false" />
+			<option shortName="s" longName="server" description="Database Server (IP or NAME)"
+				hasArgs="true" argName="address" required="true" optionalArgs="false" />
+			<option shortName="l" longName="port"
+				description="Database Server port (default: 1521)" hasArgs="true"
+				argName="port" required="false" optionalArgs="false" />
+			<option shortName="u" longName="username" description="database username"
+				hasArgs="true" argName="username" required="true" optionalArgs="false" />
+			<option shortName="p" longName="password" description="database password"
+				hasArgs="true" argName="password" required="true" optionalArgs="false" />
+			<option shortName="t" longName="tablespace"
+				description="Check the database for tablespace capacity in ORACLE_SID"
+				hasArgs="true" argName="tablespace" required="false" optionalArgs="false" />
+			<option shortName="w" longName="warning" description="warning threshold"
+				hasArgs="true" argName="threshold" required="false" optionalArgs="false" />
+			<option shortName="c" longName="critical" description="critical threshold"
+				hasArgs="true" argName="threshold" required="false" optionalArgs="false" />
+			<option shortName="k" longName="cache"
+				description="Check the database for library and buffer cache hit ratios"
+				required="false" />
+			<option shortName="a" longName="alive"
+				description="Check if the database is alive" hasArgs="false"
+				required="false" />
 
-      <option shortName="T" longName="th"
-        description="Configure a threshold. Format : metric={metric},ok={range},warn={range},crit={range},unit={unit},prefix={SI prefix}" hasArgs="true"
-        required="false" />
+			<option shortName="T" longName="th"
+				description="Configure a threshold. Format : metric={metric},ok={range},warn={range},crit={range},unit={unit},prefix={SI prefix}"
+				hasArgs="true" required="false" />
 
-    </options>
-  </command-line>
+		</options>
+	</command-line>
 </plugin>

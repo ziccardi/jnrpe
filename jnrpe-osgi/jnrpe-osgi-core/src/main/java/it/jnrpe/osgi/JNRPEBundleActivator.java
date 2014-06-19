@@ -16,6 +16,7 @@
 package it.jnrpe.osgi;
 
 import it.jnrpe.JNRPE;
+import it.jnrpe.JNRPEBuilder;
 import it.jnrpe.commands.CommandDefinition;
 import it.jnrpe.commands.CommandRepository;
 import it.jnrpe.plugins.IPluginRepository;
@@ -41,169 +42,198 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.impl.OSGILogFactory;
 
+/**
+ * The JNRPE bundle activator. Automatically receive the JNRPE configuration and
+ * starts listening on the configured ports/addresses.
+ * 
+ * @author Massimiliano Ziccardi
+ */
 public class JNRPEBundleActivator implements BundleActivator, ManagedService {
 
-	private final static String PID = "it.jnrpe.osgi";
+    /**
+     * The JNRPE OSGI bundle PID.
+     */
+    private static final String PID = "it.jnrpe.osgi";
 
-	/**
-	 * The logger.
-	 */
-	private static final Logger LOG = LoggerFactory
-			.getLogger(JNRPEBundleActivator.class);
+    /**
+     * The logger.
+     */
+    private static final Logger LOG = LoggerFactory.getLogger(JNRPEBundleActivator.class);
 
-	private BundleTracker bundleTracker;
+    /**
+     * The OSGI bundle tracker. The {@link JNRPEBundleTracker} object is used to
+     * detect the installation or the update of a plugin package.
+     */
+    private BundleTracker bundleTracker;
 
-	private IPluginRepository pluginRepository;
-	private CommandRepository commandRepository;
+    /**
+     * The JNRPE plugins repository.
+     */
+    private IPluginRepository pluginRepository;
+    
+    /**
+     * The JNRPE commands repository.
+     */
+    private CommandRepository commandRepository;
 
-	private JNRPE jnrpeEngine;
+    /**
+     * The JNRPE engine.
+     */
+    private JNRPE jnrpeEngine;
 
-	/**
-	 * Automatically called by the OSGI layer when a new configuration is ready.
-	 */
-	public void updated(final Dictionary properties)
-			throws ConfigurationException {
-		if (properties == null) {
-			LOG.info("Empty configuration received. JNRPE Server not started");
-			return;
-		}
+    /**
+     * Automatically called by the OSGI layer when a new configuration is ready.
+     * 
+     * @param properties The new configuration
+     * @throws ConfigurationException on problems loading the configuration
+     */
+    public final void updated(final Dictionary properties) throws ConfigurationException {
+        if (properties == null) {
+            LOG.info("Empty configuration received. JNRPE Server not started");
+            return;
+        }
 
-		LOG.info("New configuration received");
-		if (jnrpeEngine != null) {
-			LOG.info("Shutting down JNRPE listener...");
-			jnrpeEngine.shutdown();
-		}
+        LOG.info("New configuration received");
+        if (jnrpeEngine != null) {
+            LOG.info("Shutting down JNRPE listener...");
+            jnrpeEngine.shutdown();
+        }
 
-		// String acceptParamsString = "" + properties.get("accept_params");
-		String bindAddress = (String) properties.get("bind_address");
-		String allowAddress = (String) properties.get("allow_address");
+        String bindAddress = (String) properties.get("bind_address");
+        String allowAddress = (String) properties.get("allow_address");
 
-		// Parsing command definition...
-		for (CommandDefinition cd : parseCommandDefinitions(properties)) {
-			LOG.info("Adding command definition for command '{}'", cd.getName());
-			commandRepository.addCommandDefinition(cd);
-		}
+        // Parsing command definition...
+        for (CommandDefinition cd : parseCommandDefinitions(properties)) {
+            LOG.info("Adding command definition for command '{}'", cd.getName());
+            commandRepository.addCommandDefinition(cd);
+        }
 
-		JNRPE engine = new JNRPE(pluginRepository, commandRepository);
-		engine.addEventListener(new EventLoggerListener());
+        JNRPEBuilder builder = JNRPEBuilder.forRepositories(pluginRepository, commandRepository).withListener(new EventLoggerListener());
 
-		if (allowAddress == null || allowAddress.trim().length() == 0) {
-			allowAddress = "127.0.0.1";
-		}
+        if (allowAddress == null || allowAddress.trim().length() == 0) {
+            allowAddress = "127.0.0.1";
+        }
 
-		for (String addr : allowAddress.split(",")) {
+        for (String addr : allowAddress.split(",")) {
 
-			LOG.info("Allowing requests from : {}", addr);
+            LOG.info("Allowing requests from : {}", addr);
 
-			if (addr.trim().length() == 0) {
-				continue;
-			}
+            if (addr.trim().length() == 0) {
+                continue;
+            }
 
-			engine.addAcceptedHost(addr);
-		}
+            builder.acceptHost(addr);
+            // engine.addAcceptedHost(addr);
+        }
 
-		if (bindAddress != null && bindAddress.trim().length() != 0) {
-			JNRPEBindingAddress address = new JNRPEBindingAddress(bindAddress);
-			try {
+        JNRPE engine = builder.build();
 
-				LOG.info("Listening on : {}:{} - SSL:{}", address.getAddress(),
-						address.getPort(), address.isSsl());
+        if (bindAddress != null && bindAddress.trim().length() != 0) {
+            JNRPEBindingAddress address = new JNRPEBindingAddress(bindAddress);
+            try {
 
-				engine.listen(address.getAddress(), address.getPort(),
-						address.isSsl());
-			} catch (UnknownHostException e) {
-				LOG.error("Bad binding address: {}", bindAddress);
-				throw new ConfigurationException("bind_address",
-						e.getMessage(), e);
-			}
-		} else {
-			throw new ConfigurationException("bind_address",
-					"Binding address can't be empty");
-		}
-		jnrpeEngine = engine;
-	}
+                LOG.info("Listening on : {}:{} - SSL:{}", address.getAddress(), address.getPort(), address.isSsl());
 
-	private Collection<CommandDefinition> parseCommandDefinitions(
-			final Dictionary<String, String> props) {
+                engine.listen(address.getAddress(), address.getPort(), address.isSsl());
+            } catch (UnknownHostException e) {
+                LOG.error("Bad binding address: {}", bindAddress);
+                throw new ConfigurationException("bind_address", e.getMessage(), e);
+            }
+        } else {
+            throw new ConfigurationException("bind_address", "Binding address can't be empty");
+        }
+        jnrpeEngine = engine;
+    }
 
-		List<CommandDefinition> res = new ArrayList<CommandDefinition>();
+    /**
+     * Parses the command definitions from the recived configuration.
+     * 
+     * @param props the configuration
+     * @return a collection of the command read from the configuration
+     */
+    private Collection<CommandDefinition> parseCommandDefinitions(final Dictionary<String, String> props) {
 
-		final String prefix = "command.";
-		final int prefixLen = prefix.length();
+        List<CommandDefinition> res = new ArrayList<CommandDefinition>();
 
-		Enumeration<String> en = props.keys();
-		while (en.hasMoreElements()) {
-			String key = en.nextElement();
-			if (key.startsWith(prefix)) {
-				String commandName = key.substring(prefixLen);
+        final String prefix = "command.";
+        final int prefixLen = prefix.length();
 
-				String commandLine = props.get(key);
-				String[] elements = StringUtils.split(commandLine, false);
-				String pluginName = elements[0];
+        Enumeration<String> en = props.keys();
+        while (en.hasMoreElements()) {
+            String key = en.nextElement();
+            if (key.startsWith(prefix)) {
+                String commandName = key.substring(prefixLen);
 
-				StringBuffer cmdLine = new StringBuffer();
+                String commandLine = props.get(key);
+                String[] elements = StringUtils.split(commandLine, false);
+                String pluginName = elements[0];
 
-				for (int i = 1; i < elements.length; i++) {
-					cmdLine.append(quoteAndEscape(elements[i])).append(" ");
-				}
+                StringBuffer cmdLine = new StringBuffer();
 
-				CommandDefinition cd = new CommandDefinition(commandName,
-						pluginName);
-				cd.setArgs(cmdLine.toString());
-				res.add(cd);
-			}
-		}
+                for (int i = 1; i < elements.length; i++) {
+                    cmdLine.append(quoteAndEscape(elements[i])).append(" ");
+                }
 
-		return res;
-	}
+                CommandDefinition cd = new CommandDefinition(commandName, pluginName);
+                cd.setArgs(cmdLine.toString());
+                res.add(cd);
+            }
+        }
 
-	/**
-	 * Quotes a string.
-	 * 
-	 * @param string
-	 *            The string to be quoted
-	 * @return The quoted string
-	 */
-	private String quoteAndEscape(final String string) {
-		if (string.indexOf(' ') == -1) {
-			return string;
-		}
+        return res;
+    }
 
-		String res = "\"" + string.replaceAll("\"", "\\\"") + "\"";
-		return res;
-	}
+    /**
+     * Quotes a string.
+     * 
+     * @param string
+     *            The string to be quoted
+     * @return The quoted string
+     */
+    private String quoteAndEscape(final String string) {
+        if (string.indexOf(' ') == -1) {
+            return string;
+        }
 
-	/**
-	 * Initializes the bundle.
-	 */
-	public void start(final BundleContext context) throws Exception {
+        String res = "\"" + string.replaceAll("\"", "\\\"") + "\"";
+        return res;
+    }
 
-		OSGILogFactory.initOSGI(context);
+    /**
+     * Initializes the bundle.
+     * 
+     * @param context the bundle context
+     * @throws Exception on any error
+     */
+    public final void start(final BundleContext context) throws Exception {
 
-		pluginRepository = new PluginRepository();
-		commandRepository = new CommandRepository();
+        OSGILogFactory.initOSGI(context);
 
-		bundleTracker = new JNRPEBundleTracker(context, pluginRepository,
-				commandRepository);
-		bundleTracker.open();
-		// Register the managed service...
-		Dictionary<String, String> props = new Hashtable<String, String>();
-		props.put(Constants.SERVICE_PID, PID);
+        pluginRepository = new PluginRepository();
+        commandRepository = new CommandRepository();
 
-		ServiceRegistration servReg = context.registerService(
-				ManagedService.class.getName(), this, props);
-		servReg.setProperties(props);
-		LOG.info("JNRPE bundle started");
-	}
+        bundleTracker = new JNRPEBundleTracker(context, pluginRepository, commandRepository);
+        bundleTracker.open();
+        // Register the managed service...
+        Dictionary<String, String> props = new Hashtable<String, String>();
+        props.put(Constants.SERVICE_PID, PID);
 
-	/**
-	 * Stops the JNRPE bundle.
-	 */
-	public void stop(final BundleContext context) throws Exception {
-		if (jnrpeEngine != null) {
-			jnrpeEngine.shutdown();
-		}
+        ServiceRegistration servReg = context.registerService(ManagedService.class.getName(), this, props);
+        servReg.setProperties(props);
+        LOG.info("JNRPE bundle started");
+    }
 
-	}
+    /**
+     * Stops the JNRPE bundle.
+     * 
+     * @param context the bundle context
+     * @throws Exception on any error
+     */
+    public final void stop(final BundleContext context) throws Exception {
+        if (jnrpeEngine != null) {
+            jnrpeEngine.shutdown();
+        }
+
+    }
 
 }

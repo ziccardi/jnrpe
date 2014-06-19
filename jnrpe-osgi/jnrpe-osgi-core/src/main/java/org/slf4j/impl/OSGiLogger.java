@@ -20,34 +20,32 @@ import org.osgi.service.log.LogService;
 import org.slf4j.helpers.MarkerIgnoringBase;
 import org.slf4j.helpers.MessageFormatter;
 
-public class OSGiLogger extends MarkerIgnoringBase
-{
+public class OSGiLogger extends MarkerIgnoringBase {
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
 
     /**
-     * Check the availability of the OSGI logging service, and use it is available.
-     * Does nothing otherwise.
-     * @param level
-     * @param message
-     * @param t
+     * Check the availability of the OSGI logging service, and use it is
+     * available. Does nothing otherwise.
+     * 
+     * @param level the log level
+     * @param message the message
+     * @param t the error cause
      */
-    final private void internalLog(final int level, final Object message, final Throwable t)
-    {
+    private void internalLog(final int level, final Object message, final Throwable t) {
         LogService logservice = OSGILogFactory.getLogService();
         ServiceReference serviceref = OSGILogFactory.getServiceReference();
 
-        if (logservice != null)
-        {
+        if (logservice != null) {
             try {
-                if (t != null)
+                if (t != null) {
                     logservice.log(serviceref, level, message.toString(), t);
-                else
+                } else {
                     logservice.log(serviceref, level, message.toString());
-            } catch (Exception exc)
-            {
+                }
+            } catch (Exception exc) {
                 // Service may have become invalid, just ignore any error
                 // until the log service reference is updated by the
                 // log factory.
@@ -58,6 +56,7 @@ public class OSGiLogger extends MarkerIgnoringBase
     public boolean isTraceEnabled() {
         return true;
     }
+
     public void trace(final String msg) {
         internalLog(LogService.LOG_DEBUG, msg, null);
     }
@@ -72,8 +71,7 @@ public class OSGiLogger extends MarkerIgnoringBase
         internalLog(LogService.LOG_DEBUG, msgStr, null);
     }
 
-
-    public void trace(final String format, final Object ... argArray) {
+    public void trace(final String format, final Object... argArray) {
         String msgStr = MessageFormatter.arrayFormat(format, argArray).getMessage();
         internalLog(LogService.LOG_DEBUG, msgStr, null);
     }
@@ -82,14 +80,14 @@ public class OSGiLogger extends MarkerIgnoringBase
         internalLog(LogService.LOG_DEBUG, msg, t);
     }
 
-
-
     public boolean isDebugEnabled() {
         return true;
     }
-    public void debug(final String msg) {
+
+    public final void debug(final String msg) {
         internalLog(LogService.LOG_DEBUG, msg, null);
     }
+
     public void debug(final String format, final Object arg) {
         String msgStr = MessageFormatter.format(format, arg).getMessage();
         internalLog(LogService.LOG_DEBUG, msgStr, null);
@@ -100,7 +98,7 @@ public class OSGiLogger extends MarkerIgnoringBase
         internalLog(LogService.LOG_DEBUG, msgStr, null);
     }
 
-    public void debug(final String format, final Object ... argArray) {
+    public void debug(final String format, final Object... argArray) {
         String msgStr = MessageFormatter.arrayFormat(format, argArray).getMessage();
         internalLog(LogService.LOG_DEBUG, msgStr, null);
     }
@@ -121,12 +119,13 @@ public class OSGiLogger extends MarkerIgnoringBase
         String msgStr = MessageFormatter.format(format, arg).getMessage();
         internalLog(LogService.LOG_INFO, msgStr, null);
     }
+
     public void info(final String format, final Object arg1, final Object arg2) {
         String msgStr = MessageFormatter.format(format, arg1, arg2).getMessage();
         internalLog(LogService.LOG_INFO, msgStr, null);
     }
 
-    public void info(final String format, final Object ... argArray) {
+    public void info(final String format, final Object... argArray) {
         String msgStr = MessageFormatter.arrayFormat(format, argArray).getMessage();
         internalLog(LogService.LOG_INFO, msgStr, null);
     }
@@ -138,6 +137,7 @@ public class OSGiLogger extends MarkerIgnoringBase
     public boolean isWarnEnabled() {
         return true;
     }
+
     public void warn(final String msg) {
         internalLog(LogService.LOG_WARNING, msg, null);
     }
@@ -152,7 +152,7 @@ public class OSGiLogger extends MarkerIgnoringBase
         internalLog(LogService.LOG_WARNING, msgStr, null);
     }
 
-    public void warn(final String format, final Object ... argArray) {
+    public void warn(final String format, final Object... argArray) {
         String msgStr = MessageFormatter.arrayFormat(format, argArray).getMessage();
         internalLog(LogService.LOG_WARNING, msgStr, null);
     }
@@ -178,7 +178,8 @@ public class OSGiLogger extends MarkerIgnoringBase
         String msgStr = MessageFormatter.format(format, arg1, arg2).getMessage();
         internalLog(LogService.LOG_ERROR, msgStr, null);
     }
-    public void error(final String format, final Object ... argArray) {
+
+    public void error(final String format, final Object... argArray) {
         String msgStr = MessageFormatter.arrayFormat(format, argArray).getMessage();
         internalLog(LogService.LOG_ERROR, msgStr, null);
     }

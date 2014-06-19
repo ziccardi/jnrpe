@@ -23,7 +23,8 @@
 		</menu>
 
 		<menu name="Tutorials">
-			<item name="Writing JNRPE Java Nagios Plugins" href="http://www.ziccardi.info/cms/index.php/home/tutorials/12-nagios/jnrpe/7-creating-plugins-with-java-part1" />
+			<item name="Writing JNRPE Java Nagios Plugins"
+				href="http://www.ziccardi.info/cms/index.php/home/tutorials/12-nagios/jnrpe/7-creating-plugins-with-java-part1" />
 		</menu>
 
 		<links>
@@ -32,7 +33,7 @@
 			<item name="JNRPE 2.0" href="index.html" />
 		</links>
 
-		<menu name="Reports" ref="reports" inherit="bottom"/>
+		<menu name="Reports" ref="reports" inherit="bottom" />
 
 	</body>
 	<skin>

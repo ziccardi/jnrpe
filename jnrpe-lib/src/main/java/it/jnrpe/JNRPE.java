@@ -290,11 +290,11 @@ public final class JNRPE {
 	 * Creates, configures and returns the SSL engine.
 	 * 
 	 * @return the SSL Engine
-	 * @throws KeyStoreException
-	 * @throws CertificateException
-	 * @throws IOException
-	 * @throws UnrecoverableKeyException
-	 * @throws KeyManagementException
+	 * @throws KeyStoreException on keystore errorss
+	 * @throws CertificateException on certificate errors
+	 * @throws IOException on I/O errors
+	 * @throws UnrecoverableKeyException if key is unrecoverable
+	 * @throws KeyManagementException key management error
 	 */
 	private SSLEngine getSSLEngine() throws KeyStoreException,
 			CertificateException, IOException, UnrecoverableKeyException,

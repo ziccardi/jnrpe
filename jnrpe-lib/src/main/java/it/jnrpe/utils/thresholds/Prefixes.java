@@ -17,6 +17,12 @@ package it.jnrpe.utils.thresholds;
 
 import java.math.BigDecimal;
 
+/**
+ * Enumeration of accepted prefixes.
+ * 
+ * @author Massimiliano Ziccardi
+ *
+ */
 public enum Prefixes {
     /**
      * Yotta : 10^24.

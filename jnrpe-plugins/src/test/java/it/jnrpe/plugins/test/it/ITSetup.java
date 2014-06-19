@@ -16,6 +16,7 @@
 package it.jnrpe.plugins.test.it;
 
 import it.jnrpe.JNRPE;
+import it.jnrpe.JNRPEBuilder;
 import it.jnrpe.commands.CommandRepository;
 import it.jnrpe.events.IJNRPEEvent;
 import it.jnrpe.events.IJNRPEEventListener;
@@ -43,16 +44,15 @@ public class ITSetup implements ITConstants {
 		m_pluginRepository = new PluginRepository();
 		m_commandRepository = new CommandRepository();
 
-		m_jnrpeServer = new JNRPE(m_pluginRepository, m_commandRepository);
-
-		m_jnrpeServer.addEventListener(new IJNRPEEventListener() {
+		m_jnrpeServer = JNRPEBuilder.forRepositories(m_pluginRepository, m_commandRepository)
+			.acceptHost(BIND_ADDRESS)
+			.acceptParams(true)
+			.withListener(new IJNRPEEventListener() {
 
 			public void receive(final Object sender, final IJNRPEEvent event) {
 				// System.out.println(event.getEventParams().get("MESSAGE"));
 			}
-		});
-
-		m_jnrpeServer.addAcceptedHost(BIND_ADDRESS);
+		}).build();
 
 		m_jnrpeServer.listen(BIND_ADDRESS, JNRPE_PORT, false);
 	}

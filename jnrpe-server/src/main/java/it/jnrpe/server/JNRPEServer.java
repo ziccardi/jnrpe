@@ -198,6 +198,7 @@ public final class JNRPEServer {
 	 * @param e
 	 *            The last error. Can be null.
 	 */
+	@SuppressWarnings("unchecked")
 	private static void printUsage(final Exception e) {
 		printVersion();
 		if (e != null) {

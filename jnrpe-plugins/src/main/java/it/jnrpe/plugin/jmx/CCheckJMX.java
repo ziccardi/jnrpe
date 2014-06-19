@@ -18,7 +18,6 @@ package it.jnrpe.plugin.jmx;
 import it.jnrpe.ICommandLine;
 import it.jnrpe.ReturnValue;
 import it.jnrpe.Status;
-import it.jnrpe.events.LogEvent;
 import it.jnrpe.plugins.IPluginInterface;
 
 import java.io.ByteArrayOutputStream;
