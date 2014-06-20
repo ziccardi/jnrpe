@@ -43,88 +43,57 @@ import java.util.List;
  * @author Frederico Campos
  *
  */
-@Plugin(
-		name = "CHECK_USERS",
-		description = "This plugin checks the number of users currently logged in on the\n" +
-				"local system and generates an error if the number exceeds the thresholds specified.\n" +
-				"EXAMPLES\n" +
-				"The example will be based upon the following command definition (ini file)\n\n" +
+@Plugin(name = "CHECK_USERS", description = "This plugin checks the number of users currently logged in on the\n"
+        + "local system and generates an error if the number exceeds the thresholds specified.\n"
+        + "EXAMPLES\n"
+        + "The example will be based upon the following command definition (ini file)\n\n"
+        +
 
-			    "check_user : CHECK_USER --warning $ARG1$ --critical $ARG2$\n\n"+
-			
-			    "* Example 1 (Windows and Unix)\n"+
-			    "The following example will give a WARNING if the number of logged in users exceeds 10 and a CRITICAL message if the number of users exceeds 20\n\n"+
-			
-				"check_nrpe -H myjnrpeserver -c check_users -a '10:!20:'")
+        "check_user : CHECK_USER --warning $ARG1$ --critical $ARG2$\n\n"
+        +
 
+        "* Example 1 (Windows and Unix)\n"
+        + "The following example will give a WARNING if the number of logged in users exceeds 10 and a CRITICAL message if the number of users exceeds 20\n\n"
+        +
+
+        "check_nrpe -H myjnrpeserver -c check_users -a '10:!20:'")
 @PluginOptions({
 
-	@Option(shortName="w",
-			longName="warning",
-			description="Set WARNING status if more than INTEGER users are logged in",
-			required=false,
-			hasArgs=true,
-			argName="warning",
-			optionalArgs=false,
-			option="warning"
-			),
-			
-	@Option(shortName="c",
-			longName="critical",
-			description="Set CRITICAL status if more than INTEGER users are logged in",
-			required=false,
-			hasArgs=true,
-			argName="critical",
-			optionalArgs=false,
-			option="critical"),
-			
-	@Option(shortName="T",
-			longName="th",
-			description="Configure a threshold. Format : metric={metric},ok={range},warn={range},crit={range},unit={unit},prefix={SI prefix}",
-			required=false,
-			hasArgs=true,
-			argName="critical",
-			optionalArgs=false,
-			option="th")
-})
+        @Option(shortName = "w", longName = "warning", description = "Set WARNING status if more than INTEGER users are logged in", required = false, hasArgs = true, argName = "warning", optionalArgs = false, option = "warning"),
+
+        @Option(shortName = "c", longName = "critical", description = "Set CRITICAL status if more than INTEGER users are logged in", required = false, hasArgs = true, argName = "critical", optionalArgs = false, option = "critical"),
+
+        @Option(shortName = "T", longName = "th", description = "Configure a threshold. Format : metric={metric},ok={range},warn={range},crit={range},unit={unit},prefix={SI prefix}", required = false, hasArgs = true, argName = "critical", optionalArgs = false, option = "th") })
 public class CheckUsers extends PluginBase {
-	
+
     @Override
-    public void configureThresholdEvaluatorBuilder(
-            ThresholdsEvaluatorBuilder thrb, ICommandLine cl)
-            throws BadThresholdException {
+    public void configureThresholdEvaluatorBuilder(ThresholdsEvaluatorBuilder thrb, ICommandLine cl) throws BadThresholdException {
 
         if (cl.hasOption("th")) {
             super.configureThresholdEvaluatorBuilder(thrb, cl);
         } else {
-            thrb.withLegacyThreshold("users", null,
-                    cl.getOptionValue("warning"), cl.getOptionValue("critical"));
+            thrb.withLegacyThreshold("users", null, cl.getOptionValue("warning"), cl.getOptionValue("critical"));
         }
 
     }
 
     @Override
-    public Collection<Metric> gatherMetrics(ICommandLine cl)
-            throws MetricGatheringException {
+    public Collection<Metric> gatherMetrics(ICommandLine cl) throws MetricGatheringException {
 
         List<Metric> metricList = new ArrayList<Metric>();
         String os = System.getProperty("os.name").toLowerCase();
         try {
             if (os.contains("linux")) {
-                metricList.add(new Metric("users", "", new BigDecimal(
-                        getLinuxLoggedInUsers()), null, null));
+                metricList.add(new Metric("users", "", new BigDecimal(getLinuxLoggedInUsers()), null, null));
             } else if (os.contains("windows")) {
-                metricList.add(new Metric("users", "", new BigDecimal(
-                        getWindowsLoggedInUsers()), null, null));
+                metricList.add(new Metric("users", "", new BigDecimal(getWindowsLoggedInUsers()), null, null));
             }
 
             return metricList;
         } catch (IOException e) {
-            log.warn("CheckUser plugin execution error: "
-                    + e.getMessage(), e);
+            log.warn("CheckUser plugin execution error: " + e.getMessage(), e);
 
-            throw new MetricGatheringException("An error has occurred : "
-                    + e.getMessage(), Status.UNKNOWN, e);
+            throw new MetricGatheringException("An error has occurred : " + e.getMessage(), Status.UNKNOWN, e);
         }
     }
 
@@ -160,8 +129,7 @@ public class CheckUsers extends PluginBase {
      *             -
      */
     private int getWindowsLoggedInUsers() throws IOException {
-        String command =
-                System.getenv("windir") + "\\system32\\" + "tasklist.exe";
+        String command = System.getenv("windir") + "\\system32\\" + "tasklist.exe";
         int userCount = 0;
         ProcessBuilder builder = new ProcessBuilder();
         Process proc = null;

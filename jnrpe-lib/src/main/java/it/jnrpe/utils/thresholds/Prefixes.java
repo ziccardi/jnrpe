@@ -25,133 +25,133 @@ import java.math.BigDecimal;
  */
 public enum Prefixes {
     /**
-     * Yotta : 10^24.
-     * You can use both yotta or Y (case sensitive) as unit of prefix.
+     * Yotta : 10^24. You can use both yotta or Y (case sensitive) as unit of
+     * prefix.
      */
     yotta(new BigDecimal(10).pow(24)),
     /**
-     * Zetta : 10^21.
-     * You can use both zetta or Z (case sensitive) as unit of prefix.
+     * Zetta : 10^21. You can use both zetta or Z (case sensitive) as unit of
+     * prefix.
      */
     zetta(new BigDecimal(10).pow(21)),
     /**
-     * Exa : 10^28.
-     * You can use both exa or E (case sensitive) as unit of prefix.
+     * Exa : 10^28. You can use both exa or E (case sensitive) as unit of
+     * prefix.
      */
     exa(new BigDecimal(10).pow(18)),
     /**
-     * Peta : 10^15.
-     * You can use both peta or P (case sensitive) as unit of prefix.
+     * Peta : 10^15. You can use both peta or P (case sensitive) as unit of
+     * prefix.
      */
     peta(new BigDecimal(10).pow(15)),
     /**
-     * Tera : 10^12.
-     * You can use both tera or T (case sensitive) as unit of prefix.
+     * Tera : 10^12. You can use both tera or T (case sensitive) as unit of
+     * prefix.
      */
     tera(new BigDecimal(10).pow(12)),
     /**
-     * Giga : 10^9.
-     * You can use both giga or G (case sensitive) as unit of prefix.
+     * Giga : 10^9. You can use both giga or G (case sensitive) as unit of
+     * prefix.
      */
     giga(new BigDecimal(10).pow(9)),
     /**
-     * Mega : 10^6.
-     * You can use both mega or M (case sensitive) as unit of prefix.
+     * Mega : 10^6. You can use both mega or M (case sensitive) as unit of
+     * prefix.
      */
     mega(new BigDecimal(10).pow(6)),
     /**
-     * Kilo : 10^3.
-     * You can use both kilo or k (case sensitive) as unit of prefix.
+     * Kilo : 10^3. You can use both kilo or k (case sensitive) as unit of
+     * prefix.
      */
     kilo(new BigDecimal(10).pow(3)),
     /**
-     * Hecto : 10^2.
-     * You can use both hecto or h (case sensitive) as unit of prefix.
+     * Hecto : 10^2. You can use both hecto or h (case sensitive) as unit of
+     * prefix.
      */
     hecto(new BigDecimal(10).pow(2)),
     /**
-     * Deka : 10^1.
-     * You can use both deka or da (case sensitive) as unit of prefix.
+     * Deka : 10^1. You can use both deka or da (case sensitive) as unit of
+     * prefix.
      */
     deka(new BigDecimal(10).pow(1)),
     /**
-     * Deci : 10^-1.
-     * You can use both deci or d (case sensitive) as unit of prefix.
+     * Deci : 10^-1. You can use both deci or d (case sensitive) as unit of
+     * prefix.
      */
     deci(new BigDecimal(1).divide(new BigDecimal(10).pow(1))),
     /**
-     * Centi : 10^-2.
-     * You can use both centi or c (case sensitive) as unit of prefix.
+     * Centi : 10^-2. You can use both centi or c (case sensitive) as unit of
+     * prefix.
      */
     centi(new BigDecimal(1).divide(new BigDecimal(10).pow(2))),
     /**
-     * Milli : 10^-3.
-     * You can use both milli or m (case sensitive) as unit of prefix.
+     * Milli : 10^-3. You can use both milli or m (case sensitive) as unit of
+     * prefix.
      */
     milli(new BigDecimal(1).divide(new BigDecimal(10).pow(3))),
     /**
-     * Micro : 10^-6.
-     * You can use both micro or u (case sensitive) as unit of prefix.
+     * Micro : 10^-6. You can use both micro or u (case sensitive) as unit of
+     * prefix.
      */
     micro(new BigDecimal(1).divide(new BigDecimal(10).pow(6))),
     /**
-     * Nano : 10^-9.
-     * You can use both nano or n (case sensitive) as unit of prefix.
+     * Nano : 10^-9. You can use both nano or n (case sensitive) as unit of
+     * prefix.
      */
     nano(new BigDecimal(1).divide(new BigDecimal(10).pow(9))),
     /**
-     * Pico : 10^-12.
-     * You can use both pico or p (case sensitive) as unit of prefix.
+     * Pico : 10^-12. You can use both pico or p (case sensitive) as unit of
+     * prefix.
      */
     pico(new BigDecimal(1).divide(new BigDecimal(10).pow(12))),
     /**
-     * Femto : 10^-15.
-     * You can use both femto or f (case sensitive) as unit of prefix.
+     * Femto : 10^-15. You can use both femto or f (case sensitive) as unit of
+     * prefix.
      */
     femto(new BigDecimal(1).divide(new BigDecimal(10).pow(15))),
     /**
-     * Atto : 10^-18.
-     * You can use both atto or a (case sensitive) as unit of prefix.
+     * Atto : 10^-18. You can use both atto or a (case sensitive) as unit of
+     * prefix.
      */
     atto(new BigDecimal(1).divide(new BigDecimal(10).pow(18))),
     /**
-     * Zepto : 10^-21.
-     * You can use both zepto or z (case sensitive) as unit of prefix.
+     * Zepto : 10^-21. You can use both zepto or z (case sensitive) as unit of
+     * prefix.
      */
     zepto(new BigDecimal(1).divide(new BigDecimal(10).pow(21))),
     /**
-     * Yocto : 10^-24.
-     * You can use both yocto or y (case sensitive) as unit of prefix.
+     * Yocto : 10^-24. You can use both yocto or y (case sensitive) as unit of
+     * prefix.
      */
     yocto(new BigDecimal(1).divide(new BigDecimal(10).pow(24))),
     /**
-     * Kibi: 2^10.
-     * You can use both kibi or Ki (case sensitive) as unit of prefix.
+     * Kibi: 2^10. You can use both kibi or Ki (case sensitive) as unit of
+     * prefix.
      */
     kibi(new BigDecimal(2).pow(10)),
     /**
-     * Mebi: 2^20.
-     * You can use both mebi or Mi (case sensitive) as unit of prefix.
+     * Mebi: 2^20. You can use both mebi or Mi (case sensitive) as unit of
+     * prefix.
      */
     mebi(new BigDecimal(2).pow(20)),
     /**
-     * Gibi: 2^30.
-     * You can use both gibi or Gi (case sensitive) as unit of prefix.
+     * Gibi: 2^30. You can use both gibi or Gi (case sensitive) as unit of
+     * prefix.
      */
     gibi(new BigDecimal(2).pow(30)),
     /**
-     * Tebi: 2^40.
-     * You can use both tebi or Ti (case sensitive) as unit of prefix.
+     * Tebi: 2^40. You can use both tebi or Ti (case sensitive) as unit of
+     * prefix.
      */
     tebi(new BigDecimal(2).pow(40)),
     /**
-     * Pebi: 2^50.
-     * You can use both pebi or Pi (case sensitive) as unit of prefix.
+     * Pebi: 2^50. You can use both pebi or Pi (case sensitive) as unit of
+     * prefix.
      */
     pebi(new BigDecimal(2).pow(50)),
     /**
-     * Exbi: 2^60.
-     * You can use both exbi or Ei (case sensitive) as unit of prefix.
+     * Exbi: 2^60. You can use both exbi or Ei (case sensitive) as unit of
+     * prefix.
      */
     exbi(new BigDecimal(2).pow(60));
 
@@ -162,16 +162,19 @@ public enum Prefixes {
 
     /**
      * Builds the enumeration specifying the multiplier.
-     * @param value The multiplier
+     * 
+     * @param value
+     *            The multiplier
      */
     Prefixes(final BigDecimal value) {
         multiplier = value;
     }
 
     /**
-     * Multiplies the value with the multiplier associated
-     * with this prefix.
-     * @param value The value
+     * Multiplies the value with the multiplier associated with this prefix.
+     * 
+     * @param value
+     *            The value
      * @return The multiplied value
      */
     public BigDecimal convert(final BigDecimal value) {
@@ -179,9 +182,10 @@ public enum Prefixes {
     }
 
     /**
-     * Multiplies the value with the multiplier associated
-     * with this prefix.
-     * @param value The value
+     * Multiplies the value with the multiplier associated with this prefix.
+     * 
+     * @param value
+     *            The value
      * @return The multiplied value
      */
     public BigDecimal convert(final int value) {
@@ -189,9 +193,10 @@ public enum Prefixes {
     }
 
     /**
-     * Multiplies the value with the multiplier associated
-     * with this prefix.
-     * @param value The value
+     * Multiplies the value with the multiplier associated with this prefix.
+     * 
+     * @param value
+     *            The value
      * @return The multiplied value
      */
     public BigDecimal convert(final long value) {
@@ -199,9 +204,10 @@ public enum Prefixes {
     }
 
     /**
-     * Multiplies the value with the multiplier associated
-     * with this prefix.
-     * @param value The value
+     * Multiplies the value with the multiplier associated with this prefix.
+     * 
+     * @param value
+     *            The value
      * @return The multiplied value
      */
     public BigDecimal convert(final double value) {
@@ -210,7 +216,9 @@ public enum Prefixes {
 
     /**
      * Creates the enumeration from its prefix string.
-     * @param prefixChar The prefix
+     * 
+     * @param prefixChar
+     *            The prefix
      * @return The enumeration
      */
     public static Prefixes fromChar(final char prefixChar) {
@@ -260,7 +268,9 @@ public enum Prefixes {
 
     /**
      * Returns the enumeration relative to the passed in prefix or string.
-     * @param prefixString The prefix
+     * 
+     * @param prefixString
+     *            The prefix
      * @return The enumeration
      */
     public static Prefixes fromString(final String prefixString) {
@@ -292,6 +302,6 @@ public enum Prefixes {
         }
 
         return valueOf(prefixString);
-        //throw new IllegalArgumentException(prefixString);
+        // throw new IllegalArgumentException(prefixString);
     }
 }

@@ -92,7 +92,7 @@ class SimpleEvent implements IJNRPEEvent {
     /**
      * Returns the LogEvent type (<code>null</code> if it is not a log event).
      *
-     * @return The LogEvent type
+     * @return The LogEvent type (<code>null</code> if it is not a log event).
      */
     LogEvent getLogEvent() {
         return logEventType;

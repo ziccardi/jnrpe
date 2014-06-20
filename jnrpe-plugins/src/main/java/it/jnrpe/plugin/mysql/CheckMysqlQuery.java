@@ -52,8 +52,11 @@ public class CheckMysqlQuery extends PluginBase {
 
     /**
      * Execute and gather metrics.
-     * @param cl the command line
-     * @throws MetricGatheringException on any error gathering metrics
+     * 
+     * @param cl
+     *            the command line
+     * @throws MetricGatheringException
+     *             on any error gathering metrics
      * @return the metrics
      */
     public final Collection<Metric> gatherMetrics(final ICommandLine cl) throws MetricGatheringException {

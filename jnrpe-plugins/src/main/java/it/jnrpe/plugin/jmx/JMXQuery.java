@@ -141,8 +141,7 @@ public abstract class JMXQuery extends PluginBase {
         if (verbatim < 2)
             out.print(rootCause(ex).getMessage());
         else {
-            out.print(ex.getMessage() + " connecting to " + object + " by URL "
-                    + url);
+            out.print(ex.getMessage() + " connecting to " + object + " by URL " + url);
         }
 
         if (verbatim >= 3)
@@ -315,30 +314,23 @@ public abstract class JMXQuery extends PluginBase {
         if (checkData instanceof Boolean) {
             return checkData.equals(Boolean.parseBoolean(level));
         }
-        throw new RuntimeException(level
-                + "is not of type Number,String or Boolean");
+        throw new RuntimeException(level + "is not of type Number,String or Boolean");
     }
 
     protected void execute() throws Exception {
-        Object attr =
-                connection.getAttribute(new ObjectName(object), attribute);
+        Object attr = connection.getAttribute(new ObjectName(object), attribute);
         if (attr instanceof CompositeDataSupport) {
             CompositeDataSupport cds = (CompositeDataSupport) attr;
             if (attribute_key == null)
-                throw new ParseError("Attribute key is null for composed data "
-                        + object);
+                throw new ParseError("Attribute key is null for composed data " + object);
             checkData = cds.get(attribute_key);
         } else {
             checkData = attr;
         }
 
         if (info_attribute != null) {
-            Object info_attr =
-                    info_attribute.equals(attribute) ? attr : connection
-                            .getAttribute(new ObjectName(object),
-                                    info_attribute);
-            if (info_key != null && (info_attr instanceof CompositeDataSupport)
-                    && verbatim < 4) {
+            Object info_attr = info_attribute.equals(attribute) ? attr : connection.getAttribute(new ObjectName(object), info_attribute);
+            if (info_key != null && (info_attr instanceof CompositeDataSupport) && verbatim < 4) {
                 CompositeDataSupport cds = (CompositeDataSupport) attr;
                 infoData = cds.get(info_key);
             } else {
@@ -389,9 +381,7 @@ public abstract class JMXQuery extends PluginBase {
     }
 
     private void printHelp(PrintStream out) {
-        InputStream is =
-                JMXQuery.class.getClassLoader().getResourceAsStream(
-                        "jmxquery/HELP");
+        InputStream is = JMXQuery.class.getClassLoader().getResourceAsStream("jmxquery/HELP");
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         try {
             while (true) {

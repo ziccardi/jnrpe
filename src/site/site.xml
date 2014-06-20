@@ -24,7 +24,7 @@
 
 		<menu name="Tutorials">
 			<item name="Writing JNRPE Java Nagios Plugins"
-				href="http://www.ziccardi.info/cms/index.php/home/tutorials/12-nagios/jnrpe/7-creating-plugins-with-java-part1" />
+				href="http://www.jnrpe.it/cms/index.php/home/tutorials/12-nagios/jnrpe/7-creating-plugins-with-java-part1" />
 		</menu>
 
 		<links>

@@ -78,8 +78,7 @@ public abstract class JNRPEConfiguration {
         CommandRepository cr = new CommandRepository();
 
         for (Command c : commandSection.getAllCommands()) {
-            CommandDefinition cd =
-                    new CommandDefinition(c.getName(), c.getPlugin());
+            CommandDefinition cd = new CommandDefinition(c.getName(), c.getPlugin());
             cd.setArgs(c.getCommandLine());
 
             cr.addCommandDefinition(cd);

@@ -40,21 +40,17 @@ final class JNRPEConfigurationFactory {
      * @throws ConfigurationException
      *             -
      */
-    public static JNRPEConfiguration createConfiguration(
-            final String configurationFilePath) throws ConfigurationException {
+    public static JNRPEConfiguration createConfiguration(final String configurationFilePath) throws ConfigurationException {
         JNRPEConfiguration conf = null;
 
-        if (configurationFilePath.toLowerCase().endsWith(".conf")
-                || configurationFilePath.toLowerCase().endsWith(".ini")) {
+        if (configurationFilePath.toLowerCase().endsWith(".conf") || configurationFilePath.toLowerCase().endsWith(".ini")) {
             conf = new IniJNRPEConfiguration();
         } else if (configurationFilePath.toLowerCase().endsWith(".xml")) {
             conf = new XmlJNRPEConfiguration();
         }
 
         if (conf == null) {
-            throw new ConfigurationException(
-                    "Config file name must end with either '.ini' "
-                    + "(ini file) or '.xml' (xml file)");
+            throw new ConfigurationException("Config file name must end with either '.ini' " + "(ini file) or '.xml' (xml file)");
         }
 
         conf.load(new File(configurationFilePath));

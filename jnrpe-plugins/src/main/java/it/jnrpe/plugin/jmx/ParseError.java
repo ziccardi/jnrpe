@@ -27,7 +27,8 @@ public class ParseError extends Exception {
 
     /**
      *
-     * @param cause -
+     * @param cause
+     *            -
      */
     public ParseError(final Exception cause) {
         super(cause);
@@ -35,7 +36,8 @@ public class ParseError extends Exception {
 
     /**
      *
-     * @param string -
+     * @param string
+     *            -
      */
     public ParseError(final String string) {
         super(string);

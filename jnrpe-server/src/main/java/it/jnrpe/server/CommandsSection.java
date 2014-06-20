@@ -61,8 +61,7 @@ class CommandsSection {
          * @param cl
          *            The command line
          */
-        public Command(final String name,
-                    final String plugin, final String cl) {
+        public Command(final String name, final String plugin, final String cl) {
             commandName = name;
             pluginName = plugin;
             commandLine = cl;
@@ -93,12 +92,14 @@ class CommandsSection {
     /**
      * Adds a command to the section.
      *
-     * @param commandName The command name
-     * @param pluginName The plugin name
-     * @param commandLine The command line
+     * @param commandName
+     *            The command name
+     * @param pluginName
+     *            The plugin name
+     * @param commandLine
+     *            The command line
      */
-    public void addCommand(final String commandName, final String pluginName,
-            final String commandLine) {
+    public void addCommand(final String commandName, final String pluginName, final String commandLine) {
         commandsList.add(new Command(commandName, pluginName, commandLine));
     }
 

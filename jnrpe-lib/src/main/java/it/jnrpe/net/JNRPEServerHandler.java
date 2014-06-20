@@ -38,65 +38,58 @@ import org.apache.commons.lang.StringUtils;
  */
 public class JNRPEServerHandler extends ChannelInboundHandlerAdapter {
 
-	/**
-	 * The command invoker.
-	 */
-	private final CommandInvoker commandInvoker;
+    /**
+     * The command invoker.
+     */
+    private final CommandInvoker commandInvoker;
 
-	/**
-	 * The list of listener that will receive JNRPE events.
-	 */
-	private final Collection<IJNRPEEventListener> listeners;
+    /**
+     * The list of listener that will receive JNRPE events.
+     */
+    private final Collection<IJNRPEEventListener> listeners;
 
-	/**
-	 * Constructor.
-	 * 
-	 * @param invoker
-	 *            the command invoker
-	 * @param eventListeners
-	 *            The list of listeners
-	 */
-	public JNRPEServerHandler(final CommandInvoker invoker,
-			final Collection<IJNRPEEventListener> eventListeners) {
-		this.commandInvoker = invoker;
-		this.listeners = eventListeners;
-	}
+    /**
+     * Constructor.
+     * 
+     * @param invoker
+     *            the command invoker
+     * @param eventListeners
+     *            The list of listeners
+     */
+    public JNRPEServerHandler(final CommandInvoker invoker, final Collection<IJNRPEEventListener> eventListeners) {
+        this.commandInvoker = invoker;
+        this.listeners = eventListeners;
+    }
 
-	@Override
-	public final void channelRead(final ChannelHandlerContext ctx,
-			final Object msg) {
-		try {
-			JNRPERequest req = (JNRPERequest) msg;
+    @Override
+    public final void channelRead(final ChannelHandlerContext ctx, final Object msg) {
+        try {
+            JNRPERequest req = (JNRPERequest) msg;
 
-			ReturnValue ret = commandInvoker.invoke(req.getCommand(),
-					req.getArguments());
+            ReturnValue ret = commandInvoker.invoke(req.getCommand(), req.getArguments());
 
-			if (ret == null) {
-				String args = StringUtils.join(req.getArguments(), ',');
+            if (ret == null) {
+                String args = StringUtils.join(req.getArguments(), ',');
 
-				ret = new ReturnValue(Status.UNKNOWN, "Command ["
-						+ req.getCommand() + "] with args [" + args
-						+ "] returned null");
-			}
+                ret = new ReturnValue(Status.UNKNOWN, "Command [" + req.getCommand() + "] with args [" + args + "] returned null");
+            }
 
-			JNRPEResponse res = new JNRPEResponse();
-			res.setPacketVersion(PacketVersion.VERSION_2);
+            JNRPEResponse res = new JNRPEResponse();
+            res.setPacketVersion(PacketVersion.VERSION_2);
 
-			res.setResultCode(ret.getStatus().intValue());
-			res.setMessage(ret.getMessage());
+            res.setResultCode(ret.getStatus().intValue());
+            res.setMessage(ret.getMessage());
 
-			ChannelFuture f = ctx.writeAndFlush(res);
-			f.addListener(ChannelFutureListener.CLOSE);
-		} finally {
-			ReferenceCountUtil.release(msg);
-		}
-	}
+            ChannelFuture f = ctx.writeAndFlush(res);
+            f.addListener(ChannelFutureListener.CLOSE);
+        } finally {
+            ReferenceCountUtil.release(msg);
+        }
+    }
 
-	@Override
-	public final void exceptionCaught(final ChannelHandlerContext ctx,
-			final Throwable cause) {
-		EventsUtil.sendEvent(listeners, this, LogEvent.ERROR,
-				cause.getMessage(), cause);
-		ctx.close();
-	}
+    @Override
+    public final void exceptionCaught(final ChannelHandlerContext ctx, final Throwable cause) {
+        EventsUtil.sendEvent(listeners, this, LogEvent.ERROR, cause.getMessage(), cause);
+        ctx.close();
+    }
 }

@@ -44,9 +44,9 @@ abstract class BracketStage extends Stage {
     /**
      * Parses the threshold to remove the matched braket.
      *
-     * No checks are performed against the passed in string: the object
-     * assumes that the string is correct since the {@link #canParse(String)}
-     * method <b>must</b> be called <b>before</b> this method.
+     * No checks are performed against the passed in string: the object assumes
+     * that the string is correct since the {@link #canParse(String)} method
+     * <b>must</b> be called <b>before</b> this method.
      *
      * @param threshold
      *            The threshold to parse
@@ -90,10 +90,10 @@ abstract class BracketStage extends Stage {
     }
 
     /**
-     * Sets the {@link RangeConfig} object as not
-     * left/right inclusive.
+     * Sets the {@link RangeConfig} object as not left/right inclusive.
      *
-     * @param rc The range configuration
+     * @param rc
+     *            The range configuration
      */
     protected abstract void configure(final RangeConfig rc);
 
@@ -114,6 +114,7 @@ abstract class BracketStage extends Stage {
 
         /**
          * Closed bracket can be the end of the range.
+         * 
          * @return <code>true</code>
          */
         public final boolean isLeaf() {
@@ -121,10 +122,10 @@ abstract class BracketStage extends Stage {
         }
 
         /**
-         * Sets the {@link RangeConfig} object as not
-         * right inclusive.
+         * Sets the {@link RangeConfig} object as not right inclusive.
          *
-         * @param rc The range configuration
+         * @param rc
+         *            The range configuration
          */
         protected final void configure(final RangeConfig rc) {
             rc.setRightInclusive(false);
@@ -138,8 +139,7 @@ abstract class BracketStage extends Stage {
      * Example Input : (0..100
      *
      * Produced Output : 0..100 and calls the
-     * {@link RangeConfig#setLeftInclusive(boolean)} passing
-     * <code>true</code>
+     * {@link RangeConfig#setLeftInclusive(boolean)} passing <code>true</code>
      *
      * @author Massimiliano Ziccardi
      */
@@ -153,10 +153,10 @@ abstract class BracketStage extends Stage {
         }
 
         /**
-         * Sets the {@link RangeConfig} object as not
-         * left inclusive.
+         * Sets the {@link RangeConfig} object as not left inclusive.
          *
-         * @param rc The range configuration
+         * @param rc
+         *            The range configuration
          */
         protected final void configure(final RangeConfig rc) {
             rc.setLeftInclusive(false);

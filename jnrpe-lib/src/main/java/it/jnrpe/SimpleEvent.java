@@ -26,48 +26,48 @@ import java.util.Map;
  * @author Massimiliano Ziccardi
  */
 class SimpleEvent implements IJNRPEEvent {
-	/**
-	 * The name of the event.
-	 */
-	private final String eventName;
+    /**
+     * The name of the event.
+     */
+    private final String eventName;
 
-	/**
-	 * A map containing all the event parameters. The key of the map is the
-	 * parameter name.
-	 */
-	private final Map<String, Object> eventParametersMap = new HashMap<String, Object>();
+    /**
+     * A map containing all the event parameters. The key of the map is the
+     * parameter name.
+     */
+    private final Map<String, Object> eventParametersMap = new HashMap<String, Object>();
 
-	/**
-	 * Initializes the event with the given event name and the given event
-	 * parameters.
-	 * 
-	 * @param sEventName
-	 *            The event name
-	 * @param paramsAry
-	 *            The event parameters
-	 */
-	public SimpleEvent(final String sEventName, final Object[] paramsAry) {
-		this.eventName = sEventName;
-		for (int i = 0; paramsAry != null && i < paramsAry.length; i += 2) {
-			eventParametersMap.put((String) paramsAry[i], paramsAry[i + 1]);
-		}
-	}
+    /**
+     * Initializes the event with the given event name and the given event
+     * parameters.
+     * 
+     * @param sEventName
+     *            The event name
+     * @param paramsAry
+     *            The event parameters
+     */
+    public SimpleEvent(final String sEventName, final Object[] paramsAry) {
+        this.eventName = sEventName;
+        for (int i = 0; paramsAry != null && i < paramsAry.length; i += 2) {
+            eventParametersMap.put((String) paramsAry[i], paramsAry[i + 1]);
+        }
+    }
 
-	/**
-	 * Returns the event name.
-	 * 
-	 * @return The event name
-	 */
-	public String getEventName() {
-		return eventName;
-	}
+    /**
+     * Returns the event name.
+     * 
+     * @return The event name
+     */
+    public String getEventName() {
+        return eventName;
+    }
 
-	/**
-	 * Returns the event parameters.
-	 * 
-	 * @return The event parameters
-	 */
-	public Map<String, Object> getEventParams() {
-		return eventParametersMap;
-	}
+    /**
+     * Returns the event parameters.
+     * 
+     * @return The event parameters
+     */
+    public Map<String, Object> getEventParams() {
+        return eventParametersMap;
+    }
 }

@@ -15,6 +15,7 @@
  *******************************************************************************/
 package it.jnrpe.test.utils;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,13 +91,13 @@ public class TestCommandLine implements ICommandLine {
     /**
      * Return the value of the option.
      * 
-     * This method is CURRENTLY NOT SUPPORTED.
+     * This method is returns ONLY one value.
      * 
      * @param optionName the option name
      * @return the value
      */
     public final List<String> getOptionValues(final String optionName) {
-        throw new NotImplementedException();
+        return Arrays.asList(new String[]{getOptionValue(optionName)});
     }
 
     /**
@@ -128,13 +129,13 @@ public class TestCommandLine implements ICommandLine {
     /**
      * Return the value of the option.
      * 
-     * This method is CURRENTLY NOT SUPPORTED.
+     * This method is returns ONLY one value.
      * 
      * @param shortOptionName the option name
      * @return the value
      */
     public final List<String> getOptionValues(final char shortOptionName) {
-        throw new NotImplementedException();
+        return getOptionValues(new String(new char[]{shortOptionName}));
     }
 
     /**

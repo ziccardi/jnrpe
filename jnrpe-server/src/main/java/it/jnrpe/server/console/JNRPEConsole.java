@@ -25,36 +25,34 @@ import jline.console.ConsoleReader;
 import jline.console.history.MemoryHistory;
 
 public class JNRPEConsole {
-    
+
     private final JNRPE jnrpeInstance;
     private final IPluginRepository pluginRepository;
     private final CommandRepository commandRepository;
-    
+
     public JNRPEConsole(final JNRPE jnrpe, final IPluginRepository pr, final CommandRepository cr) {
         jnrpeInstance = jnrpe;
         pluginRepository = pr;
         commandRepository = cr;
     }
-    
+
     protected String highlight(final String msg) {
-        if (msg == null){
+        if (msg == null) {
             throw new IllegalArgumentException("Message can't be null");
         }
-        
-        return new StringBuffer("\u001B[1m")
-            .append(msg)
-            .append("\u001B[0m").toString();
+
+        return new StringBuffer("\u001B[1m").append(msg).append("\u001B[0m").toString();
     }
-    
+
     public void start() {
         try {
             boolean exit = false;
             ConsoleReader console = new ConsoleReader();
             console.setPrompt("JNRPE> ");
             console.setHistory(new MemoryHistory());
-            
+
             console.addCompleter(new CommandCompleter(pluginRepository, commandRepository));
-            
+
             while (!exit) {
                 String commandLine = console.readLine();
                 if (commandLine == null || commandLine.trim().length() == 0) {
@@ -66,7 +64,7 @@ public class JNRPEConsole {
                     console.println(highlight("ERROR: ") + e.getMessage());
                 }
             }
-            
+
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

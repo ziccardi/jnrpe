@@ -54,8 +54,7 @@ public class LegacyThreshold implements IThreshold {
      * @param crit
      *            The critical range.
      */
-    public LegacyThreshold(final String metric, final LegacyRange ok,
-            final LegacyRange warn, final LegacyRange crit) {
+    public LegacyThreshold(final String metric, final LegacyRange ok, final LegacyRange warn, final LegacyRange crit) {
         okRange = ok;
         warnRange = warn;
         critRange = crit;
@@ -63,20 +62,21 @@ public class LegacyThreshold implements IThreshold {
     }
 
     /**
-     * Evaluates the value agains the specified ranges.
-     * The followed flow is:
+     * Evaluates the value agains the specified ranges. The followed flow is:
      * <ol>
      * <li>If a critical range is defined and the value falls inside the
      * specified range, a {@link Status#CRITICAL} is returned.
      * <li>If a warning range is defined and the value falls inside the
      * specified range, a {@link Status#WARNING} is returned.
-     * <li>If a OK range is defined and the value falls inside the
-     * specified range, a {@link Status#OK} is returned.
+     * <li>If a OK range is defined and the value falls inside the specified
+     * range, a {@link Status#OK} is returned.
      * <li>If the OK range is not specified, a {@link Status#CRITICAL} is
      * returned
      * <li>{@link Status#OK} is returned
      * </ol>
-     * @param value The value to be evaluated.
+     * 
+     * @param value
+     *            The value to be evaluated.
      * @return the evaluated status.
      */
     public final Status evaluate(final BigDecimal value) {
@@ -98,7 +98,8 @@ public class LegacyThreshold implements IThreshold {
     }
 
     /**
-     * @param metric The metric we want to evaluate.
+     * @param metric
+     *            The metric we want to evaluate.
      * @return wether this threshold is about the passed in metric.
      */
     public final boolean isAboutMetric(final String metric) {
@@ -107,6 +108,7 @@ public class LegacyThreshold implements IThreshold {
 
     /**
      * The metric referred by this threshold.
+     * 
      * @return the metric name.
      */
     public final String getMetric() {
@@ -114,7 +116,8 @@ public class LegacyThreshold implements IThreshold {
     }
 
     /**
-     * @param status the range we are interested in.
+     * @param status
+     *            the range we are interested in.
      * @return the requested unparsed range string.
      */
     public final String getRangesAsString(final Status status) {

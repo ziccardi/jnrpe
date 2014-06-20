@@ -38,61 +38,76 @@ import org.testng.annotations.Test;
 @Test
 public class CheckBySshIT implements ITConstants {
 
-	private String TEST_USERNAME;
-	private String TEST_PASSWORD;
-	private boolean TEST_SSH;
+    /**
+     * Username to be used to access the ssh server.
+     */
+    private String sshUsername;
+    /**
+     * Password to be used to access the ssh server.
+     */
+    private String sshPassword;
+    
+    /**
+     * <code>true</code> if SSH test should be performed.
+     */
+    private boolean performSSHTests;
 
-	@BeforeClass
-	public void setup() throws Exception {
-		if (ITSetup.getPluginRepository() == null) {
-			ITSetup.setUp();
-		}
+    /**
+     * Initializes username and password and enables/disables the SSH tests
+     * according to the found properties.
+     * 
+     * @throws Exception on any errror
+     */
+    @BeforeClass
+    public final void setup() throws Exception {
+        if (ITSetup.getPluginRepository() == null) {
+            ITSetup.setUp();
+        }
 
-		if (System.getProperty("testSSH") != null) {
-			TEST_SSH = Boolean.getBoolean("testSSH");
-		} else {
-			TEST_SSH = false;
-		}
+        if (System.getProperty("testSSH") != null) {
+            performSSHTests = Boolean.getBoolean("testSSH");
+        } else {
+            performSSHTests = false;
+        }
 
-		TEST_USERNAME = System.getProperty("ssh.username");
-		TEST_PASSWORD = System.getProperty("ssh.password");
+        sshUsername = System.getProperty("ssh.username");
+        sshPassword = System.getProperty("ssh.password");
 
-		PluginDefinition checkProcs = PluginRepositoryUtil
-				.loadFromPluginAnnotation(CheckBySsh.class);
-		ITSetup.getPluginRepository().addPluginDefinition(checkProcs);
-	}
+        PluginDefinition checkProcs = PluginRepositoryUtil.loadFromPluginAnnotation(CheckBySsh.class);
+        ITSetup.getPluginRepository().addPluginDefinition(checkProcs);
+    }
 
-	@Test
-	public final void checkBySSH() throws JNRPEClientException {
+    /**
+     * Invokes the check_ssh plugin through the {@link JNRPEClient} object and check that
+     * the program executions works.
+     * 
+     * @throws JNRPEClientException on any JNRPE error
+     */
+    @Test
+    public final void checkBySSH() throws JNRPEClientException {
 
-		if (!TEST_SSH || TEST_USERNAME == null || TEST_PASSWORD == null) {
-			System.out
-					.println("SSH test will be skipped. To test it, install an SSH server and "
-							+ "run again the tests passing :\n"
-							+ "-Dssh.username={YOUR SSH USERNAME}\n"
-							+ "-Dssh.password={YOUR_SSH_PASSWORD}\n"
-							+ "-DtestSSH=true");
-			return;
-		}
+        if (!performSSHTests || sshUsername == null || sshPassword == null) {
+            System.out.println("SSH test will be skipped. To test it, install an SSH server and " + "run again the tests passing :\n"
+                    + "-Dssh.username={YOUR SSH USERNAME}\n" + "-Dssh.password={YOUR_SSH_PASSWORD}\n" + "-DtestSSH=true");
+            return;
+        }
 
-		CommandRepository cr = ITSetup.getCommandRepository();
+        CommandRepository cr = ITSetup.getCommandRepository();
 
-		CommandDefinition cd = new CommandDefinition("CHECK_BY_SSH_TEST",
-				"CHECK_BY_SSH");
-		cd.addArgument(new CommandOption("hostname", "$ARG1$"));
-		cd.addArgument(new CommandOption("port", "$ARG2$"));
-		cd.addArgument(new CommandOption("username", "$ARG3$"));
-		cd.addArgument(new CommandOption("password", "$ARG4$"));
-		cd.addArgument(new CommandOption("command", "$ARG5$"));
-		cr.addCommandDefinition(cd);
+        CommandDefinition cd = new CommandDefinition("CHECK_BY_SSH_TEST", "CHECK_BY_SSH");
+        cd.addArgument(new CommandOption("hostname", "$ARG1$"));
+        cd.addArgument(new CommandOption("port", "$ARG2$"));
+        cd.addArgument(new CommandOption("username", "$ARG3$"));
+        cd.addArgument(new CommandOption("password", "$ARG4$"));
+        cd.addArgument(new CommandOption("command", "$ARG5$"));
+        cr.addCommandDefinition(cd);
 
-		JNRPEClient client = new JNRPEClient(BIND_ADDRESS, JNRPE_PORT, false);
-		ReturnValue ret = client.sendCommand("CHECK_BY_SSH_TEST", "127.0.0.1",
-				"22", TEST_USERNAME, TEST_PASSWORD, "ls /tmp");
+        JNRPEClient client = new JNRPEClient(BIND_ADDRESS, JNRPE_PORT, false);
+        ReturnValue ret = client.sendCommand("CHECK_BY_SSH_TEST", "127.0.0.1", "22", sshUsername, sshPassword, "ls /tmp");
 
-		Assert.assertEquals(ret.getStatus(), Status.OK);
+        Assert.assertEquals(ret.getStatus(), Status.OK);
 
-		// TODO : should check that the output of the command is ok...
-	}
+        // TODO : should check that the output of the command is ok...
+    }
 
 }

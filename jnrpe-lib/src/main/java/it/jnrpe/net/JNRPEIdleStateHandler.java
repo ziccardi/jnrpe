@@ -30,35 +30,32 @@ import it.jnrpe.events.LogEvent;
  */
 public final class JNRPEIdleStateHandler extends ChannelDuplexHandler {
 
-	/**
-	 * The JNRPE execution context.
-	 */
-	private final JNRPEExecutionContext jnrpeContext;
+    /**
+     * The JNRPE execution context.
+     */
+    private final JNRPEExecutionContext jnrpeContext;
 
-	/**
-	 * The constructor.
-	 * 
-	 * @param ctx
-	 *            The JNRPE execution context.
-	 */
-	public JNRPEIdleStateHandler(final JNRPEExecutionContext ctx) {
-		this.jnrpeContext = ctx;
-	}
+    /**
+     * The constructor.
+     * 
+     * @param ctx
+     *            The JNRPE execution context.
+     */
+    public JNRPEIdleStateHandler(final JNRPEExecutionContext ctx) {
+        this.jnrpeContext = ctx;
+    }
 
-	@Override
-	public void userEventTriggered(final ChannelHandlerContext ctx,
-			final Object evt) throws Exception {
-		if (evt instanceof IdleStateEvent) {
-			IdleStateEvent e = (IdleStateEvent) evt;
-			if (e.state() == IdleState.READER_IDLE) {
-				ctx.close();
-				EventsUtil.sendEvent(this.jnrpeContext, this, LogEvent.INFO,
-						"Read Timeout");
-			} else if (e.state() == IdleState.WRITER_IDLE) {
-				EventsUtil.sendEvent(jnrpeContext, this, LogEvent.INFO,
-						"Write Timeout");
-				ctx.close();
-			}
-		}
-	}
+    @Override
+    public void userEventTriggered(final ChannelHandlerContext ctx, final Object evt) throws Exception {
+        if (evt instanceof IdleStateEvent) {
+            IdleStateEvent e = (IdleStateEvent) evt;
+            if (e.state() == IdleState.READER_IDLE) {
+                ctx.close();
+                EventsUtil.sendEvent(this.jnrpeContext, this, LogEvent.INFO, "Read Timeout");
+            } else if (e.state() == IdleState.WRITER_IDLE) {
+                EventsUtil.sendEvent(jnrpeContext, this, LogEvent.INFO, "Write Timeout");
+                ctx.close();
+            }
+        }
+    }
 }

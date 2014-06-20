@@ -31,94 +31,82 @@ import org.apache.commons.configuration.SubnodeConfiguration;
  */
 class IniJNRPEConfiguration extends JNRPEConfiguration {
 
-	@Override
-	public void load(final File confFile) throws ConfigurationException {
-		// Parse an ini file
-		ServerSection serverConf = getServerSection();
-		CommandsSection commandSection = getCommandSection();
-		try {
-			HierarchicalINIConfiguration confParser = new HierarchicalINIConfiguration(
-					confFile);
+    @Override
+    public void load(final File confFile) throws ConfigurationException {
+        // Parse an ini file
+        ServerSection serverConf = getServerSection();
+        CommandsSection commandSection = getCommandSection();
+        try {
+            HierarchicalINIConfiguration confParser = new HierarchicalINIConfiguration(confFile);
 
-			List<Object> vBindAddresses = confParser
-					.getList("server.bind-address");
-			if (vBindAddresses != null) {
-				for (Object address : vBindAddresses) {
-					serverConf.addBindAddress((String) address);
-				}
-			}
+            List<Object> vBindAddresses = confParser.getList("server.bind-address");
+            if (vBindAddresses != null) {
+                for (Object address : vBindAddresses) {
+                    serverConf.addBindAddress((String) address);
+                }
+            }
 
-			// Defaults accept params
-			String sAcceptParams = confParser.getString("server.accept-params",
-					"true");
-			serverConf.setAcceptParams(sAcceptParams.equalsIgnoreCase("true")
-					|| sAcceptParams.equalsIgnoreCase("yes"));
-			serverConf.setPluginPath(confParser.getString("server.plugin-path",
-					"."));
+            // Defaults accept params
+            String sAcceptParams = confParser.getString("server.accept-params", "true");
+            serverConf.setAcceptParams(sAcceptParams.equalsIgnoreCase("true") || sAcceptParams.equalsIgnoreCase("yes"));
+            serverConf.setPluginPath(confParser.getString("server.plugin-path", "."));
 
-			serverConf.setBackLogSize(confParser.getInt("server.backlog-size",
-					ServerSection.DEFAULT_BACKLOG));
+            serverConf.setBackLogSize(confParser.getInt("server.backlog-size", ServerSection.DEFAULT_BACKLOG));
 
-			// TODO : move this to publicly accessible constants
-			serverConf.setReadTimeout(confParser.getInteger(
-					"server.read-timeout", 10));
-			// TODO : move this to publicly accessible constants
-			serverConf.setWriteTimeout(confParser.getInteger(
-					"server.write-timeout", 60));
+            // TODO : move this to publicly accessible constants
+            serverConf.setReadTimeout(confParser.getInteger("server.read-timeout", 10));
+            // TODO : move this to publicly accessible constants
+            serverConf.setWriteTimeout(confParser.getInteger("server.write-timeout", 60));
 
-			List<Object> vAllowedAddresses = confParser
-					.getList("server.allow-address");
-			if (vAllowedAddresses != null) {
-				for (Object address : vAllowedAddresses) {
-					serverConf.addAllowedAddress((String) address);
-				}
-			}
+            List<Object> vAllowedAddresses = confParser.getList("server.allow-address");
+            if (vAllowedAddresses != null) {
+                for (Object address : vAllowedAddresses) {
+                    serverConf.addAllowedAddress((String) address);
+                }
+            }
 
-			SubnodeConfiguration sc = confParser.getSection("commands");
+            SubnodeConfiguration sc = confParser.getSection("commands");
 
-			if (sc != null) {
-				for (Iterator<String> it = sc.getKeys(); it.hasNext();) {
-					String sCommandName = it.next();
+            if (sc != null) {
+                for (Iterator<String> it = sc.getKeys(); it.hasNext();) {
+                    String sCommandName = it.next();
 
-					String sCommandLine = org.apache.commons.lang.StringUtils
-							.join(sc.getStringArray(sCommandName), ",");
-					// first element of the command line is the plugin name
+                    String sCommandLine = org.apache.commons.lang.StringUtils.join(sc.getStringArray(sCommandName), ",");
+                    // first element of the command line is the plugin name
 
-					String[] vElements = StringUtils.split(sCommandLine, false);
-					String sPluginName = vElements[0];
+                    String[] vElements = StringUtils.split(sCommandLine, false);
+                    String sPluginName = vElements[0];
 
-					// Rebuilding the commandline
-					StringBuffer cmdLine = new StringBuffer();
+                    // Rebuilding the commandline
+                    StringBuffer cmdLine = new StringBuffer();
 
-					for (int i = 1; i < vElements.length; i++) {
-						cmdLine.append(quoteAndEscape(vElements[i]))
-								.append(" ");
-					}
+                    for (int i = 1; i < vElements.length; i++) {
+                        cmdLine.append(quoteAndEscape(vElements[i])).append(" ");
+                    }
 
-					commandSection.addCommand(sCommandName, sPluginName,
-							cmdLine.toString());
-				}
-			}
-		} catch (org.apache.commons.configuration.ConfigurationException e) {
-			throw new ConfigurationException(e);
-		}
+                    commandSection.addCommand(sCommandName, sPluginName, cmdLine.toString());
+                }
+            }
+        } catch (org.apache.commons.configuration.ConfigurationException e) {
+            throw new ConfigurationException(e);
+        }
 
-	}
+    }
 
-	/**
-	 * Quotes a string.
-	 * 
-	 * @param string
-	 *            The string to be quoted
-	 * @return The quoted string
-	 */
-	private String quoteAndEscape(final String string) {
-		if (string.indexOf(' ') == -1) {
-			return string;
-		}
+    /**
+     * Quotes a string.
+     * 
+     * @param string
+     *            The string to be quoted
+     * @return The quoted string
+     */
+    private String quoteAndEscape(final String string) {
+        if (string.indexOf(' ') == -1) {
+            return string;
+        }
 
-		String res = "\"" + string.replaceAll("\"", "\\\"") + "\"";
-		return res;
-	}
+        String res = "\"" + string.replaceAll("\"", "\\\"") + "\"";
+        return res;
+    }
 
 }

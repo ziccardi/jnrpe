@@ -41,8 +41,7 @@ public class InvalidRangeSyntaxException extends RangeException {
     /**
      * The error message pattern.
      */
-    private static final String MESSAGE_PATTERN =
-         "{0} - Stage {1} expected one of ''{2}'' but found ''{3}'' instead.";
+    private static final String MESSAGE_PATTERN = "{0} - Stage {1} expected one of ''{2}'' but found ''{3}'' instead.";
 
     /**
      * Builds the exception specifying the stage and the range string.
@@ -67,8 +66,7 @@ public class InvalidRangeSyntaxException extends RangeException {
      * @param wholeString
      *            The whole range string.
      */
-    public InvalidRangeSyntaxException(final Stage stage, final String found,
-            final String wholeString) {
+    public InvalidRangeSyntaxException(final Stage stage, final String found, final String wholeString) {
         super(stage, found, wholeString);
     }
 
@@ -83,8 +81,7 @@ public class InvalidRangeSyntaxException extends RangeException {
         StringBuffer expected = new StringBuffer();
 
         for (String key : stage.getTransitionNames()) {
-            expected.append(",").append(
-                    stage.getTransition(key).expects());
+            expected.append(",").append(stage.getTransition(key).expects());
         }
 
         if (expected.length() > 1) {
@@ -100,15 +97,11 @@ public class InvalidRangeSyntaxException extends RangeException {
     public final String getMessage() {
         String invalidRange = null;
         if (getWholeRangeString() != null) {
-            invalidRange =
-                    MessageFormat
-                      .format(INVALID_RANGE_STRING, getWholeRangeString());
+            invalidRange = MessageFormat.format(INVALID_RANGE_STRING, getWholeRangeString());
         } else {
             invalidRange = INVALID_RANGE;
         }
 
-        return MessageFormat.format(MESSAGE_PATTERN,
-                getFailedStage().getName(), invalidRange,
-                parseExpecting(getFailedStage()), getBadString());
+        return MessageFormat.format(MESSAGE_PATTERN, getFailedStage().getName(), invalidRange, parseExpecting(getFailedStage()), getBadString());
     }
 }

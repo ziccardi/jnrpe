@@ -35,9 +35,9 @@ abstract class NumberBoundaryStage extends Stage {
     /**
      * Parses the threshold to remove the matched number string.
      *
-     * No checks are performed against the passed in string: the object
-     * assumes that the string is correct since the {@link #canParse(String)}
-     * method <b>must</b> be called <b>before</b> this method.
+     * No checks are performed against the passed in string: the object assumes
+     * that the string is correct since the {@link #canParse(String)} method
+     * <b>must</b> be called <b>before</b> this method.
      *
      * @param threshold
      *            The threshold chunk to be parsed
@@ -45,11 +45,11 @@ abstract class NumberBoundaryStage extends Stage {
      *            The threshold config object. This object will be populated
      *            according to the passed in threshold.
      * @return the remaining part of the threshold
-     * @throws RangeException if the threshold can't be parsed
+     * @throws RangeException
+     *             if the threshold can't be parsed
      */
     @Override
-    public String parse(final String threshold, final RangeConfig tc)
-            throws RangeException {
+    public String parse(final String threshold, final RangeConfig tc) throws RangeException {
         StringBuffer numberString = new StringBuffer();
         for (int i = 0; i < threshold.length(); i++) {
             if (Character.isDigit(threshold.charAt(i))) {
@@ -70,17 +70,14 @@ abstract class NumberBoundaryStage extends Stage {
                     numberString.append(threshold.charAt(i));
                     continue;
                 } else {
-                    throw new RangeException("Unexpected '"
-                            + threshold.charAt(i)
-                            + "' sign parsing boundary");
+                    throw new RangeException("Unexpected '" + threshold.charAt(i) + "' sign parsing boundary");
                 }
             }
             // throw new InvalidRangeSyntaxException(this,
             // threshold.substring(numberString.length()));
             break;
         }
-        if (numberString.length() != 0
-                && !justSign(numberString.toString())) {
+        if (numberString.length() != 0 && !justSign(numberString.toString())) {
             BigDecimal bd = new BigDecimal(numberString.toString());
             setBoundary(tc, bd);
             return threshold.substring(numberString.length());
@@ -90,7 +87,8 @@ abstract class NumberBoundaryStage extends Stage {
     }
 
     /**
-     * @param string The string to be evaluated
+     * @param string
+     *            The string to be evaluated
      * @return <code>true</code> if the string is just a sign.
      */
     private boolean justSign(final String string) {
@@ -105,8 +103,7 @@ abstract class NumberBoundaryStage extends Stage {
         switch (threshold.charAt(0)) {
         case '+':
         case '-':
-            return !(threshold.startsWith("-inf") || threshold
-                    .startsWith("+inf"));
+            return !(threshold.startsWith("-inf") || threshold.startsWith("+inf"));
         default:
             return Character.isDigit(threshold.charAt(0));
         }
@@ -127,8 +124,7 @@ abstract class NumberBoundaryStage extends Stage {
      * @param boundary
      *            The boundary value
      */
-    public abstract void setBoundary(final RangeConfig tc,
-            final BigDecimal boundary);
+    public abstract void setBoundary(final RangeConfig tc, final BigDecimal boundary);
 
     /**
      * This class represent a left numeric boundary of a range.
@@ -148,8 +144,7 @@ abstract class NumberBoundaryStage extends Stage {
         }
 
         @Override
-        public void setBoundary(final RangeConfig tc,
-                final BigDecimal boundary) {
+        public void setBoundary(final RangeConfig tc, final BigDecimal boundary) {
             tc.setLeftBoundary(boundary);
         }
     }
@@ -172,8 +167,7 @@ abstract class NumberBoundaryStage extends Stage {
         }
 
         @Override
-        public void setBoundary(final RangeConfig tc,
-                final BigDecimal boundary) {
+        public void setBoundary(final RangeConfig tc, final BigDecimal boundary) {
             tc.setRightBoundary(boundary);
         }
 

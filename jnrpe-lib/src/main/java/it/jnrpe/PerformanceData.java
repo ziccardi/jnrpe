@@ -43,14 +43,14 @@ class PerformanceData {
 
     /**
      * The Unit of Measure of {@link #performanceValue}, {@link #minimumValue}
-     * and {@link #maximumValue}.
-     * With the new threshold format this won't be used anymore.
+     * and {@link #maximumValue}. With the new threshold format this won't be
+     * used anymore.
      */
     private final UnitOfMeasure unitOfMeasure;
 
     /**
-     * The unit of {@link #performanceValue}, {@link #minimumValue}
-     * and {@link #maximumValue}.
+     * The unit of {@link #performanceValue}, {@link #minimumValue} and
+     * {@link #maximumValue}.
      */
     private final String unit;
 
@@ -82,8 +82,7 @@ class PerformanceData {
      * The performance data will be returned as string. This is the formatter
      * for all the performance numbers.
      */
-    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat(
-            "0.000000");
+    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.000000");
 
     /**
      * Creates a performance data object.
@@ -108,10 +107,8 @@ class PerformanceData {
      *            the maximum value that this performance data can reach. Can be
      *            null.
      */
-    public PerformanceData(final String perfLabel, final BigDecimal value,
-            final UnitOfMeasure uom, final String warnRange,
-            final String critRange, final BigDecimal minValue,
-            final BigDecimal maxValue) {
+    public PerformanceData(final String perfLabel, final BigDecimal value, final UnitOfMeasure uom, final String warnRange, final String critRange,
+            final BigDecimal minValue, final BigDecimal maxValue) {
         this.label = perfLabel;
         this.performanceValue = value;
         this.unitOfMeasure = uom;
@@ -145,10 +142,8 @@ class PerformanceData {
      *            the maximum value that this performance data can reach. Can be
      *            null.
      */
-    public PerformanceData(final String perfLabel, final BigDecimal value,
-            final String unitofMeasure, final String warnRange,
-            final String critRange, final BigDecimal minValue,
-            final BigDecimal maxValue) {
+    public PerformanceData(final String perfLabel, final BigDecimal value, final String unitofMeasure, final String warnRange,
+            final String critRange, final BigDecimal minValue, final BigDecimal maxValue) {
         this.label = perfLabel;
         this.performanceValue = value;
         this.unitOfMeasure = null;
@@ -159,7 +154,6 @@ class PerformanceData {
         this.unit = unitofMeasure;
     }
 
-
     /**
      * Produce a performance string accordin to Nagios specification based on
      * the value of this performance data object.
@@ -167,9 +161,7 @@ class PerformanceData {
      * @return a string that can be returned to Nagios
      */
     public String toPerformanceString() {
-        StringBuffer res =
-                new StringBuffer().append(quote(label)).append("=")
-                        .append(DECIMAL_FORMAT.format(performanceValue));
+        StringBuffer res = new StringBuffer().append(quote(label)).append("=").append(DECIMAL_FORMAT.format(performanceValue));
 
         if (unitOfMeasure != null) {
             switch (unitOfMeasure) {

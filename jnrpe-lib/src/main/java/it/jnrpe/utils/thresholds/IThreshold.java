@@ -20,8 +20,8 @@ import it.jnrpe.Status;
 import java.math.BigDecimal;
 
 /**
- * This is the interface that all the threshold objects must implement.
- * It is internally used to evaluate legacy or new threshold format.
+ * This is the interface that all the threshold objects must implement. It is
+ * internally used to evaluate legacy or new threshold format.
  *
  * @author Massimiliano Ziccardi
  *
@@ -32,18 +32,20 @@ interface IThreshold {
      * Returns <code>true</code> if this threshold references the passed in
      * metric.
      *
-     * @param metric The metric name.
+     * @param metric
+     *            The metric name.
      * @return <code>true</code> if this threshold references the passed in
-     * metric.
+     *         metric.
      */
     boolean isAboutMetric(final String metric);
 
     /**
      * Evaluates the passed in value.
      *
-     * @param value The value to be evaluated
+     * @param value
+     *            The value to be evaluated
      * @return <code>true</code> if the passed in value falls inside this
-     * thresholds.
+     *         thresholds.
      */
     Status evaluate(final BigDecimal value);
 
@@ -57,13 +59,15 @@ interface IThreshold {
      * ranges for OK, WARNING and CRITICAL status. This method returns the
      * unparsed range string for the specified status.
      *
-     * @param status The status for wich we want the range string
+     * @param status
+     *            The status for wich we want the range string
      * @return The requested range string.
      */
     String getRangesAsString(final Status status);
 
     /**
      * Returns the unit of measure as a string.
+     * 
      * @return The unit of measure.
      */
     String getUnitString();

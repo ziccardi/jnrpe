@@ -94,9 +94,8 @@ abstract class Stage {
     }
 
     /**
-     * Consumes a part of the threshold and configure the
-     * {@link RangeConfig} object according to the swallowed part of the
-     * threshold.
+     * Consumes a part of the threshold and configure the {@link RangeConfig}
+     * object according to the swallowed part of the threshold.
      *
      * @param threshold
      *            The threshold to consume.
@@ -106,12 +105,13 @@ abstract class Stage {
      * @throws RangeException
      *             -
      */
-    public abstract String parse(final String threshold, RangeConfig tc)
-            throws RangeException;
+    public abstract String parse(final String threshold, RangeConfig tc) throws RangeException;
 
     /**
      * Tells if the current stage is able to parse the given threshold.
-     * @param threshold The threshold to be parsed
+     * 
+     * @param threshold
+     *            The threshold to be parsed
      * @return The remaining tokens
      */
     public abstract boolean canParse(String threshold);

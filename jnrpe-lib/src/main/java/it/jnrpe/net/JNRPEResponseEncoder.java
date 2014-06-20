@@ -28,22 +28,21 @@ import io.netty.handler.codec.MessageToByteEncoder;
  */
 public class JNRPEResponseEncoder extends MessageToByteEncoder<JNRPEResponse> {
 
-	/**
-	 * Constructor.
-	 */
-	public JNRPEResponseEncoder() {
-	}
+    /**
+     * Constructor.
+     */
+    public JNRPEResponseEncoder() {
+    }
 
-	@Override
-	protected final void encode(final ChannelHandlerContext ctx,
-			final JNRPEResponse msg, final ByteBuf out) throws Exception {
-		msg.updateCRC();
-		out.writeShort(msg.getPacketVersion().intValue());
-		out.writeShort(msg.getPacketType().intValue());
-		out.writeInt(msg.getCRC());
-		out.writeShort(msg.getResultCode());
-		out.writeBytes(msg.getBuffer());
-		out.writeBytes(msg.getDummy());
-	}
+    @Override
+    protected final void encode(final ChannelHandlerContext ctx, final JNRPEResponse msg, final ByteBuf out) throws Exception {
+        msg.updateCRC();
+        out.writeShort(msg.getPacketVersion().intValue());
+        out.writeShort(msg.getPacketType().intValue());
+        out.writeInt(msg.getCRC());
+        out.writeShort(msg.getResultCode());
+        out.writeBytes(msg.getBuffer());
+        out.writeBytes(msg.getDummy());
+    }
 
 }

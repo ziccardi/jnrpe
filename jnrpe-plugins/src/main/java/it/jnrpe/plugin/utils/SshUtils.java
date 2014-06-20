@@ -30,53 +30,50 @@ import com.jcraft.jsch.Session;
  */
 public class SshUtils {
 
-	/**
-	 * Default timeout.
-	 */
-	protected static final int DEFAULT_TIMEOUT = 10;
+    /**
+     * Default timeout.
+     */
+    protected static final int DEFAULT_TIMEOUT = 10;
 
-	/**
-	 * Default HTTP port.
-	 */
-	protected static final int DEFAULT_PORT = 22;
+    /**
+     * Default HTTP port.
+     */
+    protected static final int DEFAULT_PORT = 22;
 
-	/**
-	 * Starts an ssh session
-	 * 
-	 * @param cl
-	 * @return
-	 * @throws MetricGatheringException
-	 * @throws Exception
-	 *             Session
-	 */
-	public static Session getSession(final ICommandLine cl)
-			throws MetricGatheringException, Exception {
-		JSch jsch = new JSch();
-		Session session = null;
-		int timeout = DEFAULT_TIMEOUT;
-		int port = cl.hasOption("port") ? Integer.parseInt(cl.getOptionValue("port")) : + DEFAULT_PORT;
-		String hostname = cl.getOptionValue("hostname");
-		String username = cl.getOptionValue("username");
-		String password = cl.getOptionValue("password");
-		String key = cl.getOptionValue("key");
-		if (cl.getOptionValue("timeout") != null) {
-			try {
-				timeout = Integer.parseInt(cl.getOptionValue("timeout"));
-			} catch (NumberFormatException e) {
-				throw new MetricGatheringException(
-						"Invalid numeric value for timeout.", Status.CRITICAL,
-						e);
-			}
-		}
-		session = jsch.getSession(username, hostname, port);
-		if (key == null) {
-			session.setConfig("StrictHostKeyChecking", "no");
-			session.setPassword(password);
-		} else {
-			jsch.addIdentity(key);
-		}
-		session.connect(timeout * 1000);
-		return session;
-	}
+    /**
+     * Starts an ssh session
+     * 
+     * @param cl
+     * @return
+     * @throws MetricGatheringException
+     * @throws Exception
+     *             Session
+     */
+    public static Session getSession(final ICommandLine cl) throws MetricGatheringException, Exception {
+        JSch jsch = new JSch();
+        Session session = null;
+        int timeout = DEFAULT_TIMEOUT;
+        int port = cl.hasOption("port") ? Integer.parseInt(cl.getOptionValue("port")) : +DEFAULT_PORT;
+        String hostname = cl.getOptionValue("hostname");
+        String username = cl.getOptionValue("username");
+        String password = cl.getOptionValue("password");
+        String key = cl.getOptionValue("key");
+        if (cl.getOptionValue("timeout") != null) {
+            try {
+                timeout = Integer.parseInt(cl.getOptionValue("timeout"));
+            } catch (NumberFormatException e) {
+                throw new MetricGatheringException("Invalid numeric value for timeout.", Status.CRITICAL, e);
+            }
+        }
+        session = jsch.getSession(username, hostname, port);
+        if (key == null) {
+            session.setConfig("StrictHostKeyChecking", "no");
+            session.setPassword(password);
+        } else {
+            jsch.addIdentity(key);
+        }
+        session.connect(timeout * 1000);
+        return session;
+    }
 
 }

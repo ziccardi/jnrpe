@@ -267,8 +267,7 @@ public final class PluginOption {
      *            the value separator.
      * @return this
      */
-    public PluginOption setValueSeparator(
-            final String argumentsValueSeparator) {
+    public PluginOption setValueSeparator(final String argumentsValueSeparator) {
         this.argsValueSeparator = argumentsValueSeparator;
         return this;
     }
@@ -303,8 +302,7 @@ public final class PluginOption {
     Option toOption() {
         DefaultOptionBuilder oBuilder = new DefaultOptionBuilder();
 
-        oBuilder.withShortName(option).withDescription(description)
-                .withRequired(required);
+        oBuilder.withShortName(option).withDescription(description).withRequired(required);
 
         if (longOptionName != null) {
             oBuilder.withLongName(longOptionName);
@@ -327,8 +325,7 @@ public final class PluginOption {
                 aBuilder.withMaximum(1);
             }
 
-            if (argsValueSeparator != null
-                    && argsValueSeparator.length() != 0) {
+            if (argsValueSeparator != null && argsValueSeparator.length() != 0) {
                 aBuilder.withInitialSeparator(argsValueSeparator.charAt(0));
                 aBuilder.withSubsequentSeparator(argsValueSeparator.charAt(0));
             }

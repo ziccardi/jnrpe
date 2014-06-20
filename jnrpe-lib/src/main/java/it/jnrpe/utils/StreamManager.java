@@ -38,8 +38,7 @@ public final class StreamManager {
      * Contains all the streams to be managed by the {@link StreamManager}
      * object.
      */
-    private final List<Closeable> managedStreamsList =
-            new ArrayList<Closeable>();
+    private final List<Closeable> managedStreamsList = new ArrayList<Closeable>();
 
     /**
      * Default constructor.
@@ -109,8 +108,7 @@ public final class StreamManager {
      * @throws FileNotFoundException
      *             If the file does not exists
      */
-    public InputStream getInputStream(final File f)
-            throws FileNotFoundException {
+    public InputStream getInputStream(final File f) throws FileNotFoundException {
         return handle(new FileInputStream(f));
     }
 
@@ -124,8 +122,7 @@ public final class StreamManager {
      * @throws FileNotFoundException
      *             If the file does not exists
      */
-    public OutputStream getOutputStream(final File f)
-            throws FileNotFoundException {
+    public OutputStream getOutputStream(final File f) throws FileNotFoundException {
         return handle(new FileOutputStream(f));
     }
 

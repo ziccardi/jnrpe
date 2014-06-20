@@ -45,9 +45,7 @@ public class ThresholdsEvaluatorBuilder {
      * @throws BadThresholdException
      *             -
      */
-    public final ThresholdsEvaluatorBuilder
-            withThreshold(final String threshold)
-                    throws BadThresholdException {
+    public final ThresholdsEvaluatorBuilder withThreshold(final String threshold) throws BadThresholdException {
         thresholds.addThreshold(new Threshold(threshold));
         return this;
     }
@@ -55,17 +53,20 @@ public class ThresholdsEvaluatorBuilder {
     /**
      * This method allows to specify thresholds using the old format.
      *
-     * @param metric The metric for which this threshold must be configured
-     * @param okRange The ok range (can be null)
-     * @param warnRange The warning range (can be null)
-     * @param critRange The critical range (can be null).
+     * @param metric
+     *            The metric for which this threshold must be configured
+     * @param okRange
+     *            The ok range (can be null)
+     * @param warnRange
+     *            The warning range (can be null)
+     * @param critRange
+     *            The critical range (can be null).
      * @return this
-     * @throws BadThresholdException If the threshold can't be parsed.
+     * @throws BadThresholdException
+     *             If the threshold can't be parsed.
      */
-    public final ThresholdsEvaluatorBuilder
-            withLegacyThreshold(final String metric, final String okRange,
-                    final String warnRange, final String critRange)
-                    throws BadThresholdException {
+    public final ThresholdsEvaluatorBuilder withLegacyThreshold(final String metric, final String okRange, final String warnRange,
+            final String critRange) throws BadThresholdException {
         LegacyRange ok = null, warn = null, crit = null;
 
         if (okRange != null) {

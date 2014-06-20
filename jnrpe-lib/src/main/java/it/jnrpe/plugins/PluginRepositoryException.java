@@ -22,48 +22,48 @@ package it.jnrpe.plugins;
  */
 public class PluginRepositoryException extends Exception {
 
-	/**
+    /**
 	 * 
 	 */
-	private static final long serialVersionUID = -440994387085530219L;
+    private static final long serialVersionUID = -440994387085530219L;
 
-	/**
-	 * Constructor.
-	 */
-	public PluginRepositoryException() {
-		super();
-	}
+    /**
+     * Constructor.
+     */
+    public PluginRepositoryException() {
+        super();
+    }
 
-	/**
-	 * Constructor.
-	 * 
-	 * @param message
-	 *            the exception message
-	 * @param cause
-	 *            the error cause
-	 */
-	public PluginRepositoryException(final String message, final Throwable cause) {
-		super(message, cause);
-	}
+    /**
+     * Constructor.
+     * 
+     * @param message
+     *            the exception message
+     * @param cause
+     *            the error cause
+     */
+    public PluginRepositoryException(final String message, final Throwable cause) {
+        super(message, cause);
+    }
 
-	/**
-	 * Constructor.
-	 * 
-	 * @param message
-	 *            the exception message
-	 */
-	public PluginRepositoryException(final String message) {
-		super(message);
-	}
+    /**
+     * Constructor.
+     * 
+     * @param message
+     *            the exception message
+     */
+    public PluginRepositoryException(final String message) {
+        super(message);
+    }
 
-	/**
-	 * Constructor.
-	 * 
-	 * @param cause
-	 *            the error cause
-	 */
-	public PluginRepositoryException(final Throwable cause) {
-		super(cause);
-	}
+    /**
+     * Constructor.
+     * 
+     * @param cause
+     *            the error cause
+     */
+    public PluginRepositoryException(final Throwable cause) {
+        super(cause);
+    }
 
 }

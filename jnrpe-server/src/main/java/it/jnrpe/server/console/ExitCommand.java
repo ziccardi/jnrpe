@@ -22,8 +22,8 @@ import it.jnrpe.JNRPE;
 
 public class ExitCommand extends ConsoleCommand {
 
-    public final static String NAME="exit";
-    
+    public final static String NAME = "exit";
+
     public ExitCommand(ConsoleReader consoleReader, JNRPE jnrpe) {
         super(consoleReader, jnrpe);
     }

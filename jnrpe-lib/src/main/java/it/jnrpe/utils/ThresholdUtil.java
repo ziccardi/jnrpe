@@ -38,8 +38,9 @@ import java.math.BigDecimal;
  *
  * @author Massimiliano Ziccardi
  * @deprecated Use the {@link it.jnrpe.utils.thresholds.ReturnValueBuilder}
- * together with the
- * {@link it.jnrpe.utils.thresholds.ThresholdsEvaluatorBuilder} instead.
+ *             together with the
+ *             {@link it.jnrpe.utils.thresholds.ThresholdsEvaluatorBuilder}
+ *             instead.
  */
 @Deprecated
 public final class ThresholdUtil {
@@ -62,8 +63,7 @@ public final class ThresholdUtil {
      * @throws BadThresholdException
      *             -
      */
-    public static boolean isValueInRange(final String thresholdString,
-            final int value) throws BadThresholdException {
+    public static boolean isValueInRange(final String thresholdString, final int value) throws BadThresholdException {
         return new LegacyRange(thresholdString).isValueInside(value);
     }
 
@@ -79,8 +79,7 @@ public final class ThresholdUtil {
      * @throws BadThresholdException
      *             -
      */
-    public static boolean isValueInRange(final String thresholdString,
-            final BigDecimal value) throws BadThresholdException {
+    public static boolean isValueInRange(final String thresholdString, final BigDecimal value) throws BadThresholdException {
         return new LegacyRange(thresholdString).isValueInside(value);
     }
 
@@ -96,9 +95,7 @@ public final class ThresholdUtil {
      * @throws BadThresholdException
      *             -
      */
-    public static boolean isValueInRange(final String thresholdString,
-            final Long value) throws BadThresholdException {
-        return new LegacyRange(thresholdString).isValueInside(new BigDecimal(
-                value));
+    public static boolean isValueInRange(final String thresholdString, final Long value) throws BadThresholdException {
+        return new LegacyRange(thresholdString).isValueInside(new BigDecimal(value));
     }
 }

@@ -21,13 +21,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 /**
- * Utility class for running shell commands 
+ * Utility class for running shell commands
  * 
  *
  * @author Frederico Campos
  */
 public class ShellUtils {
-    
+
     /**
      * Executes a system command with arguments and returns the output
      * 
@@ -36,19 +36,18 @@ public class ShellUtils {
      * @return command output
      * @throws IOException
      */
-    public static String executeSystemCommandAndGetOutput(String[] command, String encoding) throws IOException{
+    public static String executeSystemCommandAndGetOutput(String[] command, String encoding) throws IOException {
         Process p = Runtime.getRuntime().exec(command);
         InputStream input = p.getInputStream();
         StringBuffer lines = new StringBuffer();
         String line = null;
-        BufferedReader in =
-                new BufferedReader(new InputStreamReader(input, encoding));
+        BufferedReader in = new BufferedReader(new InputStreamReader(input, encoding));
         while ((line = in.readLine()) != null) {
             lines.append(line).append("\n");
         }
         return lines.toString();
     }
- 
+
     /**
      * Check if we are running in a Windows environment
      * 
@@ -58,21 +57,20 @@ public class ShellUtils {
         String os = System.getProperty("os.name").toLowerCase();
         return os.contains("windows");
     }
+
     /**
-    
+     * 
      * Check if name of process is a windows idle process
      * 
      * @param proc
      * @return true if idle process, false otherwise
      */
-	public static boolean isWindowsIdleProc(String proc) {
-		proc = proc.trim().toLowerCase();
-		if (proc.equals("system idle process") ||
-				proc.contains("inactiv") ||
-				proc.equals("system")) {
-			return true;
-		}
-		return false;
-	}
+    public static boolean isWindowsIdleProc(String proc) {
+        proc = proc.trim().toLowerCase();
+        if (proc.equals("system idle process") || proc.contains("inactiv") || proc.equals("system")) {
+            return true;
+        }
+        return false;
+    }
 
 }

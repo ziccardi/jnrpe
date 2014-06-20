@@ -54,8 +54,7 @@ public final class CommandDefinition {
      * @param cmdPluginName
      *            The plugin associated with this command
      */
-    public CommandDefinition(final String commandName,
-            final String cmdPluginName) {
+    public CommandDefinition(final String commandName, final String cmdPluginName) {
         this.name = commandName;
         this.pluginName = cmdPluginName;
     }
@@ -119,8 +118,7 @@ public final class CommandDefinition {
      */
     public String[] getCommandLine() {
         String[] resAry = null;
-        String[] argsAry =
-                argsString != null ? split(argsString) : new String[0];
+        String[] argsAry = argsString != null ? split(argsString) : new String[0];
         List<String> argsList = new ArrayList<String>();
 
         int startIndex = 0;

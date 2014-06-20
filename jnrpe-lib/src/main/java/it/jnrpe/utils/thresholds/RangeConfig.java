@@ -111,7 +111,9 @@ class RangeConfig {
 
     /**
      * Sets the left boundary to negative infinity if <code>true</code>.
-     * @param negativeInf <code>true</code> to set negative infinity
+     * 
+     * @param negativeInf
+     *            <code>true</code> to set negative infinity
      */
     public void setNegativeInfinity(final boolean negativeInf) {
         negativeInfinity = negativeInf;
@@ -119,13 +121,9 @@ class RangeConfig {
 
     @Override
     public String toString() {
-        StringBuffer sb = new StringBuffer()
-                .append("negate : " + negate)
-                .append("\nnegativeInfinity : " + negativeInfinity)
-                .append("\npositiveInfinity : " + positiveInfinity)
-                .append("\nleftInclusive : " + leftInclusive)
-                .append("\nrightInclusive : " + rightInclusive)
-                .append("\nleftBoundary : " + startBoundary)
+        StringBuffer sb = new StringBuffer().append("negate : " + negate).append("\nnegativeInfinity : " + negativeInfinity)
+                .append("\npositiveInfinity : " + positiveInfinity).append("\nleftInclusive : " + leftInclusive)
+                .append("\nrightInclusive : " + rightInclusive).append("\nleftBoundary : " + startBoundary)
                 .append("\nrightBoundary : " + rightBoundary);
 
         return sb.toString();
@@ -133,7 +131,9 @@ class RangeConfig {
 
     /**
      * Sets the left boundary (numeric).
-     * @param start The left boundary (numeric)
+     * 
+     * @param start
+     *            The left boundary (numeric)
      */
     public void setLeftBoundary(final BigDecimal start) {
         startBoundary = start;
@@ -141,7 +141,9 @@ class RangeConfig {
 
     /**
      * Sets the right boundary to positive infinity if <code>true</code>.
-     * @param positiveInf <code>true</code> to set positive infinity
+     * 
+     * @param positiveInf
+     *            <code>true</code> to set positive infinity
      */
     public void setPositiveInfinity(final boolean positiveInf) {
         positiveInfinity = positiveInf;
@@ -149,7 +151,9 @@ class RangeConfig {
 
     /**
      * Sets the right boundary (numeric).
-     * @param right The right boundary (numeric)
+     * 
+     * @param right
+     *            The right boundary (numeric)
      */
     public void setRightBoundary(final BigDecimal right) {
         rightBoundary = right;

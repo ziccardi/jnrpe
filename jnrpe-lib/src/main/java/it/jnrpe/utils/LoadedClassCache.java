@@ -29,93 +29,92 @@ import java.util.WeakHashMap;
 @SuppressWarnings("rawtypes")
 final class LoadedClassCache {
 
-	/**
-	 * Private constructor to avoid instantiations.
-	 */
-	private LoadedClassCache() {
+    /**
+     * Private constructor to avoid instantiations.
+     */
+    private LoadedClassCache() {
 
-	}
+    }
 
-	/**
-	 * Stores data about each created class loader.
-	 */
-	private static final Map<ClassLoader, ClassesData> LOADED_PLUGINS = new WeakHashMap<ClassLoader, ClassesData>();
+    /**
+     * Stores data about each created class loader.
+     */
+    private static final Map<ClassLoader, ClassesData> LOADED_PLUGINS = new WeakHashMap<ClassLoader, ClassesData>();
 
-	/**
-	 * This class stores data about all the classes loaded by a classloader.
-	 * 
-	 * @author Massimiliano Ziccardi
-	 * 
-	 */
-	private static final class ClassesData {
+    /**
+     * This class stores data about all the classes loaded by a classloader.
+     * 
+     * @author Massimiliano Ziccardi
+     * 
+     */
+    private static final class ClassesData {
 
-		/**
-		 * Maps classname with corresponding Class object.
-		 */
-		private final Map<String, Class> loadedClasses = new HashMap<String, Class>();
+        /**
+         * Maps classname with corresponding Class object.
+         */
+        private final Map<String, Class> loadedClasses = new HashMap<String, Class>();
 
-		/**
-		 * @param name
-		 *            the class name
-		 * @return the cached class object (if any)
-		 */
-		public Class getClass(final String name) {
-			return loadedClasses.get(name);
-		}
+        /**
+         * @param name
+         *            the class name
+         * @return the cached class object (if any)
+         */
+        public Class getClass(final String name) {
+            return loadedClasses.get(name);
+        }
 
-		/**
-		 * Adds a class to the cache.
-		 * 
-		 * @param clazz
-		 *            the class to be added
-		 */
-		public void addClass(final Class clazz) {
-			loadedClasses.put(clazz.getName(), clazz);
-		}
-	}
+        /**
+         * Adds a class to the cache.
+         * 
+         * @param clazz
+         *            the class to be added
+         */
+        public void addClass(final Class clazz) {
+            loadedClasses.put(clazz.getName(), clazz);
+        }
+    }
 
-	/**
-	 * Stores a class in the cache.
-	 * 
-	 * @param cl
-	 *            The classloader
-	 * @param c
-	 *            the class to be stored
-	 */
-	private static void saveClass(final ClassLoader cl, final Class c) {
-		if (LOADED_PLUGINS.get(cl) == null) {
-			LOADED_PLUGINS.put(cl, new ClassesData());
-		}
+    /**
+     * Stores a class in the cache.
+     * 
+     * @param cl
+     *            The classloader
+     * @param c
+     *            the class to be stored
+     */
+    private static void saveClass(final ClassLoader cl, final Class c) {
+        if (LOADED_PLUGINS.get(cl) == null) {
+            LOADED_PLUGINS.put(cl, new ClassesData());
+        }
 
-		ClassesData cd = LOADED_PLUGINS.get(cl);
-		cd.addClass(c);
-	}
+        ClassesData cd = LOADED_PLUGINS.get(cl);
+        cd.addClass(c);
+    }
 
-	/**
-	 * Returns a class object. If the class is new, a new Class object is
-	 * created, otherwise the cached object is returned.
-	 * 
-	 * @param cl
-	 *            the classloader
-	 * @param className
-	 *            the class name
-	 * @return the class object associated to the given class name
-	 * @throws ClassNotFoundException
-	 *             if the class can't be loaded
-	 */
-	public static Class getClass(final ClassLoader cl, final String className)
-			throws ClassNotFoundException {
-		if (LOADED_PLUGINS.get(cl) == null) {
-			LOADED_PLUGINS.put(cl, new ClassesData());
-		}
+    /**
+     * Returns a class object. If the class is new, a new Class object is
+     * created, otherwise the cached object is returned.
+     * 
+     * @param cl
+     *            the classloader
+     * @param className
+     *            the class name
+     * @return the class object associated to the given class name
+     * @throws ClassNotFoundException
+     *             if the class can't be loaded
+     */
+    public static Class getClass(final ClassLoader cl, final String className) throws ClassNotFoundException {
+        if (LOADED_PLUGINS.get(cl) == null) {
+            LOADED_PLUGINS.put(cl, new ClassesData());
+        }
 
-		ClassesData cd = LOADED_PLUGINS.get(cl);
-		Class clazz = cd.getClass(className);
-		if (clazz == null) {
-			clazz = cl.loadClass(className);
-			saveClass(cl, clazz);
-		}
+        ClassesData cd = LOADED_PLUGINS.get(cl);
+        Class clazz = cd.getClass(className);
+        if (clazz == null) {
+            clazz = cl.loadClass(className);
+            saveClass(cl, clazz);
+        }
 
-		return clazz;
-	}
+        return clazz;
+    }
 }

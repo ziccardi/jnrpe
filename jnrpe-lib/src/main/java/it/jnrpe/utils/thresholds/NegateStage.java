@@ -37,10 +37,10 @@ class NegateStage extends Stage {
     /**
      * Parses the threshold to remove the matched '^' char.
      *
-     * No checks are performed against the passed in string: the object
-     * assumes that the string is correct since the {@link #canParse(String)}
-     * method <b>must</b> be called <b>before</b> this method.
-
+     * No checks are performed against the passed in string: the object assumes
+     * that the string is correct since the {@link #canParse(String)} method
+     * <b>must</b> be called <b>before</b> this method.
+     * 
      * @param threshold
      *            The threshold chunk to be parsed
      * @param tc

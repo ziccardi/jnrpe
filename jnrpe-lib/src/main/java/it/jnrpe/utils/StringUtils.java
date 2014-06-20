@@ -48,25 +48,24 @@ public final class StringUtils {
      *
      * @since JNRPE Server 1.04
      */
-    public static String[]
-            split(final String string, final boolean ignoreQuotes) {
+    public static String[] split(final String string, final boolean ignoreQuotes) {
         return split(string, ' ', ignoreQuotes);
     }
 
     /**
-     * Splits the given string using as separator the
-     * <code>separator</code> character.
-     * @param string The string to be splitted
-     * @param separator The separator character
-     * @param ignoreQuotes <code>true</code> if the quotes
-     * must be ignored.
+     * Splits the given string using as separator the <code>separator</code>
+     * character.
+     * 
+     * @param string
+     *            The string to be splitted
+     * @param separator
+     *            The separator character
+     * @param ignoreQuotes
+     *            <code>true</code> if the quotes must be ignored.
      * @return The splitted string
      */
-    public static String[] split(final String string, final char separator,
-            final boolean ignoreQuotes) {
-        StrTokenizer strtok =
-                new StrTokenizer(string, StrMatcher.charMatcher(separator),
-                        StrMatcher.quoteMatcher());
+    public static String[] split(final String string, final char separator, final boolean ignoreQuotes) {
+        StrTokenizer strtok = new StrTokenizer(string, StrMatcher.charMatcher(separator), StrMatcher.quoteMatcher());
         return strtok.getTokenArray();
     }
 }

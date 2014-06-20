@@ -34,123 +34,115 @@ import java.util.regex.Matcher;
  * 
  */
 public final class CommandInvoker {
-	/**
-	 * <code>true</code> if the variable parameters ($ARG?$) must be
-	 * interpolated.
-	 */
-	private final boolean acceptParams;
+    /**
+     * <code>true</code> if the variable parameters ($ARG?$) must be
+     * interpolated.
+     */
+    private final boolean acceptParams;
 
-	/**
-	 * The plugin repository to be used to find the plugins.
-	 */
-	private final IPluginRepository pluginRepository;
+    /**
+     * The plugin repository to be used to find the plugins.
+     */
+    private final IPluginRepository pluginRepository;
 
-	/**
-	 * The command repository to be used to find the commands.
-	 */
-	private final CommandRepository commandRepository;
+    /**
+     * The command repository to be used to find the commands.
+     */
+    private final CommandRepository commandRepository;
 
-	/**
-	 * The listeners.
-	 */
-	private final Collection<IJNRPEEventListener> listenersList;
+    /**
+     * The listeners.
+     */
+    private final Collection<IJNRPEEventListener> listenersList;
 
-	/**
-	 * Builds and initializes the {@link CommandInvoker} object.
-	 * 
-	 * @param pluginRepo
-	 *            The plugin repository containing all the plugins that must be
-	 *            used by this invoker.
-	 * @param commandRepo
-	 *            The command repository containing all the commands that must
-	 *            be used by this invoker.
-	 * @param listeners
-	 *            All the listeners
-	 */
-	public CommandInvoker(final IPluginRepository pluginRepo,
-			final CommandRepository commandRepo, final boolean acceptParams,
-			final Collection<IJNRPEEventListener> listeners) {
-		this.acceptParams = acceptParams;
-		pluginRepository = pluginRepo;
-		commandRepository = commandRepo;
-		listenersList = listeners;
-	}
+    /**
+     * Builds and initializes the {@link CommandInvoker} object.
+     * 
+     * @param pluginRepo
+     *            The plugin repository containing all the plugins that must be
+     *            used by this invoker.
+     * @param commandRepo
+     *            The command repository containing all the commands that must
+     *            be used by this invoker.
+     * @param listeners
+     *            All the listeners
+     */
+    public CommandInvoker(final IPluginRepository pluginRepo, final CommandRepository commandRepo, final boolean acceptParams,
+            final Collection<IJNRPEEventListener> listeners) {
+        this.acceptParams = acceptParams;
+        pluginRepository = pluginRepo;
+        commandRepository = commandRepo;
+        listenersList = listeners;
+    }
 
-	/**
-	 * This method executes built in commands or builds a CommandDefinition to.
-	 * execute external commands (plugins). The methods also expands the $ARG?$
-	 * macros.
-	 * 
-	 * @param commandName
-	 *            The name of the command, as configured in the server
-	 *            configuration XML
-	 * @param argsAry
-	 *            The arguments to pass to the command as configured in the
-	 *            server configuration XML (with the $ARG?$ macros)
-	 * @return The result of the command
-	 */
-	public ReturnValue invoke(final String commandName, final String[] argsAry) {
-		if ("_NRPE_CHECK".equals(commandName)) {
-			return new ReturnValue(Status.OK, JNRPELIB.VERSION);
-		}
+    /**
+     * This method executes built in commands or builds a CommandDefinition to.
+     * execute external commands (plugins). The methods also expands the $ARG?$
+     * macros.
+     * 
+     * @param commandName
+     *            The name of the command, as configured in the server
+     *            configuration XML
+     * @param argsAry
+     *            The arguments to pass to the command as configured in the
+     *            server configuration XML (with the $ARG?$ macros)
+     * @return The result of the command
+     */
+    public ReturnValue invoke(final String commandName, final String[] argsAry) {
+        if ("_NRPE_CHECK".equals(commandName)) {
+            return new ReturnValue(Status.OK, JNRPELIB.VERSION);
+        }
 
-		CommandDefinition cd = commandRepository.getCommand(commandName);
+        CommandDefinition cd = commandRepository.getCommand(commandName);
 
-		if (cd == null) {
-			return new ReturnValue(Status.UNKNOWN, "Bad command");
-		}
+        if (cd == null) {
+            return new ReturnValue(Status.UNKNOWN, "Bad command");
+        }
 
-		return invoke(cd, argsAry);
-	}
+        return invoke(cd, argsAry);
+    }
 
-	/**
-	 * This method executes external commands (plugins) The methods also expands
-	 * the $ARG?$ macros.
-	 * 
-	 * @param cd
-	 *            The command definition
-	 * @param argsAry
-	 *            The arguments to pass to the command as configured in the
-	 *            server configuration XML (with the $ARG?$ macros)
-	 * @return The result of the command
-	 */
-	public ReturnValue invoke(final CommandDefinition cd, final String[] argsAry) {
-		String pluginName = cd.getPluginName();
-		try {
+    /**
+     * This method executes external commands (plugins) The methods also expands
+     * the $ARG?$ macros.
+     * 
+     * @param cd
+     *            The command definition
+     * @param argsAry
+     *            The arguments to pass to the command as configured in the
+     *            server configuration XML (with the $ARG?$ macros)
+     * @return The result of the command
+     */
+    public ReturnValue invoke(final CommandDefinition cd, final String[] argsAry) {
+        String pluginName = cd.getPluginName();
+        try {
 
-			String[] commandLine = cd.getCommandLine();
+            String[] commandLine = cd.getCommandLine();
 
-			if (acceptParams) {
-				for (int j = 0; commandLine != null && j < commandLine.length; j++) {
-					for (int i = 0; i < argsAry.length; i++) {
-						commandLine[j] = commandLine[j].replaceAll(
-								"\\$[Aa][Rr][Gg]" + (i + 1) + "\\$",
-								Matcher.quoteReplacement(argsAry[i]));
-					}
-				}
-			}
+            if (acceptParams) {
+                for (int j = 0; commandLine != null && j < commandLine.length; j++) {
+                    for (int i = 0; i < argsAry.length; i++) {
+                        commandLine[j] = commandLine[j].replaceAll("\\$[Aa][Rr][Gg]" + (i + 1) + "\\$", Matcher.quoteReplacement(argsAry[i]));
+                    }
+                }
+            }
 
-			PluginProxy plugin = (PluginProxy) pluginRepository
-					.getPlugin(pluginName);
+            PluginProxy plugin = (PluginProxy) pluginRepository.getPlugin(pluginName);
 
-			if (plugin == null) {
-				EventsUtil.sendEvent(listenersList, this, LogEvent.INFO,
-						"Unable to instantiate plugin named " + pluginName);
-				return new ReturnValue(Status.UNKNOWN,
-						"Error instantiating plugin '" + pluginName
-								+ "' : bad plugin name?");
-			}
+            if (plugin == null) {
+                EventsUtil.sendEvent(listenersList, this, LogEvent.INFO, "Unable to instantiate plugin named " + pluginName);
+                return new ReturnValue(Status.UNKNOWN, "Error instantiating plugin '" + pluginName + "' : bad plugin name?");
+            }
 
-			plugin.addListeners(listenersList);
+            plugin.addListeners(listenersList);
 
-			if (commandLine != null) {
-				return plugin.execute(commandLine);
-			} else {
-				return plugin.execute(new String[0]);
-			}
-		} catch (Throwable thr) {
-			return new ReturnValue(Status.UNKNOWN, "Plugin [" + pluginName
-					+ "] execution error: " + thr.getMessage());
-		}
-	}
+            if (commandLine != null) {
+                return plugin.execute(commandLine);
+            } else {
+                return plugin.execute(new String[0]);
+            }
+        } catch (Throwable thr) {
+            return new ReturnValue(Status.UNKNOWN, "Plugin [" + pluginName + "] execution error: " + thr.getMessage());
+        }
+    }
 }

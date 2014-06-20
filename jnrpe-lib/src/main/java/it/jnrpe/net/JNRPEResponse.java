@@ -25,54 +25,52 @@ import java.util.Arrays;
  * @author Massimiliano Ziccardi
  */
 public final class JNRPEResponse extends JNRPEProtocolPacket {
-	/**
-	 * Default constructor.
-	 */
-	public JNRPEResponse() {
-		super();
-		setPacketType(PacketType.RESPONSE);
-	}
+    /**
+     * Default constructor.
+     */
+    public JNRPEResponse() {
+        super();
+        setPacketType(PacketType.RESPONSE);
+    }
 
-	/**
-	 * Builds a JNRPE response reading the content from an InputStream.
-	 * 
-	 * @param in
-	 *            The InputStream to read from
-	 * 
-	 * @throws IOException
-	 *             on any io exception
-	 */
-	public JNRPEResponse(final InputStream in) throws IOException {
-		super();
-		fromInputStream(in);
-	}
+    /**
+     * Builds a JNRPE response reading the content from an InputStream.
+     * 
+     * @param in
+     *            The InputStream to read from
+     * 
+     * @throws IOException
+     *             on any io exception
+     */
+    public JNRPEResponse(final InputStream in) throws IOException {
+        super();
+        fromInputStream(in);
+    }
 
-	/**
-	 * Sets the message to be included in the response.
-	 * 
-	 * @param message
-	 *            the response message
-	 */
-	public void setMessage(final String message) {
-		setBuffer(message);
-	}
+    /**
+     * Sets the message to be included in the response.
+     * 
+     * @param message
+     *            the response message
+     */
+    public void setMessage(final String message) {
+        setBuffer(message);
+    }
 
-	/**
-	 * Returns the response message.
-	 * 
-	 * @return the response message
-	 */
-	public String getMessage() {
-		return getPacketString();
-	}
+    /**
+     * Returns the response message.
+     * 
+     * @return the response message
+     */
+    public String getMessage() {
+        return getPacketString();
+    }
 
-	@Override
-	public String toString() {
+    @Override
+    public String toString() {
 
-		return "JNRPEResponse [getPacketType()=" + getPacketType()
-				+ ", getPacketVersion()=" + getPacketVersion()
-				+ ", getResultCode()=" + getResultCode() + ", getBuffer()="
-				+ Arrays.toString(getBuffer()) + "]";
-	}
+        return "JNRPEResponse [getPacketType()=" + getPacketType() + ", getPacketVersion()=" + getPacketVersion() + ", getResultCode()="
+                + getResultCode() + ", getBuffer()=" + Arrays.toString(getBuffer()) + "]";
+    }
 
 }

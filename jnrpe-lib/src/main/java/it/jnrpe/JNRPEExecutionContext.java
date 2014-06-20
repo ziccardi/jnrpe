@@ -40,8 +40,10 @@ public class JNRPEExecutionContext {
     /**
      * Builds and initializes the context.
      * 
-     * @param eventListeners the list of listeners
-     * @param currentCharset the configured charset
+     * @param eventListeners
+     *            the list of listeners
+     * @param currentCharset
+     *            the configured charset
      */
     JNRPEExecutionContext(final Collection<IJNRPEEventListener> eventListeners, final Charset currentCharset) {
         this.eventListenersList = eventListeners;
@@ -50,6 +52,7 @@ public class JNRPEExecutionContext {
 
     /**
      * Returns all the listeners.
+     * 
      * @return the listeners
      */
     public final Collection<IJNRPEEventListener> getListeners() {
@@ -58,6 +61,7 @@ public class JNRPEExecutionContext {
 
     /**
      * Returns the charset.
+     * 
      * @return the configured charset
      */
     public final Charset getCharset() {

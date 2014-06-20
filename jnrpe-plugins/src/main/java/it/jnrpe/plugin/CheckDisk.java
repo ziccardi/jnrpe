@@ -71,22 +71,16 @@ public class CheckDisk extends PluginBase {
     }
 
     @Override
-    public final void configureThresholdEvaluatorBuilder(
-            final ThresholdsEvaluatorBuilder thrb,
-            final ICommandLine cl)
-            throws BadThresholdException {
+    public final void configureThresholdEvaluatorBuilder(final ThresholdsEvaluatorBuilder thrb, final ICommandLine cl) throws BadThresholdException {
         if (cl.hasOption("th")) {
             super.configureThresholdEvaluatorBuilder(thrb, cl);
         } else {
-            thrb.withLegacyThreshold("freepct", null,
-                    cl.getOptionValue("warning"),
-                    cl.getOptionValue("critical"));
+            thrb.withLegacyThreshold("freepct", null, cl.getOptionValue("warning"), cl.getOptionValue("critical"));
         }
     }
 
     @Override
-    public final Collection<Metric> gatherMetrics(final ICommandLine cl)
-            throws MetricGatheringException {
+    public final Collection<Metric> gatherMetrics(final ICommandLine cl) throws MetricGatheringException {
         String sPath = cl.getOptionValue("path");
 
         File f = new File(sPath);
@@ -100,19 +94,14 @@ public class CheckDisk extends PluginBase {
         int iFreePercent = percent(lBytes, lTotalSpace);
 
         String sFreePercent = "" + iFreePercent + "%";
-        String sUsedPercent =
-                "" + percent(lTotalSpace - lBytes, lTotalSpace) + "%";
+        String sUsedPercent = "" + percent(lTotalSpace - lBytes, lTotalSpace) + "%";
 
         List<Metric> res = new ArrayList<Metric>();
 
-        String msg = "Used: " + sUsedSpace + "("
-                + sUsedPercent + ") Free: " + sFreeSpace + "("
-                + sFreePercent + ")";
+        String msg = "Used: " + sUsedSpace + "(" + sUsedPercent + ") Free: " + sFreeSpace + "(" + sFreePercent + ")";
 
-        res.add(new Metric("freepct", msg, new BigDecimal(iFreePercent),
-                new BigDecimal(0), new BigDecimal(100)));
-        res.add(new Metric("freespace", msg, new BigDecimal(iFreePercent),
-                new BigDecimal(0), new BigDecimal(lTotalSpace)));
+        res.add(new Metric("freepct", msg, new BigDecimal(iFreePercent), new BigDecimal(0), new BigDecimal(100)));
+        res.add(new Metric("freespace", msg, new BigDecimal(iFreePercent), new BigDecimal(0), new BigDecimal(lTotalSpace)));
 
         return res;
     }

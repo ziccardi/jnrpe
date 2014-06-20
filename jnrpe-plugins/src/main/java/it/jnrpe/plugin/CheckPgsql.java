@@ -65,22 +65,16 @@ public class CheckPgsql extends PluginBase {
     private static final String DEFAULT_TIMEOUT = "10";
 
     @Override
-    public void configureThresholdEvaluatorBuilder(
-            final ThresholdsEvaluatorBuilder thrb,
-            final ICommandLine cl)
-            throws BadThresholdException {
+    public void configureThresholdEvaluatorBuilder(final ThresholdsEvaluatorBuilder thrb, final ICommandLine cl) throws BadThresholdException {
         if (cl.hasOption("th")) {
             super.configureThresholdEvaluatorBuilder(thrb, cl);
         } else {
-            thrb.withLegacyThreshold("conn", null,
-                    cl.getOptionValue("warning"),
-                    cl.getOptionValue("critical"));
+            thrb.withLegacyThreshold("conn", null, cl.getOptionValue("warning"), cl.getOptionValue("critical"));
         }
     }
 
     @Override
-    public Collection<Metric> gatherMetrics(ICommandLine cl)
-            throws MetricGatheringException {
+    public Collection<Metric> gatherMetrics(ICommandLine cl) throws MetricGatheringException {
 
         List<Metric> metricList = new ArrayList<Metric>();
 
@@ -90,30 +84,22 @@ public class CheckPgsql extends PluginBase {
         try {
             conn = getConnection(cl);
         } catch (ClassNotFoundException e) {
-            log.error("PostgreSQL driver library not found into the classpath: "
-                    + "download and put it in the same directory of "
-                    + "this plugin");
-            throw new MetricGatheringException("Error accessing the PostgreSQL "
-                    + "server - JDBC driver not installed", Status.CRITICAL, e);
+            log.error("PostgreSQL driver library not found into the classpath: " + "download and put it in the same directory of " + "this plugin");
+            throw new MetricGatheringException("Error accessing the PostgreSQL " + "server - JDBC driver not installed", Status.CRITICAL, e);
         } catch (Exception e) {
             log.error("Error accessing the PostgreSQL server", e);
-            throw new MetricGatheringException("Error accessing the PostgreSQL "
-                    + "server - ", Status.CRITICAL, e);
-        }
-        finally {
+            throw new MetricGatheringException("Error accessing the PostgreSQL " + "server - ", Status.CRITICAL, e);
+        } finally {
             closeConnection(conn);
         }
 
         Long end = System.currentTimeMillis();
         Long elapsed = new Long((end - start) / 1000);
 
-        metricList.add(new Metric("conn", "Connection time : " + elapsed + "s",
-                new BigDecimal(elapsed), new BigDecimal(0), null));
+        metricList.add(new Metric("conn", "Connection time : " + elapsed + "s", new BigDecimal(elapsed), new BigDecimal(0), null));
 
         return metricList;
     }
-
-
 
     /**
      * Connect to the server.
@@ -130,17 +116,14 @@ public class CheckPgsql extends PluginBase {
      * @throws ClassNotFoundException
      *             -
      */
-    private Connection getConnection(final ICommandLine cl)
-            throws SQLException,
-            InstantiationException, IllegalAccessException,
+    private Connection getConnection(final ICommandLine cl) throws SQLException, InstantiationException, IllegalAccessException,
             ClassNotFoundException {
         String database = DEFAULT_TABLE;
         if (cl.hasOption("database")) {
             database = cl.getOptionValue("database");
         }
         String hostname = DEFAULT_HOSTNAME;
-        if (cl.hasOption("hostname")
-                && !"".equals(cl.getOptionValue("hostname"))) {
+        if (cl.hasOption("hostname") && !"".equals(cl.getOptionValue("hostname"))) {
             hostname = cl.getOptionValue("hostname");
         }
         String port = DEFAULT_PORT;
@@ -163,10 +146,8 @@ public class CheckPgsql extends PluginBase {
         props.setProperty("user", username);
         props.setProperty("password", password);
         props.setProperty("timeout", timeout);
-        String url =
-                "jdbc:postgresql://" + hostname + ":" + port + "/" + database;
-        DriverManager.registerDriver((Driver) Class.forName(
-                "org.postgresql.Driver").newInstance());
+        String url = "jdbc:postgresql://" + hostname + ":" + port + "/" + database;
+        DriverManager.registerDriver((Driver) Class.forName("org.postgresql.Driver").newInstance());
         Connection conn = DriverManager.getConnection(url, props);
         return conn;
 

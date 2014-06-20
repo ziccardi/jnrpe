@@ -36,7 +36,8 @@ public interface ICommandLine {
     /**
      * Returns the values associated with the specified option.
      *
-     * @param optionName The option name
+     * @param optionName
+     *            The option name
      * @return An ordered list of values
      */
     List<String> getOptionValues(String optionName);
@@ -65,7 +66,8 @@ public interface ICommandLine {
     /**
      * Returns the values associated with the specified option.
      *
-     * @param shortOptionName The option short name
+     * @param shortOptionName
+     *            The option short name
      * @return An ordered list of values
      */
     List<String> getOptionValues(char shortOptionName);

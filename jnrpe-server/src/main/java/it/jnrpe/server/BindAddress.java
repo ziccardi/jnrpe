@@ -34,7 +34,8 @@ class BindAddress {
     /**
      * Constructs the object.
      *
-     * @param address The binding IP or URL
+     * @param address
+     *            The binding IP or URL
      */
     public BindAddress(final String address) {
         bindingAddress = address;
@@ -44,8 +45,10 @@ class BindAddress {
     /**
      * Constructs the object.
      *
-     * @param address The binding IP or URL
-     * @param ssl <code>true</code> if SSL must be used.
+     * @param address
+     *            The binding IP or URL
+     * @param ssl
+     *            <code>true</code> if SSL must be used.
      */
     public BindAddress(final String address, final boolean ssl) {
         bindingAddress = address;

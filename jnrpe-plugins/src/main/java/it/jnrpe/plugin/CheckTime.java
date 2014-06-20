@@ -115,9 +115,12 @@ public class CheckTime extends PluginBase {
     /**
      * Analizes the data and produces the metrics.
      * 
-     * @param metrics produced metrics
-     * @param elapsed elapsed time
-     * @param now date as of now
+     * @param metrics
+     *            produced metrics
+     * @param elapsed
+     *            elapsed time
+     * @param now
+     *            date as of now
      * @param date
      */
     private void analyze(final List<Metric> metrics, final long elapsed, final Date now, final Date date) {
@@ -132,7 +135,7 @@ public class CheckTime extends PluginBase {
         }
 
         Elapsed elapsedTime = new Elapsed(diff, TimeUnit.MILLISECOND);
-        
+
         String msg = getMessage(elapsedTime);
         if (diff > TimeUnit.SECOND.convert(1)) {
             if (behind) {

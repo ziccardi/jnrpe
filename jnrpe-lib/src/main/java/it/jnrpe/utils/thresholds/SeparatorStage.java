@@ -16,8 +16,8 @@
 package it.jnrpe.utils.thresholds;
 
 /**
- * This class is involved when we reached the separator
- * between the left and the right boundary ('..').
+ * This class is involved when we reached the separator between the left and the
+ * right boundary ('..').
  *
  * @author Massimiliano Ziccardi
  */

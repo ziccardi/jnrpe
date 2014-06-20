@@ -31,9 +31,7 @@ public class PrematureEndOfRangeException extends RangeException {
     /**
      * Message pattern.
      */
-    private static final String MESSAGE_PATTERN =
-            "Premature end of range parsing ''{0}''. "
-            + "Stage ''{1}'' expected one of ''{2}''";
+    private static final String MESSAGE_PATTERN = "Premature end of range parsing ''{0}''. " + "Stage ''{1}'' expected one of ''{2}''";
 
     /**
      * Builds the exception specifying the stage and the range string.
@@ -52,7 +50,6 @@ public class PrematureEndOfRangeException extends RangeException {
      */
     @Override
     public final String getMessage() {
-        return MessageFormat.format(MESSAGE_PATTERN, getWholeRangeString(),
-                getFailedStage().getName(), getExpectedTokens());
+        return MessageFormat.format(MESSAGE_PATTERN, getWholeRangeString(), getFailedStage().getName(), getExpectedTokens());
     }
 }

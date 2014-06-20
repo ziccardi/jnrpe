@@ -31,61 +31,52 @@ import it.jnrpe.plugins.annotations.PluginOptions;
  * 
  */
 @Plugin(name = "TEST", description = "This is just a test plugin. Invoke it passing the String you want to get back and,\n"
-		+ "optionally, the status you want.\n"
-		+ "Return:\n"
-		+ "If you don't specify the status parameters, the return code is 'OK'.\n"
-		+ "The returned message is always the text you pass as parameter (-t/--text)\n\n"
-		+ "Example Command Definition (inside the server configuration, in the command section)\n\n"
-		+ "check_test : TEST --text $ARG1$ --status $ARG2$\n\n"
-		+ "or, using the XML:\n\n"
-		+ "<command name=\"test\" plugin_name=\"TEST\">\n"
-		+ "   <arg name=\"text\" value=\"$ARG1$\"/>\n"
-		+ "   <arg name=\"status\" value=\"$ARG2$\"/>\n"
-		+ "</command>\n\n"
-		+ "Example invocation:\n\n"
-		+ "./check_nrpe -n -H myjnrpeserver -c check_test -a 'Hello!critical'")
+        + "optionally, the status you want.\n" + "Return:\n" + "If you don't specify the status parameters, the return code is 'OK'.\n"
+        + "The returned message is always the text you pass as parameter (-t/--text)\n\n"
+        + "Example Command Definition (inside the server configuration, in the command section)\n\n"
+        + "check_test : TEST --text $ARG1$ --status $ARG2$\n\n" + "or, using the XML:\n\n" + "<command name=\"test\" plugin_name=\"TEST\">\n"
+        + "   <arg name=\"text\" value=\"$ARG1$\"/>\n" + "   <arg name=\"status\" value=\"$ARG2$\"/>\n" + "</command>\n\n"
+        + "Example invocation:\n\n" + "./check_nrpe -n -H myjnrpeserver -c check_test -a 'Hello!critical'")
 @PluginOptions({
-		@Option(shortName = "t", longName = "text", description = "the message to print", required = true, hasArgs = true, argName = "text", optionalArgs = false, option = "text"),
-		@Option(shortName = "s", longName = "status", description = "the status to return (ok, warning, critical, unknown) - defaults to \"OK\"", required = false, hasArgs = true, argName = "statcode", optionalArgs = false, option = "status"),
-		@Option(shortName = "d", longName = "delay", description = "The number of seconds to wait before returnin (default is 0)", required = false, hasArgs = true, argName = "seconds", optionalArgs = false, option = "delay") })
+        @Option(shortName = "t", longName = "text", description = "the message to print", required = true, hasArgs = true, argName = "text", optionalArgs = false, option = "text"),
+        @Option(shortName = "s", longName = "status", description = "the status to return (ok, warning, critical, unknown) - defaults to \"OK\"", required = false, hasArgs = true, argName = "statcode", optionalArgs = false, option = "status"),
+        @Option(shortName = "d", longName = "delay", description = "The number of seconds to wait before returnin (default is 0)", required = false, hasArgs = true, argName = "seconds", optionalArgs = false, option = "delay") })
 public class CTestPlugin implements IPluginInterface {
 
-	/**
-	 * Executes the plugin. The accepter params are:
-	 * <UL>
-	 * <LI>--text : the text to be returned
-	 * <LI>--status : the status to be returned (ok, warning, critical. Any
-	 * other status is interpreted as UNKNOWN). The default value is 'ok'.
-	 * </UL>
-	 * 
-	 * @param cl
-	 *            The command line
-	 * @return The return value
-	 */
-	public final ReturnValue execute(final ICommandLine cl) {
-		Status returnStatus;
+    /**
+     * Executes the plugin. The accepter params are:
+     * <UL>
+     * <LI>--text : the text to be returned
+     * <LI>--status : the status to be returned (ok, warning, critical. Any
+     * other status is interpreted as UNKNOWN). The default value is 'ok'.
+     * </UL>
+     * 
+     * @param cl
+     *            The command line
+     * @return The return value
+     */
+    public final ReturnValue execute(final ICommandLine cl) {
+        Status returnStatus;
 
-		String statusParam = cl.getOptionValue("status", "ok");
+        String statusParam = cl.getOptionValue("status", "ok");
 
-		if (statusParam.equalsIgnoreCase("ok")) {
-			returnStatus = Status.OK;
-		} else if (statusParam.equalsIgnoreCase("critical")) {
-			returnStatus = Status.CRITICAL;
-		} else if (statusParam.equalsIgnoreCase("warning")) {
-			returnStatus = Status.WARNING;
-		} else {
-			returnStatus = Status.UNKNOWN;
-		}
+        if (statusParam.equalsIgnoreCase("ok")) {
+            returnStatus = Status.OK;
+        } else if (statusParam.equalsIgnoreCase("critical")) {
+            returnStatus = Status.CRITICAL;
+        } else if (statusParam.equalsIgnoreCase("warning")) {
+            returnStatus = Status.WARNING;
+        } else {
+            returnStatus = Status.UNKNOWN;
+        }
 
-		if (cl.hasOption("delay")
-				&& Integer.parseInt(cl.getOptionValue("delay")) > 0) {
-			try {
-				Thread.sleep(Integer.parseInt(cl.getOptionValue("delay")) * 1000);
-			} catch (Exception e) {
-			}
-		}
+        if (cl.hasOption("delay") && Integer.parseInt(cl.getOptionValue("delay")) > 0) {
+            try {
+                Thread.sleep(Integer.parseInt(cl.getOptionValue("delay")) * 1000);
+            } catch (Exception e) {
+            }
+        }
 
-		return new ReturnValue(returnStatus, "TEST : "
-				+ cl.getOptionValue("text"));
-	}
+        return new ReturnValue(returnStatus, "TEST : " + cl.getOptionValue("text"));
+    }
 }

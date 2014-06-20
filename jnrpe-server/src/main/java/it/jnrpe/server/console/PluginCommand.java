@@ -39,145 +39,136 @@ import org.apache.commons.cli2.util.HelpFormatter;
 
 public class PluginCommand extends ConsoleCommand {
 
-	public final static String NAME = "plugin:";
+    public final static String NAME = "plugin:";
 
-	private final String pluginName;
-	private final IPluginRepository pluginRepository;
+    private final String pluginName;
+    private final IPluginRepository pluginRepository;
 
-	private final IPluginInterface plugin;
+    private final IPluginInterface plugin;
 
-	public PluginCommand(ConsoleReader consoleReader, JNRPE jnrpe,
-			String pluginName, IPluginRepository pr)
-			throws UnknownPluginException {
-		super(consoleReader, jnrpe);
-		this.pluginName = pluginName;
-		this.pluginRepository = pr;
-		this.plugin = pr.getPlugin(pluginName);
-	}
+    public PluginCommand(ConsoleReader consoleReader, JNRPE jnrpe, String pluginName, IPluginRepository pr) throws UnknownPluginException {
+        super(consoleReader, jnrpe);
+        this.pluginName = pluginName;
+        this.pluginRepository = pr;
+        this.plugin = pr.getPlugin(pluginName);
+    }
 
-	public boolean execute(String[] args) throws Exception {
+    public boolean execute(String[] args) throws Exception {
 
-		Parser p = new Parser();
-		p.setGroup(getCommandLineGroup());
-		try {
-			p.parse(args);
-		} catch (Exception e) {
-			getConsole().println();
-			// getConsole().println("\u001B[1mERROR:\u001B[0m " +
-			// e.getMessage());
-			getConsole().println(highlight("ERROR: ") + e.getMessage());
-			getConsole().println();
+        Parser p = new Parser();
+        p.setGroup(getCommandLineGroup());
+        try {
+            p.parse(args);
+        } catch (Exception e) {
+            getConsole().println();
+            // getConsole().println("\u001B[1mERROR:\u001B[0m " +
+            // e.getMessage());
+            getConsole().println(highlight("ERROR: ") + e.getMessage());
+            getConsole().println();
 
-			printHelp();
-			return false;
-		}
-		PluginProxy plugin = (PluginProxy) pluginRepository
-				.getPlugin(pluginName);
+            printHelp();
+            return false;
+        }
+        PluginProxy plugin = (PluginProxy) pluginRepository.getPlugin(pluginName);
 
-		ReturnValue retVal = plugin.execute(args);
+        ReturnValue retVal = plugin.execute(args);
 
-		getConsole().println(retVal.getMessage());
-		return false;
-	}
+        getConsole().println(retVal.getMessage());
+        return false;
+    }
 
-	public String getName() {
-		return NAME + pluginName;
-	}
+    public String getName() {
+        return NAME + pluginName;
+    }
 
-	private Option toOption(PluginOption po) {
-		DefaultOptionBuilder oBuilder = new DefaultOptionBuilder();
+    private Option toOption(PluginOption po) {
+        DefaultOptionBuilder oBuilder = new DefaultOptionBuilder();
 
-		oBuilder.withShortName(po.getOption())
-				.withDescription(po.getDescription())
-				.withRequired(po.getRequired().equalsIgnoreCase("true"));
+        oBuilder.withShortName(po.getOption()).withDescription(po.getDescription()).withRequired(po.getRequired().equalsIgnoreCase("true"));
 
-		if (po.getLongOpt() != null) {
-			oBuilder.withLongName(po.getLongOpt());
-		}
+        if (po.getLongOpt() != null) {
+            oBuilder.withLongName(po.getLongOpt());
+        }
 
-		if (po.hasArgs()) {
-			ArgumentBuilder aBuilder = new ArgumentBuilder();
+        if (po.hasArgs()) {
+            ArgumentBuilder aBuilder = new ArgumentBuilder();
 
-			if (po.getArgName() != null) {
-				aBuilder.withName(po.getArgName());
-			}
+            if (po.getArgName() != null) {
+                aBuilder.withName(po.getArgName());
+            }
 
-			if (po.getArgsOptional()) {
-				aBuilder.withMinimum(0);
-			}
+            if (po.getArgsOptional()) {
+                aBuilder.withMinimum(0);
+            }
 
-			if (po.getArgsCount() != null) {
-				aBuilder.withMaximum(po.getArgsCount());
-			} else {
-				aBuilder.withMaximum(1);
-			}
+            if (po.getArgsCount() != null) {
+                aBuilder.withMaximum(po.getArgsCount());
+            } else {
+                aBuilder.withMaximum(1);
+            }
 
-			if (po.getValueSeparator() != null
-					&& po.getValueSeparator().length() != 0) {
-				aBuilder.withInitialSeparator(po.getValueSeparator().charAt(0));
-				aBuilder.withSubsequentSeparator(po.getValueSeparator().charAt(
-						0));
-			}
-			oBuilder.withArgument(aBuilder.create());
-		}
+            if (po.getValueSeparator() != null && po.getValueSeparator().length() != 0) {
+                aBuilder.withInitialSeparator(po.getValueSeparator().charAt(0));
+                aBuilder.withSubsequentSeparator(po.getValueSeparator().charAt(0));
+            }
+            oBuilder.withArgument(aBuilder.create());
+        }
 
-		return oBuilder.create();
-	}
+        return oBuilder.create();
+    }
 
-	private Group getCommandLineGroup() {
-		PluginProxy pp = (PluginProxy) plugin;
-		GroupBuilder gBuilder = new GroupBuilder();
+    private Group getCommandLineGroup() {
+        PluginProxy pp = (PluginProxy) plugin;
+        GroupBuilder gBuilder = new GroupBuilder();
 
-		for (PluginOption po : pp.getOptions()) {
-			gBuilder = gBuilder.withOption(toOption(po));
-		}
+        for (PluginOption po : pp.getOptions()) {
+            gBuilder = gBuilder.withOption(toOption(po));
+        }
 
-		return gBuilder.create();
-	}
+        return gBuilder.create();
+    }
 
-	public String getCommandLine() {
-		ByteArrayOutputStream bout = new ByteArrayOutputStream();
+    public String getCommandLine() {
+        ByteArrayOutputStream bout = new ByteArrayOutputStream();
 
-		Group g = getCommandLineGroup();
-		HelpFormatter hf = new HelpFormatter(null, null, null, getConsole()
-				.getTerminal().getWidth());
-		hf.setGroup(g);
-		hf.setPrintWriter(new PrintWriter(bout));
-		hf.printUsage();
+        Group g = getCommandLineGroup();
+        HelpFormatter hf = new HelpFormatter(null, null, null, getConsole().getTerminal().getWidth());
+        hf.setGroup(g);
+        hf.setPrintWriter(new PrintWriter(bout));
+        hf.printUsage();
 
-		String usage = new String(bout.toByteArray());
+        String usage = new String(bout.toByteArray());
 
-		String[] lines = usage.split("\\n");
+        String[] lines = usage.split("\\n");
 
-		StringBuffer res = new StringBuffer();
+        StringBuffer res = new StringBuffer();
 
-		for (int i = 1; i < lines.length; i++) {
-			res.append(lines[i]);
-		}
+        for (int i = 1; i < lines.length; i++) {
+            res.append(lines[i]);
+        }
 
-		return res.toString();
-	}
+        return res.toString();
+    }
 
-	public void printHelp() throws IOException {
-		Group g = getCommandLineGroup();
+    public void printHelp() throws IOException {
+        Group g = getCommandLineGroup();
 
-		ByteArrayOutputStream bout = new ByteArrayOutputStream();
-		HelpFormatter hf = new HelpFormatter("  ", null, null, getConsole()
-				.getTerminal().getWidth());
-		hf.setGroup(g);
+        ByteArrayOutputStream bout = new ByteArrayOutputStream();
+        HelpFormatter hf = new HelpFormatter("  ", null, null, getConsole().getTerminal().getWidth());
+        hf.setGroup(g);
 
-		PrintWriter pw = new PrintWriter(bout);
-		hf.setPrintWriter(pw);
-		hf.printHelp();
+        PrintWriter pw = new PrintWriter(bout);
+        hf.setPrintWriter(pw);
+        hf.printHelp();
 
-		pw.flush();
+        pw.flush();
 
-		// getConsole().println("\u001B[1mCommand Line:\u001B[0m ");
-		getConsole().println(highlight("Command Line: "));
-		getConsole().println("  " + getName() + " " + getCommandLine());
-		getConsole().println(highlight("Usage:"));
-		getConsole().println(new String(bout.toByteArray()));
+        // getConsole().println("\u001B[1mCommand Line:\u001B[0m ");
+        getConsole().println(highlight("Command Line: "));
+        getConsole().println("  " + getName() + " " + getCommandLine());
+        getConsole().println(highlight("Usage:"));
+        getConsole().println(new String(bout.toByteArray()));
 
-	}
+    }
 
 }

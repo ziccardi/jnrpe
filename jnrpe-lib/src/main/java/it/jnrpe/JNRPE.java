@@ -65,383 +65,342 @@ import javax.net.ssl.SSLException;
  */
 public final class JNRPE {
 
-	/**
-	 * Default number of accepted connections.
-	 */
-	static final int DEFAULT_MAX_ACCEPTED_CONNECTIONS = 128;
+    /**
+     * Default number of accepted connections.
+     */
+    static final int DEFAULT_MAX_ACCEPTED_CONNECTIONS = 128;
 
-	/**
-	 * The boss group (see netty documentation).
-	 */
-	private final EventLoopGroup bossGroup = new NioEventLoopGroup();
+    /**
+     * The boss group (see netty documentation).
+     */
+    private final EventLoopGroup bossGroup = new NioEventLoopGroup();
 
-	/**
-	 * The worker group (see netty documentation).
-	 */
-	private final EventLoopGroup workerGroup = new NioEventLoopGroup();
+    /**
+     * The worker group (see netty documentation).
+     */
+    private final EventLoopGroup workerGroup = new NioEventLoopGroup();
 
-	/**
-	 * The default keystore name (used to perform SSL).
-	 */
-	private static final String KEYSTORE_NAME = "keys.jks";
+    /**
+     * The default keystore name (used to perform SSL).
+     */
+    private static final String KEYSTORE_NAME = "keys.jks";
 
-	/**
-	 * The default keystore password.
-	 */
-	private static final String KEYSTORE_PWD = "p@55w0rd";
+    /**
+     * The default keystore password.
+     */
+    private static final String KEYSTORE_PWD = "p@55w0rd";
 
-	/**
-	 * The plugin repository to be used to find the requested plugin.
-	 */
-	private final IPluginRepository pluginRepository;
-	/**
-	 * The command repository to be used to find the requested command.
-	 */
-	private final CommandRepository commandRepository;
+    /**
+     * The plugin repository to be used to find the requested plugin.
+     */
+    private final IPluginRepository pluginRepository;
+    /**
+     * The command repository to be used to find the requested command.
+     */
+    private final CommandRepository commandRepository;
 
-	/**
-	 * The list of accepted clients.
-	 */
-	private Collection<String> acceptedHostsList = new ArrayList<String>();
+    /**
+     * The list of accepted clients.
+     */
+    private Collection<String> acceptedHostsList = new ArrayList<String>();
 
-	/**
-	 * All the listeners.
-	 */
-	private Collection<IJNRPEEventListener> eventListenersSet = new HashSet<IJNRPEEventListener>();
+    /**
+     * All the listeners.
+     */
+    private Collection<IJNRPEEventListener> eventListenersSet = new HashSet<IJNRPEEventListener>();
 
-	/**
-	 * Charset that will be used by JNRPE.
-	 */
-	private final Charset charset;
+    /**
+     * Charset that will be used by JNRPE.
+     */
+    private final Charset charset;
 
-	/**
-	 * The maximum number of concurrent connection allowed by JNRPE.
-	 */
-	private final int maxAcceptedConnections;
+    /**
+     * The maximum number of concurrent connection allowed by JNRPE.
+     */
+    private final int maxAcceptedConnections;
 
-	/**
-	 * The maximum number of seconds that JNRPE will wait for a client to send a
-	 * command.
-	 */
-	private final int readTimeout;
+    /**
+     * The maximum number of seconds that JNRPE will wait for a client to send a
+     * command.
+     */
+    private final int readTimeout;
 
-	/**
-	 * The maximum number of seconds that JNRPE will wait for a plugin to
-	 * produce a result.
-	 */
-	private final int writeTimeout;
+    /**
+     * The maximum number of seconds that JNRPE will wait for a plugin to
+     * produce a result.
+     */
+    private final int writeTimeout;
 
-	/**
-	 * <code>true</code> if $ARGxx$ macros must be expanded.
-	 */
-	private final boolean acceptParams;
+    /**
+     * <code>true</code> if $ARGxx$ macros must be expanded.
+     */
+    private final boolean acceptParams;
 
-	/**
-	 * Instantiates the JNRPE engine.
-	 * 
-	 * @param pluginRepo
-	 *            The plugin repository object
-	 * @param commandRepo
-	 *            The command repository object
-	 * 
-	 * @deprecated This constructor will be removed as of version 2.0.5. Use
-	 *             {@link JNRPEBuilder} instead
-	 */
-	@Deprecated
-	public JNRPE(final IPluginRepository pluginRepo,
-			final CommandRepository commandRepo) {
-		if (pluginRepo == null) {
-			throw new IllegalArgumentException(
-					"Plugin repository cannot be null");
-		}
+    /**
+     * Instantiates the JNRPE engine.
+     * 
+     * @param pluginRepo
+     *            The plugin repository object
+     * @param commandRepo
+     *            The command repository object
+     * 
+     * @deprecated This constructor will be removed as of version 2.0.5. Use
+     *             {@link JNRPEBuilder} instead
+     */
+    @Deprecated
+    public JNRPE(final IPluginRepository pluginRepo, final CommandRepository commandRepo) {
+        if (pluginRepo == null) {
+            throw new IllegalArgumentException("Plugin repository cannot be null");
+        }
 
-		if (commandRepo == null) {
-			throw new IllegalArgumentException(
-					"Command repository cannot be null");
-		}
-		pluginRepository = pluginRepo;
-		commandRepository = commandRepo;
-		charset = Charset.forName("UTF-8");
-		this.acceptParams = true;
-		this.maxAcceptedConnections = DEFAULT_MAX_ACCEPTED_CONNECTIONS;
-		readTimeout = 10;
-		writeTimeout = 60;
-	}
+        if (commandRepo == null) {
+            throw new IllegalArgumentException("Command repository cannot be null");
+        }
+        pluginRepository = pluginRepo;
+        commandRepository = commandRepo;
+        charset = Charset.forName("UTF-8");
+        this.acceptParams = true;
+        this.maxAcceptedConnections = DEFAULT_MAX_ACCEPTED_CONNECTIONS;
+        readTimeout = 10;
+        writeTimeout = 60;
+    }
 
-	/**
-	 * Initializes the JNRPE worker.
-	 * 
-	 * @param pluginRepo
-	 *            The repository containing all the installed plugins
-	 * @param commandRepo
-	 *            The repository containing all the configured commands.
-	 * @param newCharset
-	 *            The charset that will be used by JNRPE
-	 * @param acceptParameters
-	 *            Sets if $ARGxx$ macros should be expanded
-	 * @deprecated This constructor will be removed as of version 2.0.5. Use
-	 *             {@link JNRPEBuilder} instead
-	 */
-	@Deprecated
-	public JNRPE(final IPluginRepository pluginRepo,
-			final CommandRepository commandRepo, final Charset newCharset,
-			final boolean acceptParameters) {
-		if (pluginRepo == null) {
-			throw new IllegalArgumentException(
-					"Plugin repository cannot be null");
-		}
+    /**
+     * Initializes the JNRPE worker.
+     * 
+     * @param pluginRepo
+     *            The repository containing all the installed plugins
+     * @param commandRepo
+     *            The repository containing all the configured commands.
+     * @param newCharset
+     *            The charset that will be used by JNRPE
+     * @param acceptParameters
+     *            Sets if $ARGxx$ macros should be expanded
+     * @deprecated This constructor will be removed as of version 2.0.5. Use
+     *             {@link JNRPEBuilder} instead
+     */
+    @Deprecated
+    public JNRPE(final IPluginRepository pluginRepo, final CommandRepository commandRepo, final Charset newCharset, final boolean acceptParameters) {
+        if (pluginRepo == null) {
+            throw new IllegalArgumentException("Plugin repository cannot be null");
+        }
 
-		if (commandRepo == null) {
-			throw new IllegalArgumentException(
-					"Command repository cannot be null");
-		}
-		pluginRepository = pluginRepo;
-		commandRepository = commandRepo;
-		this.charset = newCharset;
-		this.acceptParams = acceptParameters;
-		this.maxAcceptedConnections = DEFAULT_MAX_ACCEPTED_CONNECTIONS;
-		readTimeout = 10;
-		writeTimeout = 60;
-	}
+        if (commandRepo == null) {
+            throw new IllegalArgumentException("Command repository cannot be null");
+        }
+        pluginRepository = pluginRepo;
+        commandRepository = commandRepo;
+        this.charset = newCharset;
+        this.acceptParams = acceptParameters;
+        this.maxAcceptedConnections = DEFAULT_MAX_ACCEPTED_CONNECTIONS;
+        readTimeout = 10;
+        writeTimeout = 60;
+    }
 
-	/**
-	 * Constructor used by the {@link JNRPEBuilder} to build an immutable
-	 * instance of {@link JNRPE}.
-	 * 
-	 * @param pluginRepo
-	 *            The plugin repository object
-	 * @param commandRepo
-	 *            The command repository object
-	 * @param newCharset
-	 *            The charset that JNRPE will use
-	 * @param acceptParameters
-	 *            Sets if $ARGxx$ macros should be expanded
-	 * @param acceptedHostsCollection
-	 *            The list of accepted client hosts
-	 * @param maxConnections
-	 *            The maximum number of concurrent connections
-	 * @param readTimeoutSeconds
-	 *            The maximum number of seconds to wait for the client to send
-	 *            the command
-	 * @param writeTimeoutSeconds
-	 *            The maximum number of seconds to wait for a plugin to return a
-	 *            result
-	 * @param eventListeners
-	 *            The collection of listeners that will receive JNRPE events
-	 */
-	JNRPE(final IPluginRepository pluginRepo,
-			final CommandRepository commandRepo, final Charset newCharset,
-			final boolean acceptParameters,
-			final Collection<String> acceptedHostsCollection,
-			final int maxConnections, final int readTimeoutSeconds,
-			final int writeTimeoutSeconds,
-			final Collection<IJNRPEEventListener> eventListeners) {
-		if (pluginRepo == null) {
-			throw new IllegalArgumentException(
-					"Plugin repository cannot be null");
-		}
+    /**
+     * Constructor used by the {@link JNRPEBuilder} to build an immutable
+     * instance of {@link JNRPE}.
+     * 
+     * @param pluginRepo
+     *            The plugin repository object
+     * @param commandRepo
+     *            The command repository object
+     * @param newCharset
+     *            The charset that JNRPE will use
+     * @param acceptParameters
+     *            Sets if $ARGxx$ macros should be expanded
+     * @param acceptedHostsCollection
+     *            The list of accepted client hosts
+     * @param maxConnections
+     *            The maximum number of concurrent connections
+     * @param readTimeoutSeconds
+     *            The maximum number of seconds to wait for the client to send
+     *            the command
+     * @param writeTimeoutSeconds
+     *            The maximum number of seconds to wait for a plugin to return a
+     *            result
+     * @param eventListeners
+     *            The collection of listeners that will receive JNRPE events
+     */
+    JNRPE(final IPluginRepository pluginRepo, final CommandRepository commandRepo, final Charset newCharset, final boolean acceptParameters,
+            final Collection<String> acceptedHostsCollection, final int maxConnections, final int readTimeoutSeconds, final int writeTimeoutSeconds,
+            final Collection<IJNRPEEventListener> eventListeners) {
+        if (pluginRepo == null) {
+            throw new IllegalArgumentException("Plugin repository cannot be null");
+        }
 
-		if (commandRepo == null) {
-			throw new IllegalArgumentException(
-					"Command repository cannot be null");
-		}
-		pluginRepository = pluginRepo;
-		commandRepository = commandRepo;
-		this.charset = newCharset;
-		this.acceptParams = acceptParameters;
-		this.acceptedHostsList = acceptedHostsCollection;
-		this.eventListenersSet = eventListeners;
-		this.maxAcceptedConnections = maxConnections;
-		this.readTimeout = readTimeoutSeconds;
-		this.writeTimeout = writeTimeoutSeconds;
+        if (commandRepo == null) {
+            throw new IllegalArgumentException("Command repository cannot be null");
+        }
+        pluginRepository = pluginRepo;
+        commandRepository = commandRepo;
+        this.charset = newCharset;
+        this.acceptParams = acceptParameters;
+        this.acceptedHostsList = acceptedHostsCollection;
+        this.eventListenersSet = eventListeners;
+        this.maxAcceptedConnections = maxConnections;
+        this.readTimeout = readTimeoutSeconds;
+        this.writeTimeout = writeTimeoutSeconds;
 
-	}
+    }
 
-	/**
-	 * Instructs the server to listen to the given IP/port.
-	 * 
-	 * @param address
-	 *            The address to bind to
-	 * @param port
-	 *            The port to bind to
-	 * @throws UnknownHostException
-	 *             -
-	 */
-	public void listen(final String address, final int port)
-			throws UnknownHostException {
-		listen(address, port, true);
-	}
+    /**
+     * Instructs the server to listen to the given IP/port.
+     * 
+     * @param address
+     *            The address to bind to
+     * @param port
+     *            The port to bind to
+     * @throws UnknownHostException
+     *             -
+     */
+    public void listen(final String address, final int port) throws UnknownHostException {
+        listen(address, port, true);
+    }
 
-	/**
-	 * Adds a new event listener.
-	 * 
-	 * @param listener
-	 *            The event listener to be added
-	 * 
-	 * @deprecated The JNRPE object will become immutable as of version 2.0.5.
-	 *             Use {@link JNRPEBuilder} instead
-	 */
-	@Deprecated
-	public void addEventListener(final IJNRPEEventListener listener) {
-		eventListenersSet.add(listener);
-	}
+    /**
+     * Adds a new event listener.
+     * 
+     * @param listener
+     *            The event listener to be added
+     * 
+     * @deprecated The JNRPE object will become immutable as of version 2.0.5.
+     *             Use {@link JNRPEBuilder} instead
+     */
+    @Deprecated
+    public void addEventListener(final IJNRPEEventListener listener) {
+        eventListenersSet.add(listener);
+    }
 
-	/**
-	 * Creates, configures and returns the SSL engine.
-	 * 
-	 * @return the SSL Engine
-	 * @throws KeyStoreException on keystore errorss
-	 * @throws CertificateException on certificate errors
-	 * @throws IOException on I/O errors
-	 * @throws UnrecoverableKeyException if key is unrecoverable
-	 * @throws KeyManagementException key management error
-	 */
-	private SSLEngine getSSLEngine() throws KeyStoreException,
-			CertificateException, IOException, UnrecoverableKeyException,
-			KeyManagementException {
+    /**
+     * Creates, configures and returns the SSL engine.
+     * 
+     * @return the SSL Engine
+     * @throws KeyStoreException
+     *             on keystore errorss
+     * @throws CertificateException
+     *             on certificate errors
+     * @throws IOException
+     *             on I/O errors
+     * @throws UnrecoverableKeyException
+     *             if key is unrecoverable
+     * @throws KeyManagementException
+     *             key management error
+     */
+    private SSLEngine getSSLEngine() throws KeyStoreException, CertificateException, IOException, UnrecoverableKeyException, KeyManagementException {
 
-		// Open the KeyStore Stream
-		StreamManager h = new StreamManager();
+        // Open the KeyStore Stream
+        StreamManager h = new StreamManager();
 
-		SSLContext ctx;
-		KeyManagerFactory kmf;
+        SSLContext ctx;
+        KeyManagerFactory kmf;
 
-		try {
-			InputStream ksStream = getClass().getClassLoader()
-					.getResourceAsStream(KEYSTORE_NAME);
-			h.handle(ksStream);
-			ctx = SSLContext.getInstance("SSLv3");
+        try {
+            InputStream ksStream = getClass().getClassLoader().getResourceAsStream(KEYSTORE_NAME);
+            h.handle(ksStream);
+            ctx = SSLContext.getInstance("SSLv3");
 
-			kmf = KeyManagerFactory.getInstance(KeyManagerFactory
-					.getDefaultAlgorithm());
+            kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
 
-			KeyStore ks = KeyStore.getInstance("JKS");
-			char[] passphrase = KEYSTORE_PWD.toCharArray();
-			ks.load(ksStream, passphrase);
+            KeyStore ks = KeyStore.getInstance("JKS");
+            char[] passphrase = KEYSTORE_PWD.toCharArray();
+            ks.load(ksStream, passphrase);
 
-			kmf.init(ks, passphrase);
-			ctx.init(kmf.getKeyManagers(), null,
-					new java.security.SecureRandom());
-		} catch (NoSuchAlgorithmException e) {
-			throw new SSLException("Unable to initialize SSLSocketFactory.\n"
-					+ e.getMessage());
-		} finally {
-			h.closeAll();
-		}
+            kmf.init(ks, passphrase);
+            ctx.init(kmf.getKeyManagers(), null, new java.security.SecureRandom());
+        } catch (NoSuchAlgorithmException e) {
+            throw new SSLException("Unable to initialize SSLSocketFactory.\n" + e.getMessage());
+        } finally {
+            h.closeAll();
+        }
 
-		return ctx.createSSLEngine();
-	}
+        return ctx.createSSLEngine();
+    }
 
-	/**
-	 * Creates and returns a configured NETTY ServerBootstrap object.
-	 * 
-	 * @param useSSL
-	 *            <code>true</code> if SSL must be used.
-	 * @return the server bootstrap object
-	 */
-	private ServerBootstrap getServerBootstrap(final boolean useSSL) {
+    /**
+     * Creates and returns a configured NETTY ServerBootstrap object.
+     * 
+     * @param useSSL
+     *            <code>true</code> if SSL must be used.
+     * @return the server bootstrap object
+     */
+    private ServerBootstrap getServerBootstrap(final boolean useSSL) {
 
-		final CommandInvoker invoker = new CommandInvoker(pluginRepository,
-				commandRepository, acceptParams, eventListenersSet);
+        final CommandInvoker invoker = new CommandInvoker(pluginRepository, commandRepository, acceptParams, eventListenersSet);
 
-		ServerBootstrap b = new ServerBootstrap();
-		b.group(bossGroup, workerGroup)
-				.channel(NioServerSocketChannel.class)
-				.childHandler(new ChannelInitializer<SocketChannel>() {
-					@Override
-					public void initChannel(final SocketChannel ch)
-							throws Exception {
+        ServerBootstrap b = new ServerBootstrap();
+        b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class).childHandler(new ChannelInitializer<SocketChannel>() {
+            @Override
+            public void initChannel(final SocketChannel ch) throws Exception {
 
-						if (useSSL) {
-							SSLEngine engine = getSSLEngine();
-							engine.setEnabledCipherSuites(engine
-									.getSupportedCipherSuites());
-							engine.setUseClientMode(false);
-							engine.setNeedClientAuth(false);
-							ch.pipeline()
-									.addLast("ssl", new SslHandler(engine));
-						}
+                if (useSSL) {
+                    SSLEngine engine = getSSLEngine();
+                    engine.setEnabledCipherSuites(engine.getSupportedCipherSuites());
+                    engine.setUseClientMode(false);
+                    engine.setNeedClientAuth(false);
+                    ch.pipeline().addLast("ssl", new SslHandler(engine));
+                }
 
-						ch.pipeline()
-								.addLast(
-										new JNRPERequestDecoder(),
-										new JNRPEResponseEncoder(),
-										new JNRPEServerHandler(invoker,
-												eventListenersSet))
-								.addLast(
-										"idleStateHandler",
-										new IdleStateHandler(readTimeout,
-												writeTimeout, 0))
-								.addLast(
-										"jnrpeIdleStateHandler",
-										new JNRPEIdleStateHandler(
-												new JNRPEExecutionContext(
-														JNRPE.this.eventListenersSet,
-														Charset.defaultCharset())));
-					}
-				})
-				.option(ChannelOption.SO_BACKLOG, this.maxAcceptedConnections)
-				.childOption(ChannelOption.SO_KEEPALIVE, true);
+                ch.pipeline()
+                        .addLast(new JNRPERequestDecoder(), new JNRPEResponseEncoder(), new JNRPEServerHandler(invoker, eventListenersSet))
+                        .addLast("idleStateHandler", new IdleStateHandler(readTimeout, writeTimeout, 0))
+                        .addLast("jnrpeIdleStateHandler",
+                                new JNRPEIdleStateHandler(new JNRPEExecutionContext(JNRPE.this.eventListenersSet, Charset.defaultCharset())));
+            }
+        }).option(ChannelOption.SO_BACKLOG, this.maxAcceptedConnections).childOption(ChannelOption.SO_KEEPALIVE, true);
 
-		return b;
-	}
+        return b;
+    }
 
-	/**
-	 * Starts a new thread that listen for requests. The method is <b>not
-	 * blocking</b>
-	 * 
-	 * @param address
-	 *            The address to bind to
-	 * @param port
-	 *            The listening port
-	 * @param useSSL
-	 *            <code>true</code> if an SSL socket must be created.
-	 * @throws UnknownHostException
-	 *             -
-	 */
-	public void listen(final String address, final int port,
-			final boolean useSSL) throws UnknownHostException {
+    /**
+     * Starts a new thread that listen for requests. The method is <b>not
+     * blocking</b>
+     * 
+     * @param address
+     *            The address to bind to
+     * @param port
+     *            The listening port
+     * @param useSSL
+     *            <code>true</code> if an SSL socket must be created.
+     * @throws UnknownHostException
+     *             -
+     */
+    public void listen(final String address, final int port, final boolean useSSL) throws UnknownHostException {
 
-		// Bind and start to accept incoming connections.
-		ChannelFuture cf = getServerBootstrap(useSSL).bind(address, port);
-		cf.addListener(new ChannelFutureListener() {
+        // Bind and start to accept incoming connections.
+        ChannelFuture cf = getServerBootstrap(useSSL).bind(address, port);
+        cf.addListener(new ChannelFutureListener() {
 
-			public void operationComplete(final ChannelFuture future)
-					throws Exception {
-				if (future.isSuccess()) {
-					EventsUtil.sendEvent(eventListenersSet, this,
-							LogEvent.INFO, "Listening on "
-									+ (useSSL ? "SSL/" : "") + address + ":"
-									+ port);
-				} else {
-					EventsUtil.sendEvent(eventListenersSet, this,
-							LogEvent.ERROR, "Unable to listen on "
-									+ (useSSL ? "SSL/" : "") + address + ":"
-									+ port, future.cause());
-				}
-			}
-		});
+            public void operationComplete(final ChannelFuture future) throws Exception {
+                if (future.isSuccess()) {
+                    EventsUtil.sendEvent(eventListenersSet, this, LogEvent.INFO, "Listening on " + (useSSL ? "SSL/" : "") + address + ":" + port);
+                } else {
+                    EventsUtil.sendEvent(eventListenersSet, this, LogEvent.ERROR, "Unable to listen on " + (useSSL ? "SSL/" : "") + address + ":"
+                            + port, future.cause());
+                }
+            }
+        });
 
-	}
+    }
 
-	/**
-	 * Adds an address to the list of accepted hosts.
-	 * 
-	 * @param address
-	 *            The address to accept
-	 * @deprecated The JNRPE object will become immutable as of version 2.0.5.
-	 *             Use {@link JNRPEBuilder} instead
-	 */
-	@Deprecated
-	public void addAcceptedHost(final String address) {
-		acceptedHostsList.add(address);
-	}
+    /**
+     * Adds an address to the list of accepted hosts.
+     * 
+     * @param address
+     *            The address to accept
+     * @deprecated The JNRPE object will become immutable as of version 2.0.5.
+     *             Use {@link JNRPEBuilder} instead
+     */
+    @Deprecated
+    public void addAcceptedHost(final String address) {
+        acceptedHostsList.add(address);
+    }
 
-	/**
-	 * Shuts down the server.
-	 */
-	public void shutdown() {
-		workerGroup.shutdownGracefully().syncUninterruptibly();
-		bossGroup.shutdownGracefully().syncUninterruptibly();
-	}
+    /**
+     * Shuts down the server.
+     */
+    public void shutdown() {
+        workerGroup.shutdownGracefully().syncUninterruptibly();
+        bossGroup.shutdownGracefully().syncUninterruptibly();
+    }
 }

@@ -39,155 +39,148 @@ import org.apache.commons.lang.StringUtils;
  * 
  */
 public final class PluginProxy extends PluginBase {
-	/**
-	 * The plugin instance proxied by this object.
-	 */
-	private final IPluginInterface proxiedPlugin;
+    /**
+     * The plugin instance proxied by this object.
+     */
+    private final IPluginInterface proxiedPlugin;
 
-	/**
-	 * The plugin definition of the plugin proxied by this object.
-	 */
-	private final PluginDefinition proxyedPluginDefinition;
+    /**
+     * The plugin definition of the plugin proxied by this object.
+     */
+    private final PluginDefinition proxyedPluginDefinition;
 
-	/**
-	 * The command line definition as requested by the Apache commons cli.
-	 * library.
-	 */
-	private Group mainOptionsGroup = null;
+    /**
+     * The command line definition as requested by the Apache commons cli.
+     * library.
+     */
+    private Group mainOptionsGroup = null;
 
-	/**
-	 * The proxied plugin description.
-	 */
-	private final String description;
+    /**
+     * The proxied plugin description.
+     */
+    private final String description;
 
-	/**
-	 * Instantiate a new plugin proxy.
-	 * 
-	 * @param plugin
-	 *            The plugin to be proxied
-	 * @param pluginDef
-	 *            The plugin definition of the plugin to be proxied
-	 */
-	public PluginProxy(final IPluginInterface plugin,
-			final PluginDefinition pluginDef) {
-		proxiedPlugin = plugin;
-		proxyedPluginDefinition = pluginDef;
-		description = proxyedPluginDefinition.getDescription();
+    /**
+     * Instantiate a new plugin proxy.
+     * 
+     * @param plugin
+     *            The plugin to be proxied
+     * @param pluginDef
+     *            The plugin definition of the plugin to be proxied
+     */
+    public PluginProxy(final IPluginInterface plugin, final PluginDefinition pluginDef) {
+        proxiedPlugin = plugin;
+        proxyedPluginDefinition = pluginDef;
+        description = proxyedPluginDefinition.getDescription();
 
-		GroupBuilder gBuilder = new GroupBuilder();
+        GroupBuilder gBuilder = new GroupBuilder();
 
-		for (PluginOption po : pluginDef.getOptions()) {
-			gBuilder = gBuilder.withOption(po.toOption());
-		}
+        for (PluginOption po : pluginDef.getOptions()) {
+            gBuilder = gBuilder.withOption(po.toOption());
+        }
 
-		mainOptionsGroup = gBuilder.create();
-	}
+        mainOptionsGroup = gBuilder.create();
+    }
 
-	/**
-	 * Returns a collection of all the options accepted by this plugin.
-	 * 
-	 * @return a collection of plugin options.
-	 */
-	public Collection<PluginOption> getOptions() {
-		return proxyedPluginDefinition.getOptions();
-	}
+    /**
+     * Returns a collection of all the options accepted by this plugin.
+     * 
+     * @return a collection of plugin options.
+     */
+    public Collection<PluginOption> getOptions() {
+        return proxyedPluginDefinition.getOptions();
+    }
 
-	/**
-	 * Executes the proxied plugin passing the received arguments as parameters.
-	 * 
-	 * @param argsAry
-	 *            The parameters to be passed to the plugin
-	 * @return The return value of the plugin.
-	 * @throws BadThresholdException
-	 *             -
-	 */
-	public ReturnValue execute(final String[] argsAry)
-			throws BadThresholdException {
-		// CommandLineParser clp = new PosixParser();
-		try {
-			HelpFormatter hf = new HelpFormatter();
-			// configure a parser
-			Parser p = new Parser();
-			p.setGroup(mainOptionsGroup);
-			p.setHelpFormatter(hf);
-			CommandLine cl = p.parse(argsAry);
-			if (getListeners() != null
-					&& proxiedPlugin instanceof IPluginInterfaceEx) {
-				((IPluginInterfaceEx) proxiedPlugin)
-						.addListeners(getListeners());
-			}
+    /**
+     * Executes the proxied plugin passing the received arguments as parameters.
+     * 
+     * @param argsAry
+     *            The parameters to be passed to the plugin
+     * @return The return value of the plugin.
+     * @throws BadThresholdException
+     *             -
+     */
+    public ReturnValue execute(final String[] argsAry) throws BadThresholdException {
+        // CommandLineParser clp = new PosixParser();
+        try {
+            HelpFormatter hf = new HelpFormatter();
+            // configure a parser
+            Parser p = new Parser();
+            p.setGroup(mainOptionsGroup);
+            p.setHelpFormatter(hf);
+            CommandLine cl = p.parse(argsAry);
+            if (getListeners() != null && proxiedPlugin instanceof IPluginInterfaceEx) {
+                ((IPluginInterfaceEx) proxiedPlugin).addListeners(getListeners());
+            }
 
-			Thread.currentThread().setContextClassLoader(
-					proxiedPlugin.getClass().getClassLoader());
+            Thread.currentThread().setContextClassLoader(proxiedPlugin.getClass().getClassLoader());
 
-			ReturnValue retValue = proxiedPlugin.execute(new PluginCommandLine(
-					cl));
+            ReturnValue retValue = proxiedPlugin.execute(new PluginCommandLine(cl));
 
-			if (retValue == null) {
-				String msg = "Plugin [" + getPluginName() + "] with args ["
-						+ StringUtils.join(argsAry) + "] returned null";
+            if (retValue == null) {
+                String msg = "Plugin [" + getPluginName() + "] with args [" + StringUtils.join(argsAry) + "] returned null";
 
-				retValue = new ReturnValue(Status.UNKNOWN, msg);
-			}
+                retValue = new ReturnValue(Status.UNKNOWN, msg);
+            }
 
-			return retValue;
-		} catch (OptionException e) {
-			// m_Logger.error("ERROR PARSING PLUGIN ARGUMENTS", e);
-			return new ReturnValue(Status.UNKNOWN, e.getMessage());
-		}
-	}
+            return retValue;
+        } catch (OptionException e) {
+            // m_Logger.error("ERROR PARSING PLUGIN ARGUMENTS", e);
+            return new ReturnValue(Status.UNKNOWN, e.getMessage());
+        }
+    }
 
-	/**
-	 * Prints the help related to the plugin to a specified output.
-	 * 
-	 * @param out
-	 *            the writer where the help should be written
-	 */
-	public void printHelp(final PrintWriter out) {
-		HelpFormatter hf = new HelpFormatter();
-		StringBuffer sbDivider = new StringBuffer("=");
-		while (sbDivider.length() < hf.getPageWidth()) {
-			sbDivider.append("=");
-		}
-		out.println(sbDivider.toString());
-		out.println("PLUGIN NAME : " + proxyedPluginDefinition.getName());
-		if (description != null && description.trim().length() != 0) {
-			out.println(sbDivider.toString());
-			out.println("Description : ");
-			out.println();
-			out.println(description);
-		}
+    /**
+     * Prints the help related to the plugin to a specified output.
+     * 
+     * @param out
+     *            the writer where the help should be written
+     */
+    public void printHelp(final PrintWriter out) {
+        HelpFormatter hf = new HelpFormatter();
+        StringBuffer sbDivider = new StringBuffer("=");
+        while (sbDivider.length() < hf.getPageWidth()) {
+            sbDivider.append("=");
+        }
+        out.println(sbDivider.toString());
+        out.println("PLUGIN NAME : " + proxyedPluginDefinition.getName());
+        if (description != null && description.trim().length() != 0) {
+            out.println(sbDivider.toString());
+            out.println("Description : ");
+            out.println();
+            out.println(description);
+        }
 
-		hf.setGroup(mainOptionsGroup);
-		// hf.setHeader(m_pluginDef.getName());
-		hf.setDivider(sbDivider.toString());
-		hf.setPrintWriter(out);
-		hf.print();
-		// hf.printHelp(m_pluginDef.getName(), m_Options);
-	}
+        hf.setGroup(mainOptionsGroup);
+        // hf.setHeader(m_pluginDef.getName());
+        hf.setDivider(sbDivider.toString());
+        hf.setPrintWriter(out);
+        hf.print();
+        // hf.printHelp(m_pluginDef.getName(), m_Options);
+    }
 
-	/**
-	 * Prints the help related to the plugin to standard output.
-	 */
-	// FIXME : the output should be a parameter
-	public void printHelp() {
-		printHelp(new PrintWriter(System.out));
-	}
+    /**
+     * Prints the help related to the plugin to standard output.
+     */
+    // FIXME : the output should be a parameter
+    public void printHelp() {
+        printHelp(new PrintWriter(System.out));
+    }
 
-	/**
-	 * Not used.
-	 * 
-	 * @param cl
-	 *            Not used
-	 * @return null.
-	 */
-	@Override
-	public ReturnValue execute(final ICommandLine cl) {
-		return null;
-	}
+    /**
+     * Not used.
+     * 
+     * @param cl
+     *            Not used
+     * @return null.
+     */
+    @Override
+    public ReturnValue execute(final ICommandLine cl) {
+        return null;
+    }
 
-	@Override
-	protected String getPluginName() {
-		return null;
-	}
+    @Override
+    protected String getPluginName() {
+        return null;
+    }
 }

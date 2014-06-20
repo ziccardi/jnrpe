@@ -30,14 +30,20 @@ import java.lang.annotation.RetentionPolicy;
  * @author Frederico Campos
  */
 @Retention(RetentionPolicy.RUNTIME)
-
 public @interface Option {
-	String shortName();
-	String longName();
-	String description();
-	String argName();
-	boolean optionalArgs();
-	boolean hasArgs();
-	boolean required();
-	String option();
+    String shortName();
+
+    String longName();
+
+    String description();
+
+    String argName();
+
+    boolean optionalArgs();
+
+    boolean hasArgs();
+
+    boolean required();
+
+    String option();
 }

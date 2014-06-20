@@ -32,7 +32,8 @@ public interface IPluginInterface {
      * @param cl
      *            The parsified command line arguments
      * @return The result of the plugin
-     * @throws BadThresholdException -
+     * @throws BadThresholdException
+     *             -
      */
     ReturnValue execute(ICommandLine cl) throws BadThresholdException;
 }

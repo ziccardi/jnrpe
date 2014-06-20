@@ -58,36 +58,19 @@ import java.math.BigDecimal;
  *
  * @author Massimiliano Ziccardi
  */
-@Plugin(
-        name = "CHECK_FILE",
-        description = "This plugin is used to perform various check against files:\n\n" +
-        "  * checks that a file exists (-f)\n" +
-        "  * checks that a file does not exists (-F)\n" +
-        "  * check file age (requires -f)\n" +
-        "  * check file size (requires -f)\n" +
-        "  * check how many lines of a file contains the given string. You can specify the warning and the critical range. (requires -f)\n" +
-        "     EXAMPLE: -f /path/to/your/file --contains MyString,0:10,11:\n" +
-        "  * check that a string is not inside the file (requires -f)\n"
-                      )
+@Plugin(name = "CHECK_FILE", description = "This plugin is used to perform various check against files:\n\n" + "  * checks that a file exists (-f)\n"
+        + "  * checks that a file does not exists (-F)\n" + "  * check file age (requires -f)\n" + "  * check file size (requires -f)\n"
+        + "  * check how many lines of a file contains the given string. You can specify the warning and the critical range. (requires -f)\n"
+        + "     EXAMPLE: -f /path/to/your/file --contains MyString,0:10,11:\n" + "  * check that a string is not inside the file (requires -f)\n")
 @PluginOptions({
-    @Option(shortName="F", longName="FILE", description="The path of the file the must not exist",
-            required=false, hasArgs=true, argName="path", optionalArgs=false, option="FILE"),
-    @Option(shortName="f", longName="file", description="The path to the file to check",
-            required=false, hasArgs=true, argName="path", optionalArgs=false, option="file"),
-    @Option(shortName="w", longName="warning", description="The max age (in seconds) before a warning is raised",
-            required=false, hasArgs=true, argName="age threshold", optionalArgs=false, option="warning"),
-    @Option(shortName="c", longName="critical", description="The max age (in seconds) before a critical is raisedk",
-            required=false, hasArgs=true, argName="age threshold", optionalArgs=false, option="critical"),
-    @Option(shortName="W", longName="sizewarning", description="The min file size (in bytes) before a warning is raised",
-            required=false, hasArgs=true, argName="size threshold", optionalArgs=false, option="sizewarning"),
-    @Option(shortName="C", longName="sizecritical", description="The min file size (in bytes) before a critical is raised",
-            required=false, hasArgs=true, argName="size threshold", optionalArgs=false, option="sizecritical"),
-    @Option(shortName="O", longName="contains", 
-        description="The string that must be found inside the file in the format STRING,WARNING_RANGE,CRITICAL_RANGE.",
-            required=false, hasArgs=true, argName="string to check", optionalArgs=false, option="contains"),
-    @Option(shortName="N", longName="notcontains", description="The path to the file to check",
-            required=false, hasArgs=true, argName="string to check", optionalArgs=false, option="notcontains"),
-              })
+        @Option(shortName = "F", longName = "FILE", description = "The path of the file the must not exist", required = false, hasArgs = true, argName = "path", optionalArgs = false, option = "FILE"),
+        @Option(shortName = "f", longName = "file", description = "The path to the file to check", required = false, hasArgs = true, argName = "path", optionalArgs = false, option = "file"),
+        @Option(shortName = "w", longName = "warning", description = "The max age (in seconds) before a warning is raised", required = false, hasArgs = true, argName = "age threshold", optionalArgs = false, option = "warning"),
+        @Option(shortName = "c", longName = "critical", description = "The max age (in seconds) before a critical is raisedk", required = false, hasArgs = true, argName = "age threshold", optionalArgs = false, option = "critical"),
+        @Option(shortName = "W", longName = "sizewarning", description = "The min file size (in bytes) before a warning is raised", required = false, hasArgs = true, argName = "size threshold", optionalArgs = false, option = "sizewarning"),
+        @Option(shortName = "C", longName = "sizecritical", description = "The min file size (in bytes) before a critical is raised", required = false, hasArgs = true, argName = "size threshold", optionalArgs = false, option = "sizecritical"),
+        @Option(shortName = "O", longName = "contains", description = "The string that must be found inside the file in the format STRING,WARNING_RANGE,CRITICAL_RANGE.", required = false, hasArgs = true, argName = "string to check", optionalArgs = false, option = "contains"),
+        @Option(shortName = "N", longName = "notcontains", description = "The path to the file to check", required = false, hasArgs = true, argName = "string to check", optionalArgs = false, option = "notcontains"), })
 public class CCheckFile extends PluginBase {
 
     /**
@@ -99,8 +82,7 @@ public class CCheckFile extends PluginBase {
      *            The new return value
      * @return The updated return value
      */
-    private ReturnValue updateRes(final ReturnValue res,
-            final ReturnValue newVal) {
+    private ReturnValue updateRes(final ReturnValue res, final ReturnValue newVal) {
 
         if (res == null) {
             return newVal;
@@ -137,9 +119,7 @@ public class CCheckFile extends PluginBase {
         if (f.exists()) {
             return updateRes(res, new ReturnValue(Status.OK, "FILE OK"));
         }
-        return updateRes(res, new ReturnValue(Status.CRITICAL,
-                "FILE CRITICAL: File '" + f.getAbsolutePath()
-                        + "' do not exists"));
+        return updateRes(res, new ReturnValue(Status.CRITICAL, "FILE CRITICAL: File '" + f.getAbsolutePath() + "' do not exists"));
     }
 
     /**
@@ -155,32 +135,26 @@ public class CCheckFile extends PluginBase {
      * @throws BadThresholdException
      *             -
      */
-    private ReturnValue checkAge(final ICommandLine cl, final File f,
-            final ReturnValue res)
-            throws BadThresholdException {
+    private ReturnValue checkAge(final ICommandLine cl, final File f, final ReturnValue res) throws BadThresholdException {
         if (cl.hasOption("critical")) {
             long lLastAccess = f.lastModified();
             long lNow = System.currentTimeMillis();
-            BigDecimal lAge =
-                    new BigDecimal("" + ((lNow - lLastAccess) / 1000));
+            BigDecimal lAge = new BigDecimal("" + ((lNow - lLastAccess) / 1000));
             String sCriticalThreshold = cl.getOptionValue("critical");
 
             if (ThresholdUtil.isValueInRange(sCriticalThreshold, lAge)) {
-                return updateRes(res, new ReturnValue(Status.CRITICAL,
-                        "FILE CRITICAL - File age : " + lAge + " seconds"));
+                return updateRes(res, new ReturnValue(Status.CRITICAL, "FILE CRITICAL - File age : " + lAge + " seconds"));
             }
         }
 
         if (cl.hasOption("warning")) {
             long lLastAccess = f.lastModified();
             long lNow = System.currentTimeMillis();
-            BigDecimal lAge =
-                    new BigDecimal("" + ((lNow - lLastAccess) / 1000));
+            BigDecimal lAge = new BigDecimal("" + ((lNow - lLastAccess) / 1000));
             String sWarningThreshold = cl.getOptionValue("warning");
 
             if (ThresholdUtil.isValueInRange(sWarningThreshold, lAge)) {
-                return updateRes(res, new ReturnValue(Status.WARNING,
-                        "FILE WARNING - File age : " + lAge + " seconds"));
+                return updateRes(res, new ReturnValue(Status.WARNING, "FILE WARNING - File age : " + lAge + " seconds"));
             }
         }
 
@@ -200,16 +174,13 @@ public class CCheckFile extends PluginBase {
      * @throws BadThresholdException
      *             -
      */
-    private ReturnValue checkSize(final ICommandLine cl, final File f,
-            final ReturnValue res)
-            throws BadThresholdException {
+    private ReturnValue checkSize(final ICommandLine cl, final File f, final ReturnValue res) throws BadThresholdException {
         if (cl.hasOption("sizecritical")) {
             String sCriticalThreshold = cl.getOptionValue("sizecritical");
             BigDecimal bdSize = new BigDecimal("" + f.length());
 
             if (ThresholdUtil.isValueInRange(sCriticalThreshold, bdSize)) {
-                return updateRes(res, new ReturnValue(Status.CRITICAL,
-                        "FILE CRITICAL - File size : " + bdSize + " bytes"));
+                return updateRes(res, new ReturnValue(Status.CRITICAL, "FILE CRITICAL - File size : " + bdSize + " bytes"));
             }
         }
 
@@ -218,8 +189,7 @@ public class CCheckFile extends PluginBase {
             BigDecimal bdSize = new BigDecimal("" + f.length());
 
             if (ThresholdUtil.isValueInRange(sWarningThreshold, bdSize)) {
-                return updateRes(res, new ReturnValue(Status.WARNING,
-                        "FILE WARNING  - File size : " + bdSize + " bytes"));
+                return updateRes(res, new ReturnValue(Status.WARNING, "FILE WARNING  - File size : " + bdSize + " bytes"));
             }
         }
 
@@ -239,9 +209,7 @@ public class CCheckFile extends PluginBase {
      * @throws BadThresholdException
      *             -
      */
-    private ReturnValue checkContains(final ICommandLine cl, final File f,
-            final ReturnValue res)
-            throws BadThresholdException {
+    private ReturnValue checkContains(final ICommandLine cl, final File f, final ReturnValue res) throws BadThresholdException {
         if (!cl.hasOption("contains")) {
             return updateRes(res, new ReturnValue(Status.OK, "FILE OK"));
         }
@@ -249,9 +217,7 @@ public class CCheckFile extends PluginBase {
         StreamManager sm = new StreamManager();
 
         try {
-            BufferedReader r =
-                    (BufferedReader) sm.handle(new BufferedReader(
-                            new FileReader(f)));
+            BufferedReader r = (BufferedReader) sm.handle(new BufferedReader(new FileReader(f)));
             String sLine = null;
 
             String sWarningThreshold = ":0";
@@ -277,24 +243,16 @@ public class CCheckFile extends PluginBase {
             }
 
             if (ThresholdUtil.isValueInRange(sCriticalThreshold, iCount)) {
-                return updateRes(res, new ReturnValue(Status.CRITICAL,
-                        "FILE CRITICAL - String '" + sPattern + "' found "
-                                + iCount + " times"));
+                return updateRes(res, new ReturnValue(Status.CRITICAL, "FILE CRITICAL - String '" + sPattern + "' found " + iCount + " times"));
             }
             if (ThresholdUtil.isValueInRange(sWarningThreshold, iCount)) {
-                return updateRes(res, new ReturnValue(Status.WARNING,
-                        "FILE WARNING - String '" + sPattern + "' found "
-                                + iCount + " times"));
+                return updateRes(res, new ReturnValue(Status.WARNING, "FILE WARNING - String '" + sPattern + "' found " + iCount + " times"));
             }
 
-            return updateRes(res, new ReturnValue(Status.OK,
-                    "FILE OK - String '" + sPattern + "' found " + iCount
-                            + " times"));
+            return updateRes(res, new ReturnValue(Status.OK, "FILE OK - String '" + sPattern + "' found " + iCount + " times"));
         } catch (IOException e) {
-            sendEvent(LogEvent.WARNING,
-                    "Plugin Execution error : " + e.getMessage(), e);
-            return updateRes(res, new ReturnValue(Status.UNKNOWN,
-                    "FILE UNKNOWN - " + e.getMessage()));
+            sendEvent(LogEvent.WARNING, "Plugin Execution error : " + e.getMessage(), e);
+            return updateRes(res, new ReturnValue(Status.UNKNOWN, "FILE UNKNOWN - " + e.getMessage()));
         } finally {
             sm.closeAll();
         }
@@ -312,8 +270,7 @@ public class CCheckFile extends PluginBase {
      *            The result to be updated
      * @return The updated result
      */
-    private ReturnValue checkNotContains(final ICommandLine cl, final File f,
-            final ReturnValue res) {
+    private ReturnValue checkNotContains(final ICommandLine cl, final File f, final ReturnValue res) {
         if (!cl.hasOption("notcontains")) {
             return updateRes(res, new ReturnValue(Status.OK, "FILE OK"));
         }
@@ -321,9 +278,7 @@ public class CCheckFile extends PluginBase {
         StreamManager sm = new StreamManager();
 
         try {
-            BufferedReader r =
-                    (BufferedReader) sm.handle(new BufferedReader(
-                            new FileReader(f)));
+            BufferedReader r = (BufferedReader) sm.handle(new BufferedReader(new FileReader(f)));
             String sLine = null;
 
             String[] vsPatterns = cl.getOptionValue("notcontains").split(",");
@@ -331,24 +286,15 @@ public class CCheckFile extends PluginBase {
             while ((sLine = r.readLine()) != null) {
                 for (int i = 0; i < vsPatterns.length; i++) {
                     if (sLine.indexOf(vsPatterns[i]) != -1) {
-                        return updateRes(
-                                res,
-                                new ReturnValue(
-                                        Status.CRITICAL,
-                                        "FILE CRITICAL - String '"
-                                            + cl.getOptionValue("notcontains")
-                                            + "' found"));
+                        return updateRes(res, new ReturnValue(Status.CRITICAL, "FILE CRITICAL - String '" + cl.getOptionValue("notcontains")
+                                + "' found"));
                     }
                 }
             }
-            return updateRes(res, new ReturnValue(Status.OK,
-                    "FILE OK: String '" + cl.getOptionValue("notcontains")
-                            + "' not found"));
+            return updateRes(res, new ReturnValue(Status.OK, "FILE OK: String '" + cl.getOptionValue("notcontains") + "' not found"));
         } catch (IOException e) {
-            sendEvent(LogEvent.WARNING,
-                    "Plugin Execution error : " + e.getMessage(), e);
-            return updateRes(res, new ReturnValue(Status.UNKNOWN,
-                    "FILE UNKNOWN - " + e.getMessage()));
+            sendEvent(LogEvent.WARNING, "Plugin Execution error : " + e.getMessage(), e);
+            return updateRes(res, new ReturnValue(Status.UNKNOWN, "FILE UNKNOWN - " + e.getMessage()));
         } finally {
             sm.closeAll();
         }
@@ -364,16 +310,13 @@ public class CCheckFile extends PluginBase {
      * @throws BadThresholdException
      *             -
      */
-    public final ReturnValue execute(final ICommandLine cl)
-            throws BadThresholdException {
+    public final ReturnValue execute(final ICommandLine cl) throws BadThresholdException {
         if (cl.hasOption("FILE")) {
             File f = new File(cl.getOptionValue("FILE"));
             if (f.exists()) {
-                return new ReturnValue(Status.CRITICAL, "File '" + f.getName()
-                        + "' exists");
+                return new ReturnValue(Status.CRITICAL, "File '" + f.getName() + "' exists");
             } else {
-                return new ReturnValue(Status.OK, "File '" + f.getName()
-                        + "' is OK");
+                return new ReturnValue(Status.OK, "File '" + f.getName() + "' is OK");
             }
         }
 
@@ -384,8 +327,7 @@ public class CCheckFile extends PluginBase {
         if (cl.hasOption("file")) {
             f = new File(cl.getOptionValue("file"));
         } else {
-            return new ReturnValue(Status.UNKNOWN,
-                    "Either param -f or -F must be specified");
+            return new ReturnValue(Status.UNKNOWN, "Either param -f or -F must be specified");
         }
 
         // if (!f.exists())

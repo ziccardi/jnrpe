@@ -29,153 +29,131 @@ import org.apache.commons.lang.StringUtils;
  */
 class XmlJNRPEConfiguration extends JNRPEConfiguration {
 
-	@SuppressWarnings("rawtypes")
-	@Override
-	public void load(final File confFile) throws ConfigurationException {
-		// Parse an ini file
-		ServerSection serverConf = getServerSection();
-		CommandsSection commandSection = getCommandSection();
-		try {
-			XMLConfiguration confParser = new XMLConfiguration(confFile);
+    @SuppressWarnings("rawtypes")
+    @Override
+    public void load(final File confFile) throws ConfigurationException {
+        // Parse an ini file
+        ServerSection serverConf = getServerSection();
+        CommandsSection commandSection = getCommandSection();
+        try {
+            XMLConfiguration confParser = new XMLConfiguration(confFile);
 
-			List<Object> vBindAddresses = confParser
-					.getList("server.bind[@address]");
-			int iBindListSize = vBindAddresses.size();
+            List<Object> vBindAddresses = confParser.getList("server.bind[@address]");
+            int iBindListSize = vBindAddresses.size();
 
-			for (int i = 0; i < iBindListSize; i++) {
-				String sAddress = confParser.getString("server.bind(" + i
-						+ ")[@address]");
-				String useSSL = confParser.getString("server.bind(" + i
-						+ ")[@SSL]");
-				if (useSSL == null) {
-					useSSL = "false";
-				}
+            for (int i = 0; i < iBindListSize; i++) {
+                String sAddress = confParser.getString("server.bind(" + i + ")[@address]");
+                String useSSL = confParser.getString("server.bind(" + i + ")[@SSL]");
+                if (useSSL == null) {
+                    useSSL = "false";
+                }
 
-				serverConf.addBindAddress(sAddress,
-						useSSL.equalsIgnoreCase("true"));
-			}
+                serverConf.addBindAddress(sAddress, useSSL.equalsIgnoreCase("true"));
+            }
 
-			String sAcceptParams = confParser.getString(
-					"server[@accept-params]", "true");
+            String sAcceptParams = confParser.getString("server[@accept-params]", "true");
 
-			serverConf.setAcceptParams(sAcceptParams.equalsIgnoreCase("true")
-					|| sAcceptParams.equalsIgnoreCase("yes"));
+            serverConf.setAcceptParams(sAcceptParams.equalsIgnoreCase("true") || sAcceptParams.equalsIgnoreCase("yes"));
 
-			serverConf.setPluginPath(confParser.getString(
-					"server.plugin[@path]", "."));
+            serverConf.setPluginPath(confParser.getString("server.plugin[@path]", "."));
 
-			serverConf.setBackLogSize(confParser.getInt(
-					"server[@backlog-size]", ServerSection.DEFAULT_BACKLOG));
+            serverConf.setBackLogSize(confParser.getInt("server[@backlog-size]", ServerSection.DEFAULT_BACKLOG));
 
-			// TODO : move this to publicly accessible constants
-			serverConf.setReadTimeout(confParser.getInteger(
-					"server[@read-timeout]", 10));
-			// TODO : move this to publicly accessible constants
-			serverConf.setWriteTimeout(confParser.getInteger(
-					"server[@write-timeout]", 60));
+            // TODO : move this to publicly accessible constants
+            serverConf.setReadTimeout(confParser.getInteger("server[@read-timeout]", 10));
+            // TODO : move this to publicly accessible constants
+            serverConf.setWriteTimeout(confParser.getInteger("server[@write-timeout]", 60));
 
-			List<Object> vAllowedAddresses = confParser
-					.getList("server.allow[@ip]");
-			if (vAllowedAddresses != null) {
-				for (Object address : vAllowedAddresses) {
-					serverConf.addAllowedAddress((String) address);
-				}
-			}
+            List<Object> vAllowedAddresses = confParser.getList("server.allow[@ip]");
+            if (vAllowedAddresses != null) {
+                for (Object address : vAllowedAddresses) {
+                    serverConf.addAllowedAddress((String) address);
+                }
+            }
 
-			// Get the commands count ( searching for a better way...)
-			// int iCommandsCount =
-			Object obj = confParser.getProperty("commands.command[@name]");
+            // Get the commands count ( searching for a better way...)
+            // int iCommandsCount =
+            Object obj = confParser.getProperty("commands.command[@name]");
 
-			int iCount = 0;
+            int iCount = 0;
 
-			if (obj != null) {
-				if (obj instanceof List) {
-					iCount = ((List) obj).size();
-				} else {
-					iCount = 1;
-				}
-			}
+            if (obj != null) {
+                if (obj instanceof List) {
+                    iCount = ((List) obj).size();
+                } else {
+                    iCount = 1;
+                }
+            }
 
-			// Loop through configured commands
-			for (int i = 0; i < iCount; i++) {
-				String sCommandName = (String) confParser
-						.getProperty("commands.command(" + i + ")[@name]");
-				String sPluginName = (String) confParser
-						.getProperty("commands.command(" + i
-								+ ")[@plugin_name]");
-				String sWholeCommandLine = (String) confParser
-						.getProperty("commands.command(" + i + ")[@params]");
-				if (sWholeCommandLine == null) {
-					sWholeCommandLine = "";
-				} else {
-					sWholeCommandLine += " ";
-				}
+            // Loop through configured commands
+            for (int i = 0; i < iCount; i++) {
+                String sCommandName = (String) confParser.getProperty("commands.command(" + i + ")[@name]");
+                String sPluginName = (String) confParser.getProperty("commands.command(" + i + ")[@plugin_name]");
+                String sWholeCommandLine = (String) confParser.getProperty("commands.command(" + i + ")[@params]");
+                if (sWholeCommandLine == null) {
+                    sWholeCommandLine = "";
+                } else {
+                    sWholeCommandLine += " ";
+                }
 
-				// Loop through command arguments...
+                // Loop through command arguments...
 
-				Object argsObj = confParser.getProperty("commands.command(" + i
-						+ ").arg[@name]");
-				int iArgsCount = 0;
-				if (argsObj != null) {
-					if (argsObj instanceof List) {
-						iArgsCount = ((List) argsObj).size();
-					} else {
-						iArgsCount = 1;
-					}
-				}
+                Object argsObj = confParser.getProperty("commands.command(" + i + ").arg[@name]");
+                int iArgsCount = 0;
+                if (argsObj != null) {
+                    if (argsObj instanceof List) {
+                        iArgsCount = ((List) argsObj).size();
+                    } else {
+                        iArgsCount = 1;
+                    }
+                }
 
-				StringBuffer commandLineBuffer = new StringBuffer(
-						sWholeCommandLine);
+                StringBuffer commandLineBuffer = new StringBuffer(sWholeCommandLine);
 
-				for (int j = 0; j < iArgsCount; j++) {
-					String sArgName = (String) confParser
-							.getProperty("commands.command(" + i + ").arg(" + j
-									+ ")[@name]");
+                for (int j = 0; j < iArgsCount; j++) {
+                    String sArgName = (String) confParser.getProperty("commands.command(" + i + ").arg(" + j + ")[@name]");
 
-					Object value = confParser.getProperty("commands.command("
-							+ i + ").arg(" + j + ")[@value]");
+                    Object value = confParser.getProperty("commands.command(" + i + ").arg(" + j + ")[@value]");
 
-					String sArgValue = null;
-					if (value instanceof String) {
-						sArgValue = (String) value;
-					} else if (value instanceof Collection) {
-						sArgValue = StringUtils.join((Collection) value,
-								confParser.getListDelimiter());
-					}
+                    String sArgValue = null;
+                    if (value instanceof String) {
+                        sArgValue = (String) value;
+                    } else if (value instanceof Collection) {
+                        sArgValue = StringUtils.join((Collection) value, confParser.getListDelimiter());
+                    }
 
-					if (sArgName.length() > 1) {
-						commandLineBuffer.append("--");
-					} else {
-						commandLineBuffer.append("-");
-					}
+                    if (sArgName.length() > 1) {
+                        commandLineBuffer.append("--");
+                    } else {
+                        commandLineBuffer.append("-");
+                    }
 
-					commandLineBuffer.append(sArgName).append(" ");
+                    commandLineBuffer.append(sArgName).append(" ");
 
-					if (sArgValue != null) {
-						boolean bQuote = sArgValue.indexOf(' ') != -1;
+                    if (sArgValue != null) {
+                        boolean bQuote = sArgValue.indexOf(' ') != -1;
 
-						// FIXME : handle quote escaping...
-						if (bQuote) {
-							commandLineBuffer.append("\"");
-						}
+                        // FIXME : handle quote escaping...
+                        if (bQuote) {
+                            commandLineBuffer.append("\"");
+                        }
 
-						commandLineBuffer.append(sArgValue);
+                        commandLineBuffer.append(sArgValue);
 
-						if (bQuote) {
-							commandLineBuffer.append("\"");
-						}
+                        if (bQuote) {
+                            commandLineBuffer.append("\"");
+                        }
 
-						commandLineBuffer.append(" ");
+                        commandLineBuffer.append(" ");
 
-					}
-				}
-				sWholeCommandLine = commandLineBuffer.toString();
+                    }
+                }
+                sWholeCommandLine = commandLineBuffer.toString();
 
-				commandSection.addCommand(sCommandName, sPluginName,
-						sWholeCommandLine);
-			}
-		} catch (org.apache.commons.configuration.ConfigurationException e) {
-			throw new ConfigurationException(e);
-		}
-	}
+                commandSection.addCommand(sCommandName, sPluginName, sWholeCommandLine);
+            }
+        } catch (org.apache.commons.configuration.ConfigurationException e) {
+            throw new ConfigurationException(e);
+        }
+    }
 }

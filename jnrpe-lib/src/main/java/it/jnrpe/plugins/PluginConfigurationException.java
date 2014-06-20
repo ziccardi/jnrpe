@@ -41,8 +41,7 @@ public class PluginConfigurationException extends Exception {
      * @param cause
      *            The root cause
      */
-    public PluginConfigurationException(final String message,
-            final Throwable cause) {
+    public PluginConfigurationException(final String message, final Throwable cause) {
         super(message, cause);
     }
 

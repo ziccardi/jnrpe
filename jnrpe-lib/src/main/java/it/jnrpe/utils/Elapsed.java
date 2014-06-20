@@ -1,16 +1,16 @@
 package it.jnrpe.utils;
 
 public class Elapsed {
-    
+
     private long seconds;
     private long minutes;
     private long hours;
     private long days;
-    
+
     public Elapsed(long qty, TimeUnit unit) {
         init(qty, unit);
     }
-    
+
     private void init(long qty, TimeUnit unit) {
         long millis = unit.convert(qty);
         seconds = TimeUnit.MILLISECOND.convert(millis, TimeUnit.SECOND) % 60;

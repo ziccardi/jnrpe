@@ -47,8 +47,7 @@ public final class PluginDefinition {
     /**
      * All the options this plugin supports (as parsed from the XML file).
      */
-    private List<PluginOption> pluginOptionsList =
-            new ArrayList<PluginOption>();
+    private List<PluginOption> pluginOptionsList = new ArrayList<PluginOption>();
 
     /**
      * Initializes the plugin definition specifying the Class object that
@@ -63,9 +62,7 @@ public final class PluginDefinition {
      * @param pluginClazz
      *            The plugin Class object
      */
-    public PluginDefinition(final String pluginName,
-            final String pluginDescription,
-            final Class<? extends IPluginInterface> pluginClazz) {
+    public PluginDefinition(final String pluginName, final String pluginDescription, final Class<? extends IPluginInterface> pluginClazz) {
         this.name = pluginName;
         this.pluginClass = pluginClazz;
         this.description = pluginDescription;
@@ -84,9 +81,7 @@ public final class PluginDefinition {
      * @param pluginInstance
      *            The plugin instance
      */
-    public PluginDefinition(final String pluginName,
-            final String pluginDescription,
-            final IPluginInterface pluginInstance) {
+    public PluginDefinition(final String pluginName, final String pluginDescription, final IPluginInterface pluginInstance) {
         this.name = pluginName;
         this.pluginClass = null;
         this.description = pluginDescription;

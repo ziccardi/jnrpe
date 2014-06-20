@@ -35,8 +35,7 @@ class StartStage extends Stage {
     }
 
     @Override
-    public String parse(final String threshold, final RangeConfig tc)
-            throws RangeException {
+    public String parse(final String threshold, final RangeConfig tc) throws RangeException {
 
         if (threshold == null) {
             throw new RangeException("Range can't be null");
@@ -61,8 +60,7 @@ class StartStage extends Stage {
             }
 
             if (!stageParsed) {
-                throw new InvalidRangeSyntaxException(currentStage,
-                        parsedThreshold, threshold);
+                throw new InvalidRangeSyntaxException(currentStage, parsedThreshold, threshold);
             }
         }
 

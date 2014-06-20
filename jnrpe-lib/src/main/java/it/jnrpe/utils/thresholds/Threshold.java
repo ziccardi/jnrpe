@@ -53,18 +53,15 @@ class Threshold implements IThreshold {
     /**
      * The list of ok ranges.
      */
-    private List<Range> okThresholdList =
-            new ArrayList<Range>();
+    private List<Range> okThresholdList = new ArrayList<Range>();
     /**
      * The list of warning ranges.
      */
-    private List<Range> warningThresholdList =
-            new ArrayList<Range>();
+    private List<Range> warningThresholdList = new ArrayList<Range>();
     /**
      * The list of critical ranges.
      */
-    private List<Range> criticalThresholdList =
-            new ArrayList<Range>();
+    private List<Range> criticalThresholdList = new ArrayList<Range>();
 
     /**
      * The unit of measures. It is a free string and should be used only for
@@ -110,8 +107,7 @@ class Threshold implements IThreshold {
      * @throws BadThresholdException
      *             -
      */
-    Threshold(final String definition)
-            throws BadThresholdException {
+    Threshold(final String definition) throws BadThresholdException {
         parse(definition);
     }
 
@@ -123,18 +119,14 @@ class Threshold implements IThreshold {
      * @throws BadThresholdException
      *             -
      */
-    private void parse(final String definition)
-            throws BadThresholdException {
+    private void parse(final String definition) throws BadThresholdException {
         String[] thresholdComponentAry = definition.split(",");
 
         for (String thresholdComponent : thresholdComponentAry) {
             String[] nameValuePair = thresholdComponent.split("=");
 
-            if (nameValuePair == null || nameValuePair.length != 2
-                    || StringUtils.isEmpty(nameValuePair[0])
-                    || StringUtils.isEmpty(nameValuePair[1])) {
-                throw new BadThresholdException("Invalid threshold syntax : "
-                        + definition);
+            if (nameValuePair == null || nameValuePair.length != 2 || StringUtils.isEmpty(nameValuePair[0]) || StringUtils.isEmpty(nameValuePair[1])) {
+                throw new BadThresholdException("Invalid threshold syntax : " + definition);
             }
 
             if (nameValuePair[0].equalsIgnoreCase("metric")) {
@@ -148,16 +140,12 @@ class Threshold implements IThreshold {
                 okThresholdList.add(thr);
                 continue;
             }
-            if (nameValuePair[0].equalsIgnoreCase("warning")
-                    || nameValuePair[0].equalsIgnoreCase("warn")
-                    || nameValuePair[0].equalsIgnoreCase("w")) {
+            if (nameValuePair[0].equalsIgnoreCase("warning") || nameValuePair[0].equalsIgnoreCase("warn") || nameValuePair[0].equalsIgnoreCase("w")) {
                 Range thr = new Range(nameValuePair[1]);
                 warningThresholdList.add(thr);
                 continue;
             }
-            if (nameValuePair[0].equalsIgnoreCase("critical")
-                    || nameValuePair[0].equalsIgnoreCase("crit")
-                    || nameValuePair[0].equalsIgnoreCase("c")) {
+            if (nameValuePair[0].equalsIgnoreCase("critical") || nameValuePair[0].equalsIgnoreCase("crit") || nameValuePair[0].equalsIgnoreCase("c")) {
                 Range thr = new Range(nameValuePair[1]);
                 criticalThresholdList.add(thr);
                 continue;
@@ -239,25 +227,26 @@ class Threshold implements IThreshold {
     }
 
     /**
-     * Evaluates this threshold against the passed in value.
-     * The returned status is computed this way:
+     * Evaluates this threshold against the passed in value. The returned status
+     * is computed this way:
      * <ol>
-     * <li>If at least one ok range is specified, if the value falls inside
-     * one of the ok ranges, {@link Status#OK} is returned.
+     * <li>If at least one ok range is specified, if the value falls inside one
+     * of the ok ranges, {@link Status#OK} is returned.
      * <li>If at lease one critical range is specified, if the value falls
      * inside one of the critical ranges, {@link Status#CRITICAL} is returned.
-     * <li>If at lease one warning range is specified, if the value falls
-     * inside one of the warning ranges, {@link Status#WARNING} is returned.
-     * <li>If neither of the previous match, but at least an OK range has
-     * been specified, return {@link Status#CRITICAL}.
+     * <li>If at lease one warning range is specified, if the value falls inside
+     * one of the warning ranges, {@link Status#WARNING} is returned.
+     * <li>If neither of the previous match, but at least an OK range has been
+     * specified, return {@link Status#CRITICAL}.
      * <li>Otherwise return {@link Status#OK}
      * </ol>
-     * @param value The value to be evaluated.
+     * 
+     * @param value
+     *            The value to be evaluated.
      * @return The computes status.
      */
     public final Status evaluate(final BigDecimal value) {
-        if (okThresholdList.isEmpty() && warningThresholdList.isEmpty()
-                && criticalThresholdList.isEmpty()) {
+        if (okThresholdList.isEmpty() && warningThresholdList.isEmpty() && criticalThresholdList.isEmpty()) {
             return Status.OK;
         }
 
@@ -290,9 +279,10 @@ class Threshold implements IThreshold {
     }
 
     /**
-     * @param metric The name of the metric we want to evaluate.
+     * @param metric
+     *            The name of the metric we want to evaluate.
      * @return <code>true</code> if this threshold is about the passed in
-     * metric.
+     *         metric.
      */
     public final boolean isAboutMetric(final String metric) {
         return metric.equalsIgnoreCase(metricName);

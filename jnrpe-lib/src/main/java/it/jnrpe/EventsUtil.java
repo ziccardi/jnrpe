@@ -25,35 +25,34 @@ import java.util.Collection;
  * @author Massimiliano Ziccardi
  */
 final class EventsUtil {
-	/**
-	 * Default private constructor to avoid instantiations.
-	 */
-	private EventsUtil() {
-	}
+    /**
+     * Default private constructor to avoid instantiations.
+     */
+    private EventsUtil() {
+    }
 
-	/**
-	 * Sends the given event to the given list of listeners.
-	 * 
-	 * @param vListeners
-	 *            The list of listeners
-	 * @param sender
-	 *            The sender
-	 * @param sEventName
-	 *            The name of the event
-	 * @param vParams
-	 *            The event parameters
-	 */
-	public static void sendEvent(
-			final Collection<IJNRPEEventListener> vListeners,
-			final Object sender, final String sEventName, final Object[] vParams) {
-		if (vListeners == null || vListeners.isEmpty()) {
-			return;
-		}
+    /**
+     * Sends the given event to the given list of listeners.
+     * 
+     * @param vListeners
+     *            The list of listeners
+     * @param sender
+     *            The sender
+     * @param sEventName
+     *            The name of the event
+     * @param vParams
+     *            The event parameters
+     */
+    public static void sendEvent(final Collection<IJNRPEEventListener> vListeners, final Object sender, final String sEventName,
+            final Object[] vParams) {
+        if (vListeners == null || vListeners.isEmpty()) {
+            return;
+        }
 
-		SimpleEvent se = new SimpleEvent(sEventName, vParams);
+        SimpleEvent se = new SimpleEvent(sEventName, vParams);
 
-		for (IJNRPEEventListener listener : vListeners) {
-			listener.receive(sender, se);
-		}
-	}
+        for (IJNRPEEventListener listener : vListeners) {
+            listener.receive(sender, se);
+        }
+    }
 }

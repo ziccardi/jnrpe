@@ -30,7 +30,7 @@ import java.sql.SQLException;
 public class Mysql {
     /*
      * Helper class to connect to a Msysql database
-     *
+     * 
      * Author: Frederico Campos
      */
 
@@ -71,8 +71,7 @@ public class Mysql {
             this.database = cl.getOptionValue("database");
         }
         this.hostname = "localhost";
-        if (cl.hasOption("hostname")
-                && !"".equals(cl.getOptionValue("hostname"))) {
+        if (cl.hasOption("hostname") && !"".equals(cl.getOptionValue("hostname"))) {
             this.hostname = cl.getOptionValue("hostname");
         }
         this.port = "3306";
@@ -105,9 +104,7 @@ public class Mysql {
      * @param databaseName
      *            The database name
      */
-    public Mysql(final String serverHostname, final String serverPort,
-            final String dbUsername, final String dbPassword,
-            final String databaseName) {
+    public Mysql(final String serverHostname, final String serverPort, final String dbUsername, final String dbPassword, final String databaseName) {
         this.hostname = serverHostname;
         this.port = serverPort;
         this.username = dbUsername;
@@ -128,24 +125,10 @@ public class Mysql {
      * @throws ClassNotFoundException
      *             -
      */
-    public final Connection getConnection() throws SQLException,
-            InstantiationException, IllegalAccessException,
-            ClassNotFoundException {
-        String url =
-                "jdbc:mysql://"
-                        + this.hostname
-                        + ":"
-                        + this.port
-                        + "/"
-                        + this.database
-                        + "?user="
-                        + this.username
-                        + "&password="
-                        + this.password
-                        + "&autoReconnect=true"
-                        + "&failOverReadOnly=false&maxReconnects=3";
-        DriverManager.registerDriver((Driver) Class.forName(
-                "com.mysql.jdbc.Driver").newInstance());
+    public final Connection getConnection() throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+        String url = "jdbc:mysql://" + this.hostname + ":" + this.port + "/" + this.database + "?user=" + this.username + "&password="
+                + this.password + "&autoReconnect=true" + "&failOverReadOnly=false&maxReconnects=3";
+        DriverManager.registerDriver((Driver) Class.forName("com.mysql.jdbc.Driver").newInstance());
         Connection conn = DriverManager.getConnection(url);
         return conn;
     }

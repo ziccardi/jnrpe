@@ -54,323 +54,275 @@ import org.xml.sax.SAXException;
  */
 public class CheckTomcat extends PluginBase {
 
-	/**
-	 * Default Tomcat http port.
-	 */
-	public static final String DEFAULT_PORT = "8080";
+    /**
+     * Default Tomcat http port.
+     */
+    public static final String DEFAULT_PORT = "8080";
 
-	/**
-	 * Default Tomcat manager URL.
-	 */
-	public static final String DEFAULT_URI = "/manager/status?XML=true";
+    /**
+     * Default Tomcat manager URL.
+     */
+    public static final String DEFAULT_URI = "/manager/status?XML=true";
 
-	/**
-	 * Default timeout.
-	 */
-	public static final String DEFAULT_TIMEOUT = "10";
+    /**
+     * Default timeout.
+     */
+    public static final String DEFAULT_TIMEOUT = "10";
 
-	/**
-	 * Executes the check.
-	 * 
-	 * @param cl
-	 *            The command line
-	 * @return the result of the check
-	 * @throws BadThresholdException
-	 *             if the threshold could not be parsed
-	 */
-	@Override
-	public final ReturnValue execute(final ICommandLine cl)
-			throws BadThresholdException {
-		log.debug("check_tomcat");
-		String username = cl.getOptionValue("username");
-		String password = cl.getOptionValue("password");
-		String hostname = cl.getOptionValue("hostname");
+    /**
+     * Executes the check.
+     * 
+     * @param cl
+     *            The command line
+     * @return the result of the check
+     * @throws BadThresholdException
+     *             if the threshold could not be parsed
+     */
+    @Override
+    public final ReturnValue execute(final ICommandLine cl) throws BadThresholdException {
+        log.debug("check_tomcat");
+        String username = cl.getOptionValue("username");
+        String password = cl.getOptionValue("password");
+        String hostname = cl.getOptionValue("hostname");
 
-		String port = cl.getOptionValue("port", DEFAULT_PORT);
-		String uri = cl.getOptionValue("uri", DEFAULT_URI);
-		String warning = cl.getOptionValue("warning");
-		String critical = cl.getOptionValue("critical");
+        String port = cl.getOptionValue("port", DEFAULT_PORT);
+        String uri = cl.getOptionValue("uri", DEFAULT_URI);
+        String warning = cl.getOptionValue("warning");
+        String critical = cl.getOptionValue("critical");
 
-		int timeout = Integer.parseInt(cl.getOptionValue("timeout",
-				DEFAULT_TIMEOUT));
+        int timeout = Integer.parseInt(cl.getOptionValue("timeout", DEFAULT_TIMEOUT));
 
-		if (!uri.startsWith("/")) {
-			uri = "/" + uri;
-		}
+        if (!uri.startsWith("/")) {
+            uri = "/" + uri;
+        }
 
-		String protocol;
-		String credentials;
+        String protocol;
+        String credentials;
 
-		if (cl.hasOption("ssl")) {
-			protocol = "https://";
-		} else {
-			protocol = "http://";
-		}
+        if (cl.hasOption("ssl")) {
+            protocol = "https://";
+        } else {
+            protocol = "http://";
+        }
 
-		if (password != null) {
-			credentials = username + ":" + password;
-		} else {
-			credentials = username + ":";
-		}
+        if (password != null) {
+            credentials = username + ":" + password;
+        } else {
+            credentials = username + ":";
+        }
 
-		String url = protocol + credentials + "@" + hostname + ":" + port + uri;
+        String url = protocol + credentials + "@" + hostname + ":" + port + uri;
 
-		String encoded = null;
-		try {
-			encoded = Base64.encodeBase64String((username + ":" + password)
-					.getBytes("UTF-8"));
-		} catch (UnsupportedEncodingException e) {
-			throw new BadThresholdException("Error: " + e.getMessage(), e);
-		}
-		Properties props = new Properties();
-		props.put("Authorization", "Basic " + encoded);
-		String response = null;
-		String errmsg = null;
-		try {
-			response = Utils.getUrl(new URL(url), props, timeout * 1000);
+        String encoded = null;
+        try {
+            encoded = Base64.encodeBase64String((username + ":" + password).getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            throw new BadThresholdException("Error: " + e.getMessage(), e);
+        }
+        Properties props = new Properties();
+        props.put("Authorization", "Basic " + encoded);
+        String response = null;
+        String errmsg = null;
+        try {
+            response = Utils.getUrl(new URL(url), props, timeout * 1000);
 
-		} catch (Exception e) {
-			log.info("Plugin execution failed : " + e.getMessage(), e);
-			errmsg = e.getMessage();
-		}
+        } catch (Exception e) {
+            log.info("Plugin execution failed : " + e.getMessage(), e);
+            errmsg = e.getMessage();
+        }
 
-		if (response == null) {
-			return new ReturnValue(Status.WARNING, errmsg);
-		}
+        if (response == null) {
+            return new ReturnValue(Status.WARNING, errmsg);
+        }
 
-		boolean checkThreads = cl.hasOption("threads");
-		boolean checkMemory = cl.hasOption("memory");
+        boolean checkThreads = cl.hasOption("threads");
+        boolean checkMemory = cl.hasOption("memory");
 
-		// can only have one check at a time
-		if (checkThreads && checkMemory) {
-			throw new BadThresholdException(
-					"Either --memory or --threads allowed in command.");
-		}
-		return analyseStatus(response, warning, critical, checkMemory,
-				checkThreads);
-	}
+        // can only have one check at a time
+        if (checkThreads && checkMemory) {
+            throw new BadThresholdException("Either --memory or --threads allowed in command.");
+        }
+        return analyseStatus(response, warning, critical, checkMemory, checkThreads);
+    }
 
-	/**
-	 * Parse xml data and return status.
-	 * 
-	 * @param xml
-	 *            The XML to be analyzed
-	 * @param warning
-	 *            The warning range
-	 * @param critical
-	 *            The critical range
-	 * @return ReturnValue The reesult
-	 */
-	private ReturnValue analyseStatus(final String xml, final String warning,
-			final String critical, boolean checkMemory, boolean checkThreads)
-			throws BadThresholdException {
-		StringBuffer buff = new StringBuffer();
-		log.debug("checkThreads " + checkThreads);
-		log.debug("checkMemory " + checkMemory);
-		log.debug("critical " + critical);
-		log.debug("warning	 " + warning);
+    /**
+     * Parse xml data and return status.
+     * 
+     * @param xml
+     *            The XML to be analyzed
+     * @param warning
+     *            The warning range
+     * @param critical
+     *            The critical range
+     * @return ReturnValue The reesult
+     */
+    private ReturnValue analyseStatus(final String xml, final String warning, final String critical, boolean checkMemory, boolean checkThreads)
+            throws BadThresholdException {
+        StringBuffer buff = new StringBuffer();
+        log.debug("checkThreads " + checkThreads);
+        log.debug("checkMemory " + checkMemory);
+        log.debug("critical " + critical);
+        log.debug("warning	 " + warning);
 
-		ReturnValue retVal = new ReturnValue(Status.OK, null);
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder builder = null;
-		try {
-			builder = factory.newDocumentBuilder();
-		} catch (ParserConfigurationException e) {
-			// This should never happen...
-			throw new IllegalStateException(e);
-		}
-		int freeMem = 0;
-		int totalMem = 0;
-		int availableMem = 0;
-		int maxMem = 0;
-		int memUse = 0;
-		int maxMemMb = 0;
-		int availableMemMb = 0;
-		int currentThreadCount = 0;
-		int currentThreadsBusy = 0;
-		int threadsAvailable = 0;
-		int maxThreads = 0;
+        ReturnValue retVal = new ReturnValue(Status.OK, null);
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = null;
+        try {
+            builder = factory.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            // This should never happen...
+            throw new IllegalStateException(e);
+        }
+        int freeMem = 0;
+        int totalMem = 0;
+        int availableMem = 0;
+        int maxMem = 0;
+        int memUse = 0;
+        int maxMemMb = 0;
+        int availableMemMb = 0;
+        int currentThreadCount = 0;
+        int currentThreadsBusy = 0;
+        int threadsAvailable = 0;
+        int maxThreads = 0;
 
-		InputSource is = new InputSource(new StringReader(xml));
-		try {
-			Document doc = builder.parse(is);
-			XPathFactory xPathfactory = XPathFactory.newInstance();
-			XPath xpath = xPathfactory.newXPath();
-			Element root = (Element) xpath.compile("//status").evaluate(
-					doc.getDocumentElement(), XPathConstants.NODE);
-			Element memory = (Element) xpath.compile("//status/jvm/memory")
-					.evaluate(doc.getDocumentElement(), XPathConstants.NODE);
+        InputSource is = new InputSource(new StringReader(xml));
+        try {
+            Document doc = builder.parse(is);
+            XPathFactory xPathfactory = XPathFactory.newInstance();
+            XPath xpath = xPathfactory.newXPath();
+            Element root = (Element) xpath.compile("//status").evaluate(doc.getDocumentElement(), XPathConstants.NODE);
+            Element memory = (Element) xpath.compile("//status/jvm/memory").evaluate(doc.getDocumentElement(), XPathConstants.NODE);
 
-			// check memory
-			freeMem = Integer.parseInt(memory.getAttribute("free"));
-			totalMem = Integer.parseInt(memory.getAttribute("total"));
-			maxMem = Integer.parseInt(memory.getAttribute("max"));
-			availableMem = freeMem + maxMem - totalMem;
+            // check memory
+            freeMem = Integer.parseInt(memory.getAttribute("free"));
+            totalMem = Integer.parseInt(memory.getAttribute("total"));
+            maxMem = Integer.parseInt(memory.getAttribute("max"));
+            availableMem = freeMem + maxMem - totalMem;
 
-			maxMemMb = maxMem / (1024 * 1024);
-			availableMemMb = availableMem / (1024 * 1024);
-			memUse = (maxMem - availableMem);
-			buff.append("JVM memory use " + Utils.formatSize(memUse) + " ");
-			buff.append("Free: " + Utils.formatSize(freeMem) + ", Total: "
-					+ Utils.formatSize(totalMem) + ", Max: "
-					+ Utils.formatSize(maxMem) + " ");
+            maxMemMb = maxMem / (1024 * 1024);
+            availableMemMb = availableMem / (1024 * 1024);
+            memUse = (maxMem - availableMem);
+            buff.append("JVM memory use " + Utils.formatSize(memUse) + " ");
+            buff.append("Free: " + Utils.formatSize(freeMem) + ", Total: " + Utils.formatSize(totalMem) + ", Max: " + Utils.formatSize(maxMem) + " ");
 
-			if (checkMemory) {
-				String warn = warning != null ? getRangeValue(warning, maxMem,
-						true) : null;
-				String crit = critical != null ? getRangeValue(critical,
-						maxMem, true) : null;
+            if (checkMemory) {
+                String warn = warning != null ? getRangeValue(warning, maxMem, true) : null;
+                String crit = critical != null ? getRangeValue(critical, maxMem, true) : null;
 
-				if (crit != null
-						&& ThresholdUtil.isValueInRange(crit, availableMemMb)) {
-					return new ReturnValue(Status.CRITICAL,
-							"Free memory critical: " + availableMemMb
-									+ " MB available").withPerformanceData(
-							"memory", new Long(maxMemMb), !critical
-									.contains("%") ? UnitOfMeasure.megabytes
-									: UnitOfMeasure.percentage, warning,
-							critical, 0L, new Long(maxMem));
-				}
-				if (warn != null
-						&& ThresholdUtil.isValueInRange(warn, availableMemMb)) {
-					return new ReturnValue(Status.WARNING, "Free memory low: "
-							+ availableMem / (1024 * 1024) + " MB available / "
-							+ buff.toString()).withPerformanceData("memory",
-							new Long(maxMemMb),
-							!warning.contains("%") ? UnitOfMeasure.megabytes
-									: UnitOfMeasure.percentage, warning,
-							critical, 0L, new Long(maxMem));
-				}
-			}
+                if (crit != null && ThresholdUtil.isValueInRange(crit, availableMemMb)) {
+                    return new ReturnValue(Status.CRITICAL, "Free memory critical: " + availableMemMb + " MB available").withPerformanceData(
+                            "memory", new Long(maxMemMb), !critical.contains("%") ? UnitOfMeasure.megabytes : UnitOfMeasure.percentage, warning,
+                            critical, 0L, new Long(maxMem));
+                }
+                if (warn != null && ThresholdUtil.isValueInRange(warn, availableMemMb)) {
+                    return new ReturnValue(Status.WARNING, "Free memory low: " + availableMem / (1024 * 1024) + " MB available / " + buff.toString())
+                            .withPerformanceData("memory", new Long(maxMemMb), !warning.contains("%") ? UnitOfMeasure.megabytes
+                                    : UnitOfMeasure.percentage, warning, critical, 0L, new Long(maxMem));
+                }
+            }
 
-			// check threads
-			NodeList connectors = root.getElementsByTagName("connector");
-			for (int i = 0; i < connectors.getLength(); i++) {
-				Element connector = (Element) connectors.item(i);
-				String connectorName = connector.getAttribute("name");
+            // check threads
+            NodeList connectors = root.getElementsByTagName("connector");
+            for (int i = 0; i < connectors.getLength(); i++) {
+                Element connector = (Element) connectors.item(i);
+                String connectorName = connector.getAttribute("name");
 
-				Element threadInfo = (Element) connector.getElementsByTagName(
-						"threadInfo").item(0);
-				maxThreads = Integer.parseInt(threadInfo
-						.getAttribute("maxThreads"));
-				currentThreadCount = Integer.parseInt(threadInfo
-						.getAttribute("currentThreadCount"));
-				currentThreadsBusy = Integer.parseInt(threadInfo
-						.getAttribute("currentThreadsBusy"));
-				threadsAvailable = maxThreads - currentThreadsBusy;
-				log.debug("Connector " + connectorName + " maxThreads: "
-						+ maxThreads + ", currentThreadCount:"
-						+ currentThreadCount + ", currentThreadsBusy: "
-						+ currentThreadsBusy);
+                Element threadInfo = (Element) connector.getElementsByTagName("threadInfo").item(0);
+                maxThreads = Integer.parseInt(threadInfo.getAttribute("maxThreads"));
+                currentThreadCount = Integer.parseInt(threadInfo.getAttribute("currentThreadCount"));
+                currentThreadsBusy = Integer.parseInt(threadInfo.getAttribute("currentThreadsBusy"));
+                threadsAvailable = maxThreads - currentThreadsBusy;
+                log.debug("Connector " + connectorName + " maxThreads: " + maxThreads + ", currentThreadCount:" + currentThreadCount
+                        + ", currentThreadsBusy: " + currentThreadsBusy);
 
-				String msg = connectorName + " - thread count: "
-						+ currentThreadCount + ", current threads busy: "
-						+ currentThreadsBusy + ", max threads: " + maxThreads;
+                String msg = connectorName + " - thread count: " + currentThreadCount + ", current threads busy: " + currentThreadsBusy
+                        + ", max threads: " + maxThreads;
 
-				if (checkThreads) {
-					String warn = warning != null ? getRangeValue(warning,
-							maxThreads, false) : null;
-					String crit = critical != null ? getRangeValue(critical,
-							maxThreads, false) : null;
+                if (checkThreads) {
+                    String warn = warning != null ? getRangeValue(warning, maxThreads, false) : null;
+                    String crit = critical != null ? getRangeValue(critical, maxThreads, false) : null;
 
-					if (critical != null
-							&& ThresholdUtil.isValueInRange(crit,
-									threadsAvailable)) {
-						return new ReturnValue(Status.CRITICAL,
-								"CRITICAL - Free " + connectorName
-										+ " threads: " + threadsAvailable)
-								.withMessage(msg)
-								.withPerformanceData(
-										connectorName + " threads",
-										new Long(threadsAvailable),
-										!critical.contains("%") ? UnitOfMeasure.counter
-												: UnitOfMeasure.percentage,
-										warning, critical, 0L,
-										new Long(maxThreads));
-					}
-					if (warning != null
-							&& ThresholdUtil.isValueInRange(warn,
-									threadsAvailable)) {
-						return new ReturnValue(Status.WARNING,
-								"WARNING - Free " + connectorName
-										+ " threads: " + threadsAvailable
-										+ ", " + msg).withPerformanceData(
-								connectorName + " threads", new Long(
-										threadsAvailable), !warning
-										.contains("%") ? UnitOfMeasure.counter
-										: UnitOfMeasure.percentage, warning,
-								critical, 0L, new Long(maxThreads));
-					}
+                    if (critical != null && ThresholdUtil.isValueInRange(crit, threadsAvailable)) {
+                        return new ReturnValue(Status.CRITICAL, "CRITICAL - Free " + connectorName + " threads: " + threadsAvailable)
+                                .withMessage(msg).withPerformanceData(connectorName + " threads", new Long(threadsAvailable),
+                                        !critical.contains("%") ? UnitOfMeasure.counter : UnitOfMeasure.percentage, warning, critical, 0L,
+                                        new Long(maxThreads));
+                    }
+                    if (warning != null && ThresholdUtil.isValueInRange(warn, threadsAvailable)) {
+                        return new ReturnValue(Status.WARNING, "WARNING - Free " + connectorName + " threads: " + threadsAvailable + ", " + msg)
+                                .withPerformanceData(connectorName + " threads", new Long(threadsAvailable),
+                                        !warning.contains("%") ? UnitOfMeasure.counter : UnitOfMeasure.percentage, warning, critical, 0L, new Long(
+                                                maxThreads));
+                    }
 
-				}
-				buff.append(msg);
-			}
+                }
+                buff.append(msg);
+            }
 
-			retVal.withMessage(buff.toString());
-		} catch (XPathExpressionException e) {
-			e.printStackTrace();
+            retVal.withMessage(buff.toString());
+        } catch (XPathExpressionException e) {
+            e.printStackTrace();
 
-		} catch (SAXException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-		return retVal;
-	}
+        return retVal;
+    }
 
-	/**
-	 * Extract numeric value, even if it's a percentage sign.
-	 * 
-	 * @param value
-	 *            The value
-	 * @param factor
-	 *            The factor
-	 * @return int The numeric value
-	 */
-	private long getValue(String value, final int factor, boolean memory) {
-		long val = 0;
-		if (value != null) {
-			if (value.contains("%")) {
-				val = (long) ((factor * Double.parseDouble(value.replace(":",
-						"").replace("%", ""))) / 100);
-				if (memory) {
-					val = val / (1024 * 1024); // MB
-				}
-			} else {
-				val = Long.parseLong(value.replace(":", ""));
-			}
-		}
-		return val;
+    /**
+     * Extract numeric value, even if it's a percentage sign.
+     * 
+     * @param value
+     *            The value
+     * @param factor
+     *            The factor
+     * @return int The numeric value
+     */
+    private long getValue(String value, final int factor, boolean memory) {
+        long val = 0;
+        if (value != null) {
+            if (value.contains("%")) {
+                val = (long) ((factor * Double.parseDouble(value.replace(":", "").replace("%", ""))) / 100);
+                if (memory) {
+                    val = val / (1024 * 1024); // MB
+                }
+            } else {
+                val = Long.parseLong(value.replace(":", ""));
+            }
+        }
+        return val;
 
-	}
+    }
 
-	private String getRangeValue(String value, int factor, boolean memory) {
-		boolean hadRangeStart = false;
-		boolean hadRangeEnd = false;
-		if (value.endsWith(":")) {
-			hadRangeEnd = true;
-			value = value.substring(0, value.length() - 1);
-		}
-		if (value.startsWith(":")) {
-			hadRangeStart = true;
-			value = value.substring(1, value.length());
-		}
-		String val = "" + getValue(value, factor, memory);
+    private String getRangeValue(String value, int factor, boolean memory) {
+        boolean hadRangeStart = false;
+        boolean hadRangeEnd = false;
+        if (value.endsWith(":")) {
+            hadRangeEnd = true;
+            value = value.substring(0, value.length() - 1);
+        }
+        if (value.startsWith(":")) {
+            hadRangeStart = true;
+            value = value.substring(1, value.length());
+        }
+        String val = "" + getValue(value, factor, memory);
 
-		if (hadRangeStart) {
-			val = ":" + val;
+        if (hadRangeStart) {
+            val = ":" + val;
 
-		}
-		if (hadRangeEnd) {
-			val += ":";
-		}
+        }
+        if (hadRangeEnd) {
+            val += ":";
+        }
 
-		return val;
-	}
+        return val;
+    }
 
-	@Override
-	protected String getPluginName() {
-		return "CHECK_TOMCAT";
-	}
+    @Override
+    protected String getPluginName() {
+        return "CHECK_TOMCAT";
+    }
 }

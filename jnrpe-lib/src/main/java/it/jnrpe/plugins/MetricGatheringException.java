@@ -46,8 +46,7 @@ public class MetricGatheringException extends Exception {
      * @param cause
      *            The original cause of the error.
      */
-    public MetricGatheringException(final String message, final Status status,
-            final Throwable cause) {
+    public MetricGatheringException(final String message, final Status status, final Throwable cause) {
         super(message, cause);
         returnStatus = status;
     }

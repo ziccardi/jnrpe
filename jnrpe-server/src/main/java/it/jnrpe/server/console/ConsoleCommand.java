@@ -23,31 +23,29 @@ import it.jnrpe.JNRPE;
 public abstract class ConsoleCommand implements IConsoleCommand {
     private final JNRPE jnrpeInstance;
     private final ConsoleReader console;
-    
+
     public ConsoleCommand(ConsoleReader consoleReader, JNRPE jnrpe) {
         jnrpeInstance = jnrpe;
         console = consoleReader;
     }
-    
+
     protected JNRPE getJNRPE() {
         return jnrpeInstance;
     }
-    
+
     protected ConsoleReader getConsole() {
         return console;
     }
-    
+
     protected void println(String msg) throws IOException {
-    	getConsole().println(msg);
+        getConsole().println(msg);
     }
-    
+
     protected String highlight(final String msg) {
-        if (msg == null){
+        if (msg == null) {
             throw new IllegalArgumentException("Message can't be null");
         }
-        
-        return new StringBuffer("\u001B[1m")
-            .append(msg)
-            .append("\u001B[0m").toString();
+
+        return new StringBuffer("\u001B[1m").append(msg).append("\u001B[0m").toString();
     }
 }

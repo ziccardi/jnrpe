@@ -34,11 +34,12 @@ import java.io.InputStreamReader;
 public class CNativePlugin extends PluginBase {
 
     /**
-     * The first parameter must be the full
-     * path to the executable.
+     * The first parameter must be the full path to the executable.
      *
      * The rest of the array is sent to the executable as commands parameters
-     * @param cl The parsed command line
+     * 
+     * @param cl
+     *            The parsed command line
      * @return The return value of the plugin
      */
     public final ReturnValue execute(final ICommandLine cl) {
@@ -46,31 +47,23 @@ public class CNativePlugin extends PluginBase {
         StreamManager streamMgr = new StreamManager();
 
         if (!fProcessFile.exists()) {
-            return new ReturnValue(Status.UNKNOWN,
-                    "Could not exec executable : "
-                            + fProcessFile.getAbsolutePath());
+            return new ReturnValue(Status.UNKNOWN, "Could not exec executable : " + fProcessFile.getAbsolutePath());
         }
 
         try {
-            String[] vsParams =
-                    StringUtils.split(cl.getOptionValue("args", ""), false);
+            String[] vsParams = StringUtils.split(cl.getOptionValue("args", ""), false);
             String[] vCommand = new String[vsParams.length + 1];
             vCommand[0] = cl.getOptionValue("executable");
             System.arraycopy(vsParams, 0, vCommand, 1, vsParams.length);
             Process p = Runtime.getRuntime().exec(vCommand);
-            BufferedReader br =
-                    (BufferedReader) streamMgr.handle(new BufferedReader(
-                            new InputStreamReader(p.getInputStream())));
+            BufferedReader br = (BufferedReader) streamMgr.handle(new BufferedReader(new InputStreamReader(p.getInputStream())));
             String sMessage = br.readLine();
             int iReturnCode = p.waitFor();
 
             return new ReturnValue(Status.fromIntValue(iReturnCode), sMessage);
         } catch (Exception e) {
-            log.warn("Error executing the native plugin : "
-                    + e.getMessage(), e);
-            return new ReturnValue(Status.UNKNOWN,
-                    "Could not exec executable : " + fProcessFile.getName()
-                            + " - ERROR : " + e.getMessage());
+            log.warn("Error executing the native plugin : " + e.getMessage(), e);
+            return new ReturnValue(Status.UNKNOWN, "Could not exec executable : " + fProcessFile.getName() + " - ERROR : " + e.getMessage());
         } finally {
             streamMgr.closeAll();
         }

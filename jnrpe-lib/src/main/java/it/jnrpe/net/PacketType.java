@@ -21,59 +21,59 @@ package it.jnrpe.net;
  * @author Massimiliano Ziccardi
  */
 public enum PacketType {
-	/**
-	 * Id code for a packet containing a query.
-	 */
-	QUERY(1),
-	/**
-	 * Id code for a packet containing a response.
-	 */
-	RESPONSE(2),
-	/**
-	 * Id code for an unknown packet type.
-	 */
-	UNKNOWN(99);
+    /**
+     * Id code for a packet containing a query.
+     */
+    QUERY(1),
+    /**
+     * Id code for a packet containing a response.
+     */
+    RESPONSE(2),
+    /**
+     * Id code for an unknown packet type.
+     */
+    UNKNOWN(99);
 
-	/**
-	 * The enumeration int value.
-	 */
-	private final int intValue;
+    /**
+     * The enumeration int value.
+     */
+    private final int intValue;
 
-	/**
-	 * Builds an enumeration with the given int value.
-	 * 
-	 * @param value
-	 *            The value
-	 */
-	PacketType(final int value) {
-		intValue = value;
-	}
+    /**
+     * Builds an enumeration with the given int value.
+     * 
+     * @param value
+     *            The value
+     */
+    PacketType(final int value) {
+        intValue = value;
+    }
 
-	/**
-	 * Returns the int value of the enum.
-	 * 
-	 * @return The int value
-	 */
-	public int intValue() {
-		return intValue;
-	}
+    /**
+     * Returns the int value of the enum.
+     * 
+     * @return The int value
+     */
+    public int intValue() {
+        return intValue;
+    }
 
-	/**
-	 * Converts from the protocol int value representing the state to the
-	 * enumeration constant.
-	 * 
-	 * @param value
-	 *            The int value state
-	 * @return The Enumeration
-	 */
-	public static PacketType fromIntValue(final int value) {
-		switch (value) {
-		case 1:
-			return QUERY;
-		case 2:
-			return RESPONSE;
-		default:
-			return UNKNOWN;
-		}
-	}
+    /**
+     * Converts from the protocol int value representing the state to the
+     * enumeration constant.
+     * 
+     * @param value
+     *            The int value state
+     * @return The Enumeration
+     */
+    public static PacketType fromIntValue(final int value) {
+        switch (value) {
+        case 1:
+            return QUERY;
+        case 2:
+            return RESPONSE;
+        default:
+            return UNKNOWN;
+        }
+    }
 }
