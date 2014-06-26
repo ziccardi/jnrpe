@@ -127,7 +127,7 @@ It is fully compatible with check_nrpe and can be used to execute both old nativ
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>findbugs-maven-plugin</artifactId>
-					<version>2.5.2</version>
+					<version>2.5.4</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -182,7 +182,7 @@ It is fully compatible with check_nrpe and can be used to execute both old nativ
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
-				<version>3.2</version>
+				<version>3.3</version>
 				<dependencies>
 					<dependency><!-- add support for ssh/scp -->
 						<groupId>org.apache.maven.wagon</groupId>
@@ -243,7 +243,7 @@ It is fully compatible with check_nrpe and can be used to execute both old nativ
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>findbugs-maven-plugin</artifactId>
-				<version>2.5.2</version>
+				<version>2.5.4</version>
 				<configuration>
 					<effort>Max</effort>
 					<threshold>Low</threshold>
@@ -262,7 +262,7 @@ It is fully compatible with check_nrpe and can be used to execute both old nativ
 	<distributionManagement>
 		<site>
 			<id>jnrpe-web</id>
-			<url>scp://shell.sourceforge.net/home/project-web/jnrpe/htdocs</url>
+			<url>scp://shell.sourceforge.net/home/project-web/jnrpe/htdocs/</url>
 		</site>
 	</distributionManagement>
 	<modules>

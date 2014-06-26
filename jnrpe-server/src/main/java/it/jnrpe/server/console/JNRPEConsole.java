@@ -59,7 +59,7 @@ public class JNRPEConsole {
                     continue;
                 }
                 try {
-                    exit = CommandExecutor.getInstance(console, jnrpeInstance, pluginRepository, commandRepository).executeCommand(commandLine);
+                    exit = CommandExecutor.getInstance(console, jnrpeInstance).executeCommand(commandLine);
                 } catch (Exception e) {
                     console.println(highlight("ERROR: ") + e.getMessage());
                 }

@@ -16,6 +16,7 @@
 package it.jnrpe.server.console;
 
 import it.jnrpe.JNRPE;
+import it.jnrpe.JNRPEExecutionContext;
 import it.jnrpe.commands.CommandDefinition;
 import it.jnrpe.commands.CommandRepository;
 import it.jnrpe.plugins.IPluginRepository;
@@ -41,25 +42,26 @@ public class CommandExecutor {
 
     private static CommandExecutor instance = null;
 
-    public static synchronized CommandExecutor getInstance(ConsoleReader consoleReader, JNRPE jnrpe, IPluginRepository pluginRepository,
-            CommandRepository commandRepository) {
+    public static synchronized CommandExecutor getInstance(ConsoleReader consoleReader, JNRPE jnrpe) {
         if (instance == null) {
             instance = new CommandExecutor();
             instance.commandMap.put(ExitCommand.NAME, new ExitCommand(consoleReader, jnrpe));
             instance.commandMap.put(HelpCommand.NAME, new HelpCommand(consoleReader, jnrpe, instance.commandMap));
 
-            for (PluginDefinition pd : pluginRepository.getAllPlugins()) {
+            JNRPEExecutionContext ctx = jnrpe.getExecutionContext();
+            
+            for (PluginDefinition pd : ctx.getPluginRepository().getAllPlugins()) {
                 try {
-                    instance.commandMap.put(PluginCommand.NAME + pd.getName().toLowerCase(), new PluginCommand(consoleReader, jnrpe, pd.getName(),
-                            pluginRepository));
+                    instance.commandMap.put(PluginCommand.NAME + pd.getName().toLowerCase(), 
+                            new PluginCommand(consoleReader, jnrpe, pd.getName()));
                 } catch (UnknownPluginException e) {
                     // Skip the plugin...
                 }
             }
 
-            for (CommandDefinition cd : commandRepository.getAllCommands()) {
+            for (CommandDefinition cd : ctx.getCommandRepository().getAllCommands()) {
                 instance.commandMap.put(CommandConsoleCommand.NAME + cd.getName().toLowerCase(),
-                        new CommandConsoleCommand(consoleReader, jnrpe, cd.getName(), pluginRepository, commandRepository));
+                        new CommandConsoleCommand(consoleReader, jnrpe, cd.getName()));
             }
         }
 

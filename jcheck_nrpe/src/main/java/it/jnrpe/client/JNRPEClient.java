@@ -230,7 +230,7 @@ public class JNRPEClient {
                 .withShortName("t")
                 .withDescription("Number of seconds before connection " + "times out (default=10)")
                 .withArgument(
-                        aBuilder.withName("timeout").withMinimum(1).withMaximum(1).withDefault(new Long(DEFAULT_TIMEOUT)).withValidator(positiveInt)
+                        aBuilder.withName("timeout").withMinimum(1).withMaximum(1).withDefault(Long.valueOf(DEFAULT_TIMEOUT)).withValidator(positiveInt)
                                 .create()).create();
 
         DefaultOption commandOption = oBuilder.withLongName("command").withShortName("c")
@@ -336,7 +336,7 @@ public class JNRPEClient {
             String sCommand = (String) cli.getValue("--command");
 
             JNRPEClient client = new JNRPEClient(sHost, port.intValue(), !cli.hasOption("--nossl"));
-            client.setTimeout(((Long) cli.getValue("--timeout", new Long(DEFAULT_TIMEOUT))).intValue());
+            client.setTimeout(((Long) cli.getValue("--timeout", Long.valueOf(DEFAULT_TIMEOUT))).intValue());
 
             @SuppressWarnings("unchecked")
             ReturnValue ret = client.sendCommand(sCommand, (String[]) cli.getValues("--arglist").toArray(new String[0]));

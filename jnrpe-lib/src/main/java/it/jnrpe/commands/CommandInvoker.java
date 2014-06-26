@@ -136,11 +136,7 @@ public final class CommandInvoker {
 
             plugin.addListeners(listenersList);
 
-            if (commandLine != null) {
-                return plugin.execute(commandLine);
-            } else {
-                return plugin.execute(new String[0]);
-            }
+            return plugin.execute(commandLine);
         } catch (Throwable thr) {
             return new ReturnValue(Status.UNKNOWN, "Plugin [" + pluginName + "] execution error: " + thr.getMessage());
         }

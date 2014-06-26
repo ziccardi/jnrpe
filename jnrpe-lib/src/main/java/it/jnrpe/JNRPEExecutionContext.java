@@ -15,7 +15,9 @@
  *******************************************************************************/
 package it.jnrpe;
 
+import it.jnrpe.commands.CommandRepository;
 import it.jnrpe.events.IJNRPEEventListener;
+import it.jnrpe.plugins.IPluginRepository;
 
 import java.nio.charset.Charset;
 import java.util.Collection;
@@ -37,6 +39,9 @@ public class JNRPEExecutionContext {
      */
     private final Charset charset;
 
+    private final IPluginRepository pluginRepository;
+    private final CommandRepository commandRepository;
+    
     /**
      * Builds and initializes the context.
      * 
@@ -45,9 +50,14 @@ public class JNRPEExecutionContext {
      * @param currentCharset
      *            the configured charset
      */
-    JNRPEExecutionContext(final Collection<IJNRPEEventListener> eventListeners, final Charset currentCharset) {
+    JNRPEExecutionContext(final Collection<IJNRPEEventListener> eventListeners, 
+                    final Charset currentCharset,
+                    final IPluginRepository pluginRepo,
+                    final CommandRepository commandRepo) {
         this.eventListenersList = eventListeners;
         this.charset = currentCharset;
+        this.pluginRepository = pluginRepo;
+        this.commandRepository = commandRepo;
     }
 
     /**
@@ -66,5 +76,13 @@ public class JNRPEExecutionContext {
      */
     public final Charset getCharset() {
         return charset;
+    }
+
+    public IPluginRepository getPluginRepository() {
+        return pluginRepository;
+    }
+
+    public CommandRepository getCommandRepository() {
+        return commandRepository;
     }
 }

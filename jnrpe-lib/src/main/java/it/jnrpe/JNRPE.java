@@ -344,8 +344,10 @@ public final class JNRPE {
                 ch.pipeline()
                         .addLast(new JNRPERequestDecoder(), new JNRPEResponseEncoder(), new JNRPEServerHandler(invoker, eventListenersSet))
                         .addLast("idleStateHandler", new IdleStateHandler(readTimeout, writeTimeout, 0))
-                        .addLast("jnrpeIdleStateHandler",
-                                new JNRPEIdleStateHandler(new JNRPEExecutionContext(JNRPE.this.eventListenersSet, Charset.defaultCharset())));
+                        .addLast(
+                                "jnrpeIdleStateHandler",
+                                new JNRPEIdleStateHandler(new JNRPEExecutionContext(JNRPE.this.eventListenersSet, Charset.defaultCharset(),
+                                        pluginRepository, commandRepository)));
             }
         }).option(ChannelOption.SO_BACKLOG, this.maxAcceptedConnections).childOption(ChannelOption.SO_KEEPALIVE, true);
 
@@ -394,6 +396,17 @@ public final class JNRPE {
     @Deprecated
     public void addAcceptedHost(final String address) {
         acceptedHostsList.add(address);
+    }
+
+    /**
+     * Returns the current JNRPE Execution context. An execution context
+     * contains useful informations such the encoding to be used ad the list of
+     * listeners configured to receive the events.
+     * 
+     * @return the current JNRPE Execution context.
+     */
+    public JNRPEExecutionContext getExecutionContext() {
+        return new JNRPEExecutionContext(eventListenersSet, charset, pluginRepository, commandRepository);
     }
 
     /**

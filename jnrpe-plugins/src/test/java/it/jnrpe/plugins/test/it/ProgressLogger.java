@@ -70,6 +70,8 @@ public class ProgressLogger implements IInvokedMethodListener {
 			System.out.println("*** PARTIALLY FAILED ***");
 			break;
 		case ITestResult.STARTED:
+		default:
+		        break;
 		}
 
 		if (testResult.getThrowable() != null) {

@@ -15,6 +15,8 @@
  *******************************************************************************/
 package it.jnrpe.plugin.utils;
 
+import it.jnrpe.utils.StreamManager;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,7 +31,7 @@ import java.io.InputStreamReader;
 public class ShellUtils {
 
     /**
-     * Executes a system command with arguments and returns the output
+     * Executes a system command with arguments and returns the output.
      * 
      * @param command
      * @param encoding
@@ -38,18 +40,25 @@ public class ShellUtils {
      */
     public static String executeSystemCommandAndGetOutput(String[] command, String encoding) throws IOException {
         Process p = Runtime.getRuntime().exec(command);
-        InputStream input = p.getInputStream();
-        StringBuffer lines = new StringBuffer();
-        String line = null;
-        BufferedReader in = new BufferedReader(new InputStreamReader(input, encoding));
-        while ((line = in.readLine()) != null) {
-            lines.append(line).append("\n");
+        
+        StreamManager sm = new StreamManager();
+        
+        try {
+            InputStream input = sm.handle(p.getInputStream());
+            StringBuffer lines = new StringBuffer();
+            String line = null;
+            BufferedReader in = (BufferedReader) sm.handle(new BufferedReader(new InputStreamReader(input, encoding)));
+            while ((line = in.readLine()) != null) {
+                lines.append(line).append("\n");
+            }
+            return lines.toString();
+        } finally {
+            sm.closeAll();
         }
-        return lines.toString();
     }
 
     /**
-     * Check if we are running in a Windows environment
+     * Check if we are running in a Windows environment.
      * 
      * @return true if windows
      */

@@ -88,7 +88,7 @@ public class TimeServer extends Thread {
      * @param date the time to be returned to the next request
      */
     public final void setNextTime(final Date date) {
-        nextTime = date;
+        nextTime = (Date) date.clone();
     }
     
     /**

@@ -24,12 +24,14 @@ import it.jnrpe.plugins.annotations.Option;
 import it.jnrpe.plugins.annotations.Plugin;
 import it.jnrpe.plugins.annotations.PluginOptions;
 import it.jnrpe.utils.BadThresholdException;
+import it.jnrpe.utils.StreamManager;
 import it.jnrpe.utils.thresholds.ThresholdsEvaluatorBuilder;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -110,14 +112,22 @@ public class CheckUsers extends PluginBase {
         ProcessBuilder builder = new ProcessBuilder();
         Process proc = null;
         proc = builder.command(command).start();
-        InputStream stdin = proc.getInputStream();
-        InputStreamReader isr = new InputStreamReader(stdin, "UTF-8");
-        BufferedReader br = new BufferedReader(isr);
-        String line = null;
-        while ((line = br.readLine()) != null) {
-            users.add(line);
+        
+        StreamManager sm = new StreamManager();
+     
+        try {
+            InputStream stdin = sm.handle(proc.getInputStream());
+            Reader isr = sm.handle(new InputStreamReader(stdin, "UTF-8"));
+            BufferedReader br = (BufferedReader) sm.handle(new BufferedReader(isr));
+            String line = null;
+            while ((line = br.readLine()) != null) {
+                users.add(line);
+            }
+            return users.size();
+        } finally {
+            // Close all the streams/readers
+            sm.closeAll();
         }
-        return users.size();
     }
 
     /**
@@ -134,16 +144,23 @@ public class CheckUsers extends PluginBase {
         ProcessBuilder builder = new ProcessBuilder();
         Process proc = null;
         proc = builder.command(command).start();
-        InputStream stdin = proc.getInputStream();
-        InputStreamReader isr = new InputStreamReader(stdin);
-        BufferedReader br = new BufferedReader(isr);
-        String line = null;
-        while ((line = br.readLine()) != null) {
-            if (line.contains("explorer.exe")) {
-                userCount++;
+        
+        StreamManager sm = new StreamManager();
+        
+        try {
+            InputStream stdin = sm.handle(proc.getInputStream());
+            Reader isr = sm.handle(new InputStreamReader(stdin));
+            BufferedReader br = (BufferedReader) sm.handle(new BufferedReader(isr));
+            String line = null;
+            while ((line = br.readLine()) != null) {
+                if (line.contains("explorer.exe")) {
+                    userCount++;
+                }
             }
+            return userCount;
+        } finally {
+            sm.closeAll();
         }
-        return userCount;
     }
 
     @Override

@@ -37,11 +37,11 @@ public class CommandConsoleCommand extends ConsoleCommand {
     private final CommandRepository commandRepository;
     private final IPluginRepository pluginRepository;
 
-    public CommandConsoleCommand(ConsoleReader consoleReader, JNRPE jnrpe, String commandName, IPluginRepository pr, CommandRepository cr) {
+    public CommandConsoleCommand(ConsoleReader consoleReader, JNRPE jnrpe, String commandName) {
         super(consoleReader, jnrpe);
         this.commandName = commandName;
-        this.pluginRepository = pr;
-        this.commandRepository = cr;
+        this.pluginRepository = jnrpe.getExecutionContext().getPluginRepository();
+        this.commandRepository = jnrpe.getExecutionContext().getCommandRepository();
     }
 
     public boolean execute(String[] args) throws Exception {

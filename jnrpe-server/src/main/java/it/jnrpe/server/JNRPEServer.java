@@ -16,6 +16,7 @@
 package it.jnrpe.server;
 
 import it.jnrpe.JNRPE;
+import it.jnrpe.JNRPEExecutionContext;
 import it.jnrpe.JNRPEBuilder;
 import it.jnrpe.commands.CommandRepository;
 import it.jnrpe.plugins.IPluginRepository;

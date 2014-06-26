@@ -68,12 +68,6 @@ public class JNRPEServerHandler extends ChannelInboundHandlerAdapter {
 
             ReturnValue ret = commandInvoker.invoke(req.getCommand(), req.getArguments());
 
-            if (ret == null) {
-                String args = StringUtils.join(req.getArguments(), ',');
-
-                ret = new ReturnValue(Status.UNKNOWN, "Command [" + req.getCommand() + "] with args [" + args + "] returned null");
-            }
-
             JNRPEResponse res = new JNRPEResponse();
             res.setPacketVersion(PacketVersion.VERSION_2);
 

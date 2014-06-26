@@ -25,7 +25,9 @@ import it.jnrpe.plugins.UnknownPluginException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.nio.charset.Charset;
 
 import jline.console.ConsoleReader;
 
@@ -46,11 +48,14 @@ public class PluginCommand extends ConsoleCommand {
 
     private final IPluginInterface plugin;
 
-    public PluginCommand(ConsoleReader consoleReader, JNRPE jnrpe, String pluginName, IPluginRepository pr) throws UnknownPluginException {
+    private final Charset charset;
+    
+    public PluginCommand(ConsoleReader consoleReader, JNRPE jnrpe, String pluginName) throws UnknownPluginException {
         super(consoleReader, jnrpe);
         this.pluginName = pluginName;
-        this.pluginRepository = pr;
-        this.plugin = pr.getPlugin(pluginName);
+        this.pluginRepository = jnrpe.getExecutionContext().getPluginRepository();
+        this.plugin = pluginRepository.getPlugin(pluginName);
+        this.charset = jnrpe.getExecutionContext().getCharset();
     }
 
     public boolean execute(String[] args) throws Exception {
@@ -134,10 +139,10 @@ public class PluginCommand extends ConsoleCommand {
         Group g = getCommandLineGroup();
         HelpFormatter hf = new HelpFormatter(null, null, null, getConsole().getTerminal().getWidth());
         hf.setGroup(g);
-        hf.setPrintWriter(new PrintWriter(bout));
+        hf.setPrintWriter(new PrintWriter(new OutputStreamWriter(bout, charset)));
         hf.printUsage();
 
-        String usage = new String(bout.toByteArray());
+        String usage = new String(bout.toByteArray(), charset);
 
         String[] lines = usage.split("\\n");
 
@@ -157,7 +162,7 @@ public class PluginCommand extends ConsoleCommand {
         HelpFormatter hf = new HelpFormatter("  ", null, null, getConsole().getTerminal().getWidth());
         hf.setGroup(g);
 
-        PrintWriter pw = new PrintWriter(bout);
+        PrintWriter pw = new PrintWriter(new OutputStreamWriter(bout, charset));
         hf.setPrintWriter(pw);
         hf.printHelp();
 
@@ -167,7 +172,7 @@ public class PluginCommand extends ConsoleCommand {
         getConsole().println(highlight("Command Line: "));
         getConsole().println("  " + getName() + " " + getCommandLine());
         getConsole().println(highlight("Usage:"));
-        getConsole().println(new String(bout.toByteArray()));
+        getConsole().println(new String(bout.toByteArray(), charset));
 
     }
 

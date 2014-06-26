@@ -25,6 +25,7 @@ import it.jnrpe.plugins.annotations.Plugin;
 import it.jnrpe.plugins.annotations.PluginOptions;
 import it.jnrpe.utils.BadThresholdException;
 import it.jnrpe.utils.ThresholdUtil;
+import it.jnrpe.utils.TimeUnit;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -514,9 +515,13 @@ public class CheckProcs extends PluginBase {
                 hours = Integer.parseInt(timeParts[i]);
                 break;
             default: // bad input
+                break;
             }
         }
 
-        return (days * SECONDS_IN_DAY) + (hours * SECONDS_IN_HOUR) + (minutes * SECONDS_IN_MINUTE) + seconds;
+        return (int) (TimeUnit.DAY.convert(days, TimeUnit.SECOND)
+                + TimeUnit.HOUR.convert(hours, TimeUnit.SECOND)
+                + TimeUnit.MINUTE.convert(minutes, TimeUnit.SECOND)
+                + seconds);
     }
 }

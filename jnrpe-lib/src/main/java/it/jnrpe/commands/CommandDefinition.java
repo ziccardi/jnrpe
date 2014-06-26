@@ -114,7 +114,7 @@ public final class CommandDefinition {
      * Merges the command line definition read from the server config file with.
      * the values received from check_nrpe and produces a clean command line.
      *
-     * @return a parsable command line
+     * @return a parsable command line or an empty array for empty command line.
      */
     public String[] getCommandLine() {
         String[] resAry = null;

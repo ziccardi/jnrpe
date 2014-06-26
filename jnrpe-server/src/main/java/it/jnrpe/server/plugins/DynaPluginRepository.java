@@ -134,6 +134,7 @@ public class DynaPluginRepository extends PluginRepository {
                         jarFile.close();
                     } catch (Exception e) {
                         // Intentionally ignored...
+                        LOG.warn("An error has occurred closing jar file '" + file.getName() + "'", e);
                     }
                 }
             }
