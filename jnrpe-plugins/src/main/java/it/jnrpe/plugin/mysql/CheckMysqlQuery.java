@@ -60,18 +60,18 @@ public class CheckMysqlQuery extends PluginBase {
      * @return the metrics
      */
     public final Collection<Metric> gatherMetrics(final ICommandLine cl) throws MetricGatheringException {
-        log.debug("check_mysql_query gather metrics");
+        LOG.debug(getContext(), "check_mysql_query gather metrics");
         List<Metric> metrics = new ArrayList<Metric>();
         Mysql mysql = new Mysql(cl);
         Connection conn = null;
         try {
             conn = mysql.getConnection();
         } catch (ClassNotFoundException e) {
-            log.error("Mysql driver library not found into the classpath" + ": download and put it in the same directory " + "of this plugin");
+            LOG.error(getContext(), "Mysql driver library not found into the classpath" + ": download and put it in the same directory " + "of this plugin");
             throw new MetricGatheringException("CHECK_MYSQL_QUERY - CRITICAL: Error accessing the " + "MySQL server - JDBC driver not installed",
                     Status.CRITICAL, e);
         } catch (Exception e) {
-            log.error("Error accessing the MySQL server", e);
+            LOG.error(getContext(), "Error accessing the MySQL server", e);
             throw new MetricGatheringException("CHECK_MYSQL_QUERY - CRITICAL: Error accessing " + "the MySQL server - " + e.getMessage(),
                     Status.CRITICAL, e);
         }
@@ -91,21 +91,21 @@ public class CheckMysqlQuery extends PluginBase {
             metrics.add(new Metric("rows", "CHECK_MYSQL_QUERY - Returned value is " + (value != null ? value.longValue() : null), value, null, null));
 
         } catch (SQLException e) {
-            log.warn("Error executing plugin CheckMysqlQuery : " + e.getMessage(), e);
+            LOG.warn(getContext(), "Error executing plugin CheckMysqlQuery : " + e.getMessage(), e);
             throw new MetricGatheringException("CHECK_MYSQL_QUERY - CRITICAL: " + e.getMessage(), Status.CRITICAL, e);
         } finally {
             if (st != null) {
                 try {
                     st.close();
                 } catch (SQLException e) {
-                    log.error("Error closing MySQL statement", e);
+                    LOG.error(getContext(), "Error closing MySQL statement", e);
                 }
             }
             if (set != null) {
                 try {
                     set.close();
                 } catch (SQLException e) {
-                    log.error("Error closing MySQL ResultSet", e);
+                    LOG.error(getContext(), "Error closing MySQL ResultSet", e);
                 }
             }
             mysql.closeConnection(conn);

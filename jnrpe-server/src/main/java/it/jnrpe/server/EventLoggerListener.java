@@ -15,8 +15,7 @@
  *******************************************************************************/
 package it.jnrpe.server;
 
-import it.jnrpe.events.IJNRPEEvent;
-import it.jnrpe.events.IJNRPEEventListener;
+import it.jnrpe.events.LogEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,13 +23,15 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.eventbus.Subscribe;
+
 /**
  * The JNRPE Server uses this event listener to populate the log files.
  * 
  * @author Massimiliano Ziccardi
  * 
  */
-public class EventLoggerListener implements IJNRPEEventListener {
+public class EventLoggerListener {
     /**
      * All the loggers.
      */
@@ -44,76 +45,42 @@ public class EventLoggerListener implements IJNRPEEventListener {
      * @param event
      *            The event
      */
-    public final void receive(final Object sender, final IJNRPEEvent event) {
-        String sClassName = sender.getClass().getName();
+    @Subscribe
+    public final void receive(LogEvent logEvent) {
+        String sClassName = logEvent.getSource().getClass().getName();
 
         Logger logger = loggersMap.get(sClassName);
 
         if (logger == null) {
-            logger = LoggerFactory.getLogger(sender.getClass());
+            logger = LoggerFactory.getLogger(logEvent.getSource().getClass());
             loggersMap.put(sClassName, logger);
         }
 
-        Throwable error = (Throwable) event.getEventParams().get("EXCEPTION");
+        Throwable error = logEvent.getCause();
 
         if (error != null) {
             error.printStackTrace();
         }
 
-        String sEventName = event.getEventName();
-
-        if (sEventName.equals("TRACE")) {
-            if (error != null) {
-                logger.trace((String) event.getEventParams().get("MESSAGE"), error);
-            } else {
-                logger.trace((String) event.getEventParams().get("MESSAGE"));
-            }
-            return;
-        }
-
-        if (sEventName.equals("DEBUG")) {
-            if (error != null) {
-                logger.debug((String) event.getEventParams().get("MESSAGE"), error);
-            } else {
-                logger.debug((String) event.getEventParams().get("MESSAGE"));
-            }
-            return;
-        }
-
-        if (sEventName.equals("INFO")) {
-            if (error != null) {
-                logger.info((String) event.getEventParams().get("MESSAGE"), error);
-            } else {
-                logger.info((String) event.getEventParams().get("MESSAGE"));
-            }
-            return;
-        }
-
-        if (sEventName.equals("WARNING")) {
-            if (error != null) {
-                logger.warn((String) event.getEventParams().get("MESSAGE"), error);
-            } else {
-                logger.warn((String) event.getEventParams().get("MESSAGE"));
-            }
-            return;
-        }
-
-        if (sEventName.equals("ERROR")) {
-            if (error != null) {
-                logger.error((String) event.getEventParams().get("MESSAGE"), error);
-            } else {
-                logger.error((String) event.getEventParams().get("MESSAGE"));
-            }
-            return;
-        }
-
-        if (sEventName.equals("FATAL")) {
-            if (error != null) {
-                logger.error((String) event.getEventParams().get("MESSAGE"), (Throwable) (event.getEventParams().get("EXCEPTION")));
-            } else {
-                logger.error((String) event.getEventParams().get("MESSAGE"));
-            }
-            return;
+        switch (logEvent.getLogType()) {
+        case TRACE:
+            logger.trace(logEvent.getMessage(), error);
+            break;
+        case DEBUG:
+            logger.debug(logEvent.getMessage(), error);
+            break;
+        case INFO:
+            logger.info(logEvent.getMessage(), error);
+            break;
+        case WARNING:
+            logger.warn(logEvent.getMessage(), error);
+            break;
+        case ERROR:
+            logger.error(logEvent.getMessage(), error);
+            break;
+        case FATAL:
+            logger.error(logEvent.getMessage(), error);
+            break;
         }
     }
 

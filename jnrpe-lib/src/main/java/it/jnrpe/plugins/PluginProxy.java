@@ -19,6 +19,7 @@ import it.jnrpe.ICommandLine;
 import it.jnrpe.ReturnValue;
 import it.jnrpe.Status;
 import it.jnrpe.utils.BadThresholdException;
+import it.jnrpe.utils.internal.InjectionUtils;
 
 import java.io.PrintWriter;
 import java.util.Collection;
@@ -109,10 +110,13 @@ public final class PluginProxy extends PluginBase {
             p.setGroup(mainOptionsGroup);
             p.setHelpFormatter(hf);
             CommandLine cl = p.parse(argsAry);
-            if (getListeners() != null && proxiedPlugin instanceof IPluginInterfaceEx) {
-                ((IPluginInterfaceEx) proxiedPlugin).addListeners(getListeners());
-            }
-
+            /*if (proxiedPlugin instanceof IPluginInterfaceEx) {
+                ((IPluginInterfaceEx) proxiedPlugin).setContext(this.getContext());
+            }*/
+            
+            // Inject the context...
+            InjectionUtils.inject(proxiedPlugin, getContext());
+            
             Thread.currentThread().setContextClassLoader(proxiedPlugin.getClass().getClassLoader());
 
             ReturnValue retValue = proxiedPlugin.execute(new PluginCommandLine(cl));
@@ -124,8 +128,10 @@ public final class PluginProxy extends PluginBase {
             }
 
             return retValue;
+        } catch (BadThresholdException bte) {
+            throw bte;
         } catch (OptionException e) {
-            // m_Logger.error("ERROR PARSING PLUGIN ARGUMENTS", e);
+            LOG.error(getContext(), "Error parsing plugin '" + getPluginName() + "' command line : " + e.getMessage(), e);
             return new ReturnValue(Status.UNKNOWN, e.getMessage());
         }
     }

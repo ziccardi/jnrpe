@@ -19,9 +19,10 @@ import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
-import it.jnrpe.JNRPEExecutionContext;
-import it.jnrpe.events.EventsUtil;
+import it.jnrpe.IJNRPEExecutionContext;
+import it.jnrpe.JNRPELogger;
 import it.jnrpe.events.LogEvent;
+import it.jnrpe.events.LogEvent.LogEventType;
 
 /**
  * Idle timeout handler.
@@ -30,10 +31,12 @@ import it.jnrpe.events.LogEvent;
  */
 public final class JNRPEIdleStateHandler extends ChannelDuplexHandler {
 
+    private final JNRPELogger LOG = new JNRPELogger(this);
+    
     /**
      * The JNRPE execution context.
      */
-    private final JNRPEExecutionContext jnrpeContext;
+    private final IJNRPEExecutionContext jnrpeContext;
 
     /**
      * The constructor.
@@ -41,7 +44,7 @@ public final class JNRPEIdleStateHandler extends ChannelDuplexHandler {
      * @param ctx
      *            The JNRPE execution context.
      */
-    public JNRPEIdleStateHandler(final JNRPEExecutionContext ctx) {
+    public JNRPEIdleStateHandler(final IJNRPEExecutionContext ctx) {
         this.jnrpeContext = ctx;
     }
 
@@ -51,9 +54,13 @@ public final class JNRPEIdleStateHandler extends ChannelDuplexHandler {
             IdleStateEvent e = (IdleStateEvent) evt;
             if (e.state() == IdleState.READER_IDLE) {
                 ctx.close();
-                EventsUtil.sendEvent(this.jnrpeContext, this, LogEvent.INFO, "Read Timeout");
+                LOG.warn(jnrpeContext, "Read Timeout");
+                //jnrpeContext.getEventBus().post(new LogEvent(this, LogEventType.INFO, "Read Timeout"));
+                //EventsUtil.sendEvent(this.jnrpeContext, this, LogEvent.INFO, "Read Timeout");
             } else if (e.state() == IdleState.WRITER_IDLE) {
-                EventsUtil.sendEvent(jnrpeContext, this, LogEvent.INFO, "Write Timeout");
+                LOG.warn(jnrpeContext, "Write Timeout");
+                //jnrpeContext.getEventBus().post(new LogEvent(this, LogEventType.INFO, "Write Timeout"));
+                //EventsUtil.sendEvent(jnrpeContext, this, LogEvent.INFO, "Write Timeout");
                 ctx.close();
             }
         }

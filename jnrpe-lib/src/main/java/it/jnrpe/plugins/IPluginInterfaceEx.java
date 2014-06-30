@@ -15,9 +15,7 @@
  *******************************************************************************/
 package it.jnrpe.plugins;
 
-import java.util.Collection;
-
-import it.jnrpe.events.IJNRPEEventListener;
+import it.jnrpe.IJNRPEExecutionContext;
 
 /**
  * This interface must be implemented by all the plugins that needs to send
@@ -30,20 +28,6 @@ import it.jnrpe.events.IJNRPEEventListener;
  *
  */
 public interface IPluginInterfaceEx extends IPluginInterface {
-    /**
-     * Adds a new listener to the list of objects that will receive the messages
-     * sent by this class.
-     *
-     * @param listener
-     *            The new listener
-     */
-    void addListener(IJNRPEEventListener listener);
-
-    /**
-     * Adds a whole collection of listeners to the plugin.
-     *
-     * @param listeners
-     *            The list of listeners
-     */
-    void addListeners(Collection<IJNRPEEventListener> listeners);
+    
+    //void setContext(IJNRPEExecutionContext ctx);
 }

@@ -16,19 +16,17 @@
 package it.jnrpe.plugins;
 
 import it.jnrpe.ICommandLine;
+import it.jnrpe.IJNRPEExecutionContext;
+import it.jnrpe.JNRPELogger;
 import it.jnrpe.ReturnValue;
-import it.jnrpe.events.EventParam;
-import it.jnrpe.events.EventsUtil;
-import it.jnrpe.events.IJNRPEEventListener;
 import it.jnrpe.events.LogEvent;
+import it.jnrpe.events.LogEvent.LogEventType;
 import it.jnrpe.utils.BadThresholdException;
 import it.jnrpe.utils.thresholds.ReturnValueBuilder;
 import it.jnrpe.utils.thresholds.ThresholdsEvaluatorBuilder;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * This class facilitates the implementation of plugins. If you don't need to
@@ -50,234 +48,19 @@ import java.util.Set;
  * @author Massimiliano Ziccardi
  */
 public abstract class PluginBase implements IPluginInterfaceEx {
-    /**
-     * The list of listener registered for the events raised by this plugin.
-     */
-    private final Set<IJNRPEEventListener> listenersSet = new HashSet<IJNRPEEventListener>();
+
+    @Inject
+    private IJNRPEExecutionContext context;
 
     /**
      * The logger object.
      */
-    protected final Logger log = new Logger();
-
-    /**
-     * This class represent a generic logger that will be used by plugins
-     * extending the {@link PluginBase} to write logs.
-     * 
-     * @author Massimiliano Ziccardi
-     * 
-     */
-    protected class Logger {
-
-        /**
-         * Writes a trace message.
-         * 
-         * @param message
-         *            the message
-         */
-        public final void trace(final String message) {
-            EventsUtil.sendEvent(listenersSet, PluginBase.this, LogEvent.TRACE, message);
-        }
-
-        /**
-         * Writes a trace message and logs the exception.
-         * 
-         * @param message
-         *            the message
-         * @param exc
-         *            the exception to be logged
-         */
-        public final void trace(final String message, final Throwable exc) {
-            EventsUtil.sendEvent(listenersSet, PluginBase.this, LogEvent.TRACE, message, exc);
-        }
-
-        /**
-         * Writes a debug message.
-         * 
-         * @param message
-         *            the message
-         */
-        public final void debug(final String message) {
-            EventsUtil.sendEvent(listenersSet, PluginBase.this, LogEvent.DEBUG, message);
-        }
-
-        /**
-         * Writes a debug message and logs the exception.
-         * 
-         * @param message
-         *            the message
-         * @param exc
-         *            the exception to be logged
-         */
-        public final void debug(final String message, final Throwable exc) {
-            EventsUtil.sendEvent(listenersSet, PluginBase.this, LogEvent.DEBUG, message, exc);
-        }
-
-        /**
-         * Writes an info message.
-         * 
-         * @param message
-         *            the message
-         */
-        public final void info(final String message) {
-            EventsUtil.sendEvent(listenersSet, PluginBase.this, LogEvent.INFO, message);
-        }
-
-        /**
-         * Writes an info message and logs the exception.
-         * 
-         * @param message
-         *            the message
-         * @param exc
-         *            the exception to be logged
-         */
-        public final void info(final String message, final Throwable exc) {
-            EventsUtil.sendEvent(listenersSet, PluginBase.this, LogEvent.INFO, message, exc);
-        }
-
-        /**
-         * Writes a warning message.
-         * 
-         * @param message
-         *            the message
-         */
-        public final void warn(final String message) {
-            EventsUtil.sendEvent(listenersSet, PluginBase.this, LogEvent.WARNING, message);
-        }
-
-        /**
-         * Writes a warning message and logs the exception.
-         * 
-         * @param message
-         *            the message
-         * @param exc
-         *            the exception to be logged
-         */
-        public final void warn(final String message, final Throwable exc) {
-            EventsUtil.sendEvent(listenersSet, PluginBase.this, LogEvent.WARNING, message, exc);
-        }
-
-        /**
-         * Writes an error message.
-         * 
-         * @param message
-         *            the message
-         */
-        public final void error(final String message) {
-            EventsUtil.sendEvent(listenersSet, PluginBase.this, LogEvent.ERROR, message);
-        }
-
-        /**
-         * Writes an error message and logs the exception.
-         * 
-         * @param message
-         *            the message
-         * @param exc
-         *            the exception to be logged
-         */
-        public final void error(final String message, final Throwable exc) {
-            EventsUtil.sendEvent(listenersSet, PluginBase.this, LogEvent.ERROR, message, exc);
-        }
-
-        /**
-         * Writes a fatal message.
-         * 
-         * @param message
-         *            the message
-         */
-        public final void fatal(final String message) {
-            EventsUtil.sendEvent(listenersSet, PluginBase.this, LogEvent.FATAL, message);
-        }
-
-        /**
-         * Writes a fatal message and logs the exception.
-         * 
-         * @param message
-         *            the message
-         * @param exc
-         *            the exception to be logged
-         */
-        public final void fatal(final String message, final Throwable exc) {
-            EventsUtil.sendEvent(listenersSet, PluginBase.this, LogEvent.FATAL, message, exc);
-        }
-    }
-
-    /**
-     * Adds a new listener to the list of objects that will receive the messages
-     * sent by this class.
-     * 
-     * @param listener
-     *            The new listener
-     */
-    public final void addListener(final IJNRPEEventListener listener) {
-        listenersSet.add(listener);
-    }
-
-    /**
-     * Adds a new collection of listeners.
-     * 
-     * @param listeners
-     *            The collection of listeners to be added
-     */
-    public final void addListeners(final Collection<IJNRPEEventListener> listeners) {
-        if (listeners == null) {
-            return;
-        }
-
-        listenersSet.addAll(listeners);
-    }
-
-    /**
-     * Sends an event.
-     * 
-     * @param evt
-     *            The event type
-     * @param message
-     *            The message
-     */
-    public final void sendEvent(final LogEvent evt, final String message) {
-        EventsUtil.sendEvent(listenersSet, this, evt, message);
-    }
-
-    /**
-     * Sends an event.
-     * 
-     * @param evt
-     *            The event type
-     * @param message
-     *            The message
-     * @param exc
-     *            The exception to be attached to the event
-     */
-    public final void sendEvent(final LogEvent evt, final String message, final Exception exc) {
-        EventsUtil.sendEvent(listenersSet, this, evt, message, exc);
-    }
-
-    /**
-     * Sends a custom event.
-     * 
-     * @param customEventName
-     *            The custom event identifier
-     * @param paramsAry
-     *            The parameter of the event. Can be null.
-     */
-    public final void sendEvent(final String customEventName, final EventParam... paramsAry) {
-        EventsUtil.sendEvent(listenersSet, this, customEventName, paramsAry);
-    }
+    protected final JNRPELogger LOG = new JNRPELogger(this);
 
     /**
      * @return the friendly name of this plugins.
      */
     protected abstract String getPluginName();
-
-    /**
-     * Returns all the registered listeners.
-     * 
-     * @return All the listeners
-     */
-    protected final Set<IJNRPEEventListener> getListeners() {
-        return listenersSet;
-    }
 
     /**
      * Override this method if you don't use the new threshold syntax. Here you
@@ -343,5 +126,13 @@ public abstract class PluginBase implements IPluginInterfaceEx {
             return ReturnValueBuilder.forPlugin(getPluginName()).withForcedMessage(mge.getMessage()).withStatus(mge.getStatus()).create();
         }
 
+    }
+
+    // public void setContext(IJNRPEExecutionContext ctx) {
+    // this.context = ctx;
+    // }
+
+    public IJNRPEExecutionContext getContext() {
+        return context;
     }
 }

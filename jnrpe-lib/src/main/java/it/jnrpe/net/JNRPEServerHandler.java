@@ -20,16 +20,12 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.ReferenceCountUtil;
+import it.jnrpe.IJNRPEExecutionContext;
+import it.jnrpe.JNRPELogger;
 import it.jnrpe.ReturnValue;
-import it.jnrpe.Status;
 import it.jnrpe.commands.CommandInvoker;
-import it.jnrpe.events.EventsUtil;
-import it.jnrpe.events.IJNRPEEventListener;
 import it.jnrpe.events.LogEvent;
-
-import java.util.Collection;
-
-import org.apache.commons.lang.StringUtils;
+import it.jnrpe.events.LogEvent.LogEventType;
 
 /**
  * Receives and handles connections to the JNRPE server.
@@ -38,6 +34,8 @@ import org.apache.commons.lang.StringUtils;
  */
 public class JNRPEServerHandler extends ChannelInboundHandlerAdapter {
 
+    private final JNRPELogger LOG = new JNRPELogger(this);
+    
     /**
      * The command invoker.
      */
@@ -46,19 +44,19 @@ public class JNRPEServerHandler extends ChannelInboundHandlerAdapter {
     /**
      * The list of listener that will receive JNRPE events.
      */
-    private final Collection<IJNRPEEventListener> listeners;
+    private final IJNRPEExecutionContext context;
 
     /**
      * Constructor.
      * 
      * @param invoker
      *            the command invoker
-     * @param eventListeners
-     *            The list of listeners
+     * @param ctx
+     *            The execution context
      */
-    public JNRPEServerHandler(final CommandInvoker invoker, final Collection<IJNRPEEventListener> eventListeners) {
+    public JNRPEServerHandler(final CommandInvoker invoker, final IJNRPEExecutionContext ctx) {
         this.commandInvoker = invoker;
-        this.listeners = eventListeners;
+        this.context = ctx;
     }
 
     @Override
@@ -83,7 +81,9 @@ public class JNRPEServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public final void exceptionCaught(final ChannelHandlerContext ctx, final Throwable cause) {
-        EventsUtil.sendEvent(listeners, this, LogEvent.ERROR, cause.getMessage(), cause);
+        LOG.error(context, cause.getMessage(), cause);
+        //context.getEventBus().post(new LogEvent(this, LogEventType.ERROR, cause.getMessage(), cause));
+        //EventsUtil.sendEvent(listeners, this, LogEvent.ERROR, cause.getMessage(), cause);
         ctx.close();
     }
 }

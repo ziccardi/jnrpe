@@ -15,15 +15,21 @@
  *******************************************************************************/
 package it.jnrpe.commands;
 
+import it.jnrpe.IJNRPEExecutionContext;
 import it.jnrpe.JNRPELIB;
+import it.jnrpe.JNRPELogger;
 import it.jnrpe.ReturnValue;
 import it.jnrpe.Status;
-import it.jnrpe.events.EventsUtil;
-import it.jnrpe.events.IJNRPEEventListener;
 import it.jnrpe.events.LogEvent;
+import it.jnrpe.events.LogEvent.LogEventType;
+import it.jnrpe.plugins.IPluginInterface;
 import it.jnrpe.plugins.IPluginRepository;
+import it.jnrpe.plugins.Inject;
 import it.jnrpe.plugins.PluginProxy;
+import it.jnrpe.utils.internal.InjectionUtils;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.regex.Matcher;
 
@@ -34,6 +40,9 @@ import java.util.regex.Matcher;
  * 
  */
 public final class CommandInvoker {
+    
+    private final JNRPELogger LOG = new JNRPELogger(this);
+    
     /**
      * <code>true</code> if the variable parameters ($ARG?$) must be
      * interpolated.
@@ -53,7 +62,7 @@ public final class CommandInvoker {
     /**
      * The listeners.
      */
-    private final Collection<IJNRPEEventListener> listenersList;
+    private final IJNRPEExecutionContext context;
 
     /**
      * Builds and initializes the {@link CommandInvoker} object.
@@ -64,15 +73,15 @@ public final class CommandInvoker {
      * @param commandRepo
      *            The command repository containing all the commands that must
      *            be used by this invoker.
-     * @param listeners
-     *            All the listeners
+     * @param ctx
+     *            The execution context
      */
     public CommandInvoker(final IPluginRepository pluginRepo, final CommandRepository commandRepo, final boolean acceptParams,
-            final Collection<IJNRPEEventListener> listeners) {
+            final IJNRPEExecutionContext ctx) {
         this.acceptParams = acceptParams;
         pluginRepository = pluginRepo;
         commandRepository = commandRepo;
-        listenersList = listeners;
+        context = ctx;
     }
 
     /**
@@ -102,6 +111,8 @@ public final class CommandInvoker {
         return invoke(cd, argsAry);
     }
 
+    
+    
     /**
      * This method executes external commands (plugins) The methods also expands
      * the $ARG?$ macros.
@@ -130,14 +141,20 @@ public final class CommandInvoker {
             PluginProxy plugin = (PluginProxy) pluginRepository.getPlugin(pluginName);
 
             if (plugin == null) {
-                EventsUtil.sendEvent(listenersList, this, LogEvent.INFO, "Unable to instantiate plugin named " + pluginName);
+                LOG.info(context, "Unable to instantiate plugin named " + pluginName);
+                //context.getEventBus().post(new LogEvent(this, LogEventType.INFO, "Unable to instantiate plugin named " + pluginName));
+                //EventsUtil.sendEvent(listenersList, this, LogEvent.INFO, "Unable to instantiate plugin named " + pluginName);
                 return new ReturnValue(Status.UNKNOWN, "Error instantiating plugin '" + pluginName + "' : bad plugin name?");
             }
 
-            plugin.addListeners(listenersList);
+            //plugin.addListeners(listenersList);
+            InjectionUtils.inject(plugin, context);
+            //plugin.setContext(context);
 
             return plugin.execute(commandLine);
         } catch (Throwable thr) {
+            LOG.error(context, "Plugin [" + pluginName + "] execution error", thr);
+            //context.getEventBus().post(new LogEvent(this, LogEventType.ERROR, "Plugin [" + pluginName + "] execution error", thr));
             return new ReturnValue(Status.UNKNOWN, "Plugin [" + pluginName + "] execution error: " + thr.getMessage());
         }
     }

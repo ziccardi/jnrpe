@@ -251,7 +251,8 @@ public class CCheckFile extends PluginBase {
 
             return updateRes(res, new ReturnValue(Status.OK, "FILE OK - String '" + sPattern + "' found " + iCount + " times"));
         } catch (IOException e) {
-            sendEvent(LogEvent.WARNING, "Plugin Execution error : " + e.getMessage(), e);
+            LOG.warn(getContext(), "Plugin Execution error : " + e.getMessage(), e);
+            //sendEvent(LogEvent.WARNING, "Plugin Execution error : " + e.getMessage(), e);
             return updateRes(res, new ReturnValue(Status.UNKNOWN, "FILE UNKNOWN - " + e.getMessage()));
         } finally {
             sm.closeAll();
@@ -293,7 +294,8 @@ public class CCheckFile extends PluginBase {
             }
             return updateRes(res, new ReturnValue(Status.OK, "FILE OK: String '" + cl.getOptionValue("notcontains") + "' not found"));
         } catch (IOException e) {
-            sendEvent(LogEvent.WARNING, "Plugin Execution error : " + e.getMessage(), e);
+            LOG.warn(getContext(), "Plugin Execution error : " + e.getMessage(), e);
+            //sendEvent(LogEvent.WARNING, "Plugin Execution error : " + e.getMessage(), e);
             return updateRes(res, new ReturnValue(Status.UNKNOWN, "FILE UNKNOWN - " + e.getMessage()));
         } finally {
             sm.closeAll();

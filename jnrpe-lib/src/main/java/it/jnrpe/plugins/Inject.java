@@ -13,17 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.events;
+package it.jnrpe.plugins;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * The interface that all the events must implement.
- *
+ * Annotation of injected JNRPE variables.
+ * Use it if you want JNRPE to inject values inside your plugin.
+ * 
+ * Supported injections are:
+ * <ul>
+ * <li>IJNRPEExecutionContext
+ * </ul>
  * @author Massimiliano Ziccardi
  */
-public interface IJNRPEEvent {
-
-    public String getEventName();
-    public String getMessage();
-    public Object getSource();
+@Target(value = { ElementType.FIELD })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Inject {
 }

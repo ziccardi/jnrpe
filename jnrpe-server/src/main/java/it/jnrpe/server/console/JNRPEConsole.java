@@ -16,6 +16,7 @@
 package it.jnrpe.server.console;
 
 import it.jnrpe.JNRPE;
+import it.jnrpe.JNRPELogger;
 import it.jnrpe.commands.CommandRepository;
 import it.jnrpe.plugins.IPluginRepository;
 
@@ -26,6 +27,7 @@ import jline.console.history.MemoryHistory;
 
 public class JNRPEConsole {
 
+    private final JNRPELogger LOG = new JNRPELogger(this);
     private final JNRPE jnrpeInstance;
     private final IPluginRepository pluginRepository;
     private final CommandRepository commandRepository;
@@ -59,15 +61,17 @@ public class JNRPEConsole {
                     continue;
                 }
                 try {
-                    exit = CommandExecutor.getInstance(console, jnrpeInstance).executeCommand(commandLine);
+                    exit = CommandExecutor.getInstance(console, pluginRepository, commandRepository, jnrpeInstance).executeCommand(commandLine);
                 } catch (Exception e) {
                     console.println(highlight("ERROR: ") + e.getMessage());
+                    LOG.error(jnrpeInstance.getExecutionContext(), e.getMessage(), e);
+                    //jnrpeInstance.getExecutionContext().getEventBus().post(new LogEvent(this, LogEventType.ERROR, e.getMessage(), e));
                 }
             }
 
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOG.error(jnrpeInstance.getExecutionContext(), e.getMessage(), e);
+            //jnrpeInstance.getExecutionContext().getEventBus().post(new LogEvent(this, LogEventType.ERROR, e.getMessage(), e));
         }
     }
 }

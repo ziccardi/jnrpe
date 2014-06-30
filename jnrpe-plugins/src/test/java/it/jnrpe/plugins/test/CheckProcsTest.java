@@ -15,14 +15,20 @@
  *******************************************************************************/
 package it.jnrpe.plugins.test;
 
+import it.jnrpe.JNRPEEventBus;
 import it.jnrpe.plugin.CheckProcs;
+import it.jnrpe.test.utils.TestContext;
+import it.jnrpe.utils.internal.InjectionUtils;
 
 import java.lang.reflect.Method;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import com.google.common.eventbus.EventBus;
 
 @Test
 public class CheckProcsTest {
@@ -62,13 +68,16 @@ public class CheckProcsTest {
 
     public void parseWindowsOutputTest1() throws Exception {
         CheckProcs checkProcs = new CheckProcs();
+        
+        InjectionUtils.inject(checkProcs, new TestContext(new JNRPEEventBus(), Charset.defaultCharset(), null, null));
+        
         Method method = CheckProcs.class.getDeclaredMethod("parseWindowsOutput", String.class);
         method.setAccessible(true);
 
         String winOutput = "\"Image Name\",\"PID\",\"Session Name\",\"Session#\",\"Mem Usage\",\"Status\",\"User Name\",\"CPU Time\",\"Window Title\""
                 + '\n' + "\"System Idle Process\",\"0\",\"Services\",\"0\",\"24 K\",\"Unknown\",\"NT AUTHORITY\\SYSTEM\",\"0:01:39\",\"N/A\"";
-
         List<Map<String, String>> res = (List<Map<String, String>>) method.invoke(checkProcs, winOutput);
+        
         Assert.assertEquals(res.size(), 1);
         Map<String, String> cols = res.get(0);
         Assert.assertNotNull(cols);
@@ -84,7 +93,8 @@ public class CheckProcsTest {
     @Test
     public void parseWindowsOutputTest2() throws Exception {
         CheckProcs checkProcs = new CheckProcs();
-
+        InjectionUtils.inject(checkProcs, new TestContext(new JNRPEEventBus(), Charset.defaultCharset(), null, null));
+        //checkProcs.setContext(new TestContext(new JNRPEEventBus(), Charset.defaultCharset(), null, null));
         //
         String winOutput = "\"Image Name\",\"PID\",\"Session Name\",\"Session#\",\"Mem Usage\",\"Status\",\"User Name\",\"CPU Time\",\"Window Title\""
                 + '\n' + "\"System Idle Process\",\"0\",\"Services\",\"0\",\"24 KB\",\"Unknown\",\"NT AUTHORITY\\SYSTEM\",\"0:01:39\",\"N/A\"";
@@ -108,7 +118,8 @@ public class CheckProcsTest {
     @Test
     public void parseWindowsOutputTest3() throws Exception {
         CheckProcs checkProcs = new CheckProcs();
-
+        InjectionUtils.inject(checkProcs, new TestContext(new JNRPEEventBus(), Charset.defaultCharset(), null, null));
+        //checkProcs.setContext(new TestContext(new JNRPEEventBus(), Charset.defaultCharset(), null, null));
         //
         String winOutput = "\"Image Name\",\"PID\",\"Session Name\",\"Session#\",\"Mem Usage\",\"Status\",\"User Name\",\"CPU Time\",\"Window Title\""
                 + '\n' + "\"reader_sl.exe\",\"3172\",\"Console\",\"1\",\"3.612 K\",\"Running\",\"DSBUILD-WIN64\\astk\",\"0:00:00\",\"N/A\"";
@@ -123,10 +134,10 @@ public class CheckProcsTest {
         Assert.assertTrue(!cols.isEmpty(), "No columns has been extracted from windows output");
 
         System.out.println(cols);
-        // Assert.assertEquals(cols.get("cpu"), "0");
-        // Assert.assertEquals(cols.get("command"), "System Idle Process");
-        // Assert.assertEquals(cols.get("pid"), "0");
-        // Assert.assertEquals(cols.get("user"), "NT AUTHORITY\\SYSTEM");
-        // Assert.assertEquals(cols.get("memory"), "24");
+        Assert.assertEquals(cols.get("cpu"), "0");
+        Assert.assertEquals(cols.get("command"), "reader_sl.exe");
+        Assert.assertEquals(cols.get("pid"), "3172");
+        Assert.assertEquals(cols.get("user"), "DSBUILD-WIN64\\astk");
+        Assert.assertEquals(cols.get("memory"), "3612");
     }
 }

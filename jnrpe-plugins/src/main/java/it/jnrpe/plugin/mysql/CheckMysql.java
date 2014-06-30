@@ -82,10 +82,10 @@ public class CheckMysql extends PluginBase {
             conn = mysql.getConnection();
             elapsed = (System.currentTimeMillis() - start) / 1000L;
         } catch (ClassNotFoundException e) {
-            log.error("Mysql driver library not found into the classpath: " + "download and put it in the same directory " + "of this plugin");
+            LOG.error(getContext(), "Mysql driver library not found into the classpath: " + "download and put it in the same directory " + "of this plugin");
             throw new MetricGatheringException("Error accessing the MySQL server " + "- JDBC driver not installed", Status.CRITICAL, e);
         } catch (Exception e) {
-            log.error("Error accessing the MySQL server", e);
+            LOG.error(getContext(), "Error accessing the MySQL server", e);
             throw new MetricGatheringException("Error accessing the MySQL server - " + e.getMessage(), Status.CRITICAL, e);
         }
 
@@ -133,7 +133,7 @@ public class CheckMysql extends PluginBase {
 
             metric = new Metric("secondsBehindMaster", slaveResult, new BigDecimal(secondsBehindMaster), null, null);
         } catch (SQLException e) {
-            log.warn("Error executing the CheckMysql plugin: " + e.getMessage(), e);
+            LOG.warn(getContext(), "Error executing the CheckMysql plugin: " + e.getMessage(), e);
             throw new MetricGatheringException("CHECK_MYSQL - CRITICAL: Unable to check slave status:  - " + e.getMessage(), Status.CRITICAL, e);
         }
 

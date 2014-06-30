@@ -107,7 +107,7 @@ public class CheckBySsh extends PluginBase {
             // metrics.add(new Metric("session",
             // "SSH not started, permission denied. " + e.getMessage(),
             // new BigDecimal(0), null, null));
-            log.debug(e.getMessage(), e);
+            LOG.debug(getContext(), e.getMessage(), e);
             throw new MetricGatheringException("SSH not started, permission denied.", Status.UNKNOWN, e);
         }
         try {

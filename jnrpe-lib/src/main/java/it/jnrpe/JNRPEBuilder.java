@@ -16,7 +16,6 @@
 package it.jnrpe;
 
 import it.jnrpe.commands.CommandRepository;
-import it.jnrpe.events.IJNRPEEventListener;
 import it.jnrpe.plugins.IPluginRepository;
 
 import java.nio.charset.Charset;
@@ -56,10 +55,10 @@ public final class JNRPEBuilder {
     private final Collection<String> acceptedHosts = new ArrayList<String>();
 
     /**
-     * All the event listeners.
+     * The collection of listener objects.
      */
-    private final Collection<IJNRPEEventListener> eventListeners = new ArrayList<IJNRPEEventListener>();
-
+    private final Collection<Object> eventListeners = new ArrayList<Object>(); 
+    
     /**
      * Sets if macros ($ARGxx$) should be expanded or not.
      */
@@ -142,18 +141,6 @@ public final class JNRPEBuilder {
     }
 
     /**
-     * Adds a listener to the list of event listener.
-     * 
-     * @param listener
-     *            the listener
-     * @return this
-     */
-    public JNRPEBuilder withListener(final IJNRPEEventListener listener) {
-        this.eventListeners.add(listener);
-        return this;
-    }
-
-    /**
      * Sets the charset to be used.
      * 
      * @param newCharset
@@ -204,14 +191,31 @@ public final class JNRPEBuilder {
     }
 
     /**
+     * Adds a listener to the collection of listeners.
+     * 
+     * @param listener the listener object
+     * @return this
+     */
+    public JNRPEBuilder withListener(final Object listener) {
+        this.eventListeners.add(listener);
+        return this;
+    }
+    
+    /**
      * Builds the configured JNRPE instance.
      * 
      * @return the configured JNRPE instance
      */
     public JNRPE build() {
         JNRPE jnrpe = new JNRPE(pluginRepository, commandRepository, charset, acceptParams, acceptedHosts, maxAcceptedConnections, readTimeout,
-                writeTimeout, eventListeners);
+                writeTimeout);
 
+        IJNRPEEventBus eventBus = jnrpe.getExecutionContext().getEventBus();
+        
+        for (Object obj : eventListeners) {
+            eventBus.register(obj);
+        }
+        
         return jnrpe;
     }
 }

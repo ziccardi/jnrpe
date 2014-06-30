@@ -93,7 +93,7 @@ public class CheckUsers extends PluginBase {
 
             return metricList;
         } catch (IOException e) {
-            log.warn("CheckUser plugin execution error: " + e.getMessage(), e);
+            LOG.warn(getContext(), "CheckUser plugin execution error: " + e.getMessage(), e);
 
             throw new MetricGatheringException("An error has occurred : " + e.getMessage(), Status.UNKNOWN, e);
         }

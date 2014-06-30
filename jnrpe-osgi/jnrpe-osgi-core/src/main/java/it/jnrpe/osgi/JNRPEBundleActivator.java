@@ -87,6 +87,7 @@ public class JNRPEBundleActivator implements BundleActivator, ManagedService {
      * @param properties The new configuration
      * @throws ConfigurationException on problems loading the configuration
      */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public final void updated(final Dictionary properties) throws ConfigurationException {
         if (properties == null) {
             LOG.info("Empty configuration received. JNRPE Server not started");
@@ -108,6 +109,7 @@ public class JNRPEBundleActivator implements BundleActivator, ManagedService {
             commandRepository.addCommandDefinition(cd);
         }
 
+        // TODO: EventLoggerListener can be a single instance.
         JNRPEBuilder builder = JNRPEBuilder.forRepositories(pluginRepository, commandRepository).withListener(new EventLoggerListener());
 
         if (allowAddress == null || allowAddress.trim().length() == 0) {

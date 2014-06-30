@@ -13,22 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.events;
+package it.jnrpe;
+
+import it.jnrpe.plugins.IPluginInterface;
+
+import com.google.common.eventbus.EventBus;
 
 /**
- * This object represent an 'EXCEPTION' parameter. It is usually used with the
- * LogEvents to pass the exception to be logged.
- *
+ * The JNRPE event bus implementation.
+ * 
  * @author Massimiliano Ziccardi
+ *
  */
-public class EventExceptionParam extends EventParam {
+public class JNRPEEventBus extends EventBus implements IJNRPEEventBus {
+    
+    @Override
     /**
-     * Builds and initializes the exception parameter.
-     *
-     * @param exc
-     *            The exception.
+     * Register an object as listener.
+     * An exception is thrown if the listener is a plugin, since plugins can't be registered as listeners (otherwise they would never
+     * get garbage collected).
+     *  
      */
-    public EventExceptionParam(final Throwable exc) {
-        super("EXCEPTION", exc);
+    public final void register(final Object object) {
+        if (object instanceof IPluginInterface) {
+            throw new IllegalArgumentException("Plugins can't be registered as listeners");
+        }
+        super.register(object);
     }
 }

@@ -269,13 +269,13 @@ public class CheckHttp extends PluginBase {
                     // @TODO complete for other http methods
 
                 } catch (MalformedURLException e) {
-                    log.error("Bad url", e);
+                    LOG.error(getContext(), "Bad url", e);
                     throw new MetricGatheringException("Bad url string : " + urlString, Status.CRITICAL, e);
                 }
             }
 
         } catch (Exception e) {
-            log.error("Exception: " + e.getMessage(), e);
+            LOG.error(getContext(), "Exception: " + e.getMessage(), e);
             throw new MetricGatheringException(e.getClass().getName() + ": " + e.getMessage(), Status.CRITICAL, e);
         }
         return response;

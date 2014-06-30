@@ -15,6 +15,7 @@
  *******************************************************************************/
 package it.jnrpe.server.console;
 
+import it.jnrpe.IJNRPEExecutionContext;
 import it.jnrpe.JNRPE;
 import it.jnrpe.ReturnValue;
 import it.jnrpe.commands.CommandDefinition;
@@ -36,16 +37,18 @@ public class CommandConsoleCommand extends ConsoleCommand {
     private final String commandName;
     private final CommandRepository commandRepository;
     private final IPluginRepository pluginRepository;
-
-    public CommandConsoleCommand(ConsoleReader consoleReader, JNRPE jnrpe, String commandName) {
+    private final IJNRPEExecutionContext context;
+    
+    public CommandConsoleCommand(ConsoleReader consoleReader, IPluginRepository pluginRepo, CommandRepository commandRepo, JNRPE jnrpe, String commandName) {
         super(consoleReader, jnrpe);
         this.commandName = commandName;
-        this.pluginRepository = jnrpe.getExecutionContext().getPluginRepository();
-        this.commandRepository = jnrpe.getExecutionContext().getCommandRepository();
+        this.pluginRepository = pluginRepo;
+        this.commandRepository = commandRepo;
+        this.context = jnrpe.getExecutionContext();
     }
 
     public boolean execute(String[] args) throws Exception {
-        ReturnValue retVal = new CommandInvoker(pluginRepository, commandRepository, true, null).invoke(commandName, args);
+        ReturnValue retVal = new CommandInvoker(pluginRepository, commandRepository, true, context).invoke(commandName, args);
 
         if (retVal == null) {
             getConsole().println("An error has occurred executing the plugin. Null result received.");

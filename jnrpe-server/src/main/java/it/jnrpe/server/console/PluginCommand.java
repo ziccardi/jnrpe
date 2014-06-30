@@ -15,6 +15,7 @@
  *******************************************************************************/
 package it.jnrpe.server.console;
 
+import it.jnrpe.IJNRPEExecutionContext;
 import it.jnrpe.JNRPE;
 import it.jnrpe.ReturnValue;
 import it.jnrpe.plugins.IPluginInterface;
@@ -22,6 +23,7 @@ import it.jnrpe.plugins.IPluginRepository;
 import it.jnrpe.plugins.PluginOption;
 import it.jnrpe.plugins.PluginProxy;
 import it.jnrpe.plugins.UnknownPluginException;
+import it.jnrpe.utils.internal.InjectionUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -45,17 +47,19 @@ public class PluginCommand extends ConsoleCommand {
 
     private final String pluginName;
     private final IPluginRepository pluginRepository;
-
     private final IPluginInterface plugin;
 
+    private final IJNRPEExecutionContext context;
+    
     private final Charset charset;
     
-    public PluginCommand(ConsoleReader consoleReader, JNRPE jnrpe, String pluginName) throws UnknownPluginException {
+    public PluginCommand(ConsoleReader consoleReader, IPluginRepository pluginRepo, JNRPE jnrpe, String pluginName) throws UnknownPluginException {
         super(consoleReader, jnrpe);
         this.pluginName = pluginName;
-        this.pluginRepository = jnrpe.getExecutionContext().getPluginRepository();
+        this.pluginRepository = pluginRepo;
         this.plugin = pluginRepository.getPlugin(pluginName);
         this.charset = jnrpe.getExecutionContext().getCharset();
+        this.context = jnrpe.getExecutionContext();
     }
 
     public boolean execute(String[] args) throws Exception {
@@ -75,7 +79,8 @@ public class PluginCommand extends ConsoleCommand {
             return false;
         }
         PluginProxy plugin = (PluginProxy) pluginRepository.getPlugin(pluginName);
-
+        InjectionUtils.inject(plugin, context);
+        //plugin.setContext(context);
         ReturnValue retVal = plugin.execute(args);
 
         getConsole().println(retVal.getMessage());

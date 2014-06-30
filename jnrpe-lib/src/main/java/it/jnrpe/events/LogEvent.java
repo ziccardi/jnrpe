@@ -16,33 +16,128 @@
 package it.jnrpe.events;
 
 /**
- * All the accepted Log Event types.
- *
+ * LogEvent object. Used to send log mesages.
+ * 
  * @author Massimiliano Ziccardi
+ *
  */
-public enum LogEvent {
+public final class LogEvent implements IJNRPEEvent {
+   
     /**
-     * Trace Log Event.
+     * All the accepted Log Event types.
+     *
+     * @author Massimiliano Ziccardi
      */
-    TRACE,
+    public enum LogEventType {
+        /**
+         * Trace Log Event.
+         */
+        TRACE,
+        /**
+         * Debug Log Event.
+         */
+        DEBUG,
+        /**
+         * Info Log Event.
+         */
+        INFO,
+        /**
+         * Warning Log Event.
+         */
+        WARNING,
+        /**
+         * Error Log Event.
+         */
+        ERROR,
+        /**
+         * Fatal Log Event.
+         */
+        FATAL;
+    };
+
     /**
-     * Debug Log Event.
+     * The log severity.
      */
-    DEBUG,
+    private final LogEventType logType;
+    
     /**
-     * Info Log Event.
+     * The log message.
      */
-    INFO,
+    private final String message;
+    
     /**
-     * Warning Log Event.
+     * The error cause (if any).
      */
-    WARNING,
+    private final Throwable error;
+    
     /**
-     * Error Log Event.
+     * The instance that generated the log.
      */
-    ERROR,
+    private final Object source;
+    
     /**
-     * Fatal Log Event.
+     * Generates a new LogEvent object.
+     * 
+     * @param evtSource the originator of the event
+     * @param type the event type
+     * @param logMessage the event message
+     * @param cause the cause (if any)
      */
-    FATAL;
+    public LogEvent(final Object evtSource, final LogEventType type, final String logMessage, final Throwable cause) {
+        this.logType = type;
+        this.message = logMessage;
+        this.error = cause;
+        this.source = evtSource;
+    }
+
+    /**
+     * Generates a new LogEvent object.
+     * 
+     * @param evtSource the originator of the event
+     * @param type the event type
+     * @param logMessage the event message
+     */
+    public LogEvent(final Object evtSource, final LogEventType type, final String logMessage) {
+        this.logType = type;
+        this.message = logMessage;
+        this.error = null;
+        this.source = evtSource;
+    }
+    
+    /**
+     * @return the event type
+     */
+    public LogEventType getLogType() {
+        return logType;
+    }
+
+    /**
+     * @return the message
+     */
+    public String getMessage() {
+        return message;
+    }
+
+    /**
+     * @return the cause
+     */
+    public Throwable getCause() {
+        return error;
+    }
+    
+    /**
+     * @return the event originator
+     */
+    public Object getSource() {
+        return source;
+    }
+
+    /**
+     * @return the event name
+     */
+    public String getEventName() {
+        return getLogType().name();
+    }
+    
 }
+

@@ -83,7 +83,7 @@ public class CCheckJMX extends JMXQuery implements IPluginInterface {
             ps.close();
             return new ReturnValue(status, new String(bout.toByteArray()));
         } catch (Exception ex) {
-            log.warn("An error has occurred during execution " + "of the CHECK_JMX plugin : " + ex.getMessage(), ex);
+            LOG.warn(getContext(), "An error has occurred during execution " + "of the CHECK_JMX plugin : " + ex.getMessage(), ex);
             ByteArrayOutputStream bout = new ByteArrayOutputStream();
             PrintStream ps = new PrintStream(bout);
             Status status = report(ex, ps);
@@ -94,7 +94,7 @@ public class CCheckJMX extends JMXQuery implements IPluginInterface {
             try {
                 disconnect();
             } catch (IOException e) {
-                log.warn("An error has occurred during execution" + " of the CHECK_JMX plugin : " + e.getMessage(), e);
+                LOG.warn(getContext(), "An error has occurred during execution" + " of the CHECK_JMX plugin : " + e.getMessage(), e);
                 ByteArrayOutputStream bout = new ByteArrayOutputStream();
                 PrintStream ps = new PrintStream(bout);
 

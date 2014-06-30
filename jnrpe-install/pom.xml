@@ -94,8 +94,8 @@
 						</goals>
 						<configuration>
 						<excludeArtifactIds>jcheck_nrpe, jnrpe-server, plexus-utils, jnrpe-lib
-							,commons-cli,junit,log4j,slf4j-api,slf4j-jcl,xml-apis,jline,commons-logging
-							,commons-configuration,dom4j</excludeArtifactIds>
+							,commons-cli,junit,log4j,slf4j-api,slf4j-jcl,xml-apis,jline,commons-logging, commons-lang
+							,commons-configuration,dom4j,netty-all,guava</excludeArtifactIds>
 						<stripVersion>false</stripVersion>
 						<outputDirectory>${izpack.staging.plugins.dir}/dependency/</outputDirectory>
 						</configuration>

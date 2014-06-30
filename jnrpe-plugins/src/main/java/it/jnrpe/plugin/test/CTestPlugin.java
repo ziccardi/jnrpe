@@ -22,6 +22,7 @@ import it.jnrpe.plugins.IPluginInterface;
 import it.jnrpe.plugins.annotations.Option;
 import it.jnrpe.plugins.annotations.Plugin;
 import it.jnrpe.plugins.annotations.PluginOptions;
+import it.jnrpe.utils.TimeUnit;
 
 /**
  * A simple test plugin that returns the status as specified by the 'status'
@@ -72,7 +73,7 @@ public class CTestPlugin implements IPluginInterface {
 
         if (cl.hasOption("delay") && Integer.parseInt(cl.getOptionValue("delay")) > 0) {
             try {
-                Thread.sleep(Integer.parseInt(cl.getOptionValue("delay")) * 1000);
+                Thread.sleep(TimeUnit.SECOND.convert(Integer.parseInt(cl.getOptionValue("delay"))));
             } catch (Exception e) {
             }
         }

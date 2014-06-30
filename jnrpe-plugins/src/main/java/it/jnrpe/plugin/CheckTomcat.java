@@ -80,7 +80,7 @@ public class CheckTomcat extends PluginBase {
      */
     @Override
     public final ReturnValue execute(final ICommandLine cl) throws BadThresholdException {
-        log.debug("check_tomcat");
+        LOG.debug(getContext(), "check_tomcat");
         String username = cl.getOptionValue("username");
         String password = cl.getOptionValue("password");
         String hostname = cl.getOptionValue("hostname");
@@ -127,7 +127,7 @@ public class CheckTomcat extends PluginBase {
             response = Utils.getUrl(new URL(url), props, timeout * 1000);
 
         } catch (Exception e) {
-            log.info("Plugin execution failed : " + e.getMessage(), e);
+            LOG.info(getContext(), "Plugin execution failed : " + e.getMessage(), e);
             errmsg = e.getMessage();
         }
 
@@ -159,10 +159,10 @@ public class CheckTomcat extends PluginBase {
     private ReturnValue analyseStatus(final String xml, final String warning, final String critical, boolean checkMemory, boolean checkThreads)
             throws BadThresholdException {
         StringBuffer buff = new StringBuffer();
-        log.debug("checkThreads " + checkThreads);
-        log.debug("checkMemory " + checkMemory);
-        log.debug("critical " + critical);
-        log.debug("warning	 " + warning);
+        LOG.debug(getContext(), "checkThreads " + checkThreads);
+        LOG.debug(getContext(), "checkMemory " + checkMemory);
+        LOG.debug(getContext(), "critical " + critical);
+        LOG.debug(getContext(), "warning	 " + warning);
 
         ReturnValue retVal = new ReturnValue(Status.OK, null);
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -232,7 +232,7 @@ public class CheckTomcat extends PluginBase {
                 currentThreadCount = Integer.parseInt(threadInfo.getAttribute("currentThreadCount"));
                 currentThreadsBusy = Integer.parseInt(threadInfo.getAttribute("currentThreadsBusy"));
                 threadsAvailable = maxThreads - currentThreadsBusy;
-                log.debug("Connector " + connectorName + " maxThreads: " + maxThreads + ", currentThreadCount:" + currentThreadCount
+                LOG.debug(getContext(), "Connector " + connectorName + " maxThreads: " + maxThreads + ", currentThreadCount:" + currentThreadCount
                         + ", currentThreadsBusy: " + currentThreadsBusy);
 
                 String msg = connectorName + " - thread count: " + currentThreadCount + ", current threads busy: " + currentThreadsBusy

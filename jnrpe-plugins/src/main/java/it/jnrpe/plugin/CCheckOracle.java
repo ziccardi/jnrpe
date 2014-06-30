@@ -67,7 +67,7 @@ public class CCheckOracle extends PluginBase {
             ClassNotFoundException {
         DriverManager.registerDriver((Driver) Class.forName("oracle.jdbc.driver.OracleDriver").newInstance());
 
-        log.debug("Connecting to " + cl.getOptionValue("db") + "@" + cl.getOptionValue("server"));
+        LOG.debug(getContext(), "Connecting to " + cl.getOptionValue("db") + "@" + cl.getOptionValue("server"));
 
         Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@" + cl.getOptionValue("server") + ":" + cl.getOptionValue("port", "1521")
                 + ":" + cl.getOptionValue("db"), cl.getOptionValue("username"), cl.getOptionValue("password"));
@@ -139,6 +139,7 @@ public class CCheckOracle extends PluginBase {
 
         String sTablespace = cl.getOptionValue("tablespace").toUpperCase();
 
+        // FIXME : a prepared satement should be used
         final String sQry = "select NVL(b.free,0.0),a.total,100 " + "- trunc(NVL(b.free,0.0)/a.total * 1000) / 10 prc" + " from ("
                 + " select tablespace_name,sum(bytes)/1024/1024 total" + " from dba_data_files group by tablespace_name) A" + " LEFT OUTER JOIN"
                 + " ( select tablespace_name,sum(bytes)/1024/1024 free" + " from dba_free_space group by tablespace_name) B"
@@ -274,16 +275,16 @@ public class CCheckOracle extends PluginBase {
 
             return metricList;
         } catch (ClassNotFoundException cnfe) {
-            log.error("Oracle driver library not found into the classpath: " + "download and put it in the same directory " + "of this plugin");
+            LOG.error(getContext(), "Oracle driver library not found into the classpath: " + "download and put it in the same directory " + "of this plugin");
 
             throw new MetricGatheringException(cnfe.getMessage(), Status.UNKNOWN, cnfe);
         } catch (SQLException sqle) {
-            log.error("Error communicating with database.", sqle);
+            LOG.error(getContext(), "Error communicating with database.", sqle);
 
             throw new MetricGatheringException(sqle.getMessage(), Status.CRITICAL, sqle);
 
         } catch (Exception e) {
-            log.fatal("Error communicating with database.", e);
+            LOG.fatal(getContext(), "Error communicating with database.", e);
 
             throw new MetricGatheringException(e.getMessage(), Status.UNKNOWN, e);
         } finally {
@@ -291,7 +292,7 @@ public class CCheckOracle extends PluginBase {
                 try {
                     conn.close();
                 } catch (Exception e) {
-                    log.warn("Error closing the DB connection.", e);
+                    LOG.warn(getContext(), "Error closing the DB connection.", e);
                 }
             }
         }

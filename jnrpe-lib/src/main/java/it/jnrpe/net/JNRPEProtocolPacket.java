@@ -39,10 +39,11 @@ class JNRPEProtocolPacket {
      */
     private static final int MAX_PACKETBUFFER_LENGTH = 1024;
 
+    // FIXME : charset from configuration...
     /**
      * The charset.
      */
-    private Charset charset = Charset.forName("UTF-8");
+    private Charset charset = Charset.defaultCharset();
 
     /**
      * The CRC value.
@@ -193,18 +194,24 @@ class JNRPEProtocolPacket {
         }
     }
 
+    /**
+     * @return the received raw data buffer
+     */
     protected byte[] getBuffer() {
         return byteBufferAry;
     }
 
+    /**
+     * @return The string representation of the buffer.
+     */
     protected String getPacketString() {
         byte[] buffer = getBuffer();
         int zeroIndex = ArrayUtils.indexOf(buffer, (byte) 0);
 
         if (zeroIndex == ArrayUtils.INDEX_NOT_FOUND) {
-            return new String(buffer);
+            return new String(buffer, charset);
         } else {
-            return new String(buffer, 0, zeroIndex);
+            return new String(buffer, 0, zeroIndex, charset);
         }
     }
 
@@ -218,11 +225,21 @@ class JNRPEProtocolPacket {
         r.nextBytes(dummyBytesAry);
     }
 
+    /**
+     * Sets the value of the data buffer.
+     * 
+     * @param buffer the buffer value
+     */
     protected void setBuffer(final String buffer) {
         initRandomBuffer();
         byteBufferAry = Arrays.copyOf(buffer.getBytes(charset), MAX_PACKETBUFFER_LENGTH);
     }
 
+    /**
+     * Sets the dummy buffer value.
+     * 
+     * @param dummyBytes the new value
+     */
     void setDummy(final byte[] dummyBytes) {
         if (dummyBytes == null || dummyBytes.length != 2) {
             throw new IllegalArgumentException("Dummy bytes array must have exactly two elements");
@@ -231,10 +248,16 @@ class JNRPEProtocolPacket {
         System.arraycopy(dummyBytes, 0, this.dummyBytesAry, 0, 2);
     }
 
+    /**
+     * @return the dummy buffer value.
+     */
     byte[] getDummy() {
         return dummyBytesAry;
     }
 
+    /**
+     * Updates the CRC value.
+     */
     void updateCRC() {
         setCRC(0);
         CRC32 crcAlg = new CRC32();
@@ -267,6 +290,7 @@ class JNRPEProtocolPacket {
         return bout.toByteArray();
     }
 
+    
     protected void fromInputStream(final InputStream in) throws IOException {
         DataInputStream din = new DataInputStream(in);
         packetVersion = din.readShort();

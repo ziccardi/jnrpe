@@ -18,8 +18,6 @@ package it.jnrpe.plugins.test.it;
 import it.jnrpe.JNRPE;
 import it.jnrpe.JNRPEBuilder;
 import it.jnrpe.commands.CommandRepository;
-import it.jnrpe.events.IJNRPEEvent;
-import it.jnrpe.events.IJNRPEEventListener;
 import it.jnrpe.plugins.PluginRepository;
 
 import org.testng.annotations.AfterSuite;
@@ -47,12 +45,7 @@ public class ITSetup implements ITConstants {
 		m_jnrpeServer = JNRPEBuilder.forRepositories(m_pluginRepository, m_commandRepository)
 			.acceptHost(BIND_ADDRESS)
 			.acceptParams(true)
-			.withListener(new IJNRPEEventListener() {
-
-			public void receive(final Object sender, final IJNRPEEvent event) {
-				// System.out.println(event.getEventParams().get("MESSAGE"));
-			}
-		}).build();
+			.build();
 
 		m_jnrpeServer.listen(BIND_ADDRESS, JNRPE_PORT, false);
 	}

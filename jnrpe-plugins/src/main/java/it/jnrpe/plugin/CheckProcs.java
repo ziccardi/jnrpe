@@ -376,12 +376,12 @@ public class CheckProcs extends PluginBase {
 
         for (Map<String, String> map : info) {
             int secs = Integer.parseInt(map.get(cpu));
-            log.debug("secs " + secs);
+            LOG.debug(getContext(), "secs " + secs);
             double perc = ((double) secs / (double) totalRunTime) * 100.0;
             map.put(cpu, Integer.toString((int) perc));
         }
 
-        log.debug(info + "");
+        LOG.debug(getContext(), info + "");
         return info;
     }
 

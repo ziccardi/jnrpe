@@ -13,22 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.events;
+package it.jnrpe;
+
+import it.jnrpe.commands.CommandRepository;
+import it.jnrpe.plugins.IPluginRepository;
+
+import java.nio.charset.Charset;
 
 /**
- * This object represent an event 'MESSAGE' parameter. It is usually used with
- * the LogEvent events.
- *
+ * The JNRPE execution context contains all the context information useful during 
+ * a plugin execution.
+ * 
  * @author Massimiliano Ziccardi
  */
-public class EventMessageParam extends EventParam {
+public interface IJNRPEExecutionContext {
+
     /**
-     * Builds and initializes the message parameter.
-     *
-     * @param message
-     *            The message
+     * Returns all the listeners.
+     * 
+     * @return the event bus
      */
-    public EventMessageParam(final String message) {
-        super("MESSAGE", message);
-    }
+    IJNRPEEventBus getEventBus();
+
+    /**
+     * Returns the charset.
+     * 
+     * @return the configured charset
+     */
+    Charset getCharset();
 }
