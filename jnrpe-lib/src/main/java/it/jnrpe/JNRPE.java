@@ -28,8 +28,8 @@ import io.netty.handler.ssl.SslHandler;
 import io.netty.handler.timeout.IdleStateHandler;
 import it.jnrpe.commands.CommandInvoker;
 import it.jnrpe.commands.CommandRepository;
-import it.jnrpe.events.JNRPEStatusEvents;
-import it.jnrpe.events.JNRPEStatusEvents.STATUS;
+import it.jnrpe.events.JNRPEStatusEvent;
+import it.jnrpe.events.JNRPEStatusEvent.STATUS;
 import it.jnrpe.net.JNRPEIdleStateHandler;
 import it.jnrpe.net.JNRPERequestDecoder;
 import it.jnrpe.net.JNRPEResponseEncoder;
@@ -361,10 +361,10 @@ public final class JNRPE {
 
             public void operationComplete(final ChannelFuture future) throws Exception {
                 if (future.isSuccess()) {
-                    getExecutionContext().getEventBus().post(new JNRPEStatusEvents(STATUS.STARTED, this, "JNRPE Server started"));
+                    getExecutionContext().getEventBus().post(new JNRPEStatusEvent(STATUS.STARTED, this, "JNRPE Server started"));
                     LOG.info(getExecutionContext(), "Listening on " + (useSSL ? "SSL/" : "") + address + ":" + port);
                 } else {
-                    getExecutionContext().getEventBus().post(new JNRPEStatusEvents(STATUS.FAILED, this, "JNRPE Server start failed"));
+                    getExecutionContext().getEventBus().post(new JNRPEStatusEvent(STATUS.FAILED, this, "JNRPE Server start failed"));
                     LOG.error(getExecutionContext(), "Unable to listen on " + (useSSL ? "SSL/" : "") + address + ":" + port, future.cause());
                 }
             }
@@ -403,6 +403,6 @@ public final class JNRPE {
     public void shutdown() {
         workerGroup.shutdownGracefully().syncUninterruptibly();
         bossGroup.shutdownGracefully().syncUninterruptibly();
-        getExecutionContext().getEventBus().post(new JNRPEStatusEvents(STATUS.STOPPED, this, "JNRPE Server stopped"));
+        getExecutionContext().getEventBus().post(new JNRPEStatusEvent(STATUS.STOPPED, this, "JNRPE Server stopped"));
     }
 }

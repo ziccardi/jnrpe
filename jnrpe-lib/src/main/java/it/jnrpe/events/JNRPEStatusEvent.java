@@ -22,7 +22,7 @@ import java.util.Date;
  * 
  * @author Massimiliano Ziccardi
  */
-public class JNRPEStatusEvents implements IJNRPEEvent {
+public class JNRPEStatusEvent implements IJNRPEEvent {
     
     /**
      * Enumeration of all the possible status.
@@ -71,7 +71,7 @@ public class JNRPEStatusEvents implements IJNRPEEvent {
      * @param eventSource The instance
      * @param eventMessage The message
      */
-    public JNRPEStatusEvents(final STATUS jnrpeStatus, final Object eventSource, final String eventMessage) {
+    public JNRPEStatusEvent(final STATUS jnrpeStatus, final Object eventSource, final String eventMessage) {
         this.status = jnrpeStatus;
         this.source = eventSource;
         this.message = eventMessage;
