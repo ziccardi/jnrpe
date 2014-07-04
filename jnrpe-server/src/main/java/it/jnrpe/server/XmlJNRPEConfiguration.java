@@ -53,7 +53,7 @@ class XmlJNRPEConfiguration extends JNRPEConfiguration {
 
             String sAcceptParams = confParser.getString("server[@accept-params]", "true");
 
-            serverConf.setAcceptParams(sAcceptParams.equalsIgnoreCase("true") || sAcceptParams.equalsIgnoreCase("yes"));
+            serverConf.setAcceptParams("true".equalsIgnoreCase(sAcceptParams) || "yes".equalsIgnoreCase(sAcceptParams));
 
             serverConf.setPluginPath(confParser.getString("server.plugin[@path]", "."));
 

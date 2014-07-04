@@ -28,7 +28,7 @@ public class ExitCommand extends ConsoleCommand {
         super(consoleReader, jnrpe);
     }
 
-    public boolean execute(String[] args) throws Exception {
+    public boolean execute(final String[] args) throws Exception {
         getJNRPE().shutdown();
         return true;
     }

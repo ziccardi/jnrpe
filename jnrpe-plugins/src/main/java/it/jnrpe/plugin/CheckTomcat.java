@@ -216,8 +216,8 @@ public class CheckTomcat extends PluginBase {
                 }
                 if (warn != null && ThresholdUtil.isValueInRange(warn, availableMemMb)) {
                     return new ReturnValue(Status.WARNING, "Free memory low: " + availableMem / (1024 * 1024) + " MB available / " + buff.toString())
-                            .withPerformanceData("memory", new Long(maxMemMb), !warning.contains("%") ? UnitOfMeasure.megabytes
-                                    : UnitOfMeasure.percentage, warning, critical, 0L, new Long(maxMem));
+                            .withPerformanceData("memory", Long.valueOf(maxMemMb), !warning.contains("%") ? UnitOfMeasure.megabytes
+                                    : UnitOfMeasure.percentage, warning, critical, 0L, Long.valueOf(maxMem));
                 }
             }
 

@@ -15,17 +15,14 @@
  *******************************************************************************/
 package it.jnrpe.plugins.test;
 
-import java.util.Date;
-
-import it.jnrpe.ReturnValue;
 import it.jnrpe.Status;
 import it.jnrpe.plugin.CheckTime;
-import it.jnrpe.test.utils.TestCommandLine;
 import it.jnrpe.test.utils.TimeServer;
 import it.jnrpe.test.utils.TimeServer.TimeServerDelegate;
 import it.jnrpe.utils.TimeUnit;
 
-import org.testng.Assert;
+import java.util.Date;
+
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -62,8 +59,10 @@ public class CheckTimeTest implements TimeServerDelegate {
      * @throws Exception
      */
     @AfterClass
-    public final void shutDown() {
-        timeServer.shutdown();
+    public final void shutdown() {
+        if (timeServer != null) {
+            timeServer.shutdown();    
+        }
     }
 
     /**
@@ -74,13 +73,12 @@ public class CheckTimeTest implements TimeServerDelegate {
      */
     @Test
     public final void testNoThresholds() throws Exception {
-        TestCommandLine cl = new TestCommandLine()
-            .withOption("hostname", 'H', "127.0.0.1")
-            .withOption("port", 'p', "2000");
         
-        CheckTime ct = new CheckTime();
-        ReturnValue rv = ct.execute(cl);
-        Assert.assertEquals(rv.getStatus(), Status.OK);
+        PluginTester.given(new CheckTime())
+            .withOption("hostname", 'H', "127.0.0.1")
+            .withOption("port", 'p', "2000")
+            .expect(Status.OK);
+        
     }
     
     /**
@@ -91,13 +89,12 @@ public class CheckTimeTest implements TimeServerDelegate {
      */
     @Test
     public final void testNoTimeServer() throws Exception {
-        TestCommandLine cl = new TestCommandLine()
-            .withOption("hostname", 'H', "127.0.0.1")
-            .withOption("port", 'p', "2001");
         
-        CheckTime ct = new CheckTime();
-        ReturnValue rv = ct.execute(cl);
-        Assert.assertEquals(rv.getStatus(), Status.CRITICAL);
+        PluginTester.given(new CheckTime())
+            .withOption("hostname", 'H', "127.0.0.1")
+            .withOption("port", 'p', "2001")
+            .expect(Status.CRITICAL);
+        
     }
     
     /**
@@ -109,20 +106,19 @@ public class CheckTimeTest implements TimeServerDelegate {
      */
     @Test
     public final void testCriticalStatus() throws Exception {
-        TestCommandLine cl = new TestCommandLine()
-            .withOption("hostname", 'H', "127.0.0.1")
-            .withOption("port", 'p', "2000")
-            .withOption("critical-variance", 'c', "5:");
-        
+
+        // Configure the time server to return a time 10 seconds in the future
         long now = System.currentTimeMillis();
         long tenSecondsInFuture = TimeUnit.SECOND.convert(10) + now;
-        
         timeServer.setNextTime(new Date(tenSecondsInFuture));
         
-        CheckTime ct = new CheckTime();
-        ReturnValue rv = ct.execute(cl);
-        Assert.assertEquals(rv.getStatus(), Status.CRITICAL);
-        System.out.print(rv.getMessage());
+        // Perform the check
+        PluginTester.given(new CheckTime())
+        .withOption("hostname", 'H', "127.0.0.1")
+            .withOption("port", 'p', "2000")
+            .withOption("critical-variance", 'c', "5:")
+        .expect(Status.CRITICAL);
+        
     }
     
     /**

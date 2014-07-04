@@ -23,64 +23,59 @@ import java.util.Properties;
 
 public abstract class MockDriver implements Driver {
 
-	public static int QUERY_TIME = 0;
+    public static int QUERY_TIME = 0;
 
-	private static int CONNECTION_TIME = 0;
-	private Connection conn = null;
+    private static int CONNECTION_TIME = 0;
+    private Connection conn = null;
 
-	private void delay() {
-		try {
-			Thread.sleep(CONNECTION_TIME);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
+    private void delay() {
+        try {
+            Thread.sleep(CONNECTION_TIME);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
-	public final Connection connect(String url, Properties info)
-			throws SQLException {
-		if (!acceptsURL(url))
-			return null;
-		if (conn != null && !conn.isClosed()) {
-			return conn;
-		}
-		delay();
-		return conn = newConnection(url, info);
-	}
+    public final Connection connect(String url, Properties info) throws SQLException {
+        if (!acceptsURL(url))
+            return null;
+        if (conn != null && !conn.isClosed()) {
+            return conn;
+        }
+        delay();
+        return conn = newConnection(url, info);
+    }
 
-	protected abstract Connection newConnection(String url, Properties info)
-			throws SQLException;
+    protected abstract Connection newConnection(String url, Properties info) throws SQLException;
 
-	public static void setConnectionTime(int millis) {
-		CONNECTION_TIME = millis;
-	}
+    public static void setConnectionTime(int millis) {
+        CONNECTION_TIME = millis;
+    }
 
-	public abstract boolean acceptsURL(String url) throws SQLException;
+    public DriverPropertyInfo[] getPropertyInfo(String url, Properties info) throws SQLException {
+        return null;
+    }
 
-	public DriverPropertyInfo[] getPropertyInfo(String url, Properties info)
-			throws SQLException {
-		return null;
-	}
+    public int getMajorVersion() {
+        return 1;
+    }
 
-	public int getMajorVersion() {
-		return 1;
-	}
+    public int getMinorVersion() {
+        return 0;
+    }
 
-	public int getMinorVersion() {
-		return 0;
-	}
+    public boolean jdbcCompliant() {
+        return true;
+    }
 
-	public boolean jdbcCompliant() {
-		return true;
-	}
+    public boolean isConnectionClosed() throws SQLException {
+        return conn.isClosed();
+    }
 
-	public boolean isConnectionClosed() throws SQLException {
-		return conn.isClosed();
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null)
-			return false;
-		return obj.getClass() == getClass();
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null)
+            return false;
+        return obj.getClass() == getClass();
+    }
 }

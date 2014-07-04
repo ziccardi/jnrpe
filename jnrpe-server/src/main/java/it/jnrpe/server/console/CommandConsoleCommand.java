@@ -47,7 +47,7 @@ public class CommandConsoleCommand extends ConsoleCommand {
         this.context = jnrpe.getExecutionContext();
     }
 
-    public boolean execute(String[] args) throws Exception {
+    public boolean execute(final String[] args) throws Exception {
         ReturnValue retVal = new CommandInvoker(pluginRepository, commandRepository, true, context).invoke(commandName, args);
 
         if (retVal == null) {
@@ -61,12 +61,12 @@ public class CommandConsoleCommand extends ConsoleCommand {
 
     public String getCommandLine() {
         CommandDefinition commandDef = commandRepository.getCommand(commandName);
-        StringBuffer opts;
+        StringBuilder opts;
 
         if (commandDef.getArgs() != null) {
-            opts = new StringBuffer(commandDef.getArgs()).append(" ");
+            opts = new StringBuilder(commandDef.getArgs()).append(' ');
         } else {
-            opts = new StringBuffer(" ");
+            opts = new StringBuilder(" ");
         }
 
         for (CommandOption opt : commandDef.getOptions()) {

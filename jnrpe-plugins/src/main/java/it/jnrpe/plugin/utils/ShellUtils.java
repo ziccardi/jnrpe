@@ -23,22 +23,29 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 /**
- * Utility class for running shell commands
+ * Utility class for running shell commands.
  * 
  *
  * @author Frederico Campos
  */
-public class ShellUtils {
+public final class ShellUtils {
 
+    /**
+     * Avoid instantiations.
+     */
+    private ShellUtils() {
+        
+    }
+    
     /**
      * Executes a system command with arguments and returns the output.
      * 
-     * @param command
-     * @param encoding
+     * @param command command to be executed
+     * @param encoding encoding to be used
      * @return command output
-     * @throws IOException
+     * @throws IOException on any error
      */
-    public static String executeSystemCommandAndGetOutput(String[] command, String encoding) throws IOException {
+    public static String executeSystemCommandAndGetOutput(final String[] command, final String encoding) throws IOException {
         Process p = Runtime.getRuntime().exec(command);
         
         StreamManager sm = new StreamManager();
@@ -69,14 +76,14 @@ public class ShellUtils {
 
     /**
      * 
-     * Check if name of process is a windows idle process
+     * Check if name of process is a windows idle process.
      * 
-     * @param proc
+     * @param proc process to be checked
      * @return true if idle process, false otherwise
      */
-    public static boolean isWindowsIdleProc(String proc) {
-        proc = proc.trim().toLowerCase();
-        if (proc.equals("system idle process") || proc.contains("inactiv") || proc.equals("system")) {
+    public static boolean isWindowsIdleProc(final String proc) {
+        String process = proc.trim().toLowerCase();
+        if (process.equals("system idle process") || process.contains("inactiv") || process.equals("system")) {
             return true;
         }
         return false;

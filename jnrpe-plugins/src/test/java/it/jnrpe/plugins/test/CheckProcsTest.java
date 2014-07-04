@@ -16,7 +16,16 @@
 package it.jnrpe.plugins.test;
 
 import it.jnrpe.JNRPEEventBus;
+import it.jnrpe.ReturnValue;
+import it.jnrpe.Status;
+import it.jnrpe.client.JNRPEClient;
+import it.jnrpe.client.JNRPEClientException;
+import it.jnrpe.commands.CommandDefinition;
+import it.jnrpe.commands.CommandOption;
+import it.jnrpe.commands.CommandRepository;
 import it.jnrpe.plugin.CheckProcs;
+import it.jnrpe.plugin.utils.ShellUtils;
+import it.jnrpe.plugins.test.it.ITSetup;
 import it.jnrpe.test.utils.TestContext;
 import it.jnrpe.utils.internal.InjectionUtils;
 
@@ -27,8 +36,6 @@ import java.util.Map;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
-
-import com.google.common.eventbus.EventBus;
 
 @Test
 public class CheckProcsTest {
@@ -68,16 +75,16 @@ public class CheckProcsTest {
 
     public void parseWindowsOutputTest1() throws Exception {
         CheckProcs checkProcs = new CheckProcs();
-        
+
         InjectionUtils.inject(checkProcs, new TestContext(new JNRPEEventBus(), Charset.defaultCharset(), null, null));
-        
+
         Method method = CheckProcs.class.getDeclaredMethod("parseWindowsOutput", String.class);
         method.setAccessible(true);
 
         String winOutput = "\"Image Name\",\"PID\",\"Session Name\",\"Session#\",\"Mem Usage\",\"Status\",\"User Name\",\"CPU Time\",\"Window Title\""
                 + '\n' + "\"System Idle Process\",\"0\",\"Services\",\"0\",\"24 K\",\"Unknown\",\"NT AUTHORITY\\SYSTEM\",\"0:01:39\",\"N/A\"";
         List<Map<String, String>> res = (List<Map<String, String>>) method.invoke(checkProcs, winOutput);
-        
+
         Assert.assertEquals(res.size(), 1);
         Map<String, String> cols = res.get(0);
         Assert.assertNotNull(cols);
@@ -94,7 +101,8 @@ public class CheckProcsTest {
     public void parseWindowsOutputTest2() throws Exception {
         CheckProcs checkProcs = new CheckProcs();
         InjectionUtils.inject(checkProcs, new TestContext(new JNRPEEventBus(), Charset.defaultCharset(), null, null));
-        //checkProcs.setContext(new TestContext(new JNRPEEventBus(), Charset.defaultCharset(), null, null));
+        // checkProcs.setContext(new TestContext(new JNRPEEventBus(),
+        // Charset.defaultCharset(), null, null));
         //
         String winOutput = "\"Image Name\",\"PID\",\"Session Name\",\"Session#\",\"Mem Usage\",\"Status\",\"User Name\",\"CPU Time\",\"Window Title\""
                 + '\n' + "\"System Idle Process\",\"0\",\"Services\",\"0\",\"24 KB\",\"Unknown\",\"NT AUTHORITY\\SYSTEM\",\"0:01:39\",\"N/A\"";
@@ -119,7 +127,8 @@ public class CheckProcsTest {
     public void parseWindowsOutputTest3() throws Exception {
         CheckProcs checkProcs = new CheckProcs();
         InjectionUtils.inject(checkProcs, new TestContext(new JNRPEEventBus(), Charset.defaultCharset(), null, null));
-        //checkProcs.setContext(new TestContext(new JNRPEEventBus(), Charset.defaultCharset(), null, null));
+        // checkProcs.setContext(new TestContext(new JNRPEEventBus(),
+        // Charset.defaultCharset(), null, null));
         //
         String winOutput = "\"Image Name\",\"PID\",\"Session Name\",\"Session#\",\"Mem Usage\",\"Status\",\"User Name\",\"CPU Time\",\"Window Title\""
                 + '\n' + "\"reader_sl.exe\",\"3172\",\"Console\",\"1\",\"3.612 K\",\"Running\",\"DSBUILD-WIN64\\astk\",\"0:00:00\",\"N/A\"";
@@ -139,5 +148,70 @@ public class CheckProcsTest {
         Assert.assertEquals(cols.get("pid"), "3172");
         Assert.assertEquals(cols.get("user"), "DSBUILD-WIN64\\astk");
         Assert.assertEquals(cols.get("memory"), "3612");
+    }
+
+    private String getCommand() {
+        String command = "java";
+        if (ShellUtils.isWindows()) {
+            command = "java.exe";
+        }
+        return command;
+    }
+
+    /**
+     * Test scan matches for a command.
+     */
+    @Test
+    public final void checkProcsCommand() {
+        // surely a java process must be running?
+
+        PluginTester.given(new CheckProcs())
+            .withOption("command", 'C', getCommand())
+            .withOption("warning", 'w', "1:")
+            .expect(Status.WARNING);
+
+    }
+
+    /**
+     * Test windows idle process.
+     */
+    @Test
+    public final void checkIsWindowsIdleProc() {
+        if (ShellUtils.isWindows()) {
+            String str = "\"System Idle Process\",\"0\",\"Services\",\"0\",\"24 K\",\"Unknown\",\"NT AUTHORITY\\SYSTEM\",\"2:05:59\",\"N/A\"";
+            String proc = str.replaceAll("\"", "").split(",")[0];
+            Assert.assertTrue(ShellUtils.isWindowsIdleProc(proc));
+            str = "\"System\",\"4\",\"Services\",\"0\",\"1 224 K\",\"Unknown\",\"N/A\",\"0:00:40\",\"N/A\"";
+            proc = str.replaceAll("\"", "").split(",")[0];
+            Assert.assertTrue(ShellUtils.isWindowsIdleProc(proc));
+        }
+    }
+    
+    /**
+     * Test basic usage.
+     */
+    @Test
+    public final void checkProcsBasic() {
+        
+        PluginTester.given(new CheckProcs())
+            .withOption("warning", 'w', "1:")
+            .expect(Status.WARNING);
+        
+    }
+    
+    /**
+     * Test proc elapsed time.
+     */
+    @Test
+    public final void checkProcsTimeElapsed() {
+
+        String command = getCommand();
+
+        PluginTester.given(new CheckProcs())
+            .withOption("command", 'C', command)
+            .withOption("warning", 'w', ":10")
+            .withOption("metric", 'm', "ELAPSED")
+            .expect(Status.WARNING);
+
     }
 }

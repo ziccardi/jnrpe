@@ -25,6 +25,12 @@ import java.io.File;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+/**
+ * Tests the check disk plugin.
+ * 
+ * @author Massimiliano Ziccardi
+ *
+ */
 public class CheckDiskTest {
 
     /**

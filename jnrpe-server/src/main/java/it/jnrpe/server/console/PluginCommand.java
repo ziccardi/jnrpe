@@ -62,7 +62,7 @@ public class PluginCommand extends ConsoleCommand {
         this.context = jnrpe.getExecutionContext();
     }
 
-    public boolean execute(String[] args) throws Exception {
+    public boolean execute(final String[] args) throws Exception {
 
         Parser p = new Parser();
         p.setGroup(getCommandLineGroup());
@@ -94,7 +94,7 @@ public class PluginCommand extends ConsoleCommand {
     private Option toOption(PluginOption po) {
         DefaultOptionBuilder oBuilder = new DefaultOptionBuilder();
 
-        oBuilder.withShortName(po.getOption()).withDescription(po.getDescription()).withRequired(po.getRequired().equalsIgnoreCase("true"));
+        oBuilder.withShortName(po.getOption()).withDescription(po.getDescription()).withRequired("true".equalsIgnoreCase(po.getRequired()));
 
         if (po.getLongOpt() != null) {
             oBuilder.withLongName(po.getLongOpt());
@@ -151,7 +151,7 @@ public class PluginCommand extends ConsoleCommand {
 
         String[] lines = usage.split("\\n");
 
-        StringBuffer res = new StringBuffer();
+        StringBuilder res = new StringBuilder();
 
         for (int i = 1; i < lines.length; i++) {
             res.append(lines[i]);

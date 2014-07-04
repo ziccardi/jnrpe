@@ -42,7 +42,8 @@ public class CommandExecutor {
 
     private static CommandExecutor instance = null;
 
-    public static synchronized CommandExecutor getInstance(ConsoleReader consoleReader, IPluginRepository pluginRepo, CommandRepository commandRepo, JNRPE jnrpe) {
+    public static synchronized CommandExecutor getInstance(final ConsoleReader consoleReader, final IPluginRepository pluginRepo, 
+                                                           final CommandRepository commandRepo, final JNRPE jnrpe) {
         if (instance == null) {
             instance = new CommandExecutor();
             instance.commandMap.put(ExitCommand.NAME, new ExitCommand(consoleReader, jnrpe));

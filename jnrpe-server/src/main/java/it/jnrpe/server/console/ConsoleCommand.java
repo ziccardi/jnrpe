@@ -37,7 +37,7 @@ public abstract class ConsoleCommand implements IConsoleCommand {
         return console;
     }
 
-    protected void println(String msg) throws IOException {
+    protected void println(final String msg) throws IOException {
         getConsole().println(msg);
     }
 

@@ -99,9 +99,7 @@ public final class JNRPEServer {
 
         Group jnrpeOptions = gBuilder.withOption(confOption).withOption(interactiveOption).withMinimum(1).create();
 
-        Group mainGroup = gBuilder.withOption(versionOption).withOption(helpOption).withOption(jnrpeOptions).create();
-
-        return mainGroup;
+        return gBuilder.withOption(versionOption).withOption(helpOption).withOption(jnrpeOptions).create();
     }
 
     /**
@@ -122,9 +120,7 @@ public final class JNRPEServer {
             p.setGroup(opts);
             p.setHelpFormatter(hf);
             // p.setHelpTrigger("--help");
-            CommandLine cl = p.parse(vsArgs);
-
-            return cl;
+            return p.parse(vsArgs);
         } catch (OptionException oe) {
             printUsage(oe);
         } catch (Exception e) {
@@ -186,7 +182,7 @@ public final class JNRPEServer {
 
         HelpFormatter hf = new HelpFormatter();
 
-        StringBuffer sbDivider = new StringBuffer("=");
+        StringBuilder sbDivider = new StringBuilder("=");
         while (sbDivider.length() < hf.getPageWidth()) {
             sbDivider.append("=");
         }

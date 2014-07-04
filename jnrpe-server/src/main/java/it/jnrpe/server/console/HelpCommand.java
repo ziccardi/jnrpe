@@ -32,7 +32,7 @@ public class HelpCommand extends ConsoleCommand {
         commandMap = commands;
     }
 
-    public boolean execute(String[] args) throws Exception {
+    public boolean execute(final String[] args) throws Exception {
         if (args == null || args.length == 0) {
             getConsole().println("Available commands are : ");
             for (IConsoleCommand command : commandMap.values()) {

@@ -159,9 +159,8 @@ public class CheckBySsh extends PluginBase {
         if (channel != null) {
             channel.disconnect();
         }
-        if (session != null) {
-            session.disconnect();
-        }
+
+        session.disconnect();
         long response = (System.currentTimeMillis() - then) / 1000;
         metrics.add(new Metric("response", "", new BigDecimal(response), null, null));
         // sb.append("\nexit-status: " + channel.getExitStatus());

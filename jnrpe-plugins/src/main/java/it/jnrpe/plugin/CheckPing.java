@@ -112,7 +112,7 @@ public class CheckPing extends PluginBase {
                 return null;
             }
             String val = arr[index].trim().replace("%", "");
-            if (val.indexOf(":") < 0) {
+            if (val.indexOf(':') < 0) {
                 val = val + ":";
             }
             return val;
