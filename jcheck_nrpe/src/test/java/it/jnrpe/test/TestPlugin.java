@@ -24,16 +24,16 @@ public class TestPlugin extends PluginBase {
     public TestPlugin() {
     }
 
-    public ReturnValue execute(ICommandLine cl) {
+    public ReturnValue execute(final ICommandLine cl) {
 
-        if (cl.getOptionValue("t").equals("NullPointerException"))
+        if ("NullPointerException".equals(cl.getOptionValue("t")))
             throw new NullPointerException(
                     "Thrown NullPointerException as requested");
 
-        if (cl.getOptionValue("type").equals("ReturnNull"))
+        if ("ReturnNull".equals(cl.getOptionValue("type")))
             return null;
 
-        if (cl.getOptionValue("type").equals("ThrowRuntimeException"))
+        if ("ThrowRuntimeException".equals(cl.getOptionValue("type")))
             throw new RuntimeException("Thrown RuntimeException as requested");
 
         return null;

@@ -24,6 +24,11 @@ package it.jnrpe.utils.thresholds;
 class SeparatorStage extends Stage {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = -7798534695986312023L;
+
+    /**
      *
      */
     protected SeparatorStage() {

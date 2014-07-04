@@ -279,25 +279,25 @@ public enum Prefixes {
         }
 
         String s = prefixString.toLowerCase();
-        if (s.equals("da")) {
+        if ("da".equals(s)) {
             return deka;
         }
-        if (s.equals("ki")) {
+        if ("ki".equals(s)) {
             return kilo;
         }
-        if (s.equals("mi")) {
+        if ("mi".equals(s)) {
             return mebi;
         }
-        if (s.equals("gi")) {
+        if ("gi".equals(s)) {
             return gibi;
         }
-        if (s.equals("ti")) {
+        if ("ti".equals(s)) {
             return tebi;
         }
-        if (s.equals("pi")) {
+        if ("pi".equals(s)) {
             return pebi;
         }
-        if (s.equals("ei")) {
+        if ("ei".equals(s)) {
             return exbi;
         }
 

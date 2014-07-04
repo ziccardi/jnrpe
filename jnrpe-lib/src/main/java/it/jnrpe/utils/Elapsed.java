@@ -7,11 +7,11 @@ public class Elapsed {
     private long hours;
     private long days;
 
-    public Elapsed(long qty, TimeUnit unit) {
+    public Elapsed(final long qty, final TimeUnit unit) {
         init(qty, unit);
     }
 
-    private void init(long qty, TimeUnit unit) {
+    private void init(final long qty, final TimeUnit unit) {
         long millis = unit.convert(qty);
         seconds = TimeUnit.MILLISECOND.convert(millis, TimeUnit.SECOND) % 60;
         minutes = TimeUnit.MILLISECOND.convert(millis, TimeUnit.MINUTE) % 60;

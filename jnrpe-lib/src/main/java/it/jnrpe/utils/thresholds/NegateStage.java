@@ -28,6 +28,11 @@ package it.jnrpe.utils.thresholds;
 class NegateStage extends Stage {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = -2450268601192452365L;
+
+    /**
      *
      */
     protected NegateStage() {

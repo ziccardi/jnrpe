@@ -96,7 +96,7 @@ public class LegacyRange {
 
         PushbackReader reader = new PushbackReader(new StringReader(thresholdString));
 
-        StringBuffer currentParsedBuffer = new StringBuffer();
+        StringBuilder currentParsedBuffer = new StringBuilder();
 
         byte b = 0;
 
@@ -119,7 +119,7 @@ public class LegacyRange {
                             minVal = new BigDecimal(0);
                         }
                         curState = MAXVAL;
-                        currentParsedBuffer = new StringBuffer();
+                        currentParsedBuffer = new StringBuilder();
                         continue;
                     case MAXVAL:
                         throw new BadThresholdException("Unparsable threshold '" + thresholdString + "'. Error at char "
@@ -134,13 +134,13 @@ public class LegacyRange {
                     switch (curState) {
                     case MINVAL:
                         minVal = new BigDecimal(Integer.MIN_VALUE);
-                        currentParsedBuffer = new StringBuffer();
+                        currentParsedBuffer = new StringBuilder();
                         // m_iCurState = MAXVAL;
                         continue;
                     case MAXVAL:
                         maxVal = new BigDecimal(Integer.MAX_VALUE);
                         curState = END;
-                        currentParsedBuffer = new StringBuffer();
+                        currentParsedBuffer = new StringBuilder();
                         continue;
                     default:
                     }
@@ -171,21 +171,21 @@ public class LegacyRange {
                     try {
                         minVal = new BigDecimal(numberString.trim());
                     } catch (NumberFormatException nfe) {
-                        throw new BadThresholdException("Expected a number but found '" + numberString + "' instead [" + thresholdString + "]");
+                        throw new BadThresholdException("Expected a number but found '" + numberString + "' instead [" + thresholdString + "]", nfe);
                     }
-                    currentParsedBuffer = new StringBuffer();
+                    currentParsedBuffer = new StringBuilder();
                     continue;
                 case MAXVAL:
                     try {
                         maxVal = new BigDecimal(numberString.trim());
                     } catch (NumberFormatException nfe) {
-                        throw new BadThresholdException("Expected a number but found '" + numberString + "' instead");
+                        throw new BadThresholdException("Expected a number but found '" + numberString + "' instead", nfe);
                     }
-                    currentParsedBuffer = new StringBuffer();
+                    currentParsedBuffer = new StringBuilder();
                     continue;
                 default:
                     curState = END;
-                    currentParsedBuffer = new StringBuffer();
+                    currentParsedBuffer = new StringBuilder();
                 }
                 // if (i < vBytes.length)
                 // i-=2;

@@ -131,8 +131,10 @@ public final class PluginProxy extends PluginBase {
         } catch (BadThresholdException bte) {
             throw bte;
         } catch (OptionException e) {
-            LOG.error(getContext(), "Error parsing plugin '" + getPluginName() + "' command line : " + e.getMessage(), e);
-            return new ReturnValue(Status.UNKNOWN, e.getMessage());
+            
+            String msg = e.getMessage();
+            LOG.error(getContext(), "Error parsing plugin '" + getPluginName() + "' command line : " + msg, e);
+            return new ReturnValue(Status.UNKNOWN, msg);
         }
     }
 
@@ -144,7 +146,7 @@ public final class PluginProxy extends PluginBase {
      */
     public void printHelp(final PrintWriter out) {
         HelpFormatter hf = new HelpFormatter();
-        StringBuffer sbDivider = new StringBuffer("=");
+        StringBuilder sbDivider = new StringBuilder("=");
         while (sbDivider.length() < hf.getPageWidth()) {
             sbDivider.append("=");
         }

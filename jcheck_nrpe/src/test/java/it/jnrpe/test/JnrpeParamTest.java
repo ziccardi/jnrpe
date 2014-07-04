@@ -64,7 +64,7 @@ public class JnrpeParamTest {
 
     private static class TestEventListener {
         @Subscribe
-        public void receive(LogEvent event) {
+        public void receive(final LogEvent event) {
             System.out.println("SERVER: >> " + event.getMessage());
         }
     }

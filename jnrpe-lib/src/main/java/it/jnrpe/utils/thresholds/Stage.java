@@ -15,6 +15,7 @@
  *******************************************************************************/
 package it.jnrpe.utils.thresholds;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -26,7 +27,12 @@ import java.util.Set;
  *
  * @author Massimiliano Ziccardi
  */
-abstract class Stage {
+abstract class Stage implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 595883400353293269L;
+
     /**
      * The stage name.
      */

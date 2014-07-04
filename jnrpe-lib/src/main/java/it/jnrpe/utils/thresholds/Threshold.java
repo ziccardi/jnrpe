@@ -125,7 +125,7 @@ class Threshold implements IThreshold {
         for (String thresholdComponent : thresholdComponentAry) {
             String[] nameValuePair = thresholdComponent.split("=");
 
-            if (nameValuePair == null || nameValuePair.length != 2 || StringUtils.isEmpty(nameValuePair[0]) || StringUtils.isEmpty(nameValuePair[1])) {
+            if (nameValuePair.length != 2 || StringUtils.isEmpty(nameValuePair[0]) || StringUtils.isEmpty(nameValuePair[1])) {
                 throw new BadThresholdException("Invalid threshold syntax : " + definition);
             }
 
@@ -175,9 +175,9 @@ class Threshold implements IThreshold {
      *         specified.
      */
     public final String getUnitString() {
-        StringBuffer res = new StringBuffer();
+        StringBuilder res = new StringBuilder();
         if (prefix != null) {
-            res.append(prefix.toString());
+            res.append(prefix);
         }
         if (unit != null) {
             res.append(unit);

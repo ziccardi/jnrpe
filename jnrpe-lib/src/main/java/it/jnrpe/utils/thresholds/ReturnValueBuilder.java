@@ -185,9 +185,9 @@ public final class ReturnValueBuilder {
             retVal.withStatus(forcedStatus);
         }
 
-        StringBuffer msg = new StringBuffer(pluginName + " : " + retVal.getStatus().toString());
+        StringBuilder msg = new StringBuilder(pluginName).append(" : ").append(retVal.getStatus());
         if (!StringUtils.isEmpty(retValMessage)) {
-            msg.append(" - " + retValMessage);
+            msg.append(" - ").append(retValMessage);
         }
 
         retVal.withMessage(msg.toString());

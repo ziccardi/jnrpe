@@ -212,7 +212,7 @@ public final class ReturnValue {
         if (performanceDataList.isEmpty()) {
             return messageString;
         }
-        StringBuffer res = new StringBuffer(messageString).append("|");
+        StringBuilder res = new StringBuilder(messageString).append('|');
         for (PerformanceData pd : performanceDataList) {
             res.append(pd.toPerformanceString()).append(' ');
         }

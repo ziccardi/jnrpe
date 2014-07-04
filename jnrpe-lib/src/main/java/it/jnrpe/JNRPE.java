@@ -225,8 +225,14 @@ public final class JNRPE {
      *            The maximum number of seconds to wait for a plugin to return a
      *            result
      */
-    JNRPE(final IPluginRepository pluginRepo, final CommandRepository commandRepo, final Charset newCharset, final boolean acceptParameters,
-            final Collection<String> acceptedHostsCollection, final int maxConnections, final int readTimeoutSeconds, final int writeTimeoutSeconds) {
+    JNRPE(final IPluginRepository pluginRepo, 
+            final CommandRepository commandRepo, 
+            final Charset newCharset, 
+            final boolean acceptParameters,
+            final Collection<String> acceptedHostsCollection, 
+            final int maxConnections, 
+            final int readTimeoutSeconds, 
+            final int writeTimeoutSeconds) {
         if (pluginRepo == null) {
             throw new IllegalArgumentException("Plugin repository cannot be null");
         }
@@ -274,7 +280,11 @@ public final class JNRPE {
      * @throws KeyManagementException
      *             key management error
      */
-    private SSLEngine getSSLEngine() throws KeyStoreException, CertificateException, IOException, UnrecoverableKeyException, KeyManagementException {
+    protected SSLEngine getSSLEngine() throws KeyStoreException, 
+                    CertificateException, 
+                    IOException, 
+                    UnrecoverableKeyException, 
+                    KeyManagementException {
 
         // Open the KeyStore Stream
         StreamManager h = new StreamManager();
@@ -296,7 +306,7 @@ public final class JNRPE {
             kmf.init(ks, passphrase);
             ctx.init(kmf.getKeyManagers(), null, new java.security.SecureRandom());
         } catch (NoSuchAlgorithmException e) {
-            throw new SSLException("Unable to initialize SSLSocketFactory.\n" + e.getMessage());
+            throw new SSLException("Unable to initialize SSLSocketFactory.\n" + e.getMessage(), e);
         } finally {
             h.closeAll();
         }
@@ -329,11 +339,11 @@ public final class JNRPE {
                 }
 
                 ch.pipeline()
-                        .addLast(new JNRPERequestDecoder(), new JNRPEResponseEncoder(), new JNRPEServerHandler(invoker, getExecutionContext()))
+                        .addLast(new JNRPERequestDecoder(), new JNRPEResponseEncoder(), new JNRPEServerHandler(invoker, context))
                         .addLast("idleStateHandler", new IdleStateHandler(readTimeout, writeTimeout, 0))
                         .addLast(
                                 "jnrpeIdleStateHandler",
-                                new JNRPEIdleStateHandler(getExecutionContext()));
+                                new JNRPEIdleStateHandler(context));
             }
         }).option(ChannelOption.SO_BACKLOG, this.maxAcceptedConnections).childOption(ChannelOption.SO_KEEPALIVE, true);
 
@@ -361,11 +371,11 @@ public final class JNRPE {
 
             public void operationComplete(final ChannelFuture future) throws Exception {
                 if (future.isSuccess()) {
-                    getExecutionContext().getEventBus().post(new JNRPEStatusEvent(STATUS.STARTED, this, "JNRPE Server started"));
-                    LOG.info(getExecutionContext(), "Listening on " + (useSSL ? "SSL/" : "") + address + ":" + port);
+                    context.getEventBus().post(new JNRPEStatusEvent(STATUS.STARTED, this, "JNRPE Server started"));
+                    LOG.info(context, "Listening on " + (useSSL ? "SSL/" : "") + address + ":" + port);
                 } else {
                     getExecutionContext().getEventBus().post(new JNRPEStatusEvent(STATUS.FAILED, this, "JNRPE Server start failed"));
-                    LOG.error(getExecutionContext(), "Unable to listen on " + (useSSL ? "SSL/" : "") + address + ":" + port, future.cause());
+                    LOG.error(context, "Unable to listen on " + (useSSL ? "SSL/" : "") + address + ":" + port, future.cause());
                 }
             }
         });

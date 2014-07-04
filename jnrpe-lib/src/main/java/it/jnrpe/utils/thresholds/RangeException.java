@@ -120,7 +120,7 @@ public class RangeException extends BadThresholdException {
      * @return The list of expected tokens
      */
     private static String parseExpecting(final Stage stage) {
-        StringBuffer expected = new StringBuffer();
+        StringBuilder expected = new StringBuilder();
 
         for (String key : stage.getTransitionNames()) {
             expected.append(",").append(stage.getTransition(key).expects());

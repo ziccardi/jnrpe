@@ -23,6 +23,11 @@ package it.jnrpe.utils.thresholds;
 class StartStage extends Stage {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = -454040306716489132L;
+
+    /**
      *
      */
     protected StartStage() {

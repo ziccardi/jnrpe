@@ -161,7 +161,7 @@ class PerformanceData {
      * @return a string that can be returned to Nagios
      */
     public String toPerformanceString() {
-        StringBuffer res = new StringBuffer().append(quote(label)).append("=").append(DECIMAL_FORMAT.format(performanceValue));
+        StringBuilder res = new StringBuilder().append(quote(label)).append('=').append(DECIMAL_FORMAT.format(performanceValue));
 
         if (unitOfMeasure != null) {
             switch (unitOfMeasure) {
@@ -172,10 +172,10 @@ class PerformanceData {
                 res.append("us");
                 break;
             case seconds:
-                res.append("s");
+                res.append('s');
                 break;
             case bytes:
-                res.append("B");
+                res.append('B');
                 break;
             case kilobytes:
                 res.append("KB");
@@ -190,10 +190,10 @@ class PerformanceData {
                 res.append("TB");
                 break;
             case percentage:
-                res.append("%");
+                res.append('%');
                 break;
             case counter:
-                res.append("c");
+                res.append('c');
                 break;
             default:
             }
@@ -203,19 +203,19 @@ class PerformanceData {
             res.append(unit);
         }
 
-        res.append(";");
+        res.append(';');
         if (warningRange != null) {
             res.append(warningRange);
         }
-        res.append(";");
+        res.append(';');
         if (criticalRange != null) {
             res.append(criticalRange);
         }
-        res.append(";");
+        res.append(';');
         if (minimumValue != null) {
             res.append(DECIMAL_FORMAT.format(minimumValue));
         }
-        res.append(";");
+        res.append(';');
         if (maximumValue != null) {
             res.append(DECIMAL_FORMAT.format(maximumValue));
         }
@@ -240,6 +240,6 @@ class PerformanceData {
             return lbl;
         }
 
-        return new StringBuffer("'").append(lbl).append("'").toString();
+        return new StringBuilder().append('\'').append(lbl).append('\'').toString();
     }
 }

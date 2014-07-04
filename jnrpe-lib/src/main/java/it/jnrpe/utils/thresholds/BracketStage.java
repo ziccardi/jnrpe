@@ -106,6 +106,11 @@ abstract class BracketStage extends Stage {
     public static class ClosedBracketStage extends BracketStage {
 
         /**
+         * 
+         */
+        private static final long serialVersionUID = -1507593260530752338L;
+
+        /**
          *
          */
         public ClosedBracketStage() {
@@ -144,6 +149,11 @@ abstract class BracketStage extends Stage {
      * @author Massimiliano Ziccardi
      */
     public static class OpenBracketStage extends BracketStage {
+
+        /**
+         * 
+         */
+        private static final long serialVersionUID = -8909366032913760788L;
 
         /**
          *

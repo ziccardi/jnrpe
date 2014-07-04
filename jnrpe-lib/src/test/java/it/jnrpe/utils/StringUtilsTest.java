@@ -19,99 +19,102 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class StringUtilsTest {
+    
+    private static class StringUtilSplitTester {
+        
+        private String stringToBeSplitted;
+        private char delimiter;
+        private boolean ignoreQuotes = false;
+        
+        private StringUtilSplitTester() {
+            
+        }
+        
+        public static StringUtilSplitTester given(final String s) {
+            StringUtilSplitTester tester = new StringUtilSplitTester();
+            tester.stringToBeSplitted = s;
+            return tester;
+        }
+        
+        public StringUtilSplitTester withDelimiter(char c) {
+            this.delimiter = c;
+            return this;
+        }
+        
+        public StringUtilSplitTester expect(String[] res) {
+            String[] result = StringUtils.split(stringToBeSplitted, delimiter, ignoreQuotes);
+            Assert.assertEquals(result, res);
+            return this;
+        }
+    }
+    
+    
     @Test
     public void testSplitByExclamationMark() {
-        String[] res = StringUtils.split("string1!string2!string3", '!', false);
-
-        Assert.assertEquals(res.length, 3,
-                "The split didn't return the expected result");
-        Assert.assertTrue(res[0].equals("string1"));
-        Assert.assertTrue(res[1].equals("string2"));
-        Assert.assertTrue(res[2].equals("string3"));
+        
+        StringUtilSplitTester
+            .given("string1!string2!string3")
+            .withDelimiter('!')
+            .expect(new String[] {"string1", "string2", "string3"});
     }
 
     @Test
     public void testSplitByExclamationMarkEmptyStrings() {
-        String[] res =
-                StringUtils.split("string1!string2!string3!!!!", '!', false);
 
-        Assert.assertEquals(res.length, 3,
-                "The split didn't return the expected result");
-        Assert.assertTrue(res[0].equals("string1"));
-        Assert.assertTrue(res[1].equals("string2"));
-        Assert.assertTrue(res[2].equals("string3"));
+        StringUtilSplitTester
+            .given("string1!string2!string3!!!!")
+            .withDelimiter('!')
+            .expect(new String[] {"string1", "string2", "string3"});
+        
     }
 
     @Test
     public void testSplitByExclamationMarkSingleQuotes() {
-        String[] res =
-                StringUtils.split("string1!string2!string3!'!!'!'!!!!'", '!',
-                        false);
+        
+        StringUtilSplitTester
+            .given("string1!string2!string3!'!!'!'!!!!'")
+            .withDelimiter('!')
+            .expect(new String[] {"string1", "string2", "string3", "!!", "!!!!"});
 
-        Assert.assertEquals(res.length, 5,
-                "The split didn't return the expected result");
-        Assert.assertTrue(res[0].equals("string1"));
-        Assert.assertTrue(res[1].equals("string2"));
-        Assert.assertTrue(res[2].equals("string3"));
-        Assert.assertTrue(res[3].equals("!!"));
-        Assert.assertTrue(res[4].equals("!!!!"));
     }
 
     @Test
     public void testSplitByExclamationMarkDoubleQuotes() {
-        String[] res =
-                StringUtils.split("string1!string2!string3!\"!!\"!\"!!!!\"",
-                        '!', false);
-
-        Assert.assertEquals(res.length, 5,
-                "The split didn't return the expected result");
-        Assert.assertTrue(res[0].equals("string1"));
-        Assert.assertTrue(res[1].equals("string2"));
-        Assert.assertTrue(res[2].equals("string3"));
-        Assert.assertTrue(res[3].equals("!!"));
-        Assert.assertTrue(res[4].equals("!!!!"));
+        
+        StringUtilSplitTester
+            .given("string1!string2!string3!\"!!\"!\"!!!!\"")
+            .withDelimiter('!')
+            .expect(new String[] {"string1", "string2", "string3", "!!", "!!!!"});
+        
     }
 
     @Test
     public void testSplitByExclamationMarkSingleAndDoubleQuotes() {
-        String[] res =
-                StringUtils.split("string1!string2!string3!\"!!\"!'!!!!'", '!',
-                        false);
-
-        Assert.assertEquals(res.length, 5,
-                "The split didn't return the expected result");
-        Assert.assertTrue(res[0].equals("string1"));
-        Assert.assertTrue(res[1].equals("string2"));
-        Assert.assertTrue(res[2].equals("string3"));
-        Assert.assertTrue(res[3].equals("!!"));
-        Assert.assertTrue(res[4].equals("!!!!"));
+        
+        StringUtilSplitTester
+            .given("string1!string2!string3!\"!!\"!'!!!!'")
+            .withDelimiter('!')
+            .expect(new String[] {"string1", "string2", "string3", "!!", "!!!!"});
+        
     }
 
     @Test
     public void testSplitByExclamationMarkSingleInsideDoubleQuotes() {
-        String[] res =
-                StringUtils.split("string1!string2!string3!\"!!!'!!!!'\"", '!',
-                        false);
-
-        Assert.assertEquals(res.length, 4,
-                "The split didn't return the expected result");
-        Assert.assertTrue(res[0].equals("string1"));
-        Assert.assertTrue(res[1].equals("string2"));
-        Assert.assertTrue(res[2].equals("string3"));
-        Assert.assertTrue(res[3].equals("!!!'!!!!'"));
+        
+        StringUtilSplitTester
+            .given("string1!string2!string3!\"!!!'!!!!'\"")
+            .withDelimiter('!')
+            .expect(new String[] {"string1", "string2", "string3", "!!!'!!!!'"});
+        
     }
 
     @Test
     public void testSplitByExclamationMarkDoubleInsideSingleQuotes() {
-        String[] res =
-                StringUtils.split("string1!string2!string3!'!!!\"!!!!\"'", '!',
-                        false);
-
-        Assert.assertEquals(res.length, 4,
-                "The split didn't return the expected result");
-        Assert.assertTrue(res[0].equals("string1"));
-        Assert.assertTrue(res[1].equals("string2"));
-        Assert.assertTrue(res[2].equals("string3"));
-        Assert.assertTrue(res[3].equals("!!!\"!!!!\""));
+        
+        StringUtilSplitTester
+            .given("string1!string2!string3!'!!!\"!!!!\"'")
+            .withDelimiter('!')
+            .expect(new String[] {"string1", "string2", "string3", "!!!\"!!!!\""});
+        
     }
 }

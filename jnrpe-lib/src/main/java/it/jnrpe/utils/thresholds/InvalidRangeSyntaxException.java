@@ -78,7 +78,7 @@ public class InvalidRangeSyntaxException extends RangeException {
      * @return The list of expected tokens
      */
     private static String parseExpecting(final Stage stage) {
-        StringBuffer expected = new StringBuffer();
+        StringBuilder expected = new StringBuilder();
 
         for (String key : stage.getTransitionNames()) {
             expected.append(",").append(stage.getTransition(key).expects());
@@ -96,8 +96,11 @@ public class InvalidRangeSyntaxException extends RangeException {
     @Override
     public final String getMessage() {
         String invalidRange = null;
-        if (getWholeRangeString() != null) {
-            invalidRange = MessageFormat.format(INVALID_RANGE_STRING, getWholeRangeString());
+        
+        String wholeRangeString = getWholeRangeString();
+        
+        if (wholeRangeString != null) {
+            invalidRange = MessageFormat.format(INVALID_RANGE_STRING, wholeRangeString);
         } else {
             invalidRange = INVALID_RANGE;
         }

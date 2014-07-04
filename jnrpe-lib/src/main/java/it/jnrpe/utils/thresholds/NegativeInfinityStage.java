@@ -30,6 +30,11 @@ package it.jnrpe.utils.thresholds;
 class NegativeInfinityStage extends Stage {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = -6118762278677658276L;
+
+    /**
      * The infinity sign.
      */
     private static final String INFINITY = "inf";

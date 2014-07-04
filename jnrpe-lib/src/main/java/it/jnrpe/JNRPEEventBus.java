@@ -40,4 +40,13 @@ public class JNRPEEventBus extends EventBus implements IJNRPEEventBus {
         }
         super.register(object);
     }
+    
+    /**
+     * This method must be called to post a new event.
+     * 
+     * @param event The vent object
+     */
+    public final void post(final Object event) {
+        super.post(event);
+    }
 }

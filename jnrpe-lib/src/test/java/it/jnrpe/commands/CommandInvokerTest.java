@@ -108,7 +108,7 @@ public class CommandInvokerTest {
 	
 	private static class EchoPlugin implements IPluginInterface {
 
-		public ReturnValue execute(ICommandLine cl)
+		public ReturnValue execute(final ICommandLine cl)
 				throws BadThresholdException {
 			return new ReturnValue(Status.OK, cl.getOptionValue("text"));
 		}
@@ -118,7 +118,7 @@ public class CommandInvokerTest {
 					"Test echo plugin", new EchoPlugin());
 			pd.addOption(new PluginOption().setOption("t").setLongOpt("text")
 					.setHasArgs(true).setArgName("txtToBeEchoed")
-					.setArgsOptional(false).setRequired(true));
+					.setArgsOptional(Boolean.FALSE).setRequired(true));
 
 			return pd;
 		}

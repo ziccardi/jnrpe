@@ -50,7 +50,7 @@ abstract class NumberBoundaryStage extends Stage {
      */
     @Override
     public String parse(final String threshold, final RangeConfig tc) throws RangeException {
-        StringBuffer numberString = new StringBuffer();
+        StringBuilder numberString = new StringBuilder();
         for (int i = 0; i < threshold.length(); i++) {
             if (Character.isDigit(threshold.charAt(i))) {
                 numberString.append(threshold.charAt(i));
@@ -92,7 +92,7 @@ abstract class NumberBoundaryStage extends Stage {
      * @return <code>true</code> if the string is just a sign.
      */
     private boolean justSign(final String string) {
-        return string.equals("+") || string.equals("-");
+        return "+".equals(string) || "-".equals(string);
     }
 
     @Override
@@ -137,6 +137,11 @@ abstract class NumberBoundaryStage extends Stage {
     public static class LeftBoundaryStage extends NumberBoundaryStage {
 
         /**
+         * 
+         */
+        private static final long serialVersionUID = 6686605731843120850L;
+
+        /**
          *
          */
         protected LeftBoundaryStage() {
@@ -158,6 +163,11 @@ abstract class NumberBoundaryStage extends Stage {
      *
      */
     public static class RightBoundaryStage extends NumberBoundaryStage {
+
+        /**
+         * 
+         */
+        private static final long serialVersionUID = -4377081825521946333L;
 
         /**
          *

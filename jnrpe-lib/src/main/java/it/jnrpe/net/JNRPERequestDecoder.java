@@ -97,11 +97,9 @@ public class JNRPERequestDecoder extends ReplayingDecoder<JNRPERequestDecoder.ST
 
         switch (state()) {
         case PACKET_VERSION:
-            // packet.setPacketVersion(PacketVersion.fromIntValue(in.readShort()));
             packetVersion = PacketVersion.fromIntValue(in.readShort());
             checkpoint(STAGE.PACKET_TYPE_CODE);
         case PACKET_TYPE_CODE:
-            // packet.setPacketType(PacketType.fromIntValue(in.readShort()));
             PacketType type = PacketType.fromIntValue(in.readShort());
             switch (type) {
             case QUERY:
