@@ -69,10 +69,8 @@ public class CCheckOracle extends PluginBase {
 
         LOG.debug(getContext(), "Connecting to " + cl.getOptionValue("db") + "@" + cl.getOptionValue("server"));
 
-        Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@" + cl.getOptionValue("server") + ":" + cl.getOptionValue("port", "1521")
+        return DriverManager.getConnection("jdbc:oracle:thin:@" + cl.getOptionValue("server") + ":" + cl.getOptionValue("port", "1521")
                 + ":" + cl.getOptionValue("db"), cl.getOptionValue("username"), cl.getOptionValue("password"));
-
-        return conn;
     }
 
     /**

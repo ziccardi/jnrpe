@@ -262,7 +262,7 @@ public enum Prefixes {
         case 'y':
             return yocto;
         default:
-            throw new IllegalArgumentException("" + prefixChar);
+            throw new IllegalArgumentException(String.valueOf(prefixChar));
         }
     }
 

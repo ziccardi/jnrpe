@@ -83,7 +83,7 @@ final class RangeStringParser {
      */
     public static void parse(final String range, final RangeConfig tc) throws RangeException {
         if (range == null) {
-            throw new RangeException("Null range specified");
+            throw new RangeException("Range can't be null");
         }
         ROOT_STAGE.parse(range, tc);
         checkBoundaries(tc);

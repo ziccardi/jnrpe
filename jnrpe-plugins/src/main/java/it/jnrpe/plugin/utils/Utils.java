@@ -101,12 +101,11 @@ public final class Utils {
         if (size >= KB) {
             return df.format(size / KB) + " KB";
         }
-        return "" + (int) size + " bytes";
+        return String.valueOf((int) size) + " bytes";
     }
 
     public static long milliToSec(long millis) {
-        long sec = millis / 1000;
-        return sec;
+        return millis / 1000;
     }
 
     public static int getIntValue(boolean bool) {

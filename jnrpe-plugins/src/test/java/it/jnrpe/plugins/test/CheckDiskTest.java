@@ -46,7 +46,7 @@ public class CheckDiskTest {
     private float getPercentFromMessage(final String msg) {
         String stats = msg.substring(msg.indexOf('|') + 1);
         String percent = stats.split(";")[0].split("=")[1].replace('%', ' ').trim();
-        return Float.valueOf(percent);
+        return Float.parseFloat(percent);
     }
 
     /**

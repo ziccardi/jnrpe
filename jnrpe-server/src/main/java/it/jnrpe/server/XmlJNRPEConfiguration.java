@@ -48,7 +48,7 @@ class XmlJNRPEConfiguration extends JNRPEConfiguration {
                     useSSL = "false";
                 }
 
-                serverConf.addBindAddress(sAddress, useSSL.equalsIgnoreCase("true"));
+                serverConf.addBindAddress(sAddress, "true".equalsIgnoreCase(useSSL));
             }
 
             String sAcceptParams = confParser.getString("server[@accept-params]", "true");
@@ -108,7 +108,7 @@ class XmlJNRPEConfiguration extends JNRPEConfiguration {
                     }
                 }
 
-                StringBuffer commandLineBuffer = new StringBuffer(sWholeCommandLine);
+                StringBuilder commandLineBuffer = new StringBuilder(sWholeCommandLine);
 
                 for (int j = 0; j < iArgsCount; j++) {
                     String sArgName = (String) confParser.getProperty("commands.command(" + i + ").arg(" + j + ")[@name]");
@@ -125,7 +125,7 @@ class XmlJNRPEConfiguration extends JNRPEConfiguration {
                     if (sArgName.length() > 1) {
                         commandLineBuffer.append("--");
                     } else {
-                        commandLineBuffer.append("-");
+                        commandLineBuffer.append('-');
                     }
 
                     commandLineBuffer.append(sArgName).append(" ");
@@ -135,7 +135,7 @@ class XmlJNRPEConfiguration extends JNRPEConfiguration {
 
                         // FIXME : handle quote escaping...
                         if (bQuote) {
-                            commandLineBuffer.append("\"");
+                            commandLineBuffer.append('\"');
                         }
 
                         commandLineBuffer.append(sArgValue);

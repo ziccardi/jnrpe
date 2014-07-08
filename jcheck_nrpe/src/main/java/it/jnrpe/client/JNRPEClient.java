@@ -194,6 +194,8 @@ public class JNRPEClient {
             JNRPEResponse res = new JNRPEResponse(in);
 
             return new ReturnValue(Status.fromIntValue(res.getResultCode()), res.getMessage());
+        } catch (RuntimeException re) {
+            throw re;
         } catch (Exception e) {
             throw new JNRPEClientException(e);
         } finally {

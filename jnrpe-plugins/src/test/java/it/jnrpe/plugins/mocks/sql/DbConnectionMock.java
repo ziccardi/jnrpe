@@ -43,7 +43,7 @@ public class DbConnectionMock implements Connection {
 		m_queryResolver = queryResolver;
 	}
 
-	public <T> T unwrap(Class<T> iface) throws SQLException {
+	public <T> T unwrap(final Class<T> iface) throws SQLException {
 		return null;
 	}
 

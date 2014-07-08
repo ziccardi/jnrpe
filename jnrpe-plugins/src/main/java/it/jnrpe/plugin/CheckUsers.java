@@ -69,7 +69,7 @@ import java.util.List;
 public class CheckUsers extends PluginBase {
 
     @Override
-    public void configureThresholdEvaluatorBuilder(ThresholdsEvaluatorBuilder thrb, ICommandLine cl) throws BadThresholdException {
+    public void configureThresholdEvaluatorBuilder(final ThresholdsEvaluatorBuilder thrb, final ICommandLine cl) throws BadThresholdException {
 
         if (cl.hasOption("th")) {
             super.configureThresholdEvaluatorBuilder(thrb, cl);

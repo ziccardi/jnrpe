@@ -147,7 +147,7 @@ public class LegacyRange {
 
                 }
 
-                StringBuffer numberBuffer = new StringBuffer();
+                StringBuilder numberBuffer = new StringBuilder();
 
                 // while (i < vBytes.length &&
                 // Character.isDigit((char)vBytes[i]))
@@ -161,7 +161,7 @@ public class LegacyRange {
                 }
 
                 String numberString = numberBuffer.toString();
-                if (numberString.trim().length() == 0 || numberString.equals("+") || numberString.equals("-")) {
+                if (numberString.trim().length() == 0 || "+".equals(numberString) || "-".equals(numberString)) {
                     throw new BadThresholdException("A number was expected after '" + currentParsedBuffer.toString()
                             + "', but an empty string was found");
                 }

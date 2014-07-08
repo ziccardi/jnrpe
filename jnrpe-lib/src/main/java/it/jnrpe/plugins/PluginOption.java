@@ -152,7 +152,7 @@ public final class PluginOption {
      * @return the string 'true' if required.
      */
     public String getRequired() {
-        return "" + required;
+        return String.valueOf(required);
     }
 
     /**

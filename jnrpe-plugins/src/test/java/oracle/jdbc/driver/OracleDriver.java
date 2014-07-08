@@ -26,8 +26,8 @@ import java.util.logging.Logger;
 
 public class OracleDriver extends MockDriver {
 
-    public Connection newConnection(String url, Properties info) throws SQLException {
-        if (url.equals("jdbc:oracle:thin:@127.0.0.1:1521:mockdb")) {
+    public Connection newConnection(final String url, final Properties info) throws SQLException {
+        if ("jdbc:oracle:thin:@127.0.0.1:1521:mockdb".equals(url)) {
             return new DbConnectionMock(new OracleSQLQueryResolver());
         }
 

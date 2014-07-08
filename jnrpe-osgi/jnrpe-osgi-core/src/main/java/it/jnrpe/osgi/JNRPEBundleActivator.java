@@ -170,10 +170,10 @@ public class JNRPEBundleActivator implements BundleActivator, ManagedService {
                 String[] elements = StringUtils.split(commandLine, false);
                 String pluginName = elements[0];
 
-                StringBuffer cmdLine = new StringBuffer();
+                StringBuilder cmdLine = new StringBuilder();
 
                 for (int i = 1; i < elements.length; i++) {
-                    cmdLine.append(quoteAndEscape(elements[i])).append(" ");
+                    cmdLine.append(quoteAndEscape(elements[i])).append(' ');
                 }
 
                 CommandDefinition cd = new CommandDefinition(commandName, pluginName);
@@ -197,8 +197,7 @@ public class JNRPEBundleActivator implements BundleActivator, ManagedService {
             return string;
         }
 
-        String res = "\"" + string.replaceAll("\"", "\\\"") + "\"";
-        return res;
+        return "\"" + string.replaceAll("\"", "\\\"") + "\"";
     }
 
     /**

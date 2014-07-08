@@ -31,7 +31,7 @@ import org.testng.annotations.Test;
  */
 public class ConfigTest {
 
-	private void testConfig(JNRPEConfiguration conf) {
+	private void testConfig(final JNRPEConfiguration conf) {
 		CommandsSection cs = conf.getCommandSection();
 		Collection<Command> commands = cs.getAllCommands();
 

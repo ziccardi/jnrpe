@@ -120,7 +120,7 @@ public class CheckTomcat extends PluginBase {
             throw new BadThresholdException("Error: " + e.getMessage(), e);
         }
         Properties props = new Properties();
-        props.put("Authorization", "Basic " + encoded);
+        props.setProperty("Authorization", "Basic " + encoded);
         String response = null;
         String errmsg = null;
         try {
@@ -158,7 +158,7 @@ public class CheckTomcat extends PluginBase {
      */
     private ReturnValue analyseStatus(final String xml, final String warning, final String critical, boolean checkMemory, boolean checkThreads)
             throws BadThresholdException {
-        StringBuffer buff = new StringBuffer();
+        StringBuilder buff = new StringBuilder();
         LOG.debug(getContext(), "checkThreads " + checkThreads);
         LOG.debug(getContext(), "checkMemory " + checkMemory);
         LOG.debug(getContext(), "critical " + critical);
@@ -171,7 +171,7 @@ public class CheckTomcat extends PluginBase {
             builder = factory.newDocumentBuilder();
         } catch (ParserConfigurationException e) {
             // This should never happen...
-            throw new IllegalStateException(e);
+            throw new IllegalStateException(e.getMessage(), e);
         }
         int freeMem = 0;
         int totalMem = 0;
@@ -202,8 +202,14 @@ public class CheckTomcat extends PluginBase {
             maxMemMb = maxMem / (1024 * 1024);
             availableMemMb = availableMem / (1024 * 1024);
             memUse = (maxMem - availableMem);
-            buff.append("JVM memory use " + Utils.formatSize(memUse) + " ");
-            buff.append("Free: " + Utils.formatSize(freeMem) + ", Total: " + Utils.formatSize(totalMem) + ", Max: " + Utils.formatSize(maxMem) + " ");
+            buff.append("JVM memory use ").append(Utils.formatSize(memUse)).append(' ');
+            buff.append("Free: ")
+                .append(Utils.formatSize(freeMem))
+                .append(", Total: ")
+                .append(Utils.formatSize(totalMem))
+                .append(", Max: ")
+                .append(Utils.formatSize(maxMem))
+                .append(' ');
 
             if (checkMemory) {
                 String warn = warning != null ? getRangeValue(warning, maxMem, true) : null;
@@ -244,7 +250,7 @@ public class CheckTomcat extends PluginBase {
 
                     if (critical != null && ThresholdUtil.isValueInRange(crit, threadsAvailable)) {
                         return new ReturnValue(Status.CRITICAL, "CRITICAL - Free " + connectorName + " threads: " + threadsAvailable)
-                                .withMessage(msg).withPerformanceData(connectorName + " threads", new Long(threadsAvailable),
+                                .withMessage(msg).withPerformanceData(connectorName + " threads", Long.valueOf(threadsAvailable),
                                         !critical.contains("%") ? UnitOfMeasure.counter : UnitOfMeasure.percentage, warning, critical, 0L,
                                         new Long(maxThreads));
                     }
@@ -308,7 +314,7 @@ public class CheckTomcat extends PluginBase {
             hadRangeStart = true;
             value = value.substring(1, value.length());
         }
-        String val = "" + getValue(value, factor, memory);
+        String val = String.valueOf(getValue(value, factor, memory));
 
         if (hadRangeStart) {
             val = ":" + val;

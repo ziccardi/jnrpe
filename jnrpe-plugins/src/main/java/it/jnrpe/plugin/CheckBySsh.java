@@ -132,7 +132,7 @@ public class CheckBySsh extends PluginBase {
             throw new MetricGatheringException(e2.getMessage(), Status.UNKNOWN, e2);
         }
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         byte[] tmp = new byte[1024];
         int exitStatus = 0;
         while (true) {
@@ -153,7 +153,7 @@ public class CheckBySsh extends PluginBase {
             try {
                 Thread.sleep(1000);
             } catch (Exception e) {
-                e.printStackTrace();
+                LOG.error(getContext(), "gatherMetrics - " + e.getMessage(), e);
             }
         }
         if (channel != null) {

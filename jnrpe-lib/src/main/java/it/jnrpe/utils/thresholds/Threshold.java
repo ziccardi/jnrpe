@@ -129,32 +129,32 @@ class Threshold implements IThreshold {
                 throw new BadThresholdException("Invalid threshold syntax : " + definition);
             }
 
-            if (nameValuePair[0].equalsIgnoreCase("metric")) {
+            if ("metric".equalsIgnoreCase(nameValuePair[0])) {
                 metricName = nameValuePair[1];
                 continue;
             }
-            if (nameValuePair[0].equalsIgnoreCase("ok")) {
+            if ("ok".equalsIgnoreCase(nameValuePair[0])) {
 
                 Range thr = new Range(nameValuePair[1]);
 
                 okThresholdList.add(thr);
                 continue;
             }
-            if (nameValuePair[0].equalsIgnoreCase("warning") || nameValuePair[0].equalsIgnoreCase("warn") || nameValuePair[0].equalsIgnoreCase("w")) {
+            if ("warning".equalsIgnoreCase(nameValuePair[0]) || "warn".equalsIgnoreCase(nameValuePair[0]) || "w".equalsIgnoreCase(nameValuePair[0])) {
                 Range thr = new Range(nameValuePair[1]);
                 warningThresholdList.add(thr);
                 continue;
             }
-            if (nameValuePair[0].equalsIgnoreCase("critical") || nameValuePair[0].equalsIgnoreCase("crit") || nameValuePair[0].equalsIgnoreCase("c")) {
+            if ("critical".equalsIgnoreCase(nameValuePair[0]) || "crit".equalsIgnoreCase(nameValuePair[0]) || "c".equalsIgnoreCase(nameValuePair[0])) {
                 Range thr = new Range(nameValuePair[1]);
                 criticalThresholdList.add(thr);
                 continue;
             }
-            if (nameValuePair[0].equalsIgnoreCase("unit")) {
+            if ("unit".equalsIgnoreCase(nameValuePair[0])) {
                 unit = nameValuePair[1];
                 continue;
             }
-            if (nameValuePair[0].equalsIgnoreCase("prefix")) {
+            if ("prefix".equalsIgnoreCase(nameValuePair[0])) {
                 prefix = Prefixes.fromString(nameValuePair[1].toLowerCase());
                 continue;
             }

@@ -182,13 +182,13 @@ public class CheckHttpIT implements ITConstants {
 
 	// @todo
 	@Test
-	public final void checkCertificate() throws JNRPEClientException {
+	public final void checkCertificate() {
 		
 	}
 
 	// @todo
 	@Test
-	public final void checkAuth() throws JNRPEClientException {
+	public final void checkAuth() {
 
 	}
 

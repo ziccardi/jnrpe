@@ -190,7 +190,7 @@ class JNRPEProtocolPacket {
                 throw new BadCRCException("Bad CRC");
             }
         } catch (IOException e) {
-            throw new IllegalStateException(e);
+            throw new IllegalStateException(e.getMessage(), e);
         }
     }
 
@@ -242,7 +242,14 @@ class JNRPEProtocolPacket {
      */
     void setDummy(final byte[] dummyBytes) {
         if (dummyBytes == null || dummyBytes.length != 2) {
-            throw new IllegalArgumentException("Dummy bytes array must have exactly two elements");
+            int currentSize;
+            if (dummyBytes == null) {
+                currentSize = 0;
+            } else {
+                currentSize = dummyBytes.length;
+            }
+            
+            throw new IllegalArgumentException("Dummy bytes array must have exactly two elements. Current size is : " + currentSize);
         }
 
         System.arraycopy(dummyBytes, 0, this.dummyBytesAry, 0, 2);
@@ -285,7 +292,7 @@ class JNRPEProtocolPacket {
 
             dout.close();
         } catch (IOException e) {
-            throw new IllegalStateException(e);
+            throw new IllegalStateException(e.getMessage(), e);
         }
         return bout.toByteArray();
     }

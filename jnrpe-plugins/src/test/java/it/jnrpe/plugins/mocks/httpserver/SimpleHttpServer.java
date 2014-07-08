@@ -41,7 +41,7 @@ public class SimpleHttpServer  {
 		this.server.stop();
 	}
 
-	public static void main(String[] args) throws Exception {
+	public static void main(final String[] args) throws Exception {
 		SimpleHttpServer server = new SimpleHttpServer();
 		server.start();		
 	}

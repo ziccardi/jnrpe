@@ -38,7 +38,7 @@ abstract class BracketStage extends Stage {
      */
     protected BracketStage(final String stageName, final char matchedBracket) {
         super(stageName);
-        bracket = "" + matchedBracket;
+        bracket = String.valueOf(matchedBracket);
     }
 
     /**

@@ -65,11 +65,11 @@ public class JnrpeOsgiCoreInstallationIT {
 
 	/**
 	 * Creates the JNRPE osgi config file (it.jnrpe.osgi.cfg( inside the
-	 * specified directory )
+	 * specified directory ).
 	 * 
 	 * @param confDir
 	 */
-	private void createConfFile(File confDir, Map<String, String> conf)
+	private void createConfFile(final File confDir, final Map<String, String> conf)
 			throws Exception {
 
 		File confFile = new File(confDir, "it.jnrpe.osgi.cfg");
@@ -234,15 +234,15 @@ public class JnrpeOsgiCoreInstallationIT {
 	}
 
 	private void checkBundle(String bundleName) {
-		Boolean found = false;
-		Boolean active = false;
+		Boolean found = Boolean.FALSE;
+		Boolean active = Boolean.FALSE;
 		Bundle[] bundles = context.getBundles();
 		for (Bundle bundle : bundles) {
 			if (bundle != null) {
 				if (bundle.getSymbolicName().equals(bundleName)) {
-					found = true;
+					found = Boolean.TRUE;
 					if (bundle.getState() == Bundle.ACTIVE) {
-						active = true;
+						active = Boolean.TRUE;
 					}
 				}
 			}

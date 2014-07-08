@@ -139,7 +139,7 @@ public class CCheckFile extends PluginBase {
         if (cl.hasOption("critical")) {
             long lLastAccess = f.lastModified();
             long lNow = System.currentTimeMillis();
-            BigDecimal lAge = new BigDecimal("" + ((lNow - lLastAccess) / 1000));
+            BigDecimal lAge = new BigDecimal(String.valueOf((lNow - lLastAccess) / 1000));
             String sCriticalThreshold = cl.getOptionValue("critical");
 
             if (ThresholdUtil.isValueInRange(sCriticalThreshold, lAge)) {
@@ -150,7 +150,7 @@ public class CCheckFile extends PluginBase {
         if (cl.hasOption("warning")) {
             long lLastAccess = f.lastModified();
             long lNow = System.currentTimeMillis();
-            BigDecimal lAge = new BigDecimal("" + ((lNow - lLastAccess) / 1000));
+            BigDecimal lAge = new BigDecimal(String.valueOf((lNow - lLastAccess) / 1000));
             String sWarningThreshold = cl.getOptionValue("warning");
 
             if (ThresholdUtil.isValueInRange(sWarningThreshold, lAge)) {
@@ -177,7 +177,7 @@ public class CCheckFile extends PluginBase {
     private ReturnValue checkSize(final ICommandLine cl, final File f, final ReturnValue res) throws BadThresholdException {
         if (cl.hasOption("sizecritical")) {
             String sCriticalThreshold = cl.getOptionValue("sizecritical");
-            BigDecimal bdSize = new BigDecimal("" + f.length());
+            BigDecimal bdSize = new BigDecimal(String.valueOf(f.length()));
 
             if (ThresholdUtil.isValueInRange(sCriticalThreshold, bdSize)) {
                 return updateRes(res, new ReturnValue(Status.CRITICAL, "FILE CRITICAL - File size : " + bdSize + " bytes"));
@@ -186,7 +186,7 @@ public class CCheckFile extends PluginBase {
 
         if (cl.hasOption("sizewarning")) {
             String sWarningThreshold = cl.getOptionValue("sizewarning");
-            BigDecimal bdSize = new BigDecimal("" + f.length());
+            BigDecimal bdSize = new BigDecimal(String.valueOf(f.length()));
 
             if (ThresholdUtil.isValueInRange(sWarningThreshold, bdSize)) {
                 return updateRes(res, new ReturnValue(Status.WARNING, "FILE WARNING  - File size : " + bdSize + " bytes"));

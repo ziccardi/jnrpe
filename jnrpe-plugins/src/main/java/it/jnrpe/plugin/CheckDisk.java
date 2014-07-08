@@ -93,8 +93,8 @@ public class CheckDisk extends PluginBase {
 
         int iFreePercent = percent(lBytes, lTotalSpace);
 
-        String sFreePercent = "" + iFreePercent + "%";
-        String sUsedPercent = "" + percent(lTotalSpace - lBytes, lTotalSpace) + "%";
+        String sFreePercent = String.valueOf(iFreePercent) + "%";
+        String sUsedPercent = String.valueOf(percent(lTotalSpace - lBytes, lTotalSpace)) + "%";
 
         List<Metric> res = new ArrayList<Metric>();
 
@@ -115,9 +115,9 @@ public class CheckDisk extends PluginBase {
      */
     private String format(final long bytes) {
         if (bytes > MB) {
-            return "" + (bytes / MB) + " MB";
+            return String.valueOf(bytes / MB) + " MB";
         }
-        return "" + (bytes / KB) + " KB";
+        return String.valueOf(bytes / KB) + " KB";
     }
 
     @Override

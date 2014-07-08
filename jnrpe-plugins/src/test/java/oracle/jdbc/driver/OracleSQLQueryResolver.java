@@ -24,7 +24,7 @@ import it.jnrpe.plugins.mocks.sql.ResultSetMockRowBuilder;
 
 class OracleSQLQueryResolver implements ISQLQueryResolver {
 
-    public List<ResultSetMockRow> resolveSQL(String sSQL) {
+    public List<ResultSetMockRow> resolveSQL(final String sSQL) {
 
         if (OracleDriver.QUERY_TIME > 0) {
             try {
@@ -37,37 +37,37 @@ class OracleSQLQueryResolver implements ISQLQueryResolver {
 
         List<ResultSetMockRow> vResult = new ArrayList<ResultSetMockRow>();
 
-        if (sSQL.equalsIgnoreCase("SELECT SYSDATE FROM DUAL")) {
+        if ("SELECT SYSDATE FROM DUAL".equalsIgnoreCase(sSQL)) {
             vResult.add(new ResultSetMockRowBuilder().widthValue("SYSDATE",
                     new java.util.Date()).create());
 
         }
 
-        if (sSQL.equalsIgnoreCase("select NVL(b.free,0.0),a.total,100 - trunc(NVL(b.free,0.0)/a.total * 1000) / 10 prc "
+        if (("select NVL(b.free,0.0),a.total,100 - trunc(NVL(b.free,0.0)/a.total * 1000) / 10 prc "
                 + "from ( select tablespace_name,sum(bytes)/1024/1024 total "
                 + "from dba_data_files group by tablespace_name) A "
                 + "LEFT OUTER JOIN ( select tablespace_name,sum(bytes)/1024/1024 free from dba_free_space group by tablespace_name) B "
-                + "ON a.tablespace_name=b.tablespace_name WHERE a.tablespace_name='SYSTEM'")) {
+                + "ON a.tablespace_name=b.tablespace_name WHERE a.tablespace_name='SYSTEM'").equalsIgnoreCase(sSQL)) {
             vResult.add(new ResultSetMockRowBuilder()
                     .widthValue("NVL(b.free,0.0)", 80).widthValue("total", 100)
                     .widthValue("prc", 20).create());
         }
 
-        if (sSQL.equalsIgnoreCase("select NVL(b.free,0.0),a.total,100 - trunc(NVL(b.free,0.0)/a.total * 1000) / 10 prc "
+        if (("select NVL(b.free,0.0),a.total,100 - trunc(NVL(b.free,0.0)/a.total * 1000) / 10 prc "
                 + "from ( select tablespace_name,sum(bytes)/1024/1024 total "
                 + "from dba_data_files group by tablespace_name) A "
                 + "LEFT OUTER JOIN ( select tablespace_name,sum(bytes)/1024/1024 free from dba_free_space group by tablespace_name) B "
-                + "ON a.tablespace_name=b.tablespace_name WHERE a.tablespace_name='USER'")) {
+                + "ON a.tablespace_name=b.tablespace_name WHERE a.tablespace_name='USER'").equalsIgnoreCase(sSQL)) {
             vResult.add(new ResultSetMockRowBuilder()
                     .widthValue("NVL(b.free,0.0)", 25).widthValue("total", 100)
                     .widthValue("prc", 75).create());
         }
 
-        if (sSQL.equalsIgnoreCase("select NVL(b.free,0.0),a.total,100 - trunc(NVL(b.free,0.0)/a.total * 1000) / 10 prc "
+        if (("select NVL(b.free,0.0),a.total,100 - trunc(NVL(b.free,0.0)/a.total * 1000) / 10 prc "
                 + "from ( select tablespace_name,sum(bytes)/1024/1024 total "
                 + "from dba_data_files group by tablespace_name) A "
                 + "LEFT OUTER JOIN ( select tablespace_name,sum(bytes)/1024/1024 free from dba_free_space group by tablespace_name) B "
-                + "ON a.tablespace_name=b.tablespace_name WHERE a.tablespace_name='TEMP'")) {
+                + "ON a.tablespace_name=b.tablespace_name WHERE a.tablespace_name='TEMP'").equalsIgnoreCase(sSQL)) {
             vResult.add(new ResultSetMockRowBuilder()
                     .widthValue("NVL(b.free,0.0)", 10).widthValue("total", 100)
                     .widthValue("prc", 90).create());
@@ -80,7 +80,7 @@ class OracleSQLQueryResolver implements ISQLQueryResolver {
                         + " and dbg.name='db block gets'"
                         + " and cg.name='consistent gets'";
 
-        if (sSQL.equalsIgnoreCase(sQry1)) {
+        if (sQry1.equalsIgnoreCase(sSQL)) {
             vResult.add(new ResultSetMockRowBuilder()
                             .widthValue("(1-(pr.value/(dbg.value+cg.value)))*100", 10).create());
         }
@@ -89,7 +89,7 @@ class OracleSQLQueryResolver implements ISQLQueryResolver {
                 "select sum(lc.pins)/(sum(lc.pins)"
                         + "+sum(lc.reloads))*100 from v$librarycache lc";
 
-        if (sSQL.equalsIgnoreCase(sQry2)) {
+        if (sQry2.equalsIgnoreCase(sSQL)) {
             vResult.add(new ResultSetMockRowBuilder()
                             .widthValue("sum(lc.pins)/(sum(lc.pins)+sum(lc.reloads))*100", 40).create());
         }

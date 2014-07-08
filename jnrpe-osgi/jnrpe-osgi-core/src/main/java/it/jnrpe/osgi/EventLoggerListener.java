@@ -40,19 +40,19 @@ public class EventLoggerListener {
     /**
      * This method receives the log event and logs it.
      *
-     * @param sender
-     *            The source of the event
-     * @param event
+     * @param logEvent
      *            The event
      */
     @Subscribe
-    public final void receive(LogEvent logEvent) {
-        String sClassName = logEvent.getSource().getClass().getName();
+    public final void receive(final LogEvent logEvent) {
+        
+        Class evtClass = logEvent.getSource().getClass();
+        String sClassName = evtClass.getName();
 
         Logger logger = loggersMap.get(sClassName);
 
         if (logger == null) {
-            logger = LoggerFactory.getLogger(logEvent.getSource().getClass());
+            logger = LoggerFactory.getLogger(evtClass);
             loggersMap.put(sClassName, logger);
         }
 

@@ -314,7 +314,7 @@ public class CheckHttp extends PluginBase {
         HttpUtils.setRequestProperties(props, conn, timeout);
         String initialUrl = conn.getURL() + "";
         String redirectedUrl = null;
-        if (method.equals("POST")) {
+        if ("POST".equals(method)) {
             HttpUtils.sendPostData(conn, postData);
         }
         response = HttpUtils.parseHttpResponse(conn, false, ignoreBody);
@@ -344,14 +344,14 @@ public class CheckHttp extends PluginBase {
         List<Metric> metrics = new ArrayList<Metric>();
         metrics.add(new Metric("time", "", new BigDecimal(elapsed), null, null));
 
-        if (opt.getOptionValue("certificate") == null && !opt.hasOption("certificate")) {
-            if (opt.getOptionValue("string") != null && !opt.getOptionValue("string").equals("")) {
+        if (!opt.hasOption("certificate")) {
+            if (opt.hasOption("string")) {
                 boolean found = false;
                 String string = opt.getOptionValue("string");
                 found = response.contains(string);
                 metrics.add(new Metric("string", "", new BigDecimal(Utils.getIntValue(found)), null, null));
             }
-            if (opt.getOptionValue("expect") != null) {
+            if (opt.hasOption("expect")) {
                 int count = 0;
                 String[] values = opt.getOptionValue("expect").split(",");
                 for (String value : values) {
@@ -359,9 +359,9 @@ public class CheckHttp extends PluginBase {
                         count++;
                     }
                 }
-                metrics.add(new Metric("expect", "" + count + " times. ", new BigDecimal(count), null, null));
+                metrics.add(new Metric("expect", String.valueOf(count) + " times. ", new BigDecimal(count), null, null));
             }
-            if (opt.getOptionValue("regex") != null) {
+            if (opt.hasOption("regex")) {
                 String regex = opt.getOptionValue("regex");
                 Pattern p = null;
                 int flags = 0;
@@ -374,9 +374,9 @@ public class CheckHttp extends PluginBase {
                 p = Pattern.compile(regex, flags);
                 boolean found = p.matcher(response).find();
                 if (opt.hasOption("invert-regex")) {
-                    metrics.add(new Metric("invert-regex", "" + found, new BigDecimal(Utils.getIntValue(found)), null, null));
+                    metrics.add(new Metric("invert-regex", String.valueOf(found), new BigDecimal(Utils.getIntValue(found)), null, null));
                 } else {
-                    metrics.add(new Metric("regex", "" + found, new BigDecimal(Utils.getIntValue(found)), null, null));
+                    metrics.add(new Metric("regex", String.valueOf(found), new BigDecimal(Utils.getIntValue(found)), null, null));
                 }
             }
         }
@@ -395,21 +395,21 @@ public class CheckHttp extends PluginBase {
      */
     private Properties getRequestProperties(final ICommandLine cl, final String method) throws UnsupportedEncodingException {
         Properties props = new Properties();
-        if (cl.getOptionValue("useragent") != null) {
-            props.put("User-Agent", cl.getOptionValue("useragent"));
+        if (cl.hasOption("useragent")) {
+            props.setProperty("User-Agent", cl.getOptionValue("useragent"));
         } else {
-            props.put("User-Agent", DEFAULT_USER_AGENT);
+            props.setProperty("User-Agent", DEFAULT_USER_AGENT);
         }
-        if (cl.getOptionValue("content-type") != null && method.toUpperCase().equals("POST")) {
-            props.put("Content-Type", cl.getOptionValue("content-type"));
+        if (cl.hasOption("content-type") && "POST".equalsIgnoreCase(method)) {
+            props.setProperty("Content-Type", cl.getOptionValue("content-type"));
         }
-        if (cl.getOptionValues("header") != null) {
+        if (cl.hasOption("header")) {
             List headers = cl.getOptionValues("header");
             for (Object obj : headers) {
                 String header = (String) obj;
                 String key = header.split(":")[0].trim();
                 String value = header.split(":")[1].trim();
-                props.put(key, value);
+                props.setProperty(key, value);
             }
         }
         String auth = null;
@@ -422,7 +422,7 @@ public class CheckHttp extends PluginBase {
             auth = "Proxy-Authorization";
         }
         if (auth != null && encoded != null) {
-            props.put(auth, "Basic " + encoded);
+            props.setProperty(auth, "Basic " + encoded);
         }
         return props;
     }
@@ -480,7 +480,7 @@ public class CheckHttp extends PluginBase {
         SSLContext.setDefault(ctx);
         HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
         conn.setHostnameVerifier(new HostnameVerifier() {
-            public boolean verify(String arg0, SSLSession arg1) {
+            public boolean verify(final String arg0, final SSLSession arg1) {
                 return true;
             }
         });
@@ -513,7 +513,7 @@ public class CheckHttp extends PluginBase {
          * javax.net.ssl.X509TrustManager#checkClientTrusted(java.security.cert
          * .X509Certificate[], java.lang.String)
          */
-        public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
+        public void checkClientTrusted(final X509Certificate[] arg0, final String arg1) throws CertificateException {
 
         }
 

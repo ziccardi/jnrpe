@@ -104,7 +104,7 @@ class Range extends RangeConfig {
      */
     private boolean evaluate(final BigDecimal value, final Prefixes prefix) {
         if (value == null) {
-            throw new NullPointerException("Passed in value can't be null");
+            throw new NullPointerException("Value can't be null");
         }
 
         if (!isNegativeInfinity()) {

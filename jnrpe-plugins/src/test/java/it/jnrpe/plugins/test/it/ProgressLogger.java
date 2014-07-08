@@ -29,7 +29,7 @@ import org.testng.ITestResult;
  */
 public class ProgressLogger implements IInvokedMethodListener {
 
-	private String getMethodName(IInvokedMethod m) {
+	private String getMethodName(final IInvokedMethod m) {
 		if (!m.isTestMethod())
 			return null;
 

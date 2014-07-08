@@ -61,11 +61,11 @@ public class CTestPlugin implements IPluginInterface {
 
         String statusParam = cl.getOptionValue("status", "ok");
 
-        if (statusParam.equalsIgnoreCase("ok")) {
+        if ("ok".equalsIgnoreCase(statusParam)) {
             returnStatus = Status.OK;
-        } else if (statusParam.equalsIgnoreCase("critical")) {
+        } else if ("critical".equalsIgnoreCase(statusParam)) {
             returnStatus = Status.CRITICAL;
-        } else if (statusParam.equalsIgnoreCase("warning")) {
+        } else if ("warning".equalsIgnoreCase(statusParam)) {
             returnStatus = Status.WARNING;
         } else {
             returnStatus = Status.UNKNOWN;

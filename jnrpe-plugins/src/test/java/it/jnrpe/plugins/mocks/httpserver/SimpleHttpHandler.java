@@ -25,43 +25,44 @@ import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 
 /**
- * @author Frederico Campos 
+ * @author Frederico Campos
  *
  */
 public class SimpleHttpHandler extends AbstractHandler {
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jetty.server.Handler#handle(java.lang.String, org.eclipse.jetty.server.Request, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-	 */
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.eclipse.jetty.server.Handler#handle(java.lang.String,
+     * org.eclipse.jetty.server.Request, javax.servlet.http.HttpServletRequest,
+     * javax.servlet.http.HttpServletResponse)
+     */
 
-	public void handle(String target, 
-			Request baseRequest,
-			HttpServletRequest request, 
-			HttpServletResponse response)
-					throws IOException, ServletException {
-		if (request.getMethod().equals("GET")){
-			String resp = "<h1>Hello World</h1><p>This is a paragraph</p>";
+    public void handle(final String target, final Request baseRequest, final HttpServletRequest request, final HttpServletResponse response) throws IOException,
+            ServletException {
+        if ("GET".equals(request.getMethod())) {
+            String resp = "<h1>Hello World</h1><p>This is a paragraph</p>";
 
-			if (request.getHeader("User-Agent").contains("JNRPE")) {
-				resp += "<p>GET from JNRPE detected</p>";
-			}	    
-			response.setContentType("text/html;charset=utf-8");
-			response.setStatus(HttpServletResponse.SC_OK);
-			baseRequest.setHandled(true);	    
-			response.getWriter().println(resp);
-		}else if (request.getMethod().equals("POST")){
-			StringBuffer buf = new StringBuffer();
-			for (Object key: request.getParameterMap().keySet()) {
-				String value = request.getParameter(key + "");
-				buf.append(key + ":" + value);
-				buf.append(",");
-			}		    
-			response.setContentType("text/html;charset=utf-8");
-			response.setStatus(HttpServletResponse.SC_OK);
-			baseRequest.setHandled(true);
-			//System.out.println(buf.toString());
-			response.getWriter().println(buf.toString());
-		}
-	}
+            if (request.getHeader("User-Agent").contains("JNRPE")) {
+                resp += "<p>GET from JNRPE detected</p>";
+            }
+            response.setContentType("text/html;charset=utf-8");
+            response.setStatus(HttpServletResponse.SC_OK);
+            baseRequest.setHandled(true);
+            response.getWriter().println(resp);
+        } else if ("POST".equals(request.getMethod())) {
+            StringBuilder buf = new StringBuilder();
+            for (Object key : request.getParameterMap().keySet()) {
+                String value = request.getParameter(key + "");
+                buf.append(key + ":" + value);
+                buf.append(",");
+            }
+            response.setContentType("text/html;charset=utf-8");
+            response.setStatus(HttpServletResponse.SC_OK);
+            baseRequest.setHandled(true);
+            // System.out.println(buf.toString());
+            response.getWriter().println(buf.toString());
+        }
+    }
 
 }

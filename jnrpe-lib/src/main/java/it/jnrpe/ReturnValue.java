@@ -162,7 +162,7 @@ public final class ReturnValue {
      */
     public ReturnValue withStatus(final Status status) {
         if (status == null) {
-            throw new IllegalArgumentException("Status cannot be null");
+            throw new IllegalArgumentException("Status can't be null");
         }
 
         statusCode = status;

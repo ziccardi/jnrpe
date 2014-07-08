@@ -31,7 +31,7 @@ public class InstallerUtil {
             byte[] buff = new byte[50];
             InputStream in = p.getInputStream();
 
-            StringBuffer res = new StringBuffer();
+            StringBuilder res = new StringBuilder();
             int iCount;
 
             while ((iCount = in.read(buff)) > 0) {
@@ -39,7 +39,7 @@ public class InstallerUtil {
                 res.append(new String(buff, 0, iCount, Charset.defaultCharset()));
             }
 
-            return res.toString().trim().equals("0");
+            return "0".equals(res.toString().trim());
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -122,7 +122,7 @@ public abstract class JMXQuery extends PluginBase {
     // System.exit(status.intValue());
     // }
 
-    protected Status report(Exception ex, PrintStream out) {
+    protected Status report(final Exception ex, final PrintStream out) {
         if (ex instanceof ParseError) {
             out.print(UNKNOWN_STRING + " ");
             reportException(ex, out);
@@ -155,7 +155,7 @@ public abstract class JMXQuery extends PluginBase {
         return rootCause(ex.getCause());
     }
 
-    protected Status report(PrintStream out) {
+    protected Status report(final PrintStream out) {
         Status status;
         if (compare(critical)) {
             status = Status.CRITICAL;
@@ -287,9 +287,9 @@ public abstract class JMXQuery extends PluginBase {
         this.infoData = infoData;
     }
 
-    private void report(CompositeDataSupport data, PrintStream out) {
+    private void report(final CompositeDataSupport data, final PrintStream out) {
         CompositeType type = data.getCompositeType();
-        out.print(",");
+        out.print(',');
         for (Iterator it = type.keySet().iterator(); it.hasNext();) {
             String key = (String) it.next();
             if (data.containsKey(key))
@@ -312,7 +312,7 @@ public abstract class JMXQuery extends PluginBase {
             return checkData.equals(level);
         }
         if (checkData instanceof Boolean) {
-            return checkData.equals(Boolean.parseBoolean(level));
+            return checkData.equals(Boolean.valueOf(level));
         }
         throw new RuntimeException(level + "is not of type Number,String or Boolean");
     }

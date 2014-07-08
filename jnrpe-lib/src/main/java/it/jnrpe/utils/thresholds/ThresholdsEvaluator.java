@@ -105,7 +105,7 @@ public class ThresholdsEvaluator {
     final Status evaluate(final String metric, final BigDecimal value) {
 
         if (value == null) {
-            throw new NullPointerException("Value to evaluate can't be null");
+            throw new NullPointerException("Metric value can't be null");
         }
 
         if (metric == null) {

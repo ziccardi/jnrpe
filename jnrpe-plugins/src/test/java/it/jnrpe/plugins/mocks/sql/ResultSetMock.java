@@ -51,7 +51,7 @@ public class ResultSetMock implements ResultSet {
         m_resultIterator = m_vResult.iterator();
     }
 
-    public <T> T unwrap(Class<T> iface) throws SQLException {
+    public <T> T unwrap(final Class<T> iface) throws SQLException {
         // TODO Auto-generated method stub
         return null;
     }

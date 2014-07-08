@@ -108,7 +108,7 @@ public class CheckPing extends PluginBase {
         }
         String arr[] = str.split(",");
         if (arr.length >= index) {
-            if (arr[index].equals("")) {
+            if (arr[index].length() == 0) {
                 return null;
             }
             String val = arr[index].trim().replace("%", "");

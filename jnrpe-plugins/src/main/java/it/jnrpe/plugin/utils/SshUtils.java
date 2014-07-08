@@ -58,7 +58,7 @@ public class SshUtils {
         String username = cl.getOptionValue("username");
         String password = cl.getOptionValue("password");
         String key = cl.getOptionValue("key");
-        if (cl.getOptionValue("timeout") != null) {
+        if (cl.hasOption("timeout")) {
             try {
                 timeout = Integer.parseInt(cl.getOptionValue("timeout"));
             } catch (NumberFormatException e) {

@@ -129,8 +129,7 @@ public class Mysql {
         String url = "jdbc:mysql://" + this.hostname + ":" + this.port + "/" + this.database + "?user=" + this.username + "&password="
                 + this.password + "&autoReconnect=true" + "&failOverReadOnly=false&maxReconnects=3";
         DriverManager.registerDriver((Driver) Class.forName("com.mysql.jdbc.Driver").newInstance());
-        Connection conn = DriverManager.getConnection(url);
-        return conn;
+        return DriverManager.getConnection(url);
     }
 
     /**

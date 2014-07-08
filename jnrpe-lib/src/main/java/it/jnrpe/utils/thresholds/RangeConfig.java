@@ -121,7 +121,7 @@ class RangeConfig {
 
     @Override
     public String toString() {
-        StringBuffer sb = new StringBuffer().append("negate : " + negate).append("\nnegativeInfinity : " + negativeInfinity)
+        StringBuilder sb = new StringBuilder().append("negate : " + negate).append("\nnegativeInfinity : " + negativeInfinity)
                 .append("\npositiveInfinity : " + positiveInfinity).append("\nleftInclusive : " + leftInclusive)
                 .append("\nrightInclusive : " + rightInclusive).append("\nleftBoundary : " + startBoundary)
                 .append("\nrightBoundary : " + rightBoundary);

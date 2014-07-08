@@ -52,11 +52,11 @@ public final class ShellUtils {
         
         try {
             InputStream input = sm.handle(p.getInputStream());
-            StringBuffer lines = new StringBuffer();
+            StringBuilder lines = new StringBuilder();
             String line = null;
             BufferedReader in = (BufferedReader) sm.handle(new BufferedReader(new InputStreamReader(input, encoding)));
             while ((line = in.readLine()) != null) {
-                lines.append(line).append("\n");
+                lines.append(line).append('\n');
             }
             return lines.toString();
         } finally {
@@ -83,7 +83,7 @@ public final class ShellUtils {
      */
     public static boolean isWindowsIdleProc(final String proc) {
         String process = proc.trim().toLowerCase();
-        if (process.equals("system idle process") || process.contains("inactiv") || process.equals("system")) {
+        if ("system idle process".equals(process) || process.contains("inactiv") || "system".equals(process)) {
             return true;
         }
         return false;

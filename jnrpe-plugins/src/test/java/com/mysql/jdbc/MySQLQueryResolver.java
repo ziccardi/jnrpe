@@ -27,12 +27,12 @@ public class MySQLQueryResolver implements ISQLQueryResolver {
     public MySQLQueryResolver() {
     }
 
-    public List<ResultSetMockRow> resolveSQL(String sSQL) {
+    public List<ResultSetMockRow> resolveSQL(final String sSQL) {
         List<ResultSetMockRow> vResult = new ArrayList<ResultSetMockRow>();
 
         //System.out.println("QUERY : " + sSQL);
 
-        if (sSQL.equalsIgnoreCase("show slave status;")) {
+        if ("show slave status;".equalsIgnoreCase(sSQL)) {
             vResult.add(new ResultSetMockRowBuilder()
                     .widthValue("Slave_IO_State",
                             "Waiting for master to send event")

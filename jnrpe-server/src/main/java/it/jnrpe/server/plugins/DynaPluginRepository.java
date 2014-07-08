@@ -100,7 +100,7 @@ public class DynaPluginRepository extends PluginRepository {
                 vUrls.add(vfJars[j].toURI().toURL());
             } catch (MalformedURLException e) {
                 // should never happen
-                throw new IllegalStateException(e);
+                throw new IllegalStateException(e.getMessage(), e);
             }
         }
 
@@ -134,7 +134,7 @@ public class DynaPluginRepository extends PluginRepository {
                         jarFile.close();
                     } catch (Exception e) {
                         // Intentionally ignored...
-                        LOG.warn("An error has occurred closing jar file '{0}'",file.getName(), e);
+                        LOG.warn("An error has occurred closing jar file '{}'",file.getName(), e);
                     }
                 }
             }

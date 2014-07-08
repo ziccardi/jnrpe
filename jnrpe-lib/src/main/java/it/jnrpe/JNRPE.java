@@ -345,7 +345,7 @@ public final class JNRPE {
                                 "jnrpeIdleStateHandler",
                                 new JNRPEIdleStateHandler(context));
             }
-        }).option(ChannelOption.SO_BACKLOG, this.maxAcceptedConnections).childOption(ChannelOption.SO_KEEPALIVE, true);
+        }).option(ChannelOption.SO_BACKLOG, this.maxAcceptedConnections).childOption(ChannelOption.SO_KEEPALIVE, Boolean.TRUE);
 
         return b;
     }

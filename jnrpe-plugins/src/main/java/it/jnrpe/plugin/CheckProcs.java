@@ -158,7 +158,7 @@ public class CheckProcs extends PluginBase {
      */
     private void validateArguments(ICommandLine cl, boolean windows, String metric) throws Exception {
         if (windows) {
-            if (metric.equals(METRIC_VSZ) || metric.equals(METRIC_RSS) || metric.endsWith(METRIC_ELAPSED)) {
+            if (METRIC_VSZ.equals(metric) || METRIC_RSS.equals(metric) || METRIC_ELAPSED.endsWith(metric)) {
                 throw new Exception("Metric " + metric + " not supported in Wndows.");
             } else {
                 for (String opt : UNIX_ONLY) {
@@ -168,7 +168,7 @@ public class CheckProcs extends PluginBase {
                 }
             }
         } else {
-            if (metric.equals(METRIC_MEMORY)) {
+            if (METRIC_MEMORY.equals(metric)) {
                 throw new Exception("Metric " + metric + " not supported in unix.");
             }
         }
@@ -191,7 +191,7 @@ public class CheckProcs extends PluginBase {
 
         ReturnValue retVal = null;
         try {
-            if (metric.equals(METRIC_PROCS)) {
+            if (METRIC_PROCS.equals(metric)) {
                 retVal = analyzeProcMetrics(output, cl, critical, warning, message);
             } else {
                 retVal = analyzeMetrics(output, cl, critical, warning, message, metric);
@@ -335,12 +335,11 @@ public class CheckProcs extends PluginBase {
 
             lines.append(line).append('\n');
         }
-        out = lines.toString();
-        return out;
+        return lines.toString();
     }
 
     /**
-     * Parse command output for windows environment
+     * Parse command output for windows environment.
      * 
      * @param output
      * @return List<Map<String,String>>
@@ -363,7 +362,7 @@ public class CheckProcs extends PluginBase {
             String[] line = l.replaceAll("\"", "").split(",");
             values.put(FILTER_COMMAND, line[0]);
             values.put("pid", line[1]);
-            values.put(FILTER_MEMORY, "" + convertToMemoryInt(line[4]));
+            values.put(FILTER_MEMORY, String.valueOf(convertToMemoryInt(line[4])));
             values.put(FILTER_USER, line[6]);
             int seconds = 0;
             if (!ShellUtils.isWindowsIdleProc(line[0])) {
@@ -381,12 +380,12 @@ public class CheckProcs extends PluginBase {
             map.put(cpu, Integer.toString((int) perc));
         }
 
-        LOG.debug(getContext(), info + "");
+        LOG.debug(getContext(), String.valueOf(info));
         return info;
     }
 
     /**
-     * Parse command output for unix environment
+     * Parse command output for unix environment.
      * 
      * @param output
      * @return List<Map<String,String>>
@@ -415,7 +414,7 @@ public class CheckProcs extends PluginBase {
             values.put(METRIC_CPU.toLowerCase(), line[4].trim());
             values.put(METRIC_RSS.toLowerCase(), line[5].trim());
             values.put(METRIC_VSZ.toLowerCase(), line[6].trim());
-            values.put(METRIC_ELAPSED.toLowerCase(), convertToSeconds(line[7].trim()) + "");
+            values.put(METRIC_ELAPSED.toLowerCase(), String.valueOf(convertToSeconds(line[7].trim())));
             values.put(FILTER_ARG_ARRAY, line[8]);
 
             info.add(values);
@@ -437,7 +436,7 @@ public class CheckProcs extends PluginBase {
      * @return
      */
     private List<Map<String, String>> applyFilters(List<Map<String, String>> values, Map<String, String> filterAndValue) {
-        if (filterAndValue == null || filterAndValue.size() == 0) {
+        if (filterAndValue == null || filterAndValue.isEmpty()) {
             return values;
         }
         List<Map<String, String>> filtered = new ArrayList<Map<String, String>>();

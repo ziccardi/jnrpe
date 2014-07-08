@@ -16,6 +16,7 @@
 package it.jnrpe.utils;
 
 import it.jnrpe.plugins.IPluginInterface;
+import it.jnrpe.plugins.IPluginRepository;
 import it.jnrpe.plugins.PluginConfigurationException;
 import it.jnrpe.plugins.PluginDefinition;
 import it.jnrpe.plugins.PluginOption;
@@ -65,7 +66,7 @@ public final class PluginRepositoryUtil {
      * @throws PluginConfigurationException
      *             -
      */
-    public static void loadFromXmlPluginPackageDefinitions(final PluginRepository repo, final ClassLoader cl, final InputStream in)
+    public static void loadFromXmlPluginPackageDefinitions(final IPluginRepository repo, final ClassLoader cl, final InputStream in)
             throws PluginConfigurationException {
         for (PluginDefinition pd : loadFromXmlPluginPackageDefinitions(cl, in)) {
             repo.addPluginDefinition(pd);

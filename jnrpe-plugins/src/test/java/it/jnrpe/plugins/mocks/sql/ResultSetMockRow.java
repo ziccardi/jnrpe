@@ -24,7 +24,7 @@ public class ResultSetMockRow {
     private Map<String, Object> m_mRowData =
             new LinkedHashMap<String, Object>();
 
-    void addValue(String sName, Object value) {
+    void addValue(final String sName, final Object value) {
         m_mRowData.put(sName, value);
     }
 

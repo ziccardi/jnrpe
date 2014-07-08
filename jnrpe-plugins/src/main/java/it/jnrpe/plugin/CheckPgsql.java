@@ -148,9 +148,7 @@ public class CheckPgsql extends PluginBase {
         props.setProperty("timeout", timeout);
         String url = "jdbc:postgresql://" + hostname + ":" + port + "/" + database;
         DriverManager.registerDriver((Driver) Class.forName("org.postgresql.Driver").newInstance());
-        Connection conn = DriverManager.getConnection(url, props);
-        return conn;
-
+        return DriverManager.getConnection(url, props);
     }
 
     /**
