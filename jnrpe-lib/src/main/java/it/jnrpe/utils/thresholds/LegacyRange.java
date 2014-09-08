@@ -200,7 +200,7 @@ public class LegacyRange {
         }
 
         if (curState == MAXVAL && maxVal == null && thresholdString.startsWith(":")) {
-            throw new BadThresholdException("At least one of maximum or minimum " + "value must me specified.");
+            throw new BadThresholdException("At least one of maximum or minimum " + "value must me specified (" + thresholdString + ")");
         }
 
     }

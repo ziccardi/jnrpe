@@ -15,6 +15,8 @@
  *******************************************************************************/
 package it.jnrpe;
 
+import it.jnrpe.utils.thresholds.ReturnValueBuilder;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -319,5 +321,13 @@ public final class ReturnValue {
 
         performanceDataList.add(new PerformanceData(label, value, unit, warningRange, criticalRange, minimumValue, maximumValue));
         return this;
+    }
+    
+    public static void main(String[] args) {
+        ReturnValue rv = new ReturnValue("message")
+            .withStatus(Status.OK)
+            .withPerformanceData("MyLabel", new BigDecimal("10"), (UnitOfMeasure) null, "10:", "20:", new BigDecimal(0), new BigDecimal(10));
+        
+        System.out.println (rv.getMessage());
     }
 }

@@ -17,6 +17,7 @@ package it.jnrpe.plugin.mysql;
 
 import it.jnrpe.ICommandLine;
 import it.jnrpe.Status;
+import it.jnrpe.plugin.utils.DBUtils;
 import it.jnrpe.plugins.Metric;
 import it.jnrpe.plugins.MetricGatheringException;
 import it.jnrpe.plugins.PluginBase;
@@ -133,8 +134,9 @@ public class CheckMysql extends PluginBase {
 
             metric = new Metric("secondsBehindMaster", slaveResult, new BigDecimal(secondsBehindMaster), null, null);
         } catch (SQLException e) {
-            LOG.warn(getContext(), "Error executing the CheckMysql plugin: " + e.getMessage(), e);
-            throw new MetricGatheringException("CHECK_MYSQL - CRITICAL: Unable to check slave status:  - " + e.getMessage(), Status.CRITICAL, e);
+            String message = e.getMessage();
+            LOG.warn(getContext(), "Error executing the CheckMysql plugin: " + message, e);
+            throw new MetricGatheringException("CHECK_MYSQL - CRITICAL: Unable to check slave status:  - " + message, Status.CRITICAL, e);
         }
 
         return metric;
@@ -166,9 +168,8 @@ public class CheckMysql extends PluginBase {
                 }
             }
         } finally {
-            if (statement != null) {
-                statement.close();
-            }
+            DBUtils.closeQuietly(rs);
+            DBUtils.closeQuietly(statement);
         }
         return map;
     }

@@ -445,7 +445,7 @@ public class CheckProcs extends PluginBase {
             for (Entry<String, String> entry : filterAndValue.entrySet()) {
                 String filter = entry.getKey();
                 String filterValue = entry.getValue();
-                if (filter.contains(FILTER_COMMAND) || filter.contains(FILTER_USER) || filter.equals(FILTER_ARG_ARRAY)
+                if (filter.contains(FILTER_COMMAND) || filter.contains(FILTER_USER) || FILTER_ARG_ARRAY.equals(filter)
                         || filter.contains(FILTER_PPID)) {
                     if (!map.get(filter).contains(filterValue)) {
                         matchesAll = false;

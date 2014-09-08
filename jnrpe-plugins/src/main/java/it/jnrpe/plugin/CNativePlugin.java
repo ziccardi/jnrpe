@@ -62,8 +62,10 @@ public class CNativePlugin extends PluginBase {
 
             return new ReturnValue(Status.fromIntValue(iReturnCode), sMessage);
         } catch (Exception e) {
-            LOG.warn(getContext(), "Error executing the native plugin : " + e.getMessage(), e);
-            return new ReturnValue(Status.UNKNOWN, "Could not exec executable : " + fProcessFile.getName() + " - ERROR : " + e.getMessage());
+            String message = e.getMessage();
+            
+            LOG.warn(getContext(), "Error executing the native plugin : " + message, e);
+            return new ReturnValue(Status.UNKNOWN, "Could not exec executable : " + fProcessFile.getName() + " - ERROR : " + message);
         } finally {
             streamMgr.closeAll();
         }

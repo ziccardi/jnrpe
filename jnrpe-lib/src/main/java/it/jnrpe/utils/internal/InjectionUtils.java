@@ -47,12 +47,12 @@ public final class InjectionUtils {
     @SuppressWarnings("rawtypes")
     private static void inject(final Class c, final IPluginInterface plugin, final IJNRPEExecutionContext context) throws IllegalAccessException {
 
-        Field[] fields = c.getDeclaredFields();
+        final Field[] fields = c.getDeclaredFields();
 
-        for (Field f : fields) {
-            Annotation an = f.getAnnotation(Inject.class);
+        for (final Field f : fields) {
+            final Annotation an = f.getAnnotation(Inject.class);
             if (an != null) {
-                boolean isAccessible = f.isAccessible();
+                final boolean isAccessible = f.isAccessible();
 
                 if (!isAccessible) {
                     // Change accessible flag if necessary

@@ -252,7 +252,7 @@ public class CheckTomcat extends PluginBase {
                         return new ReturnValue(Status.CRITICAL, "CRITICAL - Free " + connectorName + " threads: " + threadsAvailable)
                                 .withMessage(msg).withPerformanceData(connectorName + " threads", Long.valueOf(threadsAvailable),
                                         !critical.contains("%") ? UnitOfMeasure.counter : UnitOfMeasure.percentage, warning, critical, 0L,
-                                        new Long(maxThreads));
+                                                Long.valueOf(maxThreads));
                     }
                     if (warning != null && ThresholdUtil.isValueInRange(warn, threadsAvailable)) {
                         return new ReturnValue(Status.WARNING, "WARNING - Free " + connectorName + " threads: " + threadsAvailable + ", " + msg)

@@ -121,10 +121,14 @@ class RangeConfig {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder().append("negate : " + negate).append("\nnegativeInfinity : " + negativeInfinity)
-                .append("\npositiveInfinity : " + positiveInfinity).append("\nleftInclusive : " + leftInclusive)
-                .append("\nrightInclusive : " + rightInclusive).append("\nleftBoundary : " + startBoundary)
-                .append("\nrightBoundary : " + rightBoundary);
+        StringBuilder sb = new StringBuilder()
+                .append("negate : ").append(negate)
+                .append("\nnegativeInfinity : ").append(negativeInfinity)
+                .append("\npositiveInfinity : ").append(positiveInfinity)
+                .append("\nleftInclusive : ").append(leftInclusive)
+                .append("\nrightInclusive : ").append(rightInclusive)
+                .append("\nleftBoundary : ").append(startBoundary)
+                .append("\nrightBoundary : ").append(rightBoundary);
 
         return sb.toString();
     }

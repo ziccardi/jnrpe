@@ -88,8 +88,11 @@ public class CheckSsh extends PluginBase {
             session.disconnect();
 
         } catch (Exception e) {
-            metrics.add(new Metric("connected", e.getMessage(), new BigDecimal(0), null, null));
-            LOG.debug(getContext(), e.getMessage(), e);
+            
+            String message = e.getMessage();
+            
+            metrics.add(new Metric("connected", message, new BigDecimal(0), null, null));
+            LOG.debug(getContext(), message, e);
         }
         return metrics;
     }

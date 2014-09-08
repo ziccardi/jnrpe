@@ -17,6 +17,7 @@ package it.jnrpe.plugin;
 
 import it.jnrpe.ICommandLine;
 import it.jnrpe.Status;
+import it.jnrpe.plugin.utils.DBUtils;
 import it.jnrpe.plugins.Metric;
 import it.jnrpe.plugins.MetricGatheringException;
 import it.jnrpe.plugins.PluginBase;
@@ -89,12 +90,13 @@ public class CCheckOracle extends PluginBase {
 
         List<Metric> metricList = new ArrayList<Metric>();
         Statement stmt = null;
-
+        ResultSet rs = null;
+        
         long lStart = System.currentTimeMillis();
 
         try {
             stmt = c.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT SYSDATE FROM DUAL");
+            rs = stmt.executeQuery("SELECT SYSDATE FROM DUAL");
 
             if (!rs.next()) {
                 // Should never happen...
@@ -108,13 +110,8 @@ public class CCheckOracle extends PluginBase {
             return metricList;
 
         } finally {
-            try {
-                if (stmt != null) {
-                    stmt.close();
-                }
-            } catch (Exception e) {
-                // Intentionally ignored...
-            }
+            DBUtils.closeQuietly(rs);
+            DBUtils.closeQuietly(stmt);
         }
     }
 
@@ -170,13 +167,8 @@ public class CCheckOracle extends PluginBase {
             return metricList;
 
         } finally {
-            try {
-                if (stmt != null) {
-                    stmt.close();
-                }
-            } catch (Exception e) {
-                // Intentionally ignored...
-            }
+            DBUtils.closeQuietly(rs);
+            DBUtils.closeQuietly(stmt);
         }
 
     }
@@ -226,13 +218,8 @@ public class CCheckOracle extends PluginBase {
 
             return metricList;
         } finally {
-            try {
-                if (stmt != null) {
-                    stmt.close();
-                }
-            } catch (Exception e) {
-                // Intentionally ignored...
-            }
+            DBUtils.closeQuietly(rs);
+            DBUtils.closeQuietly(stmt);
         }
 
     }

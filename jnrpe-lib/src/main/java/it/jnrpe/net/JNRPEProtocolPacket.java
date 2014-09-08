@@ -190,6 +190,7 @@ class JNRPEProtocolPacket {
                 throw new BadCRCException("Bad CRC");
             }
         } catch (IOException e) {
+            // Never happens...
             throw new IllegalStateException(e.getMessage(), e);
         }
     }
@@ -292,12 +293,18 @@ class JNRPEProtocolPacket {
 
             dout.close();
         } catch (IOException e) {
+            // Never happens...
             throw new IllegalStateException(e.getMessage(), e);
         }
         return bout.toByteArray();
     }
 
-    
+    /**
+     * Loads the packet from the given input stream.
+     * 
+     * @param in the packet input stream
+     * @throws IOException on any error
+     */
     protected void fromInputStream(final InputStream in) throws IOException {
         DataInputStream din = new DataInputStream(in);
         packetVersion = din.readShort();

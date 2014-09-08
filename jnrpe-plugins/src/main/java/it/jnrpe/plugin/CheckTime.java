@@ -148,19 +148,21 @@ public class CheckTime extends PluginBase {
         metrics.add(new Metric("time", "", new BigDecimal(TimeUnit.MILLISECOND.convert(elapsed, TimeUnit.SECOND)), null, null));
     }
 
-    private String getMessage(Elapsed elapsed) {
-        String msg = elapsed.getSeconds() + " seconds ";
-
+    private String getMessage(final Elapsed elapsed) {
+        
+        StringBuilder msg = new StringBuilder(String.valueOf(elapsed.getSeconds())).append(" seconds ");
+        
         if (elapsed.getMinutes() > 0) {
-            msg += elapsed.getMinutes() + " minutes ";
+            msg.append(String.valueOf(elapsed.getMinutes())).append(" minutes ");
         }
         if (elapsed.getHours() > 0) {
-            msg += elapsed.getHours() + " hours ";
+            msg.append(String.valueOf(elapsed.getHours())).append(" hours ");
         }
         if (elapsed.getDays() > 0) {
-            msg += elapsed.getDays() + " days ";
+            msg.append(String.valueOf(elapsed.getDays())).append(" days ");
         }
-        return msg + "difference ";
+        
+        return msg.append("difference ").toString();
     }
 
     private Date getTimeTCP(String host, int timeout, int port) throws IOException {

@@ -53,9 +53,8 @@ public class SimpleHttpHandler extends AbstractHandler {
         } else if ("POST".equals(request.getMethod())) {
             StringBuilder buf = new StringBuilder();
             for (Object key : request.getParameterMap().keySet()) {
-                String value = request.getParameter(key + "");
-                buf.append(key + ":" + value);
-                buf.append(",");
+                String value = request.getParameter(String.valueOf(key));
+                buf.append(key).append(':').append(value).append(',');
             }
             response.setContentType("text/html;charset=utf-8");
             response.setStatus(HttpServletResponse.SC_OK);

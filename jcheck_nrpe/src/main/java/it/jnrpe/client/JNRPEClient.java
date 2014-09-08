@@ -27,12 +27,13 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.security.SecureRandom;
-import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.List;
+import java.util.Set;
 
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocket;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
@@ -83,37 +84,50 @@ public class JNRPEClient {
     private final boolean useSSL;
 
     /**
+     * <code>true</code> to enable weak cipher suites. Useful if you need to be
+     * able to communicate with NSClient++
+     */
+    private boolean weakCipherSuitesEnabled = false;
+
+    /**
      * The communication timeout (in seconds).
      */
     private int communicationTimeout = DEFAULT_TIMEOUT;
 
     /**
-     * The trust manager. 
+     * The trust manager.
      */
     private static final TrustAllManager TRUSTALL_MGR = new TrustAllManager();
-    
+
     /**
-     * Trust manager implementation.
-     * This trust manager allows connection on any host.
+     * Trust manager implementation. This trust manager allows connection on any
+     * host.
      * 
      * @author Massimiliano Ziccardi
      */
     private static final class TrustAllManager implements X509TrustManager {
 
         /**
+         * Empty list of accepted issuers.
+         */
+        private static final X509Certificate[] ISSUERS = new X509Certificate[0];
+
+        /**
          * Simply returns null.
+         * 
          * @return null
          */
         public X509Certificate[] getAcceptedIssuers() {
-            return null;
+            return ISSUERS;
         }
 
         /**
          * No checks performed.
          * 
-         * @param chain certificate chain
-         * @param authType authentication type
-         * @throws CertificateException on errors.
+         * @param chain
+         *            certificate chain
+         * @param authType
+         *            authentication type
          */
         public void checkServerTrusted(final X509Certificate[] chain, final String authType) {
 
@@ -122,14 +136,15 @@ public class JNRPEClient {
         /**
          * No checks performed.
          * 
-         * @param chain certificate chain
-         * @param authType authentication type
-         * @throws CertificateException on errors.
+         * @param chain
+         *            certificate chain
+         * @param authType
+         *            authentication type
          */
         public void checkClientTrusted(final X509Certificate[] chain, final String authType) {
         }
     }
-    
+
     /**
      * Instantiates a JNRPE client.
      * 
@@ -175,8 +190,7 @@ public class JNRPEClient {
             if (!useSSL) {
                 socketFactory = SocketFactory.getDefault();
             } else {
-                SSLContext sslContext = SSLContext.getInstance("SSL");
-                sslContext.init(null, null, new java.security.SecureRandom());
+                SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
 
                 sslContext.init(null, new TrustManager[] { getTrustManager() }, new SecureRandom());
 
@@ -184,6 +198,11 @@ public class JNRPEClient {
             }
 
             s = socketFactory.createSocket();
+            if (weakCipherSuitesEnabled) {
+                SSLSocket ssl  = (SSLSocket) s;
+                ssl.setEnabledCipherSuites(ssl.getSupportedCipherSuites());    
+            }
+
             s.setSoTimeout((int) TimeUnit.SECOND.convert(communicationTimeout));
             s.connect(new InetSocketAddress(serverIPorURL, serverPort));
             JNRPERequest req = new JNRPERequest(sCommandName, arguments);
@@ -240,6 +259,8 @@ public class JNRPEClient {
 
         DefaultOption nosslOption = oBuilder.withLongName("nossl").withShortName("n").withDescription("Do no use SSL").create();
 
+        DefaultOption weakSslOption = oBuilder.withLongName("weakCiherSuites").withShortName("w").withDescription("Enable weak cipher suites").create();
+        
         DefaultOption unknownOption = oBuilder.withLongName("unknown").withShortName("u")
                 .withDescription("Make socket timeouts return an UNKNOWN state instead of CRITICAL").create();
 
@@ -262,8 +283,8 @@ public class JNRPEClient {
                 .withShortName("t")
                 .withDescription("Number of seconds before connection " + "times out (default=10)")
                 .withArgument(
-                        aBuilder.withName("timeout").withMinimum(1).withMaximum(1).withDefault(Long.valueOf(DEFAULT_TIMEOUT)).withValidator(positiveInt)
-                                .create()).create();
+                        aBuilder.withName("timeout").withMinimum(1).withMaximum(1).withDefault(Long.valueOf(DEFAULT_TIMEOUT))
+                                .withValidator(positiveInt).create()).create();
 
         DefaultOption commandOption = oBuilder.withLongName("command").withShortName("c")
                 .withDescription("The name of the command that " + "the remote daemon should run")
@@ -279,8 +300,15 @@ public class JNRPEClient {
 
         DefaultOption helpOption = oBuilder.withLongName("help").withShortName("h").withDescription("Shows this help").create();
 
-        Group executionOption = gBuilder.withOption(nosslOption).withOption(unknownOption).withOption(hostOption).withOption(portOption)
-                .withOption(timeoutOption).withOption(commandOption).withOption(argsOption).create();
+        Group executionOption = gBuilder
+                                    .withOption(nosslOption)
+                                    .withOption(weakSslOption)
+                                    .withOption(unknownOption)
+                                    .withOption(hostOption)
+                                    .withOption(portOption)
+                                    .withOption(timeoutOption)
+                                    .withOption(commandOption)
+                                    .withOption(argsOption).create();
 
         return gBuilder.withOption(executionOption).withOption(helpOption).withMinimum(1).withMaximum(1).create();
     }
@@ -319,17 +347,19 @@ public class JNRPEClient {
         }
 
         // DISPLAY SETTING
-        hf.getDisplaySettings().clear();
-        hf.getDisplaySettings().add(DisplaySetting.DISPLAY_GROUP_EXPANDED);
-        hf.getDisplaySettings().add(DisplaySetting.DISPLAY_PARENT_CHILDREN);
+        Set displaySettings = hf.getDisplaySettings();
+
+        displaySettings.clear();
+        displaySettings.add(DisplaySetting.DISPLAY_GROUP_EXPANDED);
+        displaySettings.add(DisplaySetting.DISPLAY_PARENT_CHILDREN);
 
         // USAGE SETTING
-
-        hf.getFullUsageSettings().clear();
-        hf.getFullUsageSettings().add(DisplaySetting.DISPLAY_PARENT_ARGUMENT);
-        hf.getFullUsageSettings().add(DisplaySetting.DISPLAY_ARGUMENT_BRACKETED);
-        hf.getFullUsageSettings().add(DisplaySetting.DISPLAY_PARENT_CHILDREN);
-        hf.getFullUsageSettings().add(DisplaySetting.DISPLAY_GROUP_EXPANDED);
+        Set usageSettings = hf.getFullUsageSettings();
+        usageSettings.clear();
+        usageSettings.add(DisplaySetting.DISPLAY_PARENT_ARGUMENT);
+        usageSettings.add(DisplaySetting.DISPLAY_ARGUMENT_BRACKETED);
+        usageSettings.add(DisplaySetting.DISPLAY_PARENT_CHILDREN);
+        usageSettings.add(DisplaySetting.DISPLAY_GROUP_EXPANDED);
 
         hf.setDivider(sbDivider.toString());
 
@@ -337,6 +367,13 @@ public class JNRPEClient {
         hf.print();
     }
 
+    /**
+     * Enables weak cipher suites.
+     */
+    public final void enableWeakCipherSuites() {
+        weakCipherSuitesEnabled = true;
+    }
+    
     /**
      * 
      * @param args
@@ -367,6 +404,10 @@ public class JNRPEClient {
             JNRPEClient client = new JNRPEClient(sHost, port.intValue(), !cli.hasOption("--nossl"));
             client.setTimeout(((Long) cli.getValue("--timeout", Long.valueOf(DEFAULT_TIMEOUT))).intValue());
 
+            if (cli.hasOption("--weakCiherSuites")) {
+                client.enableWeakCipherSuites();
+            }
+            
             @SuppressWarnings("unchecked")
             List<String> argList = cli.getValues("--arglist");
             ReturnValue ret = client.sendCommand(sCommand, argList.toArray(new String[argList.size()]));

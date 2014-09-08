@@ -13,20 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.plugins;
-
-
 /**
- * This interface must be implemented by all the plugins that needs to send
- * events that must be intercepted by the JNRPE Server.
- *
- * If you plan to handle the events independently from JNRPE server, you can
- * avoid implementing this interface.
- *
- * @author Massimiliano Ziccardi
- * @deprecated this interface is not useful anymore
+ * This package contains the tests for the core JNRPE plugins.
  */
-public interface IPluginInterfaceEx extends IPluginInterface {
-    
-    //void setContext(IJNRPEExecutionContext ctx);
-}
+package it.jnrpe.plugins.test;
+

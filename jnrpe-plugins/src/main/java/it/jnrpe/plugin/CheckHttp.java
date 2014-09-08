@@ -312,13 +312,13 @@ public class CheckHttp extends PluginBase {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod(method);
         HttpUtils.setRequestProperties(props, conn, timeout);
-        String initialUrl = conn.getURL() + "";
+        String initialUrl = String.valueOf(conn.getURL());
         String redirectedUrl = null;
         if ("POST".equals(method)) {
             HttpUtils.sendPostData(conn, postData);
         }
         response = HttpUtils.parseHttpResponse(conn, false, ignoreBody);
-        redirectedUrl = conn.getURL() + "";
+        redirectedUrl = String.valueOf(conn.getURL());
 
         if (!redirectedUrl.equals(initialUrl)) {
             Metric metric = new Metric("onredirect", "", new BigDecimal(1), null, null);

@@ -21,8 +21,6 @@ import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import it.jnrpe.IJNRPEExecutionContext;
 import it.jnrpe.JNRPELogger;
-import it.jnrpe.events.LogEvent;
-import it.jnrpe.events.LogEvent.LogEventType;
 
 /**
  * Idle timeout handler.

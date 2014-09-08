@@ -24,14 +24,14 @@ package it.jnrpe;
 public final class JNRPELIB {
 
     /**
+     * The JNRPE Version as read from its manifest.
+     */
+    public static final String VERSION = "JNRPE library V. " + JNRPELIB.class.getPackage().getImplementationVersion();
+    
+    /**
      * Private constructor to avoid instantiation.
      */
     private JNRPELIB() {
 
     }
-
-    /**
-     * The JNRPE Version as read from its manifest.
-     */
-    public static final String VERSION = "JNRPE library V. " + JNRPELIB.class.getPackage().getImplementationVersion();
 }

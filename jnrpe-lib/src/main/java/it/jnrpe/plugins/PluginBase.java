@@ -19,8 +19,6 @@ import it.jnrpe.ICommandLine;
 import it.jnrpe.IJNRPEExecutionContext;
 import it.jnrpe.JNRPELogger;
 import it.jnrpe.ReturnValue;
-import it.jnrpe.events.LogEvent;
-import it.jnrpe.events.LogEvent.LogEventType;
 import it.jnrpe.utils.BadThresholdException;
 import it.jnrpe.utils.thresholds.ReturnValueBuilder;
 import it.jnrpe.utils.thresholds.ThresholdsEvaluatorBuilder;

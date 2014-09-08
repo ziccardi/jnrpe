@@ -15,9 +15,6 @@
  *******************************************************************************/
 package it.jnrpe;
 
-import it.jnrpe.commands.CommandRepository;
-import it.jnrpe.plugins.IPluginRepository;
-
 import java.nio.charset.Charset;
 
 /**
@@ -37,16 +34,6 @@ public class JNRPEExecutionContext implements IJNRPEExecutionContext {
      */
     private final Charset charset;
 
-//    /**
-//     * The plugin repository.
-//     */
-//    private final IPluginRepository pluginRepository;
-//    
-//    /**
-//     * The command repository.
-//     */
-//    private final CommandRepository commandRepository;
-    
     /**
      * Builds and initializes the context.
      * 
@@ -56,13 +43,9 @@ public class JNRPEExecutionContext implements IJNRPEExecutionContext {
      *            the configured charset
      */
     JNRPEExecutionContext(final IJNRPEEventBus bus, 
-                    final Charset currentCharset,
-                    final IPluginRepository pluginRepo,
-                    final CommandRepository commandRepo) {
+                    final Charset currentCharset) {
         this.eventBus = bus;
         this.charset = currentCharset;
-//        this.pluginRepository = pluginRepo;
-//        this.commandRepository = commandRepo;
     }
 
     /* (non-Javadoc)
@@ -78,18 +61,4 @@ public class JNRPEExecutionContext implements IJNRPEExecutionContext {
     public final Charset getCharset() {
         return charset;
     }
-
-    /* (non-Javadoc)
-     * @see it.jnrpe.IJNRPEExecutionContext#getPluginRepository()
-     */
-//    public IPluginRepository getPluginRepository() {
-//        return pluginRepository;
-//    }
-//
-//    /* (non-Javadoc)
-//     * @see it.jnrpe.IJNRPEExecutionContext#getCommandRepository()
-//     */
-//    public CommandRepository getCommandRepository() {
-//        return commandRepository;
-//    }
 }

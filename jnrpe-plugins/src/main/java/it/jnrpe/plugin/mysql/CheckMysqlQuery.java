@@ -17,6 +17,7 @@ package it.jnrpe.plugin.mysql;
 
 import it.jnrpe.ICommandLine;
 import it.jnrpe.Status;
+import it.jnrpe.plugin.utils.DBUtils;
 import it.jnrpe.plugins.Metric;
 import it.jnrpe.plugins.MetricGatheringException;
 import it.jnrpe.plugins.PluginBase;
@@ -91,24 +92,14 @@ public class CheckMysqlQuery extends PluginBase {
             metrics.add(new Metric("rows", "CHECK_MYSQL_QUERY - Returned value is " + (value != null ? value.longValue() : null), value, null, null));
 
         } catch (SQLException e) {
-            LOG.warn(getContext(), "Error executing plugin CheckMysqlQuery : " + e.getMessage(), e);
-            throw new MetricGatheringException("CHECK_MYSQL_QUERY - CRITICAL: " + e.getMessage(), Status.CRITICAL, e);
+            
+            String message = e.getMessage();
+            LOG.warn(getContext(), "Error executing plugin CheckMysqlQuery : " + message, e);
+            throw new MetricGatheringException("CHECK_MYSQL_QUERY - CRITICAL: " + message, Status.CRITICAL, e);
         } finally {
-            if (st != null) {
-                try {
-                    st.close();
-                } catch (SQLException e) {
-                    LOG.error(getContext(), "Error closing MySQL statement", e);
-                }
-            }
-            if (set != null) {
-                try {
-                    set.close();
-                } catch (SQLException e) {
-                    LOG.error(getContext(), "Error closing MySQL ResultSet", e);
-                }
-            }
-            mysql.closeConnection(conn);
+            DBUtils.closeQuietly(set);
+            DBUtils.closeQuietly(st);
+            DBUtils.closeQuietly(conn);
         }
 
         return metrics;

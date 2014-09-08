@@ -340,46 +340,6 @@ public abstract class JMXQuery extends PluginBase {
 
     }
 
-    private void parse(String[] args) throws ParseError {
-        try {
-            for (int i = 0; i < args.length; i++) {
-                String option = args[i];
-                if (option.equals("-help")) {
-                    printHelp(System.out);
-                    System.exit(RETURN_UNKNOWN);
-                } else if (option.equals("-U")) {
-                    this.url = args[++i];
-                } else if (option.equals("-O")) {
-                    this.object = args[++i];
-                } else if (option.equals("-A")) {
-                    this.attribute = args[++i];
-                } else if (option.equals("-I")) {
-                    this.info_attribute = args[++i];
-                } else if (option.equals("-J")) {
-                    this.info_key = args[++i];
-                } else if (option.equals("-K")) {
-                    this.attribute_key = args[++i];
-                } else if (option.startsWith("-v")) {
-                    this.verbatim = option.length() - 1;
-                } else if (option.equals("-w")) {
-                    this.warning = args[++i];
-                } else if (option.equals("-c")) {
-                    this.critical = args[++i];
-                } else if (option.equals("-username")) {
-                    this.username = args[++i];
-                } else if (option.equals("-password")) {
-                    this.password = args[++i];
-                }
-            }
-
-            if (url == null || object == null || attribute == null)
-                throw new Exception("Required options not specified");
-        } catch (Exception e) {
-            throw new ParseError(e);
-        }
-
-    }
-
     private void printHelp(PrintStream out) {
         InputStream is = JMXQuery.class.getClassLoader().getResourceAsStream("jmxquery/HELP");
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));

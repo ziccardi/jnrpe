@@ -161,7 +161,7 @@ class PerformanceData {
      * @return a string that can be returned to Nagios
      */
     public String toPerformanceString() {
-        StringBuilder res = new StringBuilder().append(quote(label)).append('=').append(DECIMAL_FORMAT.format(performanceValue));
+        final StringBuilder res = new StringBuilder().append(quote(label)).append('=').append(DECIMAL_FORMAT.format(performanceValue));
 
         if (unitOfMeasure != null) {
             switch (unitOfMeasure) {

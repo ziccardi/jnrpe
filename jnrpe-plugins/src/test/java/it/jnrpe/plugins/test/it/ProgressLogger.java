@@ -22,69 +22,69 @@ import org.testng.ITestNGMethod;
 import org.testng.ITestResult;
 
 /**
- * This class is used to log test method invocations
+ * This class is used to log test method invocations.
  * 
- * @author ziccardi
+ * @author Massimiliano Ziccardi
  * 
  */
 public class ProgressLogger implements IInvokedMethodListener {
 
-	private String getMethodName(final IInvokedMethod m) {
-		if (!m.isTestMethod())
-			return null;
+    private String getMethodName(final IInvokedMethod m) {
+        if (!m.isTestMethod())
+            return null;
 
-		ITestNGMethod method = m.getTestMethod();
+        ITestNGMethod method = m.getTestMethod();
 
-		IClass klass = method.getTestClass();
+        IClass klass = method.getTestClass();
 
-		return klass.getName() + "." + method.getMethodName();
-	}
+        return klass.getName() + "." + method.getMethodName();
+    }
 
-	public void beforeInvocation(IInvokedMethod method, ITestResult testResult) {
-		String methodName = getMethodName(method);
-		if (methodName == null) {
-			return;
-		}
-		System.out.print(methodName + ": ");
-		System.out.flush();
-	}
+    public void beforeInvocation(IInvokedMethod method, ITestResult testResult) {
+        String methodName = getMethodName(method);
+        if (methodName == null) {
+            return;
+        }
+        System.out.print(methodName + ": ");
+        System.out.flush();
+    }
 
-	public void afterInvocation(IInvokedMethod method, ITestResult testResult) {
-		String methodName = getMethodName(method);
+    public void afterInvocation(IInvokedMethod method, ITestResult testResult) {
+        String methodName = getMethodName(method);
 
-		if (methodName == null) {
-			return;
-		}
+        if (methodName == null) {
+            return;
+        }
 
-		switch (testResult.getStatus()) {
-		case ITestResult.SUCCESS:
-			System.out.println("OK");
-			break;
-		case ITestResult.FAILURE:
-			System.out.println("*** FAILURE ***");
-			break;
-		case ITestResult.SKIP:
-			System.out.println("*** SKIPPED ***");
-			break;
-		case ITestResult.SUCCESS_PERCENTAGE_FAILURE:
-			System.out.println("*** PARTIALLY FAILED ***");
-			break;
-		case ITestResult.STARTED:
-		default:
-		        break;
-		}
+        switch (testResult.getStatus()) {
+        case ITestResult.SUCCESS:
+            System.out.println("OK");
+            break;
+        case ITestResult.FAILURE:
+            System.out.println("*** FAILURE ***");
+            break;
+        case ITestResult.SKIP:
+            System.out.println("*** SKIPPED ***");
+            break;
+        case ITestResult.SUCCESS_PERCENTAGE_FAILURE:
+            System.out.println("*** PARTIALLY FAILED ***");
+            break;
+        case ITestResult.STARTED:
+        default:
+            break;
+        }
 
-		if (testResult.getThrowable() != null) {
-			testResult.getThrowable().printStackTrace();
-		}
+        if (testResult.getThrowable() != null) {
+            testResult.getThrowable().printStackTrace();
+        }
 
-		// if (testResult.isSuccess()) {
-		// System.out.println("OK");
-		// } else {
-		// System.out.println("*** " + testResult.getStatus());
-		// if (testResult.getThrowable() != null) {
-		// testResult.getThrowable().printStackTrace();
-		// }
-		// }
-	}
+        // if (testResult.isSuccess()) {
+        // System.out.println("OK");
+        // } else {
+        // System.out.println("*** " + testResult.getStatus());
+        // if (testResult.getThrowable() != null) {
+        // testResult.getThrowable().printStackTrace();
+        // }
+        // }
+    }
 }

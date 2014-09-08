@@ -15,9 +15,6 @@
  *******************************************************************************/
 package it.jnrpe;
 
-import it.jnrpe.commands.CommandRepository;
-import it.jnrpe.plugins.IPluginRepository;
-
 import java.nio.charset.Charset;
 
 /**

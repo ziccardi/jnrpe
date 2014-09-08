@@ -24,8 +24,6 @@ import it.jnrpe.IJNRPEExecutionContext;
 import it.jnrpe.JNRPELogger;
 import it.jnrpe.ReturnValue;
 import it.jnrpe.commands.CommandInvoker;
-import it.jnrpe.events.LogEvent;
-import it.jnrpe.events.LogEvent.LogEventType;
 
 /**
  * Receives and handles connections to the JNRPE server.

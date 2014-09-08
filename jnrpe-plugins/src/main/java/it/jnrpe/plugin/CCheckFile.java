@@ -251,9 +251,10 @@ public class CCheckFile extends PluginBase {
 
             return updateRes(res, new ReturnValue(Status.OK, "FILE OK - String '" + sPattern + "' found " + iCount + " times"));
         } catch (IOException e) {
-            LOG.warn(getContext(), "Plugin Execution error : " + e.getMessage(), e);
+            String message = e.getMessage();
+            LOG.warn(getContext(), "Plugin Execution error : " + message, e);
             //sendEvent(LogEvent.WARNING, "Plugin Execution error : " + e.getMessage(), e);
-            return updateRes(res, new ReturnValue(Status.UNKNOWN, "FILE UNKNOWN - " + e.getMessage()));
+            return updateRes(res, new ReturnValue(Status.UNKNOWN, "FILE UNKNOWN - " + message));
         } finally {
             sm.closeAll();
         }
@@ -294,9 +295,11 @@ public class CCheckFile extends PluginBase {
             }
             return updateRes(res, new ReturnValue(Status.OK, "FILE OK: String '" + cl.getOptionValue("notcontains") + "' not found"));
         } catch (IOException e) {
-            LOG.warn(getContext(), "Plugin Execution error : " + e.getMessage(), e);
-            //sendEvent(LogEvent.WARNING, "Plugin Execution error : " + e.getMessage(), e);
-            return updateRes(res, new ReturnValue(Status.UNKNOWN, "FILE UNKNOWN - " + e.getMessage()));
+            
+            String message = e.getMessage();
+            
+            LOG.warn(getContext(), "Plugin Execution error : " + message, e);
+            return updateRes(res, new ReturnValue(Status.UNKNOWN, "FILE UNKNOWN - " + message));
         } finally {
             sm.closeAll();
         }

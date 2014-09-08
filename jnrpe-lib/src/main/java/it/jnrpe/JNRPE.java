@@ -76,7 +76,7 @@ public final class JNRPE {
     /**
      * Default number of accepted connections.
      */
-    static final int DEFAULT_MAX_ACCEPTED_CONNECTIONS = 128;
+    protected static final int DEFAULT_MAX_ACCEPTED_CONNECTIONS = 128;
 
     /**
      * The boss group (see netty documentation).
@@ -166,7 +166,7 @@ public final class JNRPE {
         this.maxAcceptedConnections = DEFAULT_MAX_ACCEPTED_CONNECTIONS;
         readTimeout = 10;
         writeTimeout = 60;
-        this.context = new JNRPEExecutionContext(new JNRPEEventBus(), charset, pluginRepo, commandRepo);
+        this.context = new JNRPEExecutionContext(new JNRPEEventBus(), charset);
     }
 
     /**
@@ -199,7 +199,7 @@ public final class JNRPE {
         this.maxAcceptedConnections = DEFAULT_MAX_ACCEPTED_CONNECTIONS;
         readTimeout = 10;
         writeTimeout = 60;
-        this.context = new JNRPEExecutionContext(new JNRPEEventBus(), newCharset, pluginRepo, commandRepo);
+        this.context = new JNRPEExecutionContext(new JNRPEEventBus(), newCharset);
     }
 
     /**
@@ -248,7 +248,7 @@ public final class JNRPE {
         this.maxAcceptedConnections = maxConnections;
         this.readTimeout = readTimeoutSeconds;
         this.writeTimeout = writeTimeoutSeconds;
-        this.context = new JNRPEExecutionContext(new JNRPEEventBus(), newCharset, pluginRepo, commandRepo);
+        this.context = new JNRPEExecutionContext(new JNRPEEventBus(), newCharset);
     }
 
     /**
@@ -287,19 +287,19 @@ public final class JNRPE {
                     KeyManagementException {
 
         // Open the KeyStore Stream
-        StreamManager h = new StreamManager();
+        final StreamManager h = new StreamManager();
 
         SSLContext ctx;
         KeyManagerFactory kmf;
 
         try {
-            InputStream ksStream = getClass().getClassLoader().getResourceAsStream(KEYSTORE_NAME);
+            final InputStream ksStream = getClass().getClassLoader().getResourceAsStream(KEYSTORE_NAME);
             h.handle(ksStream);
             ctx = SSLContext.getInstance("SSLv3");
 
             kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
 
-            KeyStore ks = KeyStore.getInstance("JKS");
+            final KeyStore ks = KeyStore.getInstance("JKS");
             char[] passphrase = KEYSTORE_PWD.toCharArray();
             ks.load(ksStream, passphrase);
 
@@ -325,13 +325,13 @@ public final class JNRPE {
 
         final CommandInvoker invoker = new CommandInvoker(pluginRepository, commandRepository, acceptParams, getExecutionContext());
 
-        ServerBootstrap b = new ServerBootstrap();
+        final ServerBootstrap b = new ServerBootstrap();
         b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class).childHandler(new ChannelInitializer<SocketChannel>() {
             @Override
             public void initChannel(final SocketChannel ch) throws Exception {
 
                 if (useSSL) {
-                    SSLEngine engine = getSSLEngine();
+                    final SSLEngine engine = getSSLEngine();
                     engine.setEnabledCipherSuites(engine.getSupportedCipherSuites());
                     engine.setUseClientMode(false);
                     engine.setNeedClientAuth(false);

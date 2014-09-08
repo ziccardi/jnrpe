@@ -20,7 +20,6 @@ import it.jnrpe.plugins.IPluginRepository;
 import it.jnrpe.plugins.PluginConfigurationException;
 import it.jnrpe.plugins.PluginDefinition;
 import it.jnrpe.plugins.PluginOption;
-import it.jnrpe.plugins.PluginRepository;
 import it.jnrpe.plugins.annotations.Option;
 import it.jnrpe.plugins.annotations.Plugin;
 import it.jnrpe.plugins.annotations.PluginOptions;
