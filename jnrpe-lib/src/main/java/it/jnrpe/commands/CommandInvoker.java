@@ -20,17 +20,10 @@ import it.jnrpe.JNRPELIB;
 import it.jnrpe.JNRPELogger;
 import it.jnrpe.ReturnValue;
 import it.jnrpe.Status;
-import it.jnrpe.events.LogEvent;
-import it.jnrpe.events.LogEvent.LogEventType;
-import it.jnrpe.plugins.IPluginInterface;
 import it.jnrpe.plugins.IPluginRepository;
-import it.jnrpe.plugins.Inject;
 import it.jnrpe.plugins.PluginProxy;
 import it.jnrpe.utils.internal.InjectionUtils;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.util.Collection;
 import java.util.regex.Matcher;
 
 /**
@@ -38,9 +31,13 @@ import java.util.regex.Matcher;
  * 
  * @author Massimiliano Ziccardi
  * 
+ * @version $Revision: 1.0 $
  */
 public final class CommandInvoker {
     
+    /**
+     * Field LOG.
+     */
     private final JNRPELogger LOG = new JNRPELogger(this);
     
     /**
@@ -75,6 +72,7 @@ public final class CommandInvoker {
      *            be used by this invoker.
      * @param ctx
      *            The execution context
+     * @param acceptParams boolean
      */
     public CommandInvoker(final IPluginRepository pluginRepo, final CommandRepository commandRepo, final boolean acceptParams,
             final IJNRPEExecutionContext ctx) {
@@ -95,8 +93,8 @@ public final class CommandInvoker {
      * @param argsAry
      *            The arguments to pass to the command as configured in the
      *            server configuration XML (with the $ARG?$ macros)
-     * @return The result of the command
-     */
+    
+     * @return The result of the command */
     public ReturnValue invoke(final String commandName, final String[] argsAry) {
         if ("_NRPE_CHECK".equals(commandName)) {
             return new ReturnValue(Status.OK, JNRPELIB.VERSION);
@@ -122,8 +120,8 @@ public final class CommandInvoker {
      * @param argsAry
      *            The arguments to pass to the command as configured in the
      *            server configuration XML (with the $ARG?$ macros)
-     * @return The result of the command
-     */
+    
+     * @return The result of the command */
     public ReturnValue invoke(final CommandDefinition cd, final String[] argsAry) {
         String pluginName = cd.getPluginName();
         try {
@@ -157,5 +155,15 @@ public final class CommandInvoker {
             //context.getEventBus().post(new LogEvent(this, LogEventType.ERROR, "Plugin [" + pluginName + "] execution error", thr));
             return new ReturnValue(Status.UNKNOWN, "Plugin [" + pluginName + "] execution error: " + thr.getMessage());
         }
+    }
+
+    /**
+     * Method toString.
+     * @return String
+     */
+    @Override
+    public String toString() {
+        return "CommandInvoker [LOG=" + LOG + ", acceptParams=" + acceptParams + ", pluginRepository=" + pluginRepository + ", commandRepository="
+                + commandRepository + ", context=" + context + "]";
     }
 }

@@ -21,6 +21,7 @@ import java.math.BigDecimal;
  * This class represent a metric gathered from a plugin.
  * 
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public class Metric {
     /**
@@ -73,37 +74,47 @@ public class Metric {
     }
 
     /**
-     * @return The name of this metric.
-     */
+    
+     * @return The name of this metric. */
     public final String getMetricName() {
         return metricName;
     }
 
     /**
-     * @return The value of this metric.
-     */
+    
+     * @return The value of this metric. */
     public final BigDecimal getMetricValue() {
         return metricValue;
     }
 
     /**
-     * @return The minimum value for this metric.
-     */
+    
+     * @return The minimum value for this metric. */
     public final BigDecimal getMinValue() {
         return minValue;
     }
 
     /**
-     * @return The maximum value for this metric.
-     */
+    
+     * @return The maximum value for this metric. */
     public final BigDecimal getMaxValue() {
         return maxValue;
     }
 
     /**
-     * @return The message associated with this metric.
-     */
+    
+     * @return The message associated with this metric. */
     public final String getMessage() {
         return metricMessage;
+    }
+
+    /**
+     * Method toString.
+     * @return String
+     */
+    @Override
+    public String toString() {
+        return "Metric [metricName=" + metricName + ", metricMessage=" + metricMessage + ", metricValue=" + metricValue + ", minValue=" + minValue
+                + ", maxValue=" + maxValue + "]";
     }
 }

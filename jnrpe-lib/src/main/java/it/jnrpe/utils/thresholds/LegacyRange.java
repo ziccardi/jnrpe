@@ -27,6 +27,7 @@ import java.math.BigDecimal;
  * specified using the old Nagios syntax.
  * 
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public class LegacyRange {
     /**
@@ -77,9 +78,9 @@ public class LegacyRange {
      * 
      * @param threshold
      *            The range
+    
      * @throws BadThresholdException
-     *             -
-     */
+     *             - */
     public LegacyRange(final String threshold) throws BadThresholdException {
         thresholdString = threshold;
         parseRange();
@@ -89,9 +90,9 @@ public class LegacyRange {
      * Parses the range definition to evaluate the minimum and maximum
      * thresholds.
      * 
+    
      * @throws BadThresholdException
-     *             -
-     */
+     *             - */
     private void parseRange() throws BadThresholdException {
 
         PushbackReader reader = new PushbackReader(new StringReader(thresholdString));
@@ -199,7 +200,7 @@ public class LegacyRange {
             minVal = new BigDecimal(0);
         }
 
-        if (curState == MAXVAL && maxVal == null && thresholdString.startsWith(":")) {
+        if (curState == MAXVAL && maxVal == null && !thresholdString.isEmpty() && thresholdString.charAt(0) == ':') {
             throw new BadThresholdException("At least one of maximum or minimum " + "value must me specified (" + thresholdString + ")");
         }
 
@@ -210,9 +211,9 @@ public class LegacyRange {
      * 
      * @param value
      *            The value
+    
      * @return <code>true</code> if the value falls inside the range.
-     *         <code>false</code> otherwise.
-     */
+     *         <code>false</code> otherwise. */
     public final boolean isValueInside(final BigDecimal value) {
         return isValueInside(value, null);
     }
@@ -224,9 +225,9 @@ public class LegacyRange {
      *            The value
      * @param prefix
      *            The prefix that identifies the multiplier
+    
      * @return <code>true</code> if the value falls inside the range.
-     *         <code>false</code> otherwise.
-     */
+     *         <code>false</code> otherwise. */
     public final boolean isValueInside(final BigDecimal value, final Prefixes prefix) {
         boolean bRes = true;
         // Sets the minimum value of the range
@@ -248,9 +249,9 @@ public class LegacyRange {
      * 
      * @param value
      *            The value
+    
      * @return <code>true</code> if the value falls inside the range.
-     *         <code>false</code> otherwise.
-     */
+     *         <code>false</code> otherwise. */
     public final boolean isValueInside(final int value) {
         return isValueInside(new BigDecimal(value));
     }
@@ -260,17 +261,27 @@ public class LegacyRange {
      * 
      * @param value
      *            The value
+    
      * @return <code>true</code> if the value falls inside the range.
-     *         <code>false</code> otherwise.
-     */
+     *         <code>false</code> otherwise. */
     public final boolean isValueInside(final long value) {
         return isValueInside(new BigDecimal(value));
     }
 
     /**
-     * @return The original unparsed threshold string.
-     */
+    
+     * @return The original unparsed threshold string. */
     final String getThresholdString() {
         return thresholdString;
+    }
+
+    /**
+     * Method toString.
+     * @return String
+     */
+    @Override
+    public String toString() {
+        return "LegacyRange [minVal=" + minVal + ", maxVal=" + maxVal + ", negateThreshold=" + negateThreshold + ", curState=" + curState
+                + ", thresholdString=" + thresholdString + "]";
     }
 }

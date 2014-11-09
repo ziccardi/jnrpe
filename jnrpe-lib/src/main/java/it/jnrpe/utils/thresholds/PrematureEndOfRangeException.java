@@ -21,6 +21,7 @@ import java.text.MessageFormat;
  * Exception thrown when the parse string is not complete.
  *
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public class PrematureEndOfRangeException extends RangeException {
     /**
@@ -46,8 +47,8 @@ public class PrematureEndOfRangeException extends RangeException {
     }
 
     /**
-     * @return the exception message
-     */
+    
+     * @return the exception message */
     @Override
     public final String getMessage() {
         return MessageFormat.format(MESSAGE_PATTERN, getWholeRangeString(), getFailedStage().getName(), getExpectedTokens());

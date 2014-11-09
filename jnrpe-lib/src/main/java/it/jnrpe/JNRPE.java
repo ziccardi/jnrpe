@@ -60,6 +60,7 @@ import javax.net.ssl.SSLException;
  * NRPE requests
  * 
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public final class JNRPE {
 
@@ -76,7 +77,7 @@ public final class JNRPE {
     /**
      * Default number of accepted connections.
      */
-    protected static final int DEFAULT_MAX_ACCEPTED_CONNECTIONS = 128;
+    static final int DEFAULT_MAX_ACCEPTED_CONNECTIONS = 128;
 
     /**
      * The boss group (see netty documentation).
@@ -162,11 +163,11 @@ public final class JNRPE {
         pluginRepository = pluginRepo;
         commandRepository = commandRepo;
         charset = Charset.forName("UTF-8");
-        this.acceptParams = true;
-        this.maxAcceptedConnections = DEFAULT_MAX_ACCEPTED_CONNECTIONS;
+        acceptParams = true;
+        maxAcceptedConnections = DEFAULT_MAX_ACCEPTED_CONNECTIONS;
         readTimeout = 10;
         writeTimeout = 60;
-        this.context = new JNRPEExecutionContext(new JNRPEEventBus(), charset);
+        context = new JNRPEExecutionContext(new JNRPEEventBus(), charset);
     }
 
     /**
@@ -194,12 +195,12 @@ public final class JNRPE {
         }
         pluginRepository = pluginRepo;
         commandRepository = commandRepo;
-        this.charset = newCharset;
-        this.acceptParams = acceptParameters;
-        this.maxAcceptedConnections = DEFAULT_MAX_ACCEPTED_CONNECTIONS;
+        charset = newCharset;
+        acceptParams = acceptParameters;
+        maxAcceptedConnections = DEFAULT_MAX_ACCEPTED_CONNECTIONS;
         readTimeout = 10;
         writeTimeout = 60;
-        this.context = new JNRPEExecutionContext(new JNRPEEventBus(), newCharset);
+        context = new JNRPEExecutionContext(new JNRPEEventBus(), newCharset);
     }
 
     /**
@@ -242,13 +243,13 @@ public final class JNRPE {
         }
         pluginRepository = pluginRepo;
         commandRepository = commandRepo;
-        this.charset = newCharset;
-        this.acceptParams = acceptParameters;
-        this.acceptedHostsList = acceptedHostsCollection;
-        this.maxAcceptedConnections = maxConnections;
-        this.readTimeout = readTimeoutSeconds;
-        this.writeTimeout = writeTimeoutSeconds;
-        this.context = new JNRPEExecutionContext(new JNRPEEventBus(), newCharset);
+        charset = newCharset;
+        acceptParams = acceptParameters;
+        acceptedHostsList = acceptedHostsCollection;
+        maxAcceptedConnections = maxConnections;
+        readTimeout = readTimeoutSeconds;
+        writeTimeout = writeTimeoutSeconds;
+        context = new JNRPEExecutionContext(new JNRPEEventBus(), newCharset);
     }
 
     /**
@@ -258,9 +259,9 @@ public final class JNRPE {
      *            The address to bind to
      * @param port
      *            The port to bind to
+    
      * @throws UnknownHostException
-     *             -
-     */
+     *             - */
     public void listen(final String address, final int port) throws UnknownHostException {
         listen(address, port, true);
     }
@@ -268,33 +269,33 @@ public final class JNRPE {
     /**
      * Creates, configures and returns the SSL engine.
      * 
-     * @return the SSL Engine
-     * @throws KeyStoreException
-     *             on keystore errorss
-     * @throws CertificateException
-     *             on certificate errors
-     * @throws IOException
-     *             on I/O errors
-     * @throws UnrecoverableKeyException
-     *             if key is unrecoverable
-     * @throws KeyManagementException
-     *             key management error
-     */
-    protected SSLEngine getSSLEngine() throws KeyStoreException, 
+    
+    
+    
+    
+    
+    
+     * @return the SSL Engine * @throws KeyStoreException
+     *             on keystore errorss * @throws CertificateException
+     *             on certificate errors * @throws IOException
+     *             on I/O errors * @throws UnrecoverableKeyException
+     *             if key is unrecoverable * @throws KeyManagementException
+     *             key management error */
+    private SSLEngine getSSLEngine() throws KeyStoreException, 
                     CertificateException, 
                     IOException, 
                     UnrecoverableKeyException, 
                     KeyManagementException {
 
         // Open the KeyStore Stream
-        final StreamManager h = new StreamManager();
+        final StreamManager streamManager = new StreamManager();
 
         SSLContext ctx;
         KeyManagerFactory kmf;
 
         try {
             final InputStream ksStream = getClass().getClassLoader().getResourceAsStream(KEYSTORE_NAME);
-            h.handle(ksStream);
+            streamManager.handle(ksStream);
             ctx = SSLContext.getInstance("SSLv3");
 
             kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
@@ -306,9 +307,9 @@ public final class JNRPE {
             kmf.init(ks, passphrase);
             ctx.init(kmf.getKeyManagers(), null, new java.security.SecureRandom());
         } catch (NoSuchAlgorithmException e) {
-            throw new SSLException("Unable to initialize SSLSocketFactory.\n" + e.getMessage(), e);
+            throw new SSLException("Unable to initialize SSLSocketFactory" + e.getMessage(), e);
         } finally {
-            h.closeAll();
+            streamManager.closeAll();
         }
 
         return ctx.createSSLEngine();
@@ -319,14 +320,14 @@ public final class JNRPE {
      * 
      * @param useSSL
      *            <code>true</code> if SSL must be used.
-     * @return the server bootstrap object
-     */
+    
+     * @return the server bootstrap object */
     private ServerBootstrap getServerBootstrap(final boolean useSSL) {
 
         final CommandInvoker invoker = new CommandInvoker(pluginRepository, commandRepository, acceptParams, getExecutionContext());
 
-        final ServerBootstrap b = new ServerBootstrap();
-        b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class).childHandler(new ChannelInitializer<SocketChannel>() {
+        final ServerBootstrap serverBootstrap = new ServerBootstrap();
+        serverBootstrap.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class).childHandler(new ChannelInitializer<SocketChannel>() {
             @Override
             public void initChannel(final SocketChannel ch) throws Exception {
 
@@ -345,9 +346,9 @@ public final class JNRPE {
                                 "jnrpeIdleStateHandler",
                                 new JNRPEIdleStateHandler(context));
             }
-        }).option(ChannelOption.SO_BACKLOG, this.maxAcceptedConnections).childOption(ChannelOption.SO_KEEPALIVE, Boolean.TRUE);
+        }).option(ChannelOption.SO_BACKLOG, maxAcceptedConnections).childOption(ChannelOption.SO_KEEPALIVE, Boolean.TRUE);
 
-        return b;
+        return serverBootstrap;
     }
 
     /**
@@ -360,9 +361,9 @@ public final class JNRPE {
      *            The listening port
      * @param useSSL
      *            <code>true</code> if an SSL socket must be created.
+    
      * @throws UnknownHostException
-     *             -
-     */
+     *             - */
     public void listen(final String address, final int port, final boolean useSSL) throws UnknownHostException {
 
         // Bind and start to accept incoming connections.
@@ -400,8 +401,8 @@ public final class JNRPE {
      * contains useful informations such the encoding to be used ad the list of
      * listeners configured to receive the events.
      * 
-     * @return the current JNRPE Execution context.
-     */
+    
+     * @return the current JNRPE Execution context. */
     public IJNRPEExecutionContext getExecutionContext() {
         //return new JNRPEExecutionContext(eventBus, charset, pluginRepository, commandRepository);
         return context;
@@ -414,5 +415,17 @@ public final class JNRPE {
         workerGroup.shutdownGracefully().syncUninterruptibly();
         bossGroup.shutdownGracefully().syncUninterruptibly();
         getExecutionContext().getEventBus().post(new JNRPEStatusEvent(STATUS.STOPPED, this, "JNRPE Server stopped"));
+    }
+
+    /**
+     * Method toString.
+     * @return String
+     */
+    @Override
+    public String toString() {
+        return "JNRPE [LOG=" + LOG + ", context=" + context + ", bossGroup=" + bossGroup + ", workerGroup=" + workerGroup + ", pluginRepository="
+                + pluginRepository + ", commandRepository=" + commandRepository + ", acceptedHostsList=" + acceptedHostsList + ", charset=" + charset
+                + ", maxAcceptedConnections=" + maxAcceptedConnections + ", readTimeout=" + readTimeout + ", writeTimeout=" + writeTimeout
+                + ", acceptParams=" + acceptParams + "]";
     }
 }

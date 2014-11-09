@@ -24,9 +24,15 @@ import com.google.common.eventbus.EventBus;
  * 
  * @author Massimiliano Ziccardi
  *
+ * @version $Revision: 1.0 $
  */
 public class JNRPEEventBus extends EventBus implements IJNRPEEventBus {
     
+    /**
+     * Method register.
+     * @param object Object
+     * @see it.jnrpe.IJNRPEEventBus#register(Object)
+     */
     @Override
     /**
      * Register an object as listener.
@@ -45,8 +51,18 @@ public class JNRPEEventBus extends EventBus implements IJNRPEEventBus {
      * This method must be called to post a new event.
      * 
      * @param event The vent object
+     * @see it.jnrpe.IJNRPEEventBus#post(Object)
      */
     public final void post(final Object event) {
         super.post(event);
+    }
+
+    /**
+     * Method toString.
+     * @return String
+     */
+    @Override
+    public String toString() {
+        return "JNRPEEventBus []";
     }
 }

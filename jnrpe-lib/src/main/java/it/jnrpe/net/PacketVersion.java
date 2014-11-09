@@ -19,6 +19,7 @@ package it.jnrpe.net;
  * Enumeration of all the supported packet versions.
  *
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public enum PacketVersion {
     /**
@@ -48,8 +49,8 @@ public enum PacketVersion {
     /**
      * Returns the int value of the enum.
      *
-     * @return The int value
-     */
+    
+     * @return The int value */
     public int intValue() {
         return intValue;
     }
@@ -59,8 +60,8 @@ public enum PacketVersion {
      *
      * @param value
      *            The int value to be converted
-     * @return A {@link PacketVersion} enum. Null if not found
-     */
+    
+     * @return A {@link PacketVersion} enum. Null if not found */
     public static PacketVersion fromIntValue(final int value) {
         switch (value) {
         case 1:

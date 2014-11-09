@@ -24,6 +24,7 @@ import it.jnrpe.utils.BadThresholdException;
  *
  * @author Massimiliano Ziccardi
  *
+ * @version $Revision: 1.0 $
  */
 public interface IPluginInterface {
     /**
@@ -31,9 +32,9 @@ public interface IPluginInterface {
      *
      * @param cl
      *            The parsified command line arguments
-     * @return The result of the plugin
-     * @throws BadThresholdException
-     *             -
-     */
+    
+    
+     * @return The result of the plugin * @throws BadThresholdException
+     *             - */
     ReturnValue execute(ICommandLine cl) throws BadThresholdException;
 }

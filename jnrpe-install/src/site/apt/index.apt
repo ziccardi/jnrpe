@@ -112,6 +112,16 @@ java -jar jnrpe-server-install-{your-jnrpe-version}.jar
   Here you can see a message saying if the installation has been successful and see where the uninstaller
   has been created.
   
+* Headless installation
+
+   You can run the installer in headless mode issuing the following command:
+   
++--------------------------------------------------+
+
+java -jar jnrpe-server-install-{your-jnrpe-version}.jar -console
+
++--------------------------------------------------+
+  
 * The installed directory structure
 
   When the installer will end, you'll find the following structure inside the JNRPE directory:

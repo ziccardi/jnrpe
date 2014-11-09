@@ -19,6 +19,7 @@ package it.jnrpe.utils.thresholds;
  * The configured threshold parser.
  * 
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 final class RangeStringParser {
 
@@ -37,8 +38,8 @@ final class RangeStringParser {
     /**
      * Configures the state machine.
      * 
-     * @return The configured state machine.
-     */
+    
+     * @return The configured state machine. */
     private static Stage configureParser() {
         Stage startStage = new StartStage();
         Stage negativeInfinityStage = new NegativeInfinityStage();
@@ -78,9 +79,9 @@ final class RangeStringParser {
      *            The threshold to be parsed
      * @param tc
      *            The configuration
+    
      * @throws RangeException
-     *             -
-     */
+     *             - */
     public static void parse(final String range, final RangeConfig tc) throws RangeException {
         if (range == null) {
             throw new RangeException("Range can't be null");
@@ -94,9 +95,9 @@ final class RangeStringParser {
      * 
      * @param rc
      *            The range configuration
+    
      * @throws RangeException
-     *             If right < left
-     */
+     *             If right < left */
     private static void checkBoundaries(final RangeConfig rc) throws RangeException {
         if (rc.isNegativeInfinity()) {
             // No other checks necessary. Negative infinity is less than any

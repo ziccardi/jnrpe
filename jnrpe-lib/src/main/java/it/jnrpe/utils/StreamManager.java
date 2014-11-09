@@ -32,6 +32,7 @@ import java.util.List;
  *
  * @author Massimiliano Ziccardi
  *
+ * @version $Revision: 1.0 $
  */
 public final class StreamManager {
     /**
@@ -52,8 +53,8 @@ public final class StreamManager {
      * @param in
      *            The stream to be automatically closed when {@link #closeAll()}
      *            is called.
-     * @return The passed in stream.
-     */
+    
+     * @return The passed in stream. */
     public InputStream handle(final InputStream in) {
         managedStreamsList.add(in);
         return in;
@@ -65,8 +66,8 @@ public final class StreamManager {
      * @param out
      *            The stream to be automatically closed when {@link #closeAll()}
      *            is called.
-     * @return The passed in stream.
-     */
+    
+     * @return The passed in stream. */
     public OutputStream handle(final OutputStream out) {
         managedStreamsList.add(out);
         return out;
@@ -78,8 +79,8 @@ public final class StreamManager {
      * @param r
      *            The reader to be automatically closed when {@link #closeAll()}
      *            is called.
-     * @return The passed in reader.
-     */
+    
+     * @return The passed in reader. */
     public Reader handle(final Reader r) {
         managedStreamsList.add(r);
         return r;
@@ -91,8 +92,8 @@ public final class StreamManager {
      * @param w
      *            The writer to be automatically closed when {@link #closeAll()}
      *            is called.
-     * @return The passed in writer.
-     */
+    
+     * @return The passed in writer. */
     public Writer handle(final Writer w) {
         managedStreamsList.add(w);
         return w;
@@ -104,10 +105,10 @@ public final class StreamManager {
      * @param f
      *            The file attached to the returned stream to be automatically
      *            closed when {@link #closeAll()} is called.
-     * @return The stream to the passed in file
-     * @throws FileNotFoundException
-     *             If the file does not exists
-     */
+    
+    
+     * @return The stream to the passed in file * @throws FileNotFoundException
+     *             If the file does not exists */
     public InputStream getInputStream(final File f) throws FileNotFoundException {
         return handle(new FileInputStream(f));
     }
@@ -118,10 +119,10 @@ public final class StreamManager {
      * @param f
      *            The file attached to the returned stream to be automatically
      *            closed when {@link #closeAll()} is called.
-     * @return The stream to the passed in file
-     * @throws FileNotFoundException
-     *             If the file does not exists
-     */
+    
+    
+     * @return The stream to the passed in file * @throws FileNotFoundException
+     *             If the file does not exists */
     public OutputStream getOutputStream(final File f) throws FileNotFoundException {
         return handle(new FileOutputStream(f));
     }
@@ -140,6 +141,17 @@ public final class StreamManager {
                 // e.getMessage());
             }
         }
+    }
+
+    /**
+     * Method toString.
+     * @return String
+     */
+    @Override
+    public String toString() {
+        final int maxLen = 10;
+        return "StreamManager [managedStreamsList="
+                + (managedStreamsList != null ? managedStreamsList.subList(0, Math.min(managedStreamsList.size(), maxLen)) : null) + "]";
     }
 
 }

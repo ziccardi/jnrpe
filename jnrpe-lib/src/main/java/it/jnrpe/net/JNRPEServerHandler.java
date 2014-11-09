@@ -29,9 +29,13 @@ import it.jnrpe.commands.CommandInvoker;
  * Receives and handles connections to the JNRPE server.
  * 
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public class JNRPEServerHandler extends ChannelInboundHandlerAdapter {
 
+    /**
+     * Field LOG.
+     */
     private final JNRPELogger LOG = new JNRPELogger(this);
     
     /**
@@ -53,10 +57,16 @@ public class JNRPEServerHandler extends ChannelInboundHandlerAdapter {
      *            The execution context
      */
     public JNRPEServerHandler(final CommandInvoker invoker, final IJNRPEExecutionContext ctx) {
-        this.commandInvoker = invoker;
-        this.context = ctx;
+        commandInvoker = invoker;
+        context = ctx;
     }
 
+    /**
+     * Method channelRead.
+     * @param ctx ChannelHandlerContext
+     * @param msg Object
+     * @see io.netty.channel.ChannelInboundHandler#channelRead(ChannelHandlerContext, Object)
+     */
     @Override
     public final void channelRead(final ChannelHandlerContext ctx, final Object msg) {
         try {
@@ -70,18 +80,33 @@ public class JNRPEServerHandler extends ChannelInboundHandlerAdapter {
             res.setResultCode(ret.getStatus().intValue());
             res.setMessage(ret.getMessage());
 
-            ChannelFuture f = ctx.writeAndFlush(res);
-            f.addListener(ChannelFutureListener.CLOSE);
+            ChannelFuture channelFuture = ctx.writeAndFlush(res);
+            channelFuture.addListener(ChannelFutureListener.CLOSE);
         } finally {
             ReferenceCountUtil.release(msg);
         }
     }
 
+    /**
+     * Method exceptionCaught.
+     * @param ctx ChannelHandlerContext
+     * @param cause Throwable
+     * @see io.netty.channel.ChannelInboundHandler#exceptionCaught(ChannelHandlerContext, Throwable)
+     */
     @Override
     public final void exceptionCaught(final ChannelHandlerContext ctx, final Throwable cause) {
         LOG.error(context, cause.getMessage(), cause);
         //context.getEventBus().post(new LogEvent(this, LogEventType.ERROR, cause.getMessage(), cause));
         //EventsUtil.sendEvent(listeners, this, LogEvent.ERROR, cause.getMessage(), cause);
         ctx.close();
+    }
+
+    /**
+     * Method toString.
+     * @return String
+     */
+    @Override
+    public String toString() {
+        return "JNRPEServerHandler [commandInvoker=" + commandInvoker + ", context=" + context + "]";
     }
 }

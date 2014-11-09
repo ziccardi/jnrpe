@@ -23,6 +23,7 @@ import java.util.List;
  * which parameters a plugin supports
  *
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public final class PluginDefinition {
     /**
@@ -63,10 +64,10 @@ public final class PluginDefinition {
      *            The plugin Class object
      */
     public PluginDefinition(final String pluginName, final String pluginDescription, final Class<? extends IPluginInterface> pluginClazz) {
-        this.name = pluginName;
-        this.pluginClass = pluginClazz;
-        this.description = pluginDescription;
-        this.pluginInterface = null;
+        name = pluginName;
+        pluginClass = pluginClazz;
+        description = pluginDescription;
+        pluginInterface = null;
     }
 
     /**
@@ -82,10 +83,10 @@ public final class PluginDefinition {
      *            The plugin instance
      */
     public PluginDefinition(final String pluginName, final String pluginDescription, final IPluginInterface pluginInstance) {
-        this.name = pluginName;
-        this.pluginClass = null;
-        this.description = pluginDescription;
-        this.pluginInterface = pluginInstance;
+        name = pluginName;
+        pluginClass = null;
+        description = pluginDescription;
+        pluginInterface = pluginInstance;
     }
 
     /**
@@ -93,8 +94,8 @@ public final class PluginDefinition {
      *
      * @param option
      *            The option
-     * @return this
-     */
+    
+     * @return this */
     public PluginDefinition addOption(final PluginOption option) {
         pluginOptionsList.add(option);
         return this;
@@ -103,8 +104,8 @@ public final class PluginDefinition {
     /**
      * Returns the plugin name.
      *
-     * @return the plugin name.
-     */
+    
+     * @return the plugin name. */
     public String getName() {
         return name;
     }
@@ -112,8 +113,8 @@ public final class PluginDefinition {
     /**
      * Returns all the plugin options.
      *
-     * @return a List of all the plugin option
-     */
+    
+     * @return a List of all the plugin option */
     public List<PluginOption> getOptions() {
         return pluginOptionsList;
     }
@@ -121,8 +122,8 @@ public final class PluginDefinition {
     /**
      * Returns the plugin description.
      *
-     * @return The plugin description
-     */
+    
+     * @return The plugin description */
     public String getDescription() {
         return description;
     }
@@ -130,8 +131,8 @@ public final class PluginDefinition {
     /**
      * Returns the plugin class, if specified.
      *
-     * @return the plugin class. <code>null</code> if not specified.
-     */
+    
+     * @return the plugin class. <code>null</code> if not specified. */
     Class<? extends IPluginInterface> getPluginClass() {
         return pluginClass;
     }
@@ -139,9 +140,19 @@ public final class PluginDefinition {
     /**
      * Returns the plugin instance, if present.
      *
-     * @return the plugin interface.<code>null</code> if not specified.
-     */
+    
+     * @return the plugin interface.<code>null</code> if not specified. */
     IPluginInterface getPluginInterface() {
         return pluginInterface;
+    }
+
+    /**
+     * Method toString.
+     * @return String
+     */
+    @Override
+    public String toString() {
+        return "PluginDefinition [name=" + name + ", pluginClass=" + pluginClass + ", pluginInterface=" + pluginInterface + ", description="
+                + description + ", pluginOptionsList=" + pluginOptionsList + "]";
     }
 }

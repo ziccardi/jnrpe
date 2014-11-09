@@ -25,6 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * This object manages all the configured commands.
  * 
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public final class CommandRepository {
     /**
@@ -58,8 +59,8 @@ public final class CommandRepository {
      * 
      * @param pluginName
      *            the name of the plugin we are interested in
-     * @return all the command definition that involves the given plugin
-     */
+    
+     * @return all the command definition that involves the given plugin */
     public Set<CommandDefinition> getAllCommandDefinition(final String pluginName) {
 
         Set<CommandDefinition> res = new HashSet<CommandDefinition>();
@@ -78,17 +79,26 @@ public final class CommandRepository {
      * 
      * @param commandName
      *            The command name
+    
      * @return The command definition associated with <code>sName</code>.
-     *         <code>null</code> if not found.
-     */
+     *         <code>null</code> if not found. */
     public CommandDefinition getCommand(final String commandName) {
         return commandDefinitionsMap.get(commandName);
     }
 
     /**
-     * @return all the installed commands.
-     */
+    
+     * @return all the installed commands. */
     public Collection<CommandDefinition> getAllCommands() {
         return commandDefinitionsMap.values();
+    }
+
+    /**
+     * Method toString.
+     * @return String
+     */
+    @Override
+    public String toString() {
+        return "CommandRepository [commandDefinitionsMap=" + commandDefinitionsMap + "]";
     }
 }

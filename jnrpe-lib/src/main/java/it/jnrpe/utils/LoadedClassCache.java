@@ -15,7 +15,9 @@
  *******************************************************************************/
 package it.jnrpe.utils;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -25,6 +27,7 @@ import java.util.WeakHashMap;
  * 
  * @author Massimiliano Ziccardi
  * 
+ * @version $Revision: 1.0 $
  */
 @SuppressWarnings("rawtypes")
 final class LoadedClassCache {
@@ -57,8 +60,8 @@ final class LoadedClassCache {
         /**
          * @param name
          *            the class name
-         * @return the cached class object (if any)
-         */
+        
+         * @return the cached class object (if any) */
         public Class getClass(final String name) {
             return loadedClasses.get(name);
         }
@@ -71,6 +74,36 @@ final class LoadedClassCache {
          */
         public void addClass(final Class clazz) {
             loadedClasses.put(clazz.getName(), clazz);
+        }
+
+        /**
+         * Method toString.
+         * @return String
+         */
+        @Override
+        public String toString() {
+            final int maxLen = 10;
+            return "ClassesData [loadedClasses=" + (loadedClasses != null ? toString(loadedClasses.entrySet(), maxLen) : null) + "]";
+        }
+
+        /**
+         * Method toString.
+         * @param collection Collection<?>
+         * @param maxLen int
+         * @return String
+         */
+        private String toString(Collection<?> collection, int maxLen) {
+            StringBuilder builder = new StringBuilder();
+            builder.append('[');
+            int i = 0;
+            for (Iterator<?> iterator = collection.iterator(); iterator.hasNext() && i < maxLen; i++) {
+                if (i > 0) {
+                    builder.append(", ");
+                }
+                builder.append(iterator.next());
+            }
+            builder.append(']');
+            return builder.toString();
         }
     }
 
@@ -99,10 +132,10 @@ final class LoadedClassCache {
      *            the classloader
      * @param className
      *            the class name
-     * @return the class object associated to the given class name
-     * @throws ClassNotFoundException
-     *             if the class can't be loaded
-     */
+    
+    
+     * @return the class object associated to the given class name * @throws ClassNotFoundException
+     *             if the class can't be loaded */
     public static Class getClass(final ClassLoader cl, final String className) throws ClassNotFoundException {
         if (LOADED_PLUGINS.get(cl) == null) {
             LOADED_PLUGINS.put(cl, new ClassesData());

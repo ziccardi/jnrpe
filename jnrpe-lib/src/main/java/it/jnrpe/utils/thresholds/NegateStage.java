@@ -24,6 +24,7 @@ package it.jnrpe.utils.thresholds;
  * {@link RangeConfig#setNegate(boolean)} passing <code>true</code>
  *
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 class NegateStage extends Stage {
 
@@ -51,8 +52,8 @@ class NegateStage extends Stage {
      * @param tc
      *            The threshold config object. This object will be populated
      *            according to the passed in threshold.
-     * @return the remaining part of the threshold
-     */
+    
+     * @return the remaining part of the threshold */
     @Override
     public String parse(final String threshold, final RangeConfig tc) {
         tc.setNegate(true);
@@ -65,21 +66,21 @@ class NegateStage extends Stage {
      *
      * @param threshold
      *            The threshold part to be parsed.
+    
      * @return <code>true</code> if this object can consume a part of the
-     *         threshold
-     */
+     *         threshold */
     public boolean canParse(final String threshold) {
         if (threshold == null) {
             return false;
         }
-        return threshold.startsWith("^");
+        return !threshold.isEmpty() && threshold.charAt(0) == '^';
     }
 
     /**
      * This method is used to generate the exception message.
      *
-     * @return the token that this stage is waiting for.
-     */
+    
+     * @return the token that this stage is waiting for. */
     @Override
     public String expects() {
         return "^";

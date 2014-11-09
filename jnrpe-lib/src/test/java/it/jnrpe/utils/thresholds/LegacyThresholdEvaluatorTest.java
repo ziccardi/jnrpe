@@ -23,10 +23,16 @@ import java.math.BigDecimal;
 
 import org.testng.annotations.Test;
 
+/**
+ */
 public class LegacyThresholdEvaluatorTest {
 
 	// metric={metric},ok={range},warn={range},crit={range},unit={unit}prefix={SI
 	// prefix}
+	/**
+	 * Method testNoLevels.
+	 * @throws BadThresholdException
+	 */
 	@Test
 	public void testNoLevels() throws BadThresholdException {
 		ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
@@ -35,6 +41,10 @@ public class LegacyThresholdEvaluatorTest {
 		assertEquals(s, Status.OK);
 	}
 
+	/**
+	 * Method testOnlyOKButCritical.
+	 * @throws BadThresholdException
+	 */
 	@Test
 	public void testOnlyOKButCritical() throws BadThresholdException {
 		ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
@@ -43,6 +53,10 @@ public class LegacyThresholdEvaluatorTest {
 		assertEquals(s, Status.CRITICAL);
 	}
 
+	/**
+	 * Method testOkWarnCrit_ok.
+	 * @throws BadThresholdException
+	 */
 	@Test
 	public void testOkWarnCrit_ok() throws BadThresholdException {
 		ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
@@ -52,6 +66,10 @@ public class LegacyThresholdEvaluatorTest {
 		assertEquals(s, Status.OK);
 	}
 
+	/**
+	 * Method testOkWarnCrit_warn.
+	 * @throws BadThresholdException
+	 */
 	@Test
 	public void testOkWarnCrit_warn() throws BadThresholdException {
 		ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
@@ -61,6 +79,10 @@ public class LegacyThresholdEvaluatorTest {
 		assertEquals(s, Status.WARNING);
 	}
 
+	/**
+	 * Method testOkWarnCrit_crit.
+	 * @throws BadThresholdException
+	 */
 	@Test
 	public void testOkWarnCrit_crit() throws BadThresholdException {
 		ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
@@ -70,6 +92,10 @@ public class LegacyThresholdEvaluatorTest {
 		assertEquals(s, Status.CRITICAL);
 	}
 
+	/**
+	 * Method testNullMetricValue.
+	 * @throws BadThresholdException
+	 */
 	@Test(expectedExceptions = NullPointerException.class)
 	public void testNullMetricValue() throws BadThresholdException {
 		ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
@@ -78,6 +104,10 @@ public class LegacyThresholdEvaluatorTest {
 		ths.evaluate("pippo", null);
 	}
 
+	/**
+	 * Method testNullMetricName.
+	 * @throws BadThresholdException
+	 */
 	@Test(expectedExceptions = NullPointerException.class)
 	public void testNullMetricName() throws BadThresholdException {
 		ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
@@ -86,6 +116,10 @@ public class LegacyThresholdEvaluatorTest {
 		ths.evaluate(null, new BigDecimal("210"));
 	}
 
+	/**
+	 * Method testBadMetricPair.
+	 * @throws BadThresholdException
+	 */
 	@Test(expectedExceptions = NullPointerException.class)
 	public void testBadMetricPair() throws BadThresholdException {
 		ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
@@ -94,6 +128,10 @@ public class LegacyThresholdEvaluatorTest {
 		ths.evaluate(null, new BigDecimal("210"));
 	}
 
+	/**
+	 * Method testBadMetric.
+	 * @throws BadThresholdException
+	 */
 	@Test(expectedExceptions = BadThresholdException.class)
 	public void testBadMetric() throws BadThresholdException {
 		ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()

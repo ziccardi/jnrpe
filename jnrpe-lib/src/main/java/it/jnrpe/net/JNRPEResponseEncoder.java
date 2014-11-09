@@ -25,6 +25,7 @@ import io.netty.handler.codec.MessageToByteEncoder;
  * 
  * @author Massimiliano Ziccardi
  *
+ * @version $Revision: 1.0 $
  */
 public class JNRPEResponseEncoder extends MessageToByteEncoder<JNRPEResponse> {
 
@@ -34,6 +35,13 @@ public class JNRPEResponseEncoder extends MessageToByteEncoder<JNRPEResponse> {
     public JNRPEResponseEncoder() {
     }
 
+    /**
+     * Method encode.
+     * @param ctx ChannelHandlerContext
+     * @param msg JNRPEResponse
+     * @param out ByteBuf
+     * @throws Exception
+     */
     @Override
     protected final void encode(final ChannelHandlerContext ctx, final JNRPEResponse msg, final ByteBuf out) throws Exception {
         msg.updateCRC();

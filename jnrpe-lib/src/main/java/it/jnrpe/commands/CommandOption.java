@@ -19,6 +19,7 @@ package it.jnrpe.commands;
  * This class represent a command Option.
  *
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public final class CommandOption {
     /**
@@ -37,7 +38,7 @@ public final class CommandOption {
      *            The option name
      */
     public CommandOption(final String optName) {
-        this.optionName = optName;
+        optionName = optName;
         optionValue = null;
     }
 
@@ -52,15 +53,15 @@ public final class CommandOption {
      *            The option value
      */
     public CommandOption(final String optName, final String optValue) {
-        this.optionName = optName;
-        this.optionValue = optValue;
+        optionName = optName;
+        optionValue = optValue;
     }
 
     /**
      * Returns the option name.
      *
-     * @return The option name
-     */
+    
+     * @return The option name */
     public String getName() {
         return optionName;
     }
@@ -68,9 +69,18 @@ public final class CommandOption {
     /**
      * Returns the option value.
      *
-     * @return The argument value
-     */
+    
+     * @return The argument value */
     public String getValue() {
         return optionValue;
+    }
+
+    /**
+     * Method toString.
+     * @return String
+     */
+    @Override
+    public String toString() {
+        return "CommandOption [optionName=" + optionName + ", optionValue=" + optionValue + "]";
     }
 }

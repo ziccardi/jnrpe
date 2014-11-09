@@ -26,6 +26,7 @@ import java.util.Set;
  * state machine.
  *
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 abstract class Stage implements Serializable {
     /**
@@ -64,8 +65,8 @@ abstract class Stage implements Serializable {
     /**
      * Returns the name of this stage.
      *
-     * @return The name of this stage
-     */
+    
+     * @return The name of this stage */
     public String getName() {
         return name;
     }
@@ -75,8 +76,8 @@ abstract class Stage implements Serializable {
      *
      * @param stageName
      *            The requested transition
-     * @return The transition if found. Null otherwise.
-     */
+    
+     * @return The transition if found. Null otherwise. */
     public Stage getTransition(final String stageName) {
         return nextStagesMap.get(stageName);
     }
@@ -84,8 +85,8 @@ abstract class Stage implements Serializable {
     /**
      * Returns the list of the possible transitions from this stage.
      *
-     * @return the list of the possible transitions from this stage
-     */
+    
+     * @return the list of the possible transitions from this stage */
     public Set<String> getTransitionNames() {
         return nextStagesMap.keySet();
     }
@@ -93,10 +94,10 @@ abstract class Stage implements Serializable {
     /**
      * A stage is a leaf if no transition are possible from here..
      *
-     * @return <code>true</code> if no transitions are available from here.
-     */
+    
+     * @return <code>true</code> if no transitions are available from here. */
     public boolean isLeaf() {
-        return this.nextStagesMap.isEmpty();
+        return nextStagesMap.isEmpty();
     }
 
     /**
@@ -107,10 +108,10 @@ abstract class Stage implements Serializable {
      *            The threshold to consume.
      * @param tc
      *            The threshold configuration object
-     * @return The remaining unparsed part of the threshold
-     * @throws RangeException
-     *             -
-     */
+    
+    
+     * @return The remaining unparsed part of the threshold * @throws RangeException
+     *             - */
     public abstract String parse(final String threshold, RangeConfig tc) throws RangeException;
 
     /**
@@ -118,12 +119,12 @@ abstract class Stage implements Serializable {
      * 
      * @param threshold
      *            The threshold to be parsed
-     * @return The remaining tokens
-     */
+    
+     * @return The remaining tokens */
     public abstract boolean canParse(String threshold);
 
     /**
-     * @return The list of tokens expected by this stage.
-     */
+    
+     * @return The list of tokens expected by this stage. */
     public abstract String expects();
 }

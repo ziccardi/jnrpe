@@ -189,6 +189,17 @@ It is fully compatible with check_nrpe and can be used to execute both old nativ
 						<artifactId>wagon-ssh</artifactId>
 						<version>1.0</version>
 					</dependency>
+					<dependency>
+						<groupId>lt.velykis.maven.skins</groupId>
+						<artifactId>reflow-velocity-tools</artifactId>
+						<version>1.1.1</version>
+					</dependency>
+					<!-- Reflow skin requires Velocity >= 1.7 -->
+					<dependency>
+						<groupId>org.apache.velocity</groupId>
+						<artifactId>velocity</artifactId>
+						<version>1.7</version>
+					</dependency>
 				</dependencies>
 				<configuration>
 					<siteDirectory>${project.basedir}/src/site</siteDirectory>

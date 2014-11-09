@@ -18,7 +18,6 @@ package it.jnrpe.plugin;
 import it.jnrpe.ICommandLine;
 import it.jnrpe.ReturnValue;
 import it.jnrpe.Status;
-import it.jnrpe.events.LogEvent;
 import it.jnrpe.plugins.PluginBase;
 import it.jnrpe.plugins.annotations.Option;
 import it.jnrpe.plugins.annotations.Plugin;

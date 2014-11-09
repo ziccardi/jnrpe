@@ -25,6 +25,7 @@ import java.util.List;
  * This class is just a container for the plugin result.
  * 
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public final class ReturnValue {
     /**
@@ -145,9 +146,9 @@ public final class ReturnValue {
      * 
      * @param returnCode
      *            The return code
-     * @return this
+    
      * @deprecated Use {@link #withStatus(Status)} instead.
-     */
+     * @return this */
     @Deprecated
     public ReturnValue withReturnCode(final int returnCode) {
         statusCode = Status.fromIntValue(returnCode);
@@ -160,8 +161,8 @@ public final class ReturnValue {
      * 
      * @param status
      *            The status to be returned to Nagios
-     * @return this
-     */
+    
+     * @return this */
     public ReturnValue withStatus(final Status status) {
         if (status == null) {
             throw new IllegalArgumentException("Status can't be null");
@@ -176,8 +177,8 @@ public final class ReturnValue {
      * 
      * @param message
      *            The message to be returned
-     * @return this
-     */
+    
+     * @return this */
     public ReturnValue withMessage(final String message) {
         messageString = message;
         return this;
@@ -186,9 +187,9 @@ public final class ReturnValue {
     /**
      * Returns the status.
      * 
-     * @return The state
+    
      * @deprecated Use {@link #getStatus()} instead.
-     */
+     * @return The state */
     @Deprecated
     public int getReturnCode() {
         return statusCode.intValue();
@@ -197,8 +198,8 @@ public final class ReturnValue {
     /**
      * Returns the status.
      * 
-     * @return The status
-     */
+    
+     * @return The status */
     public Status getStatus() {
         return statusCode;
     }
@@ -208,8 +209,8 @@ public final class ReturnValue {
      * attached at the end of the message accordingly to the Nagios
      * specifications
      * 
-     * @return The message and optionally the performance data
-     */
+    
+     * @return The message and optionally the performance data */
     public String getMessage() {
         if (performanceDataList.isEmpty()) {
             return messageString;
@@ -242,8 +243,8 @@ public final class ReturnValue {
      * @param maximumValue
      *            The maximum value for this metric (can be null if not
      *            applicable)
-     * @return this
-     */
+    
+     * @return this */
     public ReturnValue withPerformanceData(final String label, final Long value, final UnitOfMeasure uom, final String warningRange,
             final String criticalRange, final Long minimumValue, final Long maximumValue) {
         BigDecimal bdValue = null;
@@ -285,8 +286,8 @@ public final class ReturnValue {
      * @param maximumValue
      *            The maximum value for this metric (can be null if not
      *            applicable)
-     * @return this
-     */
+    
+     * @return this */
     public ReturnValue withPerformanceData(final String label, final BigDecimal value, final UnitOfMeasure uom, final String warningRange,
             final String criticalRange, final BigDecimal minimumValue, final BigDecimal maximumValue) {
         performanceDataList.add(new PerformanceData(label, value, uom, warningRange, criticalRange, minimumValue, maximumValue));
@@ -314,8 +315,8 @@ public final class ReturnValue {
      * @param maximumValue
      *            The maximum value for this metric (can be null if not
      *            applicable)
-     * @return this
-     */
+    
+     * @return this */
     public ReturnValue withPerformanceData(final String label, final BigDecimal value, final String unit, final String warningRange,
             final String criticalRange, final BigDecimal minimumValue, final BigDecimal maximumValue) {
 
@@ -323,11 +324,15 @@ public final class ReturnValue {
         return this;
     }
     
-    public static void main(String[] args) {
-        ReturnValue rv = new ReturnValue("message")
-            .withStatus(Status.OK)
-            .withPerformanceData("MyLabel", new BigDecimal("10"), (UnitOfMeasure) null, "10:", "20:", new BigDecimal(0), new BigDecimal(10));
-        
-        System.out.println (rv.getMessage());
+    /**
+     * Method toString.
+     * @return String
+     */
+    @Override
+    public String toString() {
+        final int maxLen = 10;
+        return "ReturnValue [performanceDataList="
+                + (performanceDataList != null ? performanceDataList.subList(0, Math.min(performanceDataList.size(), maxLen)) : null)
+                + ", statusCode=" + statusCode + ", messageString=" + messageString + "]";
     }
 }

@@ -20,6 +20,7 @@ package it.jnrpe.utils.thresholds;
  * open or closed bracket.
  *
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 abstract class BracketStage extends Stage {
 
@@ -53,8 +54,8 @@ abstract class BracketStage extends Stage {
      * @param tc
      *            The threshold config object. This object will be populated
      *            according to the passed in threshold.
-     * @return the remaining part of the threshold
-     */
+    
+     * @return the remaining part of the threshold */
     @Override
     public String parse(final String threshold, final RangeConfig tc) {
         configure(tc);
@@ -67,9 +68,9 @@ abstract class BracketStage extends Stage {
      *
      * @param threshold
      *            The threshold part to be parsed.
+    
      * @return <code>true</code> if this object can consume a part of the
-     *         threshold
-     */
+     *         threshold */
     @Override
     public boolean canParse(final String threshold) {
         if (threshold == null) {
@@ -82,8 +83,8 @@ abstract class BracketStage extends Stage {
     /**
      * This method is used to generate the exception message.
      *
-     * @return the token that this stage is waiting for.
-     */
+    
+     * @return the token that this stage is waiting for. */
     @Override
     public String expects() {
         return bracket;
@@ -120,8 +121,8 @@ abstract class BracketStage extends Stage {
         /**
          * Closed bracket can be the end of the range.
          * 
-         * @return <code>true</code>
-         */
+        
+         * @return <code>true</code> */
         public final boolean isLeaf() {
             return true;
         }

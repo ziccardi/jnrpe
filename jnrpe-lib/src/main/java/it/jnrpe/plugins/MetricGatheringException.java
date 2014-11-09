@@ -23,6 +23,7 @@ import it.jnrpe.Status;
  *
  * @author Massimiliano Ziccardi
  *
+ * @version $Revision: 1.0 $
  */
 public class MetricGatheringException extends Exception {
 
@@ -52,8 +53,8 @@ public class MetricGatheringException extends Exception {
     }
 
     /**
-     * @return The status to be returned to Nagios.
-     */
+    
+     * @return The status to be returned to Nagios. */
     public final Status getStatus() {
         return returnStatus;
     }

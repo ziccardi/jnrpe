@@ -27,6 +27,7 @@ import org.apache.commons.lang.ArrayUtils;
  * The NETTY implementation of the JNRPE protocol request decoder.
  * 
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public class JNRPERequestDecoder extends ReplayingDecoder<JNRPERequestDecoder.STAGE> {
 
@@ -92,6 +93,13 @@ public class JNRPERequestDecoder extends ReplayingDecoder<JNRPERequestDecoder.ST
         super(STAGE.PACKET_VERSION);
     }
 
+    /**
+     * Method decode.
+     * @param ctx ChannelHandlerContext
+     * @param in ByteBuf
+     * @param out List<Object>
+     * @throws Exception
+     */
     @Override
     protected final void decode(final ChannelHandlerContext ctx, final ByteBuf in, final List<Object> out) throws Exception {
         
@@ -150,10 +158,19 @@ public class JNRPERequestDecoder extends ReplayingDecoder<JNRPERequestDecoder.ST
      * 
      * @param buff
      *            the '0' terminated string
-     * @return the java string
-     */
+    
+     * @return the java string */
     private String ztString2String(final byte[] buff) {
         return new String(buff, 0, ArrayUtils.indexOf(buff, (byte) 0));
+    }
+
+    /**
+     * Method toString.
+     * @return String
+     */
+    @Override
+    public String toString() {
+        return "JNRPERequestDecoder [packet=" + packet + ", packetVersion=" + packetVersion + "]";
     }
 
 }

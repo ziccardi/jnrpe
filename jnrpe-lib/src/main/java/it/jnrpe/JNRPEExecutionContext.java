@@ -21,6 +21,7 @@ import java.nio.charset.Charset;
  * A context to be passed to all the object managing the communication.
  * 
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public class JNRPEExecutionContext implements IJNRPEExecutionContext {
 
@@ -44,11 +45,16 @@ public class JNRPEExecutionContext implements IJNRPEExecutionContext {
      */
     JNRPEExecutionContext(final IJNRPEEventBus bus, 
                     final Charset currentCharset) {
-        this.eventBus = bus;
-        this.charset = currentCharset;
+        eventBus = bus;
+        charset = currentCharset;
     }
 
     /* (non-Javadoc)
+     * @see it.jnrpe.IJNRPEExecutionContext#getEventBus()
+     */
+    /**
+     * Method getEventBus.
+     * @return IJNRPEEventBus
      * @see it.jnrpe.IJNRPEExecutionContext#getEventBus()
      */
     public final IJNRPEEventBus getEventBus() {
@@ -58,7 +64,21 @@ public class JNRPEExecutionContext implements IJNRPEExecutionContext {
     /* (non-Javadoc)
      * @see it.jnrpe.IJNRPEExecutionContext#getCharset()
      */
+    /**
+     * Method getCharset.
+     * @return Charset
+     * @see it.jnrpe.IJNRPEExecutionContext#getCharset()
+     */
     public final Charset getCharset() {
         return charset;
+    }
+
+    /**
+     * Method toString.
+     * @return String
+     */
+    @Override
+    public String toString() {
+        return "JNRPEExecutionContext [eventBus=" + eventBus + ", charset=" + charset + "]";
     }
 }

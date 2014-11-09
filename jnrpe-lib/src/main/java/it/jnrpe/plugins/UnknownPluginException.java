@@ -19,6 +19,7 @@ package it.jnrpe.plugins;
  * Exception throws when an unknown plugin is requested.
  * 
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public class UnknownPluginException extends PluginRepositoryException {
 

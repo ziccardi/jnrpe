@@ -29,6 +29,7 @@ import java.lang.annotation.Target;
  * <li>IJNRPEExecutionContext
  * </ul>
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 @Target(value = { ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)

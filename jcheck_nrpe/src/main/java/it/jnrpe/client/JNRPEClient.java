@@ -183,7 +183,7 @@ public class JNRPEClient {
      *             Thrown on any communication error.
      */
     public final ReturnValue sendCommand(final String sCommandName, final String... arguments) throws JNRPEClientException {
-        SocketFactory socketFactory = null;
+        SocketFactory socketFactory;
 
         Socket s = null;
         try {
@@ -265,7 +265,7 @@ public class JNRPEClient {
                 .withDescription("Make socket timeouts return an UNKNOWN state instead of CRITICAL").create();
 
         DefaultOption hostOption = oBuilder.withLongName("host").withShortName("H")
-                .withDescription("The address of the host running " + "the JNRPE/NRPE daemon")
+                .withDescription("The address of the host running the JNRPE/NRPE daemon")
                 .withArgument(aBuilder.withName("host").withMinimum(1).withMaximum(1).create()).create();
 
         NumberValidator positiveInt = NumberValidator.getIntegerInstance();
@@ -273,7 +273,7 @@ public class JNRPEClient {
         DefaultOption portOption = oBuilder
                 .withLongName("port")
                 .withShortName("p")
-                .withDescription("The port on which the daemon " + "is running (default=5666)")
+                .withDescription("The port on which the daemon is running (default=5666)")
                 .withArgument(
                         aBuilder.withName("port").withMinimum(1).withMaximum(1).withDefault(Long.valueOf(DEFAULT_PORT)).withValidator(positiveInt)
                                 .create()).create();
@@ -281,21 +281,29 @@ public class JNRPEClient {
         DefaultOption timeoutOption = oBuilder
                 .withLongName("timeout")
                 .withShortName("t")
-                .withDescription("Number of seconds before connection " + "times out (default=10)")
+                .withDescription("Number of seconds before connection times out (default=10)")
                 .withArgument(
                         aBuilder.withName("timeout").withMinimum(1).withMaximum(1).withDefault(Long.valueOf(DEFAULT_TIMEOUT))
                                 .withValidator(positiveInt).create()).create();
 
-        DefaultOption commandOption = oBuilder.withLongName("command").withShortName("c")
-                .withDescription("The name of the command that " + "the remote daemon should run")
-                .withArgument(aBuilder.withName("command").withMinimum(1).withMaximum(1).create()).create();
+        DefaultOption commandOption = oBuilder
+                    .withLongName("command")
+                    .withShortName("c")
+                    .withDescription("The name of the command that the remote daemon should run")
+                    .withArgument(
+                            aBuilder
+                                .withName("command")
+                                .withMinimum(1)
+                                .withMaximum(1).create()
+                                )
+                                .create();
 
         DefaultOption argsOption = oBuilder
                 .withLongName("arglist")
                 .withShortName("a")
                 .withDescription(
-                        "Optional arguments that should be " + "passed to the command.  Multiple " + "arguments should be separated by "
-                                + "a space (' '). If provided, " + "this must be the last option " + "supplied on the command line.")
+                        "Optional arguments that should be passed to the command.  Multiple arguments should be separated by "
+                                + "a space (' '). If provided, this must be the last option supplied on the command line.")
                 .withArgument(aBuilder.withName("arglist").withMinimum(1).create()).create();
 
         DefaultOption helpOption = oBuilder.withLongName("help").withShortName("h").withDescription("Shows this help").create();
@@ -343,7 +351,7 @@ public class JNRPEClient {
 
         HelpFormatter hf = new HelpFormatter();
         while (sbDivider.length() < hf.getPageWidth()) {
-            sbDivider.append("=");
+            sbDivider.append('=');
         }
 
         // DISPLAY SETTING
@@ -378,27 +386,26 @@ public class JNRPEClient {
      * 
      * @param args
      *            command line arguments
-     * @throws Exception
      *             -
      */
-    public static void main(final String[] args) throws Exception {
+    public static void main(final String[] args) {
 
         Parser parser = new Parser();
         parser.setGroup(configureCommandLine());
 
-        boolean timeoutAsUnknown = false;
-
+        CommandLine cli = null;
+        
         try {
-            CommandLine cli = parser.parse(args);
+            cli = parser.parse(args);
 
             if (cli.hasOption("--help")) {
                 printUsage(null);
             }
 
-            timeoutAsUnknown = cli.hasOption("--unknown");
+            //timeoutAsUnknown = cli.hasOption("--unknown");
 
             String sHost = (String) cli.getValue("--host");
-            Long port = (Long) cli.getValue("--port", Long.valueOf(DEFAULT_PORT));
+            final Long port = (Long) cli.getValue("--port", Long.valueOf(DEFAULT_PORT));
             String sCommand = (String) cli.getValue("--command");
 
             JNRPEClient client = new JNRPEClient(sHost, port.intValue(), !cli.hasOption("--nossl"));
@@ -415,10 +422,10 @@ public class JNRPEClient {
             System.out.println(ret.getMessage());
             System.exit(ret.getStatus().intValue());
         } catch (JNRPEClientException exc) {
-            Status returnStatus = null;
+            Status returnStatus;
 
             Throwable cause = exc.getCause();
-            if (timeoutAsUnknown && cause instanceof SocketTimeoutException) {
+            if (cli.hasOption("--unknown") && cause instanceof SocketTimeoutException) {
                 returnStatus = Status.UNKNOWN;
             } else {
                 returnStatus = Status.CRITICAL;

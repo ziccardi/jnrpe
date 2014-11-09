@@ -25,6 +25,7 @@ import java.math.BigDecimal;
  *
  * @author Massimiliano Ziccardi
  *
+ * @version $Revision: 1.0 $
  */
 interface IThreshold {
 
@@ -34,9 +35,9 @@ interface IThreshold {
      *
      * @param metric
      *            The metric name.
+    
      * @return <code>true</code> if this threshold references the passed in
-     *         metric.
-     */
+     *         metric. */
     boolean isAboutMetric(final String metric);
 
     /**
@@ -44,14 +45,14 @@ interface IThreshold {
      *
      * @param value
      *            The value to be evaluated
+    
      * @return <code>true</code> if the passed in value falls inside this
-     *         thresholds.
-     */
+     *         thresholds. */
     Status evaluate(final BigDecimal value);
 
     /**
-     * @return The name of the metric referred by this threshold.
-     */
+    
+     * @return The name of the metric referred by this threshold. */
     String getMetric();
 
     /**
@@ -61,14 +62,14 @@ interface IThreshold {
      *
      * @param status
      *            The status for wich we want the range string
-     * @return The requested range string.
-     */
+    
+     * @return The requested range string. */
     String getRangesAsString(final Status status);
 
     /**
      * Returns the unit of measure as a string.
      * 
-     * @return The unit of measure.
-     */
+    
+     * @return The unit of measure. */
     String getUnitString();
 }

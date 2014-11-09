@@ -27,6 +27,7 @@ import org.apache.commons.cli2.CommandLine;
  * 
  * @author Massimiliano Ziccardi
  * 
+ * @version $Revision: 1.0 $
  */
 class PluginCommandLine implements ICommandLine {
     /**
@@ -40,7 +41,7 @@ class PluginCommandLine implements ICommandLine {
      * @param cl
      *            The command line to be incapsulated
      */
-    public PluginCommandLine(final CommandLine cl) {
+    PluginCommandLine(final CommandLine cl) {
         commandLine = cl;
     }
 
@@ -49,7 +50,8 @@ class PluginCommandLine implements ICommandLine {
      * 
      * @param optionName
      *            The option name
-     * @return The value of the option
+    
+     * @return The value of the option * @see it.jnrpe.ICommandLine#getOptionValue(String)
      */
     public String getOptionValue(final String optionName) {
         if (optionName.length() == 1) {
@@ -61,7 +63,8 @@ class PluginCommandLine implements ICommandLine {
     /**
      * @param optionName
      *            The name of the option whose values we are searching for.
-     * @return The list of the values.
+    
+     * @return The list of the values. * @see it.jnrpe.ICommandLine#getOptionValues(String)
      */
     @SuppressWarnings("unchecked")
     public List<String> getOptionValues(final String optionName) {
@@ -80,7 +83,8 @@ class PluginCommandLine implements ICommandLine {
      *            The option name
      * @param defaultValue
      *            The default value
-     * @return The option value or, if not specified, the default value
+    
+     * @return The option value or, if not specified, the default value * @see it.jnrpe.ICommandLine#getOptionValue(String, String)
      */
     public String getOptionValue(final String optionName, final String defaultValue) {
         if (optionName.length() == 1) {
@@ -94,7 +98,8 @@ class PluginCommandLine implements ICommandLine {
      * 
      * @param shortOption
      *            The option short name
-     * @return The option value
+    
+     * @return The option value * @see it.jnrpe.ICommandLine#getOptionValue(char)
      */
     public String getOptionValue(final char shortOption) {
         return (String) commandLine.getValue("-" + shortOption);
@@ -103,7 +108,8 @@ class PluginCommandLine implements ICommandLine {
     /**
      * @param shortOption
      *            The name of the option whose values we are searching for.
-     * @return The list of the values.
+    
+     * @return The list of the values. * @see it.jnrpe.ICommandLine#getOptionValues(char)
      */
     @SuppressWarnings("unchecked")
     public List<String> getOptionValues(final char shortOption) {
@@ -118,7 +124,8 @@ class PluginCommandLine implements ICommandLine {
      *            The option short name
      * @param defaultValue
      *            The default value
-     * @return The option value or, if not specified, the default value
+    
+     * @return The option value or, if not specified, the default value * @see it.jnrpe.ICommandLine#getOptionValue(char, String)
      */
     public String getOptionValue(final char shortOption, final String defaultValue) {
         return (String) commandLine.getValue("-" + shortOption, defaultValue);
@@ -129,7 +136,8 @@ class PluginCommandLine implements ICommandLine {
      * 
      * @param optionName
      *            The option name
-     * @return <code>true</code> if the option is present
+    
+     * @return <code>true</code> if the option is present * @see it.jnrpe.ICommandLine#hasOption(String)
      */
     public boolean hasOption(final String optionName) {
         if (optionName.length() == 1) {
@@ -143,9 +151,19 @@ class PluginCommandLine implements ICommandLine {
      * 
      * @param shortOption
      *            The option short name
-     * @return <code>true</code> if the specified option is present
+    
+     * @return <code>true</code> if the specified option is present * @see it.jnrpe.ICommandLine#hasOption(char)
      */
     public boolean hasOption(final char shortOption) {
         return commandLine.hasOption("-" + shortOption);
+    }
+
+    /**
+     * Method toString.
+     * @return String
+     */
+    @Override
+    public String toString() {
+        return "PluginCommandLine [commandLine=" + commandLine + "]";
     }
 }

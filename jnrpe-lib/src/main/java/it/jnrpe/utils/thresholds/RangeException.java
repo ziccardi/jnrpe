@@ -21,6 +21,7 @@ import it.jnrpe.utils.BadThresholdException;
  * Base class for the range parsing exceptions.
  *
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public class RangeException extends BadThresholdException {
 
@@ -82,8 +83,8 @@ public class RangeException extends BadThresholdException {
     }
 
     /**
-     * @return The whole range string
-     */
+    
+     * @return The whole range string */
     protected final String getWholeRangeString() {
         return wholeRangeString;
     }
@@ -99,15 +100,15 @@ public class RangeException extends BadThresholdException {
     }
 
     /**
-     * @return The parser stage that failed
-     */
+    
+     * @return The parser stage that failed */
     protected final Stage getFailedStage() {
         return failedStage;
     }
 
     /**
-     * @return the erroneous tokens
-     */
+    
+     * @return the erroneous tokens */
     protected final String getBadString() {
         return badString;
     }
@@ -117,13 +118,13 @@ public class RangeException extends BadThresholdException {
      *
      * @param stage
      *            the stage to ask for expected tokens.
-     * @return The list of expected tokens
-     */
+    
+     * @return The list of expected tokens */
     private static String parseExpecting(final Stage stage) {
         StringBuilder expected = new StringBuilder();
 
         for (String key : stage.getTransitionNames()) {
-            expected.append(",").append(stage.getTransition(key).expects());
+            expected.append(',').append(stage.getTransition(key).expects());
         }
 
         return expected.substring(1);
@@ -132,8 +133,8 @@ public class RangeException extends BadThresholdException {
     /**
      * Returns the expected token for the failed stage.
      * 
-     * @return the expected token for the failed stage.
-     */
+    
+     * @return the expected token for the failed stage. */
     protected final String getExpectedTokens() {
         return parseExpecting(failedStage);
     }
@@ -149,8 +150,8 @@ public class RangeException extends BadThresholdException {
     }
 
     /**
-     * @return the error message.
-     */
+    
+     * @return the error message. */
     @Override
     public String getMessage() {
         return message;

@@ -21,6 +21,7 @@ import java.util.Date;
  * Event class to be used to send and receive JNRPE status events.
  * 
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public class JNRPEStatusEvent implements IJNRPEEvent {
     
@@ -72,43 +73,55 @@ public class JNRPEStatusEvent implements IJNRPEEvent {
      * @param eventMessage The message
      */
     public JNRPEStatusEvent(final STATUS jnrpeStatus, final Object eventSource, final String eventMessage) {
-        this.status = jnrpeStatus;
-        this.source = eventSource;
-        this.message = eventMessage;
+        status = jnrpeStatus;
+        source = eventSource;
+        message = eventMessage;
     }
     
     /**
-     * @return the status represented by this object.
-     */
+    
+     * @return the status represented by this object. */
     public final STATUS getStatus() {
         return status;
     }
     
     /**
-     * @return the date when the status has been reached.
-     */
+    
+     * @return the date when the status has been reached. */
     public final Date getInstant() {
         return (Date) instant.clone();
     }
 
     /**
-     * @return the status name.
+    
+     * @return the status name. * @see it.jnrpe.events.IJNRPEEvent#getEventName()
      */
     public final String getEventName() {
         return status.name();
     }
 
     /**
-     * @return the event message.
+    
+     * @return the event message. * @see it.jnrpe.events.IJNRPEEvent#getMessage()
      */
     public final String getMessage() {
         return message;
     }
 
     /**
-     * @return the instance that generated the event.
+    
+     * @return the instance that generated the event. * @see it.jnrpe.events.IJNRPEEvent#getSource()
      */
     public final Object getSource() {
         return source;
+    }
+
+    /**
+     * Method toString.
+     * @return String
+     */
+    @Override
+    public String toString() {
+        return "JNRPEStatusEvent [status=" + status + ", instant=" + instant + ", source=" + source + ", message=" + message + "]";
     }
 }

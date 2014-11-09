@@ -27,6 +27,7 @@ import java.util.Map;
  * object.
  *
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public class ThresholdsEvaluator {
 
@@ -57,8 +58,8 @@ public class ThresholdsEvaluator {
      *
      * @param metricName
      *            The name of the metric
-     * @return <code>true</code> if the metric is required.
-     */
+    
+     * @return <code>true</code> if the metric is required. */
     final boolean isMetricRequired(final String metricName) {
         return thresholdsMap.containsKey(metricName);
     }
@@ -68,8 +69,8 @@ public class ThresholdsEvaluator {
      *
      * @param metric
      *            The metric name attached to the threshold.
-     * @return The threshold
-     */
+    
+     * @return The threshold */
     final IThreshold getThreshold(final String metric) {
         return thresholdsMap.get(metric);
     }
@@ -83,9 +84,9 @@ public class ThresholdsEvaluator {
      *            The metric name
      * @param value
      *            The value to be checked
+    
      * @return The status computed accordin to the rules specified for
-     *         {@link IThreshold#evaluate(BigDecimal)}
-     */
+     *         {@link IThreshold#evaluate(BigDecimal)} */
     final Status evaluate(final String metric, final int value) {
         return evaluate(metric, new BigDecimal(value));
     }
@@ -99,9 +100,9 @@ public class ThresholdsEvaluator {
      *            The metric name
      * @param value
      *            The value to be checked
+    
      * @return The status computed accordin to the rules specified for
-     *         {@link IThreshold#evaluate(BigDecimal)}
-     */
+     *         {@link IThreshold#evaluate(BigDecimal)} */
     final Status evaluate(final String metric, final BigDecimal value) {
 
         if (value == null) {
@@ -118,5 +119,14 @@ public class ThresholdsEvaluator {
         }
 
         return thr.evaluate(value);
+    }
+
+    /**
+     * Method toString.
+     * @return String
+     */
+    @Override
+    public String toString() {
+        return "ThresholdsEvaluator [thresholdsMap=" + thresholdsMap + "]";
     }
 }

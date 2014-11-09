@@ -27,6 +27,7 @@ import java.text.DecimalFormat;
  * Refer to http://nagiosplug.sourceforge.net/developer-guidelines.html#AEN201
  *
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 class PerformanceData {
 
@@ -107,16 +108,16 @@ class PerformanceData {
      *            the maximum value that this performance data can reach. Can be
      *            null.
      */
-    public PerformanceData(final String perfLabel, final BigDecimal value, final UnitOfMeasure uom, final String warnRange, final String critRange,
+    PerformanceData(final String perfLabel, final BigDecimal value, final UnitOfMeasure uom, final String warnRange, final String critRange,
             final BigDecimal minValue, final BigDecimal maxValue) {
-        this.label = perfLabel;
-        this.performanceValue = value;
-        this.unitOfMeasure = uom;
-        this.warningRange = warnRange;
-        this.criticalRange = critRange;
-        this.minimumValue = minValue;
-        this.maximumValue = maxValue;
-        this.unit = null;
+        label = perfLabel;
+        performanceValue = value;
+        unitOfMeasure = uom;
+        warningRange = warnRange;
+        criticalRange = critRange;
+        minimumValue = minValue;
+        maximumValue = maxValue;
+        unit = null;
     }
 
     /**
@@ -142,24 +143,23 @@ class PerformanceData {
      *            the maximum value that this performance data can reach. Can be
      *            null.
      */
-    public PerformanceData(final String perfLabel, final BigDecimal value, final String unitofMeasure, final String warnRange,
+    PerformanceData(final String perfLabel, final BigDecimal value, final String unitofMeasure, final String warnRange,
             final String critRange, final BigDecimal minValue, final BigDecimal maxValue) {
-        this.label = perfLabel;
-        this.performanceValue = value;
-        this.unitOfMeasure = null;
-        this.warningRange = warnRange;
-        this.criticalRange = critRange;
-        this.minimumValue = minValue;
-        this.maximumValue = maxValue;
-        this.unit = unitofMeasure;
+        label = perfLabel;
+        performanceValue = value;
+        unitOfMeasure = null;
+        warningRange = warnRange;
+        criticalRange = critRange;
+        minimumValue = minValue;
+        maximumValue = maxValue;
+        unit = unitofMeasure;
     }
 
     /**
      * Produce a performance string accordin to Nagios specification based on
      * the value of this performance data object.
      *
-     * @return a string that can be returned to Nagios
-     */
+     * @return a string that can be returned to Nagios */
     public String toPerformanceString() {
         final StringBuilder res = new StringBuilder().append(quote(label)).append('=').append(DECIMAL_FORMAT.format(performanceValue));
 
@@ -232,14 +232,25 @@ class PerformanceData {
      *
      * @param lbl
      *            The label to be quoted
+    
      * @return The quoted label or the original label if quoting is not
-     *         required.
-     */
+     *         required. */
     private String quote(final String lbl) {
         if (lbl.indexOf(' ') == -1) {
             return lbl;
         }
 
         return new StringBuilder().append('\'').append(lbl).append('\'').toString();
+    }
+
+    /**
+     * Method toString.
+     * @return String
+     */
+    @Override
+    public String toString() {
+        return "PerformanceData [label=" + label + ", performanceValue=" + performanceValue + ", unitOfMeasure=" + unitOfMeasure + ", unit=" + unit
+                + ", warningRange=" + warningRange + ", criticalRange=" + criticalRange + ", minimumValue=" + minimumValue + ", maximumValue="
+                + maximumValue + "]";
     }
 }

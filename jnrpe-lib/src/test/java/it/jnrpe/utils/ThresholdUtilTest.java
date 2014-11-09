@@ -20,9 +20,15 @@ import java.math.BigDecimal;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+/**
+ */
 @SuppressWarnings("deprecation")
 public class ThresholdUtilTest {
 
+    /**
+     * Method testSimpleThreshold.
+     * @throws BadThresholdException
+     */
     @Test
     public void testSimpleThreshold() throws BadThresholdException {
         Assert.assertTrue(ThresholdUtil.isValueInRange("10", 5));
@@ -33,6 +39,10 @@ public class ThresholdUtilTest {
 
     }
 
+    /**
+     * Method testToInfinity.
+     * @throws BadThresholdException
+     */
     @Test
     public void testToInfinity() throws BadThresholdException {
         Assert.assertTrue(ThresholdUtil.isValueInRange("10:", 10));
@@ -42,6 +52,10 @@ public class ThresholdUtilTest {
         Assert.assertFalse(ThresholdUtil.isValueInRange("10:", -11));
     }
 
+    /**
+     * Method testToInfinityExplicit.
+     * @throws BadThresholdException
+     */
     @Test
     public void testToInfinityExplicit() throws BadThresholdException {
         Assert.assertTrue(ThresholdUtil.isValueInRange("10:~", 10));
@@ -51,6 +65,10 @@ public class ThresholdUtilTest {
         Assert.assertFalse(ThresholdUtil.isValueInRange("10:~", -11));
     }
 
+    /**
+     * Method testNegativeInfinity.
+     * @throws BadThresholdException
+     */
     @Test
     public void testNegativeInfinity() throws BadThresholdException {
         Assert.assertTrue(ThresholdUtil.isValueInRange("~:10", 10));
@@ -62,6 +80,10 @@ public class ThresholdUtilTest {
         Assert.assertFalse(ThresholdUtil.isValueInRange("~:10", 1000));
     }
 
+    /**
+     * Method testBounded.
+     * @throws BadThresholdException
+     */
     @Test
     public void testBounded() throws BadThresholdException {
         Assert.assertTrue(ThresholdUtil.isValueInRange("10:20", 10));
@@ -72,6 +94,10 @@ public class ThresholdUtilTest {
         Assert.assertFalse(ThresholdUtil.isValueInRange("10:20", -10));
     }
 
+    /**
+     * Method testNegatedBounded.
+     * @throws BadThresholdException
+     */
     @Test
     public void testNegatedBounded() throws BadThresholdException {
         Assert.assertFalse(ThresholdUtil.isValueInRange("@10:20", 10));
@@ -82,26 +108,46 @@ public class ThresholdUtilTest {
         Assert.assertTrue(ThresholdUtil.isValueInRange("@10:20", -10));
     }
 
+    /**
+     * Method testMalformedNegation.
+     * @throws BadThresholdException
+     */
     @Test(expectedExceptions = BadThresholdException.class)
     public void testMalformedNegation() throws BadThresholdException {
         ThresholdUtil.isValueInRange("10:@20", 10);
     }
 
+    /**
+     * Method testBadSeparator.
+     * @throws BadThresholdException
+     */
     @Test(expectedExceptions = BadThresholdException.class)
     public void testBadSeparator() throws BadThresholdException {
         ThresholdUtil.isValueInRange("10:20:", 10);
     }
 
+    /**
+     * Method testEmptyNumbers.
+     * @throws BadThresholdException
+     */
     @Test(expectedExceptions = BadThresholdException.class)
     public void testEmptyNumbers() throws BadThresholdException {
         ThresholdUtil.isValueInRange(":", 10);
     }
 
+    /**
+     * Method testEmptyNumbersJustSign.
+     * @throws BadThresholdException
+     */
     @Test(expectedExceptions = BadThresholdException.class)
     public void testEmptyNumbersJustSign() throws BadThresholdException {
         ThresholdUtil.isValueInRange("+:", 10);
     }
 
+    /**
+     * Method testMissingLeft.
+     * @throws BadThresholdException
+     */
     @Test
     public void testMissingLeft() throws BadThresholdException {
         Assert.assertTrue(ThresholdUtil.isValueInRange(":20", 10));
@@ -110,6 +156,10 @@ public class ThresholdUtilTest {
         Assert.assertFalse(ThresholdUtil.isValueInRange(":20", -5000));
     }
 
+    /**
+     * Method testMissingRight.
+     * @throws BadThresholdException
+     */
     @Test
     public void testMissingRight() throws BadThresholdException {
         Assert.assertFalse(ThresholdUtil.isValueInRange("20:", 10));
@@ -118,6 +168,10 @@ public class ThresholdUtilTest {
         Assert.assertFalse(ThresholdUtil.isValueInRange("20:", -5000));
     }
 
+    /**
+     * Method testMissingRightLong.
+     * @throws BadThresholdException
+     */
     @Test
     public void testMissingRightLong() throws BadThresholdException {
         Assert.assertFalse(ThresholdUtil.isValueInRange("20:", 10L));
@@ -126,6 +180,10 @@ public class ThresholdUtilTest {
         Assert.assertFalse(ThresholdUtil.isValueInRange("20:", -5000L));
     }
 
+    /**
+     * Method testMissingRightBigDecimal.
+     * @throws BadThresholdException
+     */
     @Test
     public void testMissingRightBigDecimal() throws BadThresholdException {
         Assert.assertFalse(ThresholdUtil.isValueInRange("20:", new BigDecimal(10)));

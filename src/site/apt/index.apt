@@ -3,39 +3,44 @@
  -----
  Massimiliano Ziccardi
  -----
- 2013/02/18
+ 2014/11/03
  -----
-
-
 
 Welcome to the JNRPE package
 
-  The JNRPE aims to give you all the tools you need to be able to write and execute {{{http://www.nagios.com/#ref=maxzjnrpe}Nagios}} plugins using the
-  JAVA language. 
-  It comprises many modules:
+  The JNRPE addon is a Java replacement of NRPE and is designed to allow you to execute Nagios plugins on remote machines. 
+  Differently from NRPE, JNRPE gives you the ability to execute plugins written using the Java language without the
+  overhead of many short lived JVM instances (NRPE executes the plugins as external executables: that means that to execute
+  a Java plugin, one JVM must be started for each java-written plugin execution).
   
-  * {{{./jnrpe-server/index.html}JNRPE Server}} : a server that is able, similarly to NRPE, to execute {{{http://www.nagios.com/#ref=maxzjnrpe}Nagios}} plugin. In addition to NRPE, JNRPE is able
-    to execute JAVA plugin without instantiating a new JVM for every execution.
-    It is able to execute both JAVA and native plugins. You can, for example, run with JNRPE all the plugins already bundled with
-    {{{http://www.nagios.com/#ref=maxzjnrpe}Nagios}}.
+  The main reason for using JNRPE is to allow Nagios to monitor "local" resources on remote machines with 'write once, run everywhere'
+  plugins. Moreover, JNRPE itself is a Java application, so it can run on all the operating systems where Java runs
+  removing the limit to Unix/Linux.
+
+* How JNRPE works
+
+[images/deployment.png] JNRPE deployment.
+
+  The Nagios plugins will be executing as follows:
   
-  * {{{./jnrpe-lib/index.html}JNRPE Library}} : it is the core of JNRPE and implements all the logic of instantiating and executing plugins in response
-    of check_nrpe queries. It can be embedded inside your own application to allow you to easily answer to check_nrpe queries.
-  
-  * {{{./jcheck_nrpe/index.html}jcheck_nrpe}} : it is a java implementation of the check_nrpe utils. It can be used to invoke both JNRPE and NRPE.
-    You can embed it inside your application to call NRPE or JNRPE.
-  
-  * {{{./jnrpe-plugins/index.html}JNRPE Plugins}} : it is a package containing some JAVA plugin you can get out of the box with JNRPE. These plugins are
-    full java, so you don't have to bother issues about operating systems, hardware architecture, recompiling from sources, etc.
-  
-  * {{{./jnrpe-install/index.html}JNRPE Install}} : it is a graphical user interface that allows you to easily install JNRPE on both windows and linux/unix.
+  [[1]] Nagios will invoke a check defined as a check_nrpe command.
+
+  [[2]] check_nrpe will invoke the command on the JNRPE server
+
+  [[3]] The JNRPE server will invoke the plugin associated with the requested command
+
+  [[4]] The plugin will perform the check. If the plugin is the NATIVE check plugin, 
+  the external executable will be invoked and its output will be returned. This plugin is
+  useful if you want to use a mix of java and executable plugins since you don't have to
+  install both JNRPE and NRPE.
+
+  [[5]] JNRPE receives the plugin output and returns it to check_nrpe
+
+  [[6]] check_nrpe returns the check result to Nagios
   
 * How to Get Support
 
- Support for JNRPE is offered mainly through the forum and the mailing lists.
- 
- If the problem has not been reported before, the recommended way to get help is to subscribe to the
- {{{http://sourceforge.net/projects/jnrpe/forums/forum/730634}JNRPE forum}}.
+  TBD
  
 * How can I Help?
 
@@ -49,3 +54,4 @@ Welcome to the JNRPE package
  Please note that this is not payment for JNRPE, but an optional donation to the project -- JNRPE is always free to use.
  
  Click {{{http://sourceforge.net/donate/index.php?group_id=204486}here}} to make a donation.
+

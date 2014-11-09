@@ -19,6 +19,7 @@ package it.jnrpe.utils;
  * This class converts an amount of time unit in an elapsed time object.
  * 
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public class Elapsed {
 
@@ -63,19 +64,44 @@ public class Elapsed {
         days = TimeUnit.MILLISECOND.convert(millis, TimeUnit.DAY);
     }
 
+    /**
+     * Method getSeconds.
+     * @return long
+     */
     public long getSeconds() {
         return seconds;
     }
 
+    /**
+     * Method getMinutes.
+     * @return long
+     */
     public long getMinutes() {
         return minutes;
     }
 
+    /**
+     * Method getHours.
+     * @return long
+     */
     public long getHours() {
         return hours;
     }
 
+    /**
+     * Method getDays.
+     * @return long
+     */
     public long getDays() {
         return days;
+    }
+
+    /**
+     * Method toString.
+     * @return String
+     */
+    @Override
+    public String toString() {
+        return "Elapsed [seconds=" + seconds + ", minutes=" + minutes + ", hours=" + hours + ", days=" + days + "]";
     }
 }

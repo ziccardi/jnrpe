@@ -41,6 +41,7 @@ import java.math.BigDecimal;
  *             together with the
  *             {@link it.jnrpe.utils.thresholds.ThresholdsEvaluatorBuilder}
  *             instead.
+ * @version $Revision: 1.0 $
  */
 @Deprecated
 public final class ThresholdUtil {
@@ -59,10 +60,10 @@ public final class ThresholdUtil {
      *            The range
      * @param value
      *            The value
-     * @return <code>true</code> if the value <code>iValue</code> falls into the
-     * @throws BadThresholdException
-     *             -
-     */
+    
+    
+     * @return <code>true</code> if the value <code>iValue</code> falls into the * @throws BadThresholdException
+     *             - */
     public static boolean isValueInRange(final String thresholdString, final int value) throws BadThresholdException {
         return new LegacyRange(thresholdString).isValueInside(value);
     }
@@ -75,10 +76,10 @@ public final class ThresholdUtil {
      *            The range
      * @param value
      *            The value given range
-     * @return <code>true</code> if the given value falls inside the given range
-     * @throws BadThresholdException
-     *             -
-     */
+    
+    
+     * @return <code>true</code> if the given value falls inside the given range * @throws BadThresholdException
+     *             - */
     public static boolean isValueInRange(final String thresholdString, final BigDecimal value) throws BadThresholdException {
         return new LegacyRange(thresholdString).isValueInside(value);
     }
@@ -91,10 +92,10 @@ public final class ThresholdUtil {
      *            The range
      * @param value
      *            The value given range
-     * @return <code>true</code> if the given value falls inside the given range
-     * @throws BadThresholdException
-     *             -
-     */
+    
+    
+     * @return <code>true</code> if the given value falls inside the given range * @throws BadThresholdException
+     *             - */
     public static boolean isValueInRange(final String thresholdString, final Long value) throws BadThresholdException {
         return new LegacyRange(thresholdString).isValueInside(new BigDecimal(value));
     }

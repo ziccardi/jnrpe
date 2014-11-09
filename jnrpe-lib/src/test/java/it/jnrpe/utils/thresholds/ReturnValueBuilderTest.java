@@ -25,9 +25,15 @@ import java.math.BigDecimal;
 
 import org.testng.annotations.Test;
 
+/**
+ */
 public class ReturnValueBuilderTest {
 
     //metric={metric},ok={range},warn={range},crit={range},unit={unit}prefix={SI prefix}
+    /**
+     * Method testNoLevels.
+     * @throws BadThresholdException
+     */
     @Test
     public void testNoLevels() throws BadThresholdException {
         ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
@@ -41,6 +47,10 @@ public class ReturnValueBuilderTest {
         assertEquals(ret.getStatus(), Status.OK);
     }
 
+    /**
+     * Method testOnlyOKButCritical.
+     * @throws BadThresholdException
+     */
     @Test
     public void testOnlyOKButCritical() throws BadThresholdException {
         ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
@@ -54,6 +64,10 @@ public class ReturnValueBuilderTest {
         assertEquals(ret.getStatus(), Status.CRITICAL);
     }
 
+    /**
+     * Method testOnlyOK.
+     * @throws BadThresholdException
+     */
     @Test
     public void testOnlyOK() throws BadThresholdException {
         ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
@@ -67,6 +81,10 @@ public class ReturnValueBuilderTest {
         assertEquals(ret.getStatus(), Status.OK);
     }
 
+    /**
+     * Method testOkWarnCrit_ok.
+     * @throws BadThresholdException
+     */
     @Test
     public void testOkWarnCrit_ok() throws BadThresholdException {
         ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
@@ -80,6 +98,10 @@ public class ReturnValueBuilderTest {
         assertEquals(ret.getStatus(), Status.OK);
     }
 
+    /**
+     * Method testOkWarnCrit_warn.
+     * @throws BadThresholdException
+     */
     @Test
     public void testOkWarnCrit_warn() throws BadThresholdException {
         ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
@@ -93,6 +115,10 @@ public class ReturnValueBuilderTest {
         assertEquals(ret.getStatus(), Status.WARNING);
     }
     
+    /**
+     * Method testOkWarnCrit_crit.
+     * @throws BadThresholdException
+     */
     @Test
     public void testOkWarnCrit_crit() throws BadThresholdException {
         ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
@@ -106,6 +132,10 @@ public class ReturnValueBuilderTest {
         assertEquals(ret.getStatus(), Status.CRITICAL);
     }
 
+    /**
+     * Method testOkWarnCrit_okMega.
+     * @throws BadThresholdException
+     */
     @Test
     public void testOkWarnCrit_okMega() throws BadThresholdException {
         ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()

@@ -17,8 +17,14 @@ package it.jnrpe.utils.thresholds;
 
 import org.testng.annotations.Test;
 
+/**
+ */
 public class RangeParser_TestMalformed {
 
+    /**
+     * Method testExclusiveNegativeInfinite.
+     * @throws Exception
+     */
     @Test(expectedExceptions = InvalidRangeSyntaxException.class)
     public void testExclusiveNegativeInfinite() throws Exception {
 
@@ -27,6 +33,10 @@ public class RangeParser_TestMalformed {
         RangeStringParser.parse("(-inf..+inf", rc);
     }
 
+    /**
+     * Method testExclusivePositiveInfinite.
+     * @throws Exception
+     */
     @Test(expectedExceptions = InvalidRangeSyntaxException.class)
     public void testExclusivePositiveInfinite() throws Exception {
 
@@ -35,6 +45,10 @@ public class RangeParser_TestMalformed {
         RangeStringParser.parse("-inf..+inf)", rc);
     }
 
+    /**
+     * Method testLeftBoundaryGreaterThanRightBoundary.
+     * @throws Exception
+     */
     @Test(expectedExceptions = RangeException.class)
     public void testLeftBoundaryGreaterThanRightBoundary() throws Exception {
 
@@ -43,6 +57,10 @@ public class RangeParser_TestMalformed {
         RangeStringParser.parse("50..10", rc);
     }
 
+    /**
+     * Method testLeftBoundaryGreaterThanRightBoundary_infinity.
+     * @throws Exception
+     */
     @Test(expectedExceptions = InvalidRangeSyntaxException.class)
     public void testLeftBoundaryGreaterThanRightBoundary_infinity() throws Exception {
 
@@ -51,6 +69,10 @@ public class RangeParser_TestMalformed {
         RangeStringParser.parse("+inf..-inf", rc);
     }
 
+    /**
+     * Method testRightIncomplete.
+     * @throws Exception
+     */
     @Test(expectedExceptions = PrematureEndOfRangeException.class)
     public void testRightIncomplete() throws Exception {
 
@@ -59,6 +81,10 @@ public class RangeParser_TestMalformed {
         RangeStringParser.parse("inf..", rc);
     }
 
+    /**
+     * Method testLeftIncomplete.
+     * @throws Exception
+     */
     @Test(expectedExceptions = InvalidRangeSyntaxException.class)
     public void testLeftIncomplete() throws Exception {
 
@@ -67,6 +93,10 @@ public class RangeParser_TestMalformed {
         RangeStringParser.parse("..inf", rc);
     }
 
+    /**
+     * Method testLeftDoubleSign.
+     * @throws Exception
+     */
     @Test(expectedExceptions = RangeException.class)
     public void testLeftDoubleSign() throws Exception {
 
@@ -75,6 +105,10 @@ public class RangeParser_TestMalformed {
         RangeStringParser.parse("--10..+50", rc);
     }
 
+    /**
+     * Method testRightDoubleSign.
+     * @throws Exception
+     */
     @Test(expectedExceptions = RangeException.class)
     public void testRightDoubleSign() throws Exception {
 
@@ -83,6 +117,10 @@ public class RangeParser_TestMalformed {
         RangeStringParser.parse("10..++50", rc);
     }
 
+    /**
+     * Method testBadLeftBoundary.
+     * @throws Exception
+     */
     @Test(expectedExceptions = InvalidRangeSyntaxException.class)
     public void testBadLeftBoundary() throws Exception {
 
@@ -91,6 +129,10 @@ public class RangeParser_TestMalformed {
         RangeStringParser.parse("1a0..+50", rc);
     }
 
+    /**
+     * Method testBadRightBoundary.
+     * @throws Exception
+     */
     @Test(expectedExceptions = InvalidRangeSyntaxException.class)
     public void testBadRightBoundary() throws Exception {
 

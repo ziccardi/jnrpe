@@ -22,6 +22,7 @@ import org.apache.commons.lang.text.StrTokenizer;
  * A simple string util class.
  *
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public final class StringUtils {
     /**
@@ -44,10 +45,10 @@ public final class StringUtils {
      *            The string to split
      * @param ignoreQuotes
      *            For future implementation
-     * @return The splitted string
+    
      *
      * @since JNRPE Server 1.04
-     */
+     * @return The splitted string */
     public static String[] split(final String string, final boolean ignoreQuotes) {
         return split(string, ' ', ignoreQuotes);
     }
@@ -62,8 +63,8 @@ public final class StringUtils {
      *            The separator character
      * @param ignoreQuotes
      *            <code>true</code> if the quotes must be ignored.
-     * @return The splitted string
-     */
+    
+     * @return The splitted string */
     public static String[] split(final String string, final char separator, final boolean ignoreQuotes) {
         StrTokenizer strtok = new StrTokenizer(string, StrMatcher.charMatcher(separator), StrMatcher.quoteMatcher());
         return strtok.getTokenArray();

@@ -22,6 +22,7 @@ import java.math.BigDecimal;
  * 
  * @author Massimiliano Ziccardi
  *
+ * @version $Revision: 1.0 $
  */
 public enum Prefixes {
     /**
@@ -175,8 +176,8 @@ public enum Prefixes {
      * 
      * @param value
      *            The value
-     * @return The multiplied value
-     */
+    
+     * @return The multiplied value */
     public BigDecimal convert(final BigDecimal value) {
         return multiplier.multiply(value);
     }
@@ -186,8 +187,8 @@ public enum Prefixes {
      * 
      * @param value
      *            The value
-     * @return The multiplied value
-     */
+    
+     * @return The multiplied value */
     public BigDecimal convert(final int value) {
         return multiplier.multiply(new BigDecimal(value));
     }
@@ -197,8 +198,8 @@ public enum Prefixes {
      * 
      * @param value
      *            The value
-     * @return The multiplied value
-     */
+    
+     * @return The multiplied value */
     public BigDecimal convert(final long value) {
         return multiplier.multiply(new BigDecimal(value));
     }
@@ -208,8 +209,8 @@ public enum Prefixes {
      * 
      * @param value
      *            The value
-     * @return The multiplied value
-     */
+    
+     * @return The multiplied value */
     public BigDecimal convert(final double value) {
         return multiplier.multiply(new BigDecimal(value));
     }
@@ -219,8 +220,8 @@ public enum Prefixes {
      * 
      * @param prefixChar
      *            The prefix
-     * @return The enumeration
-     */
+    
+     * @return The enumeration */
     public static Prefixes fromChar(final char prefixChar) {
         switch (prefixChar) {
         case 'Y':
@@ -271,33 +272,33 @@ public enum Prefixes {
      * 
      * @param prefixString
      *            The prefix
-     * @return The enumeration
-     */
+    
+     * @return The enumeration */
     public static Prefixes fromString(final String prefixString) {
         if (prefixString.length() == 1) {
             return fromChar(prefixString.charAt(0));
         }
 
-        String s = prefixString.toLowerCase();
-        if ("da".equals(s)) {
+        String lowercasePrefix = prefixString.toLowerCase();
+        if ("da".equals(lowercasePrefix)) {
             return deka;
         }
-        if ("ki".equals(s)) {
+        if ("ki".equals(lowercasePrefix)) {
             return kilo;
         }
-        if ("mi".equals(s)) {
+        if ("mi".equals(lowercasePrefix)) {
             return mebi;
         }
-        if ("gi".equals(s)) {
+        if ("gi".equals(lowercasePrefix)) {
             return gibi;
         }
-        if ("ti".equals(s)) {
+        if ("ti".equals(lowercasePrefix)) {
             return tebi;
         }
-        if ("pi".equals(s)) {
+        if ("pi".equals(lowercasePrefix)) {
             return pebi;
         }
-        if ("ei".equals(s)) {
+        if ("ei".equals(lowercasePrefix)) {
             return exbi;
         }
 

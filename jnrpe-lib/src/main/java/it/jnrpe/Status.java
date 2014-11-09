@@ -19,6 +19,7 @@ package it.jnrpe;
  * Enumeration of all the supported status.
  *
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public enum Status {
     /**
@@ -81,8 +82,8 @@ public enum Status {
     /**
      * Returns the int value of the enum.
      *
-     * @return The int value
-     */
+    
+     * @return The int value */
     public int intValue() {
         return intValue;
     }
@@ -92,8 +93,8 @@ public enum Status {
      *
      * @param intValue
      *            The int value to be converted
-     * @return A {@link Status} enum. Null if not found
-     */
+    
+     * @return A {@link Status} enum. Null if not found */
     public static Status fromIntValue(final int intValue) {
         switch (intValue) {
         case OK_STATUS:
@@ -109,8 +110,8 @@ public enum Status {
     }
 
     /**
-     * @return The severity as an int value (higher is more severe)
-     */
+    
+     * @return The severity as an int value (higher is more severe) */
     public int getSeverity() {
         return severityValue;
     }

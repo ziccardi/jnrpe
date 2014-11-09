@@ -27,6 +27,7 @@ package it.jnrpe.utils.thresholds;
  * Positive infinity can only be at the end of a range.
  *
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 class PositiveInfinityStage extends Stage {
 
@@ -64,8 +65,8 @@ class PositiveInfinityStage extends Stage {
      * @param tc
      *            The threshold config object. This object will be populated
      *            according to the passed in threshold.
-     * @return the remaining part of the threshold
-     */
+    
+     * @return the remaining part of the threshold */
     @Override
     public String parse(final String threshold, final RangeConfig tc) {
 
@@ -78,6 +79,11 @@ class PositiveInfinityStage extends Stage {
         }
     }
 
+    /**
+     * Method canParse.
+     * @param threshold String
+     * @return boolean
+     */
     @Override
     public boolean canParse(final String threshold) {
         if (threshold == null) {
@@ -86,11 +92,19 @@ class PositiveInfinityStage extends Stage {
         return threshold.startsWith("inf") || threshold.startsWith("+inf");
     }
 
+    /**
+     * Method expects.
+     * @return String
+     */
     @Override
     public String expects() {
         return "[+]inf";
     }
 
+    /**
+     * Method isLeaf.
+     * @return boolean
+     */
     @Override
     public boolean isLeaf() {
         return true;

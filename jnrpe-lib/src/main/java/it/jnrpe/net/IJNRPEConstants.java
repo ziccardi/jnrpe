@@ -19,7 +19,9 @@ package it.jnrpe.net;
  * In this interface are initialized all needed constants.
  *
  * @author Massimiliano Ziccardi
- * @deprecated
+
+ * @deprecated since <unknown>
+ * @version $Revision: 1.0 $
  */
 public interface IJNRPEConstants {
     /**

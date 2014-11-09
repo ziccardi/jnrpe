@@ -19,6 +19,7 @@ package it.jnrpe.plugins;
  * Exception throws when errors occurs accessing the plugin repository.
  * 
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public class PluginRepositoryException extends Exception {
 

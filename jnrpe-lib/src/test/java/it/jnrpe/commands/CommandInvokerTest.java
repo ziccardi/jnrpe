@@ -36,18 +36,37 @@ import org.testng.annotations.Test;
 
 import com.google.common.eventbus.EventBus;
 
+/**
+ */
 public class CommandInvokerTest {
 
+	/**
+	 * Field pluginRepository.
+	 */
 	private final PluginRepository pluginRepository = new PluginRepository();;
+	/**
+	 * Field commandRepository.
+	 */
 	private final CommandRepository commandRepository = new CommandRepository();
+	/**
+	 * Field context.
+	 */
 	private IJNRPEExecutionContext context;
 	
+	/**
+	 * Constructor for CommandInvokerTest.
+	 */
 	public CommandInvokerTest() {
 		initRepositories();
 	}
 
+	/**
+	 */
 	private static class TestContext implements IJNRPEExecutionContext {
 
+	    /**
+	     * Field eventBus.
+	     */
 	    private final IJNRPEEventBus eventBus;
 	    
 	    /**
@@ -55,28 +74,41 @@ public class CommandInvokerTest {
 	     */
 	    private final Charset charset;
 
+	    /**
+	     * Field pluginRepository.
+	     */
 	    private final IPluginRepository pluginRepository;
+	    /**
+	     * Field commandRepository.
+	     */
 	    private final CommandRepository commandRepository;
 	    
 	    /**
 	     * Builds and initializes the context.
 	     * 
-	     * @param eventListeners
-	     *            the list of listeners
+	    
 	     * @param currentCharset
 	     *            the configured charset
+	     * @param bus IJNRPEEventBus
+	     * @param pluginRepo IPluginRepository
+	     * @param commandRepo CommandRepository
 	     */
-	    public TestContext(final IJNRPEEventBus bus, 
+	    private TestContext(final IJNRPEEventBus bus, 
 	                    final Charset currentCharset,
 	                    final IPluginRepository pluginRepo,
 	                    final CommandRepository commandRepo) {
-	        this.eventBus = bus;
-	        this.charset = currentCharset;
-	        this.pluginRepository = pluginRepo;
-	        this.commandRepository = commandRepo;
+	        eventBus = bus;
+	        charset = currentCharset;
+	        pluginRepository = pluginRepo;
+	        commandRepository = commandRepo;
 	    }
 
 	    /* (non-Javadoc)
+	     * @see it.jnrpe.IJNRPEExecutionContext#getEventBus()
+	     */
+	    /**
+	     * Method getEventBus.
+	     * @return IJNRPEEventBus
 	     * @see it.jnrpe.IJNRPEExecutionContext#getEventBus()
 	     */
 	    public final IJNRPEEventBus getEventBus() {
@@ -86,12 +118,21 @@ public class CommandInvokerTest {
 	    /* (non-Javadoc)
 	     * @see it.jnrpe.IJNRPEExecutionContext#getCharset()
 	     */
+	    /**
+	     * Method getCharset.
+	     * @return Charset
+	     * @see it.jnrpe.IJNRPEExecutionContext#getCharset()
+	     */
 	    public final Charset getCharset() {
 	        return charset;
 	    }
 
 	    /* (non-Javadoc)
 	     * @see it.jnrpe.IJNRPEExecutionContext#getPluginRepository()
+	     */
+	    /**
+	     * Method getPluginRepository.
+	     * @return IPluginRepository
 	     */
 	    public IPluginRepository getPluginRepository() {
 	        return pluginRepository;
@@ -100,19 +141,36 @@ public class CommandInvokerTest {
 	    /* (non-Javadoc)
 	     * @see it.jnrpe.IJNRPEExecutionContext#getCommandRepository()
 	     */
+	    /**
+	     * Method getCommandRepository.
+	     * @return CommandRepository
+	     */
 	    public CommandRepository getCommandRepository() {
 	        return commandRepository;
 	    }
 	    
 	}
 	
+	/**
+	 */
 	private static class EchoPlugin implements IPluginInterface {
 
+		/**
+		 * Method execute.
+		 * @param cl ICommandLine
+		 * @return ReturnValue
+		 * @throws BadThresholdException
+		 * @see it.jnrpe.plugins.IPluginInterface#execute(ICommandLine)
+		 */
 		public ReturnValue execute(final ICommandLine cl)
 				throws BadThresholdException {
 			return new ReturnValue(Status.OK, cl.getOptionValue("text"));
 		}
 
+		/**
+		 * Method getPluginDefinition.
+		 * @return PluginDefinition
+		 */
 		private static PluginDefinition getPluginDefinition() {
 			PluginDefinition pd = new PluginDefinition("EchoPlugin",
 					"Test echo plugin", new EchoPlugin());
@@ -124,6 +182,9 @@ public class CommandInvokerTest {
 		}
 	}
 
+	/**
+	 * Method initRepositories.
+	 */
 	private void initRepositories() {
 		pluginRepository.addPluginDefinition(EchoPlugin.getPluginDefinition());
 		CommandDefinition cd = new CommandDefinition("ECHO", "EchoPlugin");
@@ -133,6 +194,9 @@ public class CommandInvokerTest {
 		context = new TestContext(new JNRPEEventBus(), Charset.defaultCharset(), pluginRepository, commandRepository);
 	}
 
+	/**
+	 * Method testAcceptParams.
+	 */
 	@Test
 	public void testAcceptParams() {
 
@@ -144,6 +208,9 @@ public class CommandInvokerTest {
 		Assert.assertEquals(rv.getMessage(), "ECHO ME");
 	}
 
+	/**
+	 * Method testDoNotAcceptParams.
+	 */
 	@Test
 	public void testDoNotAcceptParams() {
 		CommandInvoker invoker = new CommandInvoker(pluginRepository,

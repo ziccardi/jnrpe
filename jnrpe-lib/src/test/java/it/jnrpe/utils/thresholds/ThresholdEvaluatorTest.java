@@ -23,10 +23,16 @@ import java.math.BigDecimal;
 
 import org.testng.annotations.Test;
 
+/**
+ */
 public class ThresholdEvaluatorTest {
 
 	// metric={metric},ok={range},warn={range},crit={range},unit={unit}prefix={SI
 	// prefix}
+	/**
+	 * Method testNoLevels.
+	 * @throws BadThresholdException
+	 */
 	@Test
 	public void testNoLevels() throws BadThresholdException {
 		ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
@@ -35,6 +41,10 @@ public class ThresholdEvaluatorTest {
 		assertEquals(s, Status.OK);
 	}
 
+	/**
+	 * Method testOnlyOKButCritical.
+	 * @throws BadThresholdException
+	 */
 	@Test
 	public void testOnlyOKButCritical() throws BadThresholdException {
 		ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
@@ -43,6 +53,10 @@ public class ThresholdEvaluatorTest {
 		assertEquals(s, Status.CRITICAL);
 	}
 
+	/**
+	 * Method testOnlyOK.
+	 * @throws BadThresholdException
+	 */
 	@Test
 	public void testOnlyOK() throws BadThresholdException {
 		ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
@@ -51,6 +65,10 @@ public class ThresholdEvaluatorTest {
 		assertEquals(s, Status.CRITICAL);
 	}
 
+	/**
+	 * Method testOkWarnCrit_ok.
+	 * @throws BadThresholdException
+	 */
 	@Test
 	public void testOkWarnCrit_ok() throws BadThresholdException {
 		ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
@@ -61,6 +79,10 @@ public class ThresholdEvaluatorTest {
 		assertEquals(s, Status.OK);
 	}
 
+	/**
+	 * Method testOkWarnCrit_warn.
+	 * @throws BadThresholdException
+	 */
 	@Test
 	public void testOkWarnCrit_warn() throws BadThresholdException {
 		ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
@@ -71,6 +93,10 @@ public class ThresholdEvaluatorTest {
 		assertEquals(s, Status.WARNING);
 	}
 
+	/**
+	 * Method testOkWarnCrit_warnMega.
+	 * @throws BadThresholdException
+	 */
 	@Test
 	public void testOkWarnCrit_warnMega() throws BadThresholdException {
 		ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
@@ -81,6 +107,10 @@ public class ThresholdEvaluatorTest {
 		assertEquals(s, Status.WARNING);
 	}
 
+	/**
+	 * Method testOkWarnCrit_crit.
+	 * @throws BadThresholdException
+	 */
 	@Test
 	public void testOkWarnCrit_crit() throws BadThresholdException {
 		ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
@@ -91,6 +121,10 @@ public class ThresholdEvaluatorTest {
 		assertEquals(s, Status.CRITICAL);
 	}
 
+	/**
+	 * Method testNullMetricValue.
+	 * @throws BadThresholdException
+	 */
 	@Test(expectedExceptions = NullPointerException.class)
 	public void testNullMetricValue() throws BadThresholdException {
 		ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
@@ -100,6 +134,10 @@ public class ThresholdEvaluatorTest {
 		ths.evaluate("pippo", null);
 	}
 
+	/**
+	 * Method testNullMetricName.
+	 * @throws BadThresholdException
+	 */
 	@Test(expectedExceptions = NullPointerException.class)
 	public void testNullMetricName() throws BadThresholdException {
 		ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
@@ -109,6 +147,10 @@ public class ThresholdEvaluatorTest {
 		ths.evaluate(null, new BigDecimal("210"));
 	}
 
+	/**
+	 * Method testBadMetricPair.
+	 * @throws BadThresholdException
+	 */
 	@Test(expectedExceptions = BadThresholdException.class)
 	public void testBadMetricPair() throws BadThresholdException {
 		ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
@@ -117,6 +159,10 @@ public class ThresholdEvaluatorTest {
 		ths.evaluate(null, new BigDecimal("210"));
 	}
 
+	/**
+	 * Method testBadMetricPair2.
+	 * @throws BadThresholdException
+	 */
 	@Test(expectedExceptions = BadThresholdException.class)
 	public void testBadMetricPair2() throws BadThresholdException {
 		ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
@@ -125,6 +171,10 @@ public class ThresholdEvaluatorTest {
 		ths.evaluate(null, new BigDecimal("210"));
 	}
 
+	/**
+	 * Method testBadOkPair.
+	 * @throws BadThresholdException
+	 */
 	@Test(expectedExceptions = BadThresholdException.class)
 	public void testBadOkPair() throws BadThresholdException {
 		ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
@@ -133,6 +183,10 @@ public class ThresholdEvaluatorTest {
 		ths.evaluate(null, new BigDecimal("210"));
 	}
 
+	/**
+	 * Method testBadWarnPair.
+	 * @throws BadThresholdException
+	 */
 	@Test(expectedExceptions = BadThresholdException.class)
 	public void testBadWarnPair() throws BadThresholdException {
 		ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
@@ -141,6 +195,10 @@ public class ThresholdEvaluatorTest {
 		ths.evaluate(null, new BigDecimal("210"));
 	}
 
+	/**
+	 * Method testBadCritPair.
+	 * @throws BadThresholdException
+	 */
 	@Test(expectedExceptions = BadThresholdException.class)
 	public void testBadCritPair() throws BadThresholdException {
 		ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
@@ -149,6 +207,10 @@ public class ThresholdEvaluatorTest {
 		ths.evaluate(null, new BigDecimal("210"));
 	}
 
+	/**
+	 * Method testBadMetric.
+	 * @throws BadThresholdException
+	 */
 	@Test
 	public void testBadMetric() throws BadThresholdException {
 		ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()

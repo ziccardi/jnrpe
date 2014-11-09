@@ -21,37 +21,59 @@ import static org.testng.Assert.assertTrue;
 
 import org.testng.annotations.Test;
 
+/**
+ */
 public class NegativeInfinityStageTest {
+    /**
+     * Method testCanParseNull.
+     */
     @Test
     public void testCanParseNull() {
         NegativeInfinityStage stage = new NegativeInfinityStage();
         assertFalse(stage.canParse(null));
     }
 
+    /**
+     * Method testCanParseWithoutMinus.
+     */
     @Test
     public void testCanParseWithoutMinus() {
         NegativeInfinityStage stage = new NegativeInfinityStage();
         assertTrue(stage.canParse("inf"));
     }
 
+    /**
+     * Method testCanParseWithMinus.
+     */
     @Test
     public void testCanParseWithMinus() {
         NegativeInfinityStage stage = new NegativeInfinityStage();
         assertTrue(stage.canParse("-inf"));
     }
 
+    /**
+     * Method testExpect.
+     */
     @Test
     public void testExpect() {
         NegativeInfinityStage stage = new NegativeInfinityStage();
         assertEquals(stage.expects(), "[-]inf");
     }
 
+    /**
+     * Method testParseWithSignOk.
+     * @throws InvalidRangeSyntaxException
+     */
     @Test
     public void testParseWithSignOk() throws InvalidRangeSyntaxException {
         NegativeInfinityStage stage = new NegativeInfinityStage();
         assertEquals(stage.parse("-inf..80", new RangeConfig()), "..80");
     }
 
+    /**
+     * Method testParseWithoutSignOk.
+     * @throws InvalidRangeSyntaxException
+     */
     @Test
     public void testParseWithoutSignOk() throws InvalidRangeSyntaxException {
         NegativeInfinityStage stage = new NegativeInfinityStage();
@@ -59,6 +81,10 @@ public class NegativeInfinityStageTest {
     }
 
 
+    /**
+     * Method testParseKo.
+     * @throws InvalidRangeSyntaxException
+     */
     @Test
     public void testParseKo() throws InvalidRangeSyntaxException {
         NegativeInfinityStage stage = new NegativeInfinityStage();

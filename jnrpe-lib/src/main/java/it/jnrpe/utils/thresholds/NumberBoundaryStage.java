@@ -21,6 +21,7 @@ import java.math.BigDecimal;
  * Base class for the number parsing stages.
  *
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 abstract class NumberBoundaryStage extends Stage {
 
@@ -44,10 +45,10 @@ abstract class NumberBoundaryStage extends Stage {
      * @param tc
      *            The threshold config object. This object will be populated
      *            according to the passed in threshold.
-     * @return the remaining part of the threshold
-     * @throws RangeException
-     *             if the threshold can't be parsed
-     */
+    
+    
+     * @return the remaining part of the threshold * @throws RangeException
+     *             if the threshold can't be parsed */
     @Override
     public String parse(final String threshold, final RangeConfig tc) throws RangeException {
         StringBuilder numberString = new StringBuilder();
@@ -89,12 +90,17 @@ abstract class NumberBoundaryStage extends Stage {
     /**
      * @param string
      *            The string to be evaluated
-     * @return <code>true</code> if the string is just a sign.
-     */
+    
+     * @return <code>true</code> if the string is just a sign. */
     private boolean justSign(final String string) {
         return "+".equals(string) || "-".equals(string);
     }
 
+    /**
+     * Method canParse.
+     * @param threshold String
+     * @return boolean
+     */
     @Override
     public boolean canParse(final String threshold) {
         if (threshold == null || threshold.isEmpty()) {
@@ -109,6 +115,10 @@ abstract class NumberBoundaryStage extends Stage {
         }
     }
 
+    /**
+     * Method expects.
+     * @return String
+     */
     @Override
     public String expects() {
         return "+-[0-9]";
@@ -148,6 +158,11 @@ abstract class NumberBoundaryStage extends Stage {
             super("startboundary");
         }
 
+        /**
+         * Method setBoundary.
+         * @param tc RangeConfig
+         * @param boundary BigDecimal
+         */
         @Override
         public void setBoundary(final RangeConfig tc, final BigDecimal boundary) {
             tc.setLeftBoundary(boundary);
@@ -176,6 +191,11 @@ abstract class NumberBoundaryStage extends Stage {
             super("rightboundary");
         }
 
+        /**
+         * Method setBoundary.
+         * @param tc RangeConfig
+         * @param boundary BigDecimal
+         */
         @Override
         public void setBoundary(final RangeConfig tc, final BigDecimal boundary) {
             tc.setRightBoundary(boundary);
@@ -184,8 +204,8 @@ abstract class NumberBoundaryStage extends Stage {
         /**
          * Right boundary can be the end of the range.
          *
-         * @return <code>true</code>
-         */
+        
+         * @return <code>true</code> */
         public final boolean isLeaf() {
             return true;
         }

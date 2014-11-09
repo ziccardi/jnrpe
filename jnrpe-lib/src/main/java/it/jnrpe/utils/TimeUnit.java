@@ -1,9 +1,25 @@
+/*******************************************************************************
+ * Copyright (c) 2007, 2014 Massimiliano Ziccardi
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *******************************************************************************/
 package it.jnrpe.utils;
 
 /**
  * Enumeration for time constants.
  * 
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public enum TimeUnit {
 
@@ -41,7 +57,7 @@ public enum TimeUnit {
      *            the number of milliseconds
      */
     private TimeUnit(final long value) {
-        this.milliseconds = value;
+        milliseconds = value;
     }
 
     /**
@@ -49,8 +65,8 @@ public enum TimeUnit {
      * 
      * @param qty
      *            the quantity of SECONDS, MINUTES, HOURS or DAYS
-     * @return the number of milliseconds
-     */
+    
+     * @return the number of milliseconds */
     public long convert(final long qty) {
         return qty * milliseconds;
     }
@@ -62,8 +78,8 @@ public enum TimeUnit {
      *            the quantity to be converted.
      * @param to
      *            the destination time unit
-     * @return the time unit
-     */
+    
+     * @return the time unit */
     public long convert(final long qty, final TimeUnit to) {
         long millis = convert(qty);
         return millis / to.milliseconds;
@@ -73,9 +89,9 @@ public enum TimeUnit {
      * Returns the current time in terms of number of TimeUnit since 1st January
      * 1970.
      * 
+    
      * @return the current time in terms of number of TimeUnit since 1st January
-     *         1970
-     */
+     *         1970 */
     public long currentTime() {
         return MILLISECOND.convert(System.currentTimeMillis(), this);
     }

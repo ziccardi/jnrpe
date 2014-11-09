@@ -19,6 +19,7 @@ package it.jnrpe;
  * The interface that must be implemented by the JNRPE listeners.
  *
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 interface IJNRPEListener {
     /**

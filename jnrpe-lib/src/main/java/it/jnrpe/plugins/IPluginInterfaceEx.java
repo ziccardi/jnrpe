@@ -25,6 +25,7 @@ package it.jnrpe.plugins;
  *
  * @author Massimiliano Ziccardi
  * @deprecated this interface is not useful anymore
+ * @version $Revision: 1.0 $
  */
 public interface IPluginInterfaceEx extends IPluginInterface {
     

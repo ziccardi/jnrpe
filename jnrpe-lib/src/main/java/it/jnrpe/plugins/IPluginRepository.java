@@ -21,6 +21,7 @@ import java.util.Collection;
  * The interface that all the plugin repository classes must implement.
  * 
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public interface IPluginRepository {
 
@@ -30,17 +31,17 @@ public interface IPluginRepository {
      * 
      * @param name
      *            The name of the plugin to be instantiated.
-     * @return The plugin instance
-     * @throws UnknownPluginException
-     *             if no plugins with the given name exists
-     */
+    
+    
+     * @return The plugin instance * @throws UnknownPluginException
+     *             if no plugins with the given name exists */
     IPluginInterface getPlugin(final String name) throws UnknownPluginException;
 
     /**
      * Returns all the plugin definitions managed by this repository.
      * 
-     * @return The collection of plugin definitions.
-     */
+    
+     * @return The collection of plugin definitions. */
     Collection<PluginDefinition> getAllPlugins();
 
     /**

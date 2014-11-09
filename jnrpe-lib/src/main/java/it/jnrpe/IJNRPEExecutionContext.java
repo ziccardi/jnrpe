@@ -22,20 +22,21 @@ import java.nio.charset.Charset;
  * a plugin execution.
  * 
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public interface IJNRPEExecutionContext {
 
     /**
      * Returns all the listeners.
      * 
-     * @return the event bus
-     */
+    
+     * @return the event bus */
     IJNRPEEventBus getEventBus();
 
     /**
      * Returns the charset.
      * 
-     * @return the configured charset
-     */
+    
+     * @return the configured charset */
     Charset getCharset();
 }

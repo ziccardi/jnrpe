@@ -19,6 +19,7 @@ package it.jnrpe.net;
  * Enumeration of all the supported packet types.
  * 
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public enum PacketType {
     /**
@@ -52,8 +53,8 @@ public enum PacketType {
     /**
      * Returns the int value of the enum.
      * 
-     * @return The int value
-     */
+    
+     * @return The int value */
     public int intValue() {
         return intValue;
     }
@@ -64,8 +65,8 @@ public enum PacketType {
      * 
      * @param value
      *            The int value state
-     * @return The Enumeration
-     */
+    
+     * @return The Enumeration */
     public static PacketType fromIntValue(final int value) {
         switch (value) {
         case 1:

@@ -20,8 +20,14 @@ import java.math.BigDecimal;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+/**
+ */
 public class RangeTest {
 
+	/**
+	 * Method testLeftInfinityInclusive.
+	 * @throws Exception
+	 */
 	@Test
 	public void testLeftInfinityInclusive() throws Exception {
 		Range range = new Range("-inf..50");
@@ -34,6 +40,10 @@ public class RangeTest {
 		Assert.assertTrue(range.isValueInside(new BigDecimal("50")));
 	}
 
+	/**
+	 * Method tesRightInfinityInclusive.
+	 * @throws Exception
+	 */
 	@Test
 	public void tesRightInfinityInclusive() throws Exception {
 		Range range = new Range("50..+inf");
@@ -46,6 +56,10 @@ public class RangeTest {
 		Assert.assertTrue(range.isValueInside(new BigDecimal("50")));
 	}
 
+	/**
+	 * Method testLeftInfinityExclusive.
+	 * @throws Exception
+	 */
 	@Test
 	public void testLeftInfinityExclusive() throws Exception {
 		Range range = new Range("-inf..50)");
@@ -58,6 +72,10 @@ public class RangeTest {
 		Assert.assertFalse(range.isValueInside(new BigDecimal("50")));
 	}
 
+	/**
+	 * Method tesRightInfinityExclusive.
+	 * @throws Exception
+	 */
 	@Test
 	public void tesRightInfinityExclusive() throws Exception {
 		Range range = new Range("(50..+inf");
@@ -70,6 +88,10 @@ public class RangeTest {
 		Assert.assertFalse(range.isValueInside(new BigDecimal("50")));
 	}
 
+	/**
+	 * Method testLeftInclusive.
+	 * @throws Exception
+	 */
 	@Test
 	public void testLeftInclusive() throws Exception {
 		Range range = new Range("50..150)");
@@ -82,6 +104,10 @@ public class RangeTest {
 		Assert.assertTrue(range.isValueInside(new BigDecimal("149.999999")));
 	}
 
+	/**
+	 * Method testRightInclusive.
+	 * @throws Exception
+	 */
 	@Test
 	public void testRightInclusive() throws Exception {
 		Range range = new Range("(50..150");
@@ -94,6 +120,10 @@ public class RangeTest {
 		Assert.assertTrue(range.isValueInside(new BigDecimal("150.0000")));
 	}
 
+	/**
+	 * Method testNegatedInclusive.
+	 * @throws Exception
+	 */
 	@Test
 	public void testNegatedInclusive() throws Exception {
 		Range range = new Range("^50..150");
@@ -106,6 +136,10 @@ public class RangeTest {
 		Assert.assertFalse(range.isValueInside(new BigDecimal("150.0000")));
 	}
 
+	/**
+	 * Method testNegatedExclusive.
+	 * @throws Exception
+	 */
 	@Test
 	public void testNegatedExclusive() throws Exception {
 		Range range = new Range("^(50..150)");
@@ -118,6 +152,10 @@ public class RangeTest {
 		Assert.assertTrue(range.isValueInside(new BigDecimal("150.0000")));
 	}
 
+	/**
+	 * Method testNegatedAll.
+	 * @throws Exception
+	 */
 	@Test
 	public void testNegatedAll() throws Exception {
 		Range range = new Range("^-inf..+inf");
@@ -130,6 +168,10 @@ public class RangeTest {
 		Assert.assertFalse(range.isValueInside(new BigDecimal("150.0000")));
 	}
 
+	/**
+	 * Method testNegatedAllInt.
+	 * @throws Exception
+	 */
 	@Test
 	public void testNegatedAllInt() throws Exception {
 		Range range = new Range("^-inf..+inf");
@@ -139,6 +181,10 @@ public class RangeTest {
 		Assert.assertFalse(range.isValueInside(150));
 	}
 
+	/**
+	 * Method testNegatedAllLong.
+	 * @throws Exception
+	 */
 	@Test
 	public void testNegatedAllLong() throws Exception {
 		Range range = new Range("^-inf..+inf");
@@ -148,17 +194,29 @@ public class RangeTest {
 		Assert.assertFalse(range.isValueInside(150L));
 	}
 
+	/**
+	 * Method testNull.
+	 * @throws Exception
+	 */
 	@Test(expectedExceptions = RangeException.class)
 	public void testNull() throws Exception {
 		new Range(null);
 	}
 
+	/**
+	 * Method testEvaluateNull.
+	 * @throws Exception
+	 */
 	@Test(expectedExceptions = NullPointerException.class)
 	public void testEvaluateNull() throws Exception {
 		Range range = new Range("10..200");
 		range.isValueInside(null);
 	}
 
+	/**
+	 * Method testWhiteString.
+	 * @throws Exception
+	 */
 	@Test(expectedExceptions = InvalidRangeSyntaxException.class)
 	public void testWhiteString() throws Exception {
 		new Range("   ");

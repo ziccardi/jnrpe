@@ -26,6 +26,7 @@ import java.util.Collection;
  * Builder for the {@link JNRPE} object.
  * 
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public final class JNRPEBuilder {
 
@@ -98,8 +99,8 @@ public final class JNRPEBuilder {
             throw new IllegalArgumentException("Both plugin and command repository can't be null");
         }
 
-        this.pluginRepository = jnrpePluginRepository;
-        this.commandRepository = jnrpeCommandRepository;
+        pluginRepository = jnrpePluginRepository;
+        commandRepository = jnrpeCommandRepository;
     }
 
     /**
@@ -109,8 +110,8 @@ public final class JNRPEBuilder {
      *            The plugin repository
      * @param commandRepository
      *            The command repository
-     * @return this
-     */
+    
+     * @return this */
     public static JNRPEBuilder forRepositories(final IPluginRepository pluginRepository, final CommandRepository commandRepository) {
 
         return new JNRPEBuilder(pluginRepository, commandRepository);
@@ -121,10 +122,10 @@ public final class JNRPEBuilder {
      * 
      * @param accept
      *            <code>true</code> if $ARGxx$ macros should be expanded.
-     * @return this
-     */
+    
+     * @return this */
     public JNRPEBuilder acceptParams(final boolean accept) {
-        this.acceptParams = accept;
+        acceptParams = accept;
         return this;
     }
 
@@ -133,10 +134,10 @@ public final class JNRPEBuilder {
      * 
      * @param hostName
      *            the hostname or ip address
-     * @return this
-     */
+    
+     * @return this */
     public JNRPEBuilder acceptHost(final String hostName) {
-        this.acceptedHosts.add(hostName);
+        acceptedHosts.add(hostName);
         return this;
     }
 
@@ -145,10 +146,10 @@ public final class JNRPEBuilder {
      * 
      * @param newCharset
      *            the charset to be used
-     * @return this
-     */
+    
+     * @return this */
     public JNRPEBuilder withCharset(final Charset newCharset) {
-        this.charset = newCharset;
+        charset = newCharset;
         return this;
     }
 
@@ -157,10 +158,10 @@ public final class JNRPEBuilder {
      * 
      * @param maxConnections
      *            the maximum number of accepted connections.
-     * @return this
-     */
+    
+     * @return this */
     public JNRPEBuilder withMaxAcceptedConnections(final int maxConnections) {
-        this.maxAcceptedConnections = maxConnections;
+        maxAcceptedConnections = maxConnections;
         return this;
     }
 
@@ -170,10 +171,10 @@ public final class JNRPEBuilder {
      * 
      * @param readTimeoutSecs
      *            the new read timeout in seconds
-     * @return this
-     */
+    
+     * @return this */
     public JNRPEBuilder withReadTimeout(final int readTimeoutSecs) {
-        this.readTimeout = readTimeoutSecs;
+        readTimeout = readTimeoutSecs;
         return this;
     }
 
@@ -183,10 +184,10 @@ public final class JNRPEBuilder {
      * 
      * @param writeTimeoutSecs
      *            the new write timeout in seconds
-     * @return this
-     */
+    
+     * @return this */
     public JNRPEBuilder withWriteTimeout(final int writeTimeoutSecs) {
-        this.writeTimeout = writeTimeoutSecs;
+        writeTimeout = writeTimeoutSecs;
         return this;
     }
 
@@ -194,18 +195,18 @@ public final class JNRPEBuilder {
      * Adds a listener to the collection of listeners.
      * 
      * @param listener the listener object
-     * @return this
-     */
+    
+     * @return this */
     public JNRPEBuilder withListener(final Object listener) {
-        this.eventListeners.add(listener);
+        eventListeners.add(listener);
         return this;
     }
     
     /**
      * Builds the configured JNRPE instance.
      * 
-     * @return the configured JNRPE instance
-     */
+    
+     * @return the configured JNRPE instance */
     public JNRPE build() {
         JNRPE jnrpe = new JNRPE(pluginRepository, commandRepository, charset, acceptParams, acceptedHosts, maxAcceptedConnections, readTimeout,
                 writeTimeout);
@@ -217,5 +218,16 @@ public final class JNRPEBuilder {
         }
         
         return jnrpe;
+    }
+
+    /**
+     * Method toString.
+     * @return String
+     */
+    @Override
+    public String toString() {
+        return "JNRPEBuilder [pluginRepository=" + pluginRepository + ", commandRepository=" + commandRepository + ", acceptedHosts=" + acceptedHosts
+                + ", eventListeners=" + eventListeners + ", acceptParams=" + acceptParams + ", maxAcceptedConnections=" + maxAcceptedConnections
+                + ", charset=" + charset + ", readTimeout=" + readTimeout + ", writeTimeout=" + writeTimeout + "]";
     }
 }

@@ -23,6 +23,7 @@ import java.math.BigDecimal;
  * This class represent a parser/evaluator for the old threshold syntax.
  *
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public class LegacyThreshold implements IThreshold {
     /**
@@ -62,7 +63,7 @@ public class LegacyThreshold implements IThreshold {
     }
 
     /**
-     * Evaluates the value agains the specified ranges. The followed flow is:
+     * Evaluates the value against the specified ranges. The followed flow is:
      * <ol>
      * <li>If a critical range is defined and the value falls inside the
      * specified range, a {@link Status#CRITICAL} is returned.
@@ -77,7 +78,8 @@ public class LegacyThreshold implements IThreshold {
      * 
      * @param value
      *            The value to be evaluated.
-     * @return the evaluated status.
+    
+     * @return the evaluated status. * @see it.jnrpe.utils.thresholds.IThreshold#evaluate(BigDecimal)
      */
     public final Status evaluate(final BigDecimal value) {
         if (critRange != null && critRange.isValueInside(value)) {
@@ -100,7 +102,8 @@ public class LegacyThreshold implements IThreshold {
     /**
      * @param metric
      *            The metric we want to evaluate.
-     * @return wether this threshold is about the passed in metric.
+    
+     * @return wether this threshold is about the passed in metric. * @see it.jnrpe.utils.thresholds.IThreshold#isAboutMetric(String)
      */
     public final boolean isAboutMetric(final String metric) {
         return metricName.equalsIgnoreCase(metric);
@@ -109,7 +112,8 @@ public class LegacyThreshold implements IThreshold {
     /**
      * The metric referred by this threshold.
      * 
-     * @return the metric name.
+    
+     * @return the metric name. * @see it.jnrpe.utils.thresholds.IThreshold#getMetric()
      */
     public final String getMetric() {
         return metricName;
@@ -118,7 +122,8 @@ public class LegacyThreshold implements IThreshold {
     /**
      * @param status
      *            the range we are interested in.
-     * @return the requested unparsed range string.
+    
+     * @return the requested unparsed range string. * @see it.jnrpe.utils.thresholds.IThreshold#getRangesAsString(Status)
      */
     public final String getRangesAsString(final Status status) {
         switch (status) {
@@ -144,9 +149,19 @@ public class LegacyThreshold implements IThreshold {
     }
 
     /**
-     * @return the unit of measure as string.
+    
+     * @return the unit of measure as string. * @see it.jnrpe.utils.thresholds.IThreshold#getUnitString()
      */
     public final String getUnitString() {
         return null;
+    }
+
+    /**
+     * Method toString.
+     * @return String
+     */
+    @Override
+    public String toString() {
+        return "LegacyThreshold [okRange=" + okRange + ", warnRange=" + warnRange + ", critRange=" + critRange + ", metricName=" + metricName + "]";
     }
 }

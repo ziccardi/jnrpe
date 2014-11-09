@@ -21,38 +21,60 @@ import static org.testng.Assert.assertTrue;
 
 import org.testng.annotations.Test;
 
+/**
+ */
 public class NegateStageTest {
 
+    /**
+     * Method testCanParseNull.
+     */
     @Test
     public void testCanParseNull() {
         NegateStage stage = new NegateStage();
         assertFalse(stage.canParse(null));
     }
 
+    /**
+     * Method testCanParseOk.
+     */
     @Test
     public void testCanParseOk() {
         NegateStage stage = new NegateStage();
         assertTrue(stage.canParse("^"));
     }
 
+    /**
+     * Method testCanParseKo.
+     */
     @Test
     public void testCanParseKo() {
         NegateStage stage = new NegateStage();
         assertFalse(stage.canParse("("));
     }
 
+    /**
+     * Method testExpect.
+     */
     @Test
     public void testExpect() {
         NegateStage stage = new NegateStage();
         assertEquals(stage.expects(), "^");
     }
 
+    /**
+     * Method testParseOk.
+     * @throws InvalidRangeSyntaxException
+     */
     @Test
     public void testParseOk() throws InvalidRangeSyntaxException {
         NegateStage stage = new NegateStage();
         assertEquals(stage.parse("^50..80", new RangeConfig()), "50..80");
     }
 
+    /**
+     * Method testParseKo.
+     * @throws InvalidRangeSyntaxException
+     */
     @Test
     public void testParseKo() throws InvalidRangeSyntaxException {
         NegateStage stage = new NegateStage();

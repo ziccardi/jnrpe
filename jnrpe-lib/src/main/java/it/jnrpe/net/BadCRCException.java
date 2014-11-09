@@ -21,6 +21,7 @@ package it.jnrpe.net;
  *
  * @author Massimiliano Ziccardi
  *
+ * @version $Revision: 1.0 $
  */
 public class BadCRCException extends Exception {
     /**

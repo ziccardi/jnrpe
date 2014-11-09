@@ -23,6 +23,7 @@ import org.apache.commons.cli2.builder.DefaultOptionBuilder;
  * This class describes a plugin option.
  *
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public final class PluginOption {
     /**
@@ -85,8 +86,8 @@ public final class PluginOption {
     /**
      * Returns the option string.
      *
-     * @return The option as string
-     */
+    
+     * @return The option as string */
     public String getOption() {
         return option;
     }
@@ -97,18 +98,18 @@ public final class PluginOption {
      *
      * @param optionName
      *            The option as string
-     * @return this
-     */
+    
+     * @return this */
     public PluginOption setOption(final String optionName) {
-        this.option = optionName;
+        option = optionName;
         return this;
     }
 
     /**
      * Returns true if the option has an argument.
      *
-     * @return true if the option has an argument.
-     */
+    
+     * @return true if the option has an argument. */
     public boolean hasArgs() {
         return hasArgs;
     }
@@ -118,18 +119,18 @@ public final class PluginOption {
      *
      * @param argsPresent
      *            true if the option has an argument.
-     * @return this
-     */
+    
+     * @return this */
     public PluginOption setHasArgs(final boolean argsPresent) {
-        this.hasArgs = argsPresent;
+        hasArgs = argsPresent;
         return this;
     }
 
     /**
      * Returns the number of arguments.
      *
-     * @return the number of arguments.
-     */
+    
+     * @return the number of arguments. */
     public Integer getArgsCount() {
         return argsCount;
     }
@@ -139,18 +140,18 @@ public final class PluginOption {
      *
      * @param numberOfArgs
      *            the number of arguments.
-     * @return this
-     */
+    
+     * @return this */
     public PluginOption setArgsCount(final Integer numberOfArgs) {
-        this.argsCount = numberOfArgs;
+        argsCount = numberOfArgs;
         return this;
     }
 
     /**
      * Returns the string 'true' if required.
      *
-     * @return the string 'true' if required.
-     */
+    
+     * @return the string 'true' if required. */
     public String getRequired() {
         return String.valueOf(required);
     }
@@ -160,18 +161,18 @@ public final class PluginOption {
      *
      * @param optIsRequired
      *            <code>true</code> if the option is required.
-     * @return this
-     */
+    
+     * @return this */
     public PluginOption setRequired(final boolean optIsRequired) {
-        this.required = optIsRequired;
+        required = optIsRequired;
         return this;
     }
 
     /**
      * Used to know if the option has optional arguments.
      *
-     * @return <code>true</code> if the option has optional arguments.
-     */
+    
+     * @return <code>true</code> if the option has optional arguments. */
     public Boolean getArgsOptional() {
         return argsAreOptional;
     }
@@ -181,8 +182,8 @@ public final class PluginOption {
      *
      * @param argsOptional
      *            <code>true</code> if the option has optional arguments.
-     * @return this
-     */
+    
+     * @return this */
     public PluginOption setArgsOptional(final Boolean argsOptional) {
         argsAreOptional = argsOptional;
         return this;
@@ -191,8 +192,8 @@ public final class PluginOption {
     /**
      * Returns the name of the argument of this option.
      *
-     * @return the name of the argument of this option.
-     */
+    
+     * @return the name of the argument of this option. */
     public String getArgName() {
         return argName;
     }
@@ -202,18 +203,18 @@ public final class PluginOption {
      *
      * @param argumentName
      *            The argument name
-     * @return this
-     */
+    
+     * @return this */
     public PluginOption setArgName(final String argumentName) {
-        this.argName = argumentName;
+        argName = argumentName;
         return this;
     }
 
     /**
      * Returns the long name of this option.
      *
-     * @return the long name of this option.
-     */
+    
+     * @return the long name of this option. */
     public String getLongOpt() {
         return longOptionName;
     }
@@ -223,18 +224,18 @@ public final class PluginOption {
      *
      * @param longOptName
      *            the long name of this option.
-     * @return this
-     */
+    
+     * @return this */
     public PluginOption setLongOpt(final String longOptName) {
-        this.longOptionName = longOptName;
+        longOptionName = longOptName;
         return this;
     }
 
     /**
      * Returns the type of this option.
      *
-     * @return the type of this option.
-     */
+    
+     * @return the type of this option. */
     public String getType() {
         return optionType;
     }
@@ -244,8 +245,8 @@ public final class PluginOption {
      *
      * @param type
      *            the type of this option.
-     * @return this
-     */
+    
+     * @return this */
     public PluginOption setType(final String type) {
         optionType = type;
         return this;
@@ -254,8 +255,8 @@ public final class PluginOption {
     /**
      * Returns the value separator.
      *
-     * @return the value separator.
-     */
+    
+     * @return the value separator. */
     public String getValueSeparator() {
         return argsValueSeparator;
     }
@@ -265,18 +266,18 @@ public final class PluginOption {
      *
      * @param argumentsValueSeparator
      *            the value separator.
-     * @return this
-     */
+    
+     * @return this */
     public PluginOption setValueSeparator(final String argumentsValueSeparator) {
-        this.argsValueSeparator = argumentsValueSeparator;
+        argsValueSeparator = argumentsValueSeparator;
         return this;
     }
 
     /**
      * Returns the description of this option.
      *
-     * @return the description of this option.
-     */
+    
+     * @return the description of this option. */
     public String getDescription() {
         return description;
     }
@@ -286,10 +287,10 @@ public final class PluginOption {
      *
      * @param optDescription
      *            the description of this option.
-     * @return this
-     */
+    
+     * @return this */
     public PluginOption setDescription(final String optDescription) {
-        this.description = optDescription;
+        description = optDescription;
         return this;
     }
 
@@ -297,8 +298,8 @@ public final class PluginOption {
      * Convert this {@link PluginOption} to the Option required by Apache.
      * Commons Cli.
      *
-     * @return The option object required by commons cli
-     */
+    
+     * @return The option object required by commons cli */
     Option toOption() {
         DefaultOptionBuilder oBuilder = new DefaultOptionBuilder();
 
@@ -333,5 +334,16 @@ public final class PluginOption {
         }
 
         return oBuilder.create();
+    }
+
+    /**
+     * Method toString.
+     * @return String
+     */
+    @Override
+    public String toString() {
+        return "PluginOption [option=" + option + ", hasArgs=" + hasArgs + ", argsCount=" + argsCount + ", required=" + required
+                + ", argsAreOptional=" + argsAreOptional + ", argName=" + argName + ", longOptionName=" + longOptionName + ", optionType="
+                + optionType + ", argsValueSeparator=" + argsValueSeparator + ", description=" + description + "]";
     }
 }

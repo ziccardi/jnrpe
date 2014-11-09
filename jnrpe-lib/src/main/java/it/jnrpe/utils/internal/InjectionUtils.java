@@ -26,6 +26,7 @@ import java.lang.reflect.Field;
  * Utility to perform injection of code in JNRPE plugin classes.
  * 
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public final class InjectionUtils {
     
@@ -42,8 +43,8 @@ public final class InjectionUtils {
      * @param c the object class
      * @param plugin teh plugin instance
      * @param context the context to be injected
-     * @throws IllegalAccessException on any error accessing the field
-     */
+    
+     * @throws IllegalAccessException on any error accessing the field */
     @SuppressWarnings("rawtypes")
     private static void inject(final Class c, final IPluginInterface plugin, final IJNRPEExecutionContext context) throws IllegalAccessException {
 
@@ -80,14 +81,14 @@ public final class InjectionUtils {
     public static void inject(final IPluginInterface plugin, final IJNRPEExecutionContext context) {
 
         try {
-            Class c = plugin.getClass();
-            inject(c, plugin, context);
-            while (IPluginInterface.class.isAssignableFrom(c.getSuperclass())) {
-                c = c.getSuperclass();
-                inject(c, plugin, context);
+            Class clazz = plugin.getClass();
+            inject(clazz, plugin, context);
+            while (IPluginInterface.class.isAssignableFrom(clazz.getSuperclass())) {
+                clazz = clazz.getSuperclass();
+                inject(clazz, plugin, context);
             }
         } catch (Exception e) {
-            throw new Error(e);
+            throw new Error(e.getMessage(), e);
         }
 
     }

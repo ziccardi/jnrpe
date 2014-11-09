@@ -26,6 +26,7 @@ package it.jnrpe.utils.thresholds;
  * {@link RangeConfig#setNegativeInfinity(boolean)} passing <code>true</code>
  *
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 class NegativeInfinityStage extends Stage {
 
@@ -63,9 +64,9 @@ class NegativeInfinityStage extends Stage {
      * @param tc
      *            The threshold config object. This object will be populated
      *            according to the passed in threshold.
-     * @see RangeConfig#setNegativeInfinity(boolean)
-     * @return the remaining part of the threshold
-     */
+    
+    
+     * @return the remaining part of the threshold * @see RangeConfig#setNegativeInfinity(boolean) */
     @Override
     public String parse(final String threshold, final RangeConfig tc) {
 
@@ -84,9 +85,9 @@ class NegativeInfinityStage extends Stage {
      *
      * @param threshold
      *            The threshold part to be parsed.
+    
      * @return <code>true</code> if this object can consume a part of the
-     *         threshold
-     */
+     *         threshold */
     @Override
     public boolean canParse(final String threshold) {
         if (threshold == null) {
@@ -98,8 +99,8 @@ class NegativeInfinityStage extends Stage {
     /**
      * This method is used to generate the exception message.
      *
-     * @return the token that this stage is waiting for.
-     */
+    
+     * @return the token that this stage is waiting for. */
     @Override
     public String expects() {
         return "[-]inf";

@@ -18,29 +18,60 @@ package it.jnrpe.utils;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+/**
+ */
 public class StringUtilsTest {
     
+    /**
+     */
     private static class StringUtilSplitTester {
         
+        /**
+         * Field stringToBeSplitted.
+         */
         private String stringToBeSplitted;
+        /**
+         * Field delimiter.
+         */
         private char delimiter;
+        /**
+         * Field ignoreQuotes.
+         */
         private boolean ignoreQuotes = false;
         
+        /**
+         * Constructor for StringUtilSplitTester.
+         */
         private StringUtilSplitTester() {
             
         }
         
+        /**
+         * Method given.
+         * @param s String
+         * @return StringUtilSplitTester
+         */
         public static StringUtilSplitTester given(final String s) {
             StringUtilSplitTester tester = new StringUtilSplitTester();
             tester.stringToBeSplitted = s;
             return tester;
         }
         
+        /**
+         * Method withDelimiter.
+         * @param c char
+         * @return StringUtilSplitTester
+         */
         public StringUtilSplitTester withDelimiter(char c) {
-            this.delimiter = c;
+            delimiter = c;
             return this;
         }
         
+        /**
+         * Method expect.
+         * @param res String[]
+         * @return StringUtilSplitTester
+         */
         public StringUtilSplitTester expect(String[] res) {
             String[] result = StringUtils.split(stringToBeSplitted, delimiter, ignoreQuotes);
             Assert.assertEquals(result, res);
@@ -49,6 +80,9 @@ public class StringUtilsTest {
     }
     
     
+    /**
+     * Method testSplitByExclamationMark.
+     */
     @Test
     public void testSplitByExclamationMark() {
         
@@ -58,6 +92,9 @@ public class StringUtilsTest {
             .expect(new String[] {"string1", "string2", "string3"});
     }
 
+    /**
+     * Method testSplitByExclamationMarkEmptyStrings.
+     */
     @Test
     public void testSplitByExclamationMarkEmptyStrings() {
 
@@ -68,6 +105,9 @@ public class StringUtilsTest {
         
     }
 
+    /**
+     * Method testSplitByExclamationMarkSingleQuotes.
+     */
     @Test
     public void testSplitByExclamationMarkSingleQuotes() {
         
@@ -78,6 +118,9 @@ public class StringUtilsTest {
 
     }
 
+    /**
+     * Method testSplitByExclamationMarkDoubleQuotes.
+     */
     @Test
     public void testSplitByExclamationMarkDoubleQuotes() {
         
@@ -88,6 +131,9 @@ public class StringUtilsTest {
         
     }
 
+    /**
+     * Method testSplitByExclamationMarkSingleAndDoubleQuotes.
+     */
     @Test
     public void testSplitByExclamationMarkSingleAndDoubleQuotes() {
         
@@ -98,6 +144,9 @@ public class StringUtilsTest {
         
     }
 
+    /**
+     * Method testSplitByExclamationMarkSingleInsideDoubleQuotes.
+     */
     @Test
     public void testSplitByExclamationMarkSingleInsideDoubleQuotes() {
         
@@ -108,6 +157,9 @@ public class StringUtilsTest {
         
     }
 
+    /**
+     * Method testSplitByExclamationMarkDoubleInsideSingleQuotes.
+     */
     @Test
     public void testSplitByExclamationMarkDoubleInsideSingleQuotes() {
         

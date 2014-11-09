@@ -21,6 +21,7 @@ package it.jnrpe.utils;
  *
  * @author Massimiliano Ziccardi
  *
+ * @version $Revision: 1.0 $
  */
 public class BadThresholdException extends Exception {
 

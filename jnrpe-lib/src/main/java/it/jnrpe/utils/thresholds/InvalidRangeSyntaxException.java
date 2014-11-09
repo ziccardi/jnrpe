@@ -21,6 +21,7 @@ import java.text.MessageFormat;
  * Exception thrown when a range syntax error is found.
  *
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public class InvalidRangeSyntaxException extends RangeException {
     /**
@@ -75,13 +76,13 @@ public class InvalidRangeSyntaxException extends RangeException {
      *
      * @param stage
      *            the stage to ask for expected tokens.
-     * @return The list of expected tokens
-     */
+    
+     * @return The list of expected tokens */
     private static String parseExpecting(final Stage stage) {
         StringBuilder expected = new StringBuilder();
 
         for (String key : stage.getTransitionNames()) {
-            expected.append(",").append(stage.getTransition(key).expects());
+            expected.append(',').append(stage.getTransition(key).expects());
         }
 
         if (expected.length() > 1) {
@@ -91,8 +92,8 @@ public class InvalidRangeSyntaxException extends RangeException {
     }
 
     /**
-     * @return the exception message
-     */
+    
+     * @return the exception message */
     @Override
     public final String getMessage() {
         String invalidRange = null;

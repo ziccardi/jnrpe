@@ -31,6 +31,7 @@ import org.apache.commons.lang.ArrayUtils;
  * This class represent a generic NRPE protocol packet.
  * 
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 class JNRPEProtocolPacket {
 
@@ -78,8 +79,8 @@ class JNRPEProtocolPacket {
     /**
      * Returns the packet CRC value.
      * 
-     * @return the CRC value
-     */
+    
+     * @return the CRC value */
     int getCRC() {
         return crcValue;
     }
@@ -87,8 +88,8 @@ class JNRPEProtocolPacket {
     /**
      * Returns the packet type.
      * 
-     * @return The packet type
-     */
+    
+     * @return The packet type */
     PacketType getPacketType() {
         return PacketType.fromIntValue(packetTypeCode);
     }
@@ -96,8 +97,8 @@ class JNRPEProtocolPacket {
     /**
      * Returns the packet version.
      * 
-     * @return The packet version
-     */
+    
+     * @return The packet version */
     public PacketVersion getPacketVersion() {
         return PacketVersion.fromIntValue(packetVersion);
     }
@@ -139,14 +140,14 @@ class JNRPEProtocolPacket {
      *            the new charset,
      */
     public void setCharset(final Charset newCharset) {
-        this.charset = newCharset;
+        charset = newCharset;
     }
 
     /**
      * Returns the result code.
      * 
-     * @return The result code
-     */
+    
+     * @return The result code */
     public int getResultCode() {
         return resultCode;
     }
@@ -164,9 +165,9 @@ class JNRPEProtocolPacket {
     /**
      * Validates the packet CRC.
      * 
+    
      * @throws BadCRCException
-     *             If the CRC can't be validated
-     */
+     *             If the CRC can't be validated */
     public void validate() throws BadCRCException {
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
         DataOutputStream dout = new DataOutputStream(bout);
@@ -196,15 +197,15 @@ class JNRPEProtocolPacket {
     }
 
     /**
-     * @return the received raw data buffer
-     */
+    
+     * @return the received raw data buffer */
     protected byte[] getBuffer() {
         return byteBufferAry;
     }
 
     /**
-     * @return The string representation of the buffer.
-     */
+    
+     * @return The string representation of the buffer. */
     protected String getPacketString() {
         byte[] buffer = getBuffer();
         int zeroIndex = ArrayUtils.indexOf(buffer, (byte) 0);
@@ -220,10 +221,10 @@ class JNRPEProtocolPacket {
      * Initializes the arrays with random data. Not sure it is really needed...
      */
     private void initRandomBuffer() {
-        Random r = new Random(System.currentTimeMillis());
+        Random rnd = new Random(System.currentTimeMillis());
 
-        r.nextBytes(byteBufferAry);
-        r.nextBytes(dummyBytesAry);
+        rnd.nextBytes(byteBufferAry);
+        rnd.nextBytes(dummyBytesAry);
     }
 
     /**
@@ -253,12 +254,12 @@ class JNRPEProtocolPacket {
             throw new IllegalArgumentException("Dummy bytes array must have exactly two elements. Current size is : " + currentSize);
         }
 
-        System.arraycopy(dummyBytes, 0, this.dummyBytesAry, 0, 2);
+        System.arraycopy(dummyBytes, 0, dummyBytesAry, 0, 2);
     }
 
     /**
-     * @return the dummy buffer value.
-     */
+    
+     * @return the dummy buffer value. */
     byte[] getDummy() {
         return dummyBytesAry;
     }
@@ -277,8 +278,8 @@ class JNRPEProtocolPacket {
     /**
      * Converts the packet object to its byte array representation.
      * 
-     * @return The byte array representation of this packet.
-     */
+    
+     * @return The byte array representation of this packet. */
     public byte[] toByteArray() {
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
         DataOutputStream dout = new DataOutputStream(bout);
@@ -303,8 +304,8 @@ class JNRPEProtocolPacket {
      * Loads the packet from the given input stream.
      * 
      * @param in the packet input stream
-     * @throws IOException on any error
-     */
+    
+     * @throws IOException on any error */
     protected void fromInputStream(final InputStream in) throws IOException {
         DataInputStream din = new DataInputStream(in);
         packetVersion = din.readShort();
@@ -313,5 +314,16 @@ class JNRPEProtocolPacket {
         resultCode = din.readShort();
         din.readFully(byteBufferAry);
         din.readFully(dummyBytesAry);
+    }
+
+    /**
+     * Method toString.
+     * @return String
+     */
+    @Override
+    public String toString() {
+        return "JNRPEProtocolPacket [charset=" + charset + ", crcValue=" + crcValue + ", packetTypeCode=" + packetTypeCode + ", packetVersion="
+                + packetVersion + ", resultCode=" + resultCode + ", byteBufferAry=" + Arrays.toString(byteBufferAry) + ", dummyBytesAry="
+                + Arrays.toString(dummyBytesAry) + "]";
     }
 }

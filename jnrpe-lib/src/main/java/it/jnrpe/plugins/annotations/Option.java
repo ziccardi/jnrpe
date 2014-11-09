@@ -28,22 +28,55 @@ import java.lang.annotation.RetentionPolicy;
  * Plugin option definition.
  *
  * @author Frederico Campos
+ * @version $Revision: 1.0 $
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Option {
+    /**
+     * Method shortName.
+     * @return String
+     */
     String shortName();
 
+    /**
+     * Method longName.
+     * @return String
+     */
     String longName();
 
+    /**
+     * Method description.
+     * @return String
+     */
     String description();
 
+    /**
+     * Method argName.
+     * @return String
+     */
     String argName();
 
+    /**
+     * Method optionalArgs.
+     * @return boolean
+     */
     boolean optionalArgs();
 
+    /**
+     * Method hasArgs.
+     * @return boolean
+     */
     boolean hasArgs();
 
+    /**
+     * Method required.
+     * @return boolean
+     */
     boolean required();
 
+    /**
+     * Method option.
+     * @return String
+     */
     String option();
 }

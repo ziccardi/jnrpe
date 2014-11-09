@@ -23,10 +23,15 @@ import java.lang.annotation.RetentionPolicy;
  *
  * @author Frederico Campos
  *
+ * @version $Revision: 1.0 $
  */
 
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PluginOptions {
 
+    /**
+     * Method value.
+     * @return Option[]
+     */
     Option[] value();
 }

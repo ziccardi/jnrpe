@@ -20,8 +20,13 @@ import static org.testng.Assert.assertFalse;
 
 import org.testng.annotations.Test;
 
+/**
+ */
 public class SeparatorStageTest {
 
+    /**
+     * Method testParseOk.
+     */
     @Test
     public void testParseOk() {
         SeparatorStage stage = new SeparatorStage();
@@ -29,6 +34,9 @@ public class SeparatorStageTest {
         assertEquals(stage.parse("..10", new RangeConfig()), "10");
     }
 
+    /**
+     * Method testParseKo.
+     */
     @Test
     public void testParseKo() {
         SeparatorStage stage = new SeparatorStage();

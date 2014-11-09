@@ -23,6 +23,7 @@ import java.math.BigDecimal;
  *
  * @author Massimiliano Ziccardi
  *
+ * @version $Revision: 1.0 $
  */
 class RangeConfig {
     /**
@@ -65,8 +66,8 @@ class RangeConfig {
     /**
      * Returns whether this threshold must be negated.
      *
-     * @return whether this threshold must be negated.
-     */
+    
+     * @return whether this threshold must be negated. */
     public boolean isNegate() {
         return negate;
     }
@@ -78,14 +79,14 @@ class RangeConfig {
      *            <code>true</code> if must be negated
      */
     void setNegate(final boolean negateThrehsold) {
-        this.negate = negateThrehsold;
+        negate = negateThrehsold;
     }
 
     /**
      * Returns whether the left boundary is inclusive.
      *
-     * @return whether the left boundary is inclusive.
-     */
+    
+     * @return whether the left boundary is inclusive. */
     public boolean isLeftInclusive() {
         return leftInclusive;
     }
@@ -93,8 +94,8 @@ class RangeConfig {
     /**
      * Returns whether the right boundary is inclusive.
      *
-     * @return whether the right boundary is inclusive.
-     */
+    
+     * @return whether the right boundary is inclusive. */
     public boolean isRightInclusive() {
         return rightInclusive;
     }
@@ -106,7 +107,7 @@ class RangeConfig {
      *            <code>true</code> if left boundary is inclusive
      */
     public void setLeftInclusive(final boolean leftBoundaryInclusive) {
-        this.leftInclusive = leftBoundaryInclusive;
+        leftInclusive = leftBoundaryInclusive;
     }
 
     /**
@@ -119,6 +120,10 @@ class RangeConfig {
         negativeInfinity = negativeInf;
     }
 
+    /**
+     * Method toString.
+     * @return String
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder()
@@ -174,29 +179,29 @@ class RangeConfig {
     }
 
     /**
-     * @return The value of the left boundary. <code>null</code> if -inf.
-     */
+    
+     * @return The value of the left boundary. <code>null</code> if -inf. */
     protected BigDecimal getLeftBoundary() {
         return startBoundary;
     }
 
     /**
-     * @return The value of the right boundary. <code>null</code> if -inf.
-     */
+    
+     * @return The value of the right boundary. <code>null</code> if -inf. */
     protected BigDecimal getRightBoundary() {
         return rightBoundary;
     }
 
     /**
-     * @return <code>true</code> if the left boundary is -inf.
-     */
+    
+     * @return <code>true</code> if the left boundary is -inf. */
     protected boolean isNegativeInfinity() {
         return negativeInfinity;
     }
 
     /**
-     * @return <code>true</code> if the right boundary is +inf.
-     */
+    
+     * @return <code>true</code> if the right boundary is +inf. */
     protected boolean isPositiveInfinity() {
         return positiveInfinity;
     }

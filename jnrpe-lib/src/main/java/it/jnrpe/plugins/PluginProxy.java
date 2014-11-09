@@ -38,6 +38,7 @@ import org.apache.commons.lang.StringUtils;
  * 
  * @author Massimiliano Ziccardi
  * 
+ * @version $Revision: 1.0 $
  */
 public final class PluginProxy extends PluginBase {
     /**
@@ -86,8 +87,8 @@ public final class PluginProxy extends PluginBase {
     /**
      * Returns a collection of all the options accepted by this plugin.
      * 
-     * @return a collection of plugin options.
-     */
+    
+     * @return a collection of plugin options. */
     public Collection<PluginOption> getOptions() {
         return proxyedPluginDefinition.getOptions();
     }
@@ -97,19 +98,19 @@ public final class PluginProxy extends PluginBase {
      * 
      * @param argsAry
      *            The parameters to be passed to the plugin
-     * @return The return value of the plugin.
-     * @throws BadThresholdException
-     *             -
-     */
+    
+    
+     * @return The return value of the plugin. * @throws BadThresholdException
+     *             - */
     public ReturnValue execute(final String[] argsAry) throws BadThresholdException {
         // CommandLineParser clp = new PosixParser();
         try {
             HelpFormatter hf = new HelpFormatter();
             // configure a parser
-            Parser p = new Parser();
-            p.setGroup(mainOptionsGroup);
-            p.setHelpFormatter(hf);
-            CommandLine cl = p.parse(argsAry);
+            Parser cliParser = new Parser();
+            cliParser.setGroup(mainOptionsGroup);
+            cliParser.setHelpFormatter(hf);
+            CommandLine cl = cliParser.parse(argsAry);
             /*if (proxiedPlugin instanceof IPluginInterfaceEx) {
                 ((IPluginInterfaceEx) proxiedPlugin).setContext(this.getContext());
             }*/
@@ -148,7 +149,7 @@ public final class PluginProxy extends PluginBase {
         HelpFormatter hf = new HelpFormatter();
         StringBuilder sbDivider = new StringBuilder("=");
         while (sbDivider.length() < hf.getPageWidth()) {
-            sbDivider.append("=");
+            sbDivider.append('=');
         }
         out.println(sbDivider.toString());
         out.println("PLUGIN NAME : " + proxyedPluginDefinition.getName());
@@ -180,15 +181,30 @@ public final class PluginProxy extends PluginBase {
      * 
      * @param cl
      *            Not used
-     * @return null.
+    
+     * @return null. * @see it.jnrpe.plugins.IPluginInterface#execute(ICommandLine)
      */
     @Override
     public ReturnValue execute(final ICommandLine cl) {
         return null;
     }
 
+    /**
+     * Method getPluginName.
+     * @return String
+     */
     @Override
     protected String getPluginName() {
         return null;
+    }
+
+    /**
+     * Method toString.
+     * @return String
+     */
+    @Override
+    public String toString() {
+        return "PluginProxy [proxiedPlugin=" + proxiedPlugin + ", proxyedPluginDefinition=" + proxyedPluginDefinition + ", mainOptionsGroup="
+                + mainOptionsGroup + ", description=" + description + "]";
     }
 }

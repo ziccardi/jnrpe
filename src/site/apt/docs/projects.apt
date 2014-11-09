@@ -1,0 +1,71 @@
+ -----
+ JNRPE Package
+ -----
+ Massimiliano Ziccardi
+ -----
+ 2014-11-06
+ -----
+ 
+JNRPE Modules
+
+  The JNRPE project is composed of many modules:
+  
+  * {{{The jnrpe-lib project}jnrpe-lib}}
+  
+  * {{{The jnrpe-server project}jnrpe-server}}
+  
+  * {{{The jnrpe-osgi-core project}jnrpe-osgi-core (jnrpe-osgi)}}
+  
+  * {{{The jnrpe-plugins-osgi project}jnrpe-plugins-osgi (jnrpe-osgi)}}
+  
+  * {{{The jnrpe-plugins project}jnrpe-plugins}} 
+  
+  * {{{The jcheck_nrpe project}jcheck_nrpe}}
+  
+  * {{{The jnrpe-install project}jnrpe-install}}
+  
+  * {{{The jnrpe-debian project}jnrpe-debian}}
+  
+* The jnrpe-lib project
+
+[/images/jnrpe-lib.png] jnrpe-lib project.
+
+  The jnrpe-lib project is the most important module: it contains the core implementation
+  of the NRPE protocol and all the classes that allows the user to embed JNRPE funcionalities
+  inside his own application. jnrpe-server is an example of application that embeds jnrpe-lib.
+  
+* The jnrpe-server project
+
+  This project is an implementation based on jnrpe-lib of a clone of the Nagios NRPE server.
+
+* The jnrpe-osgi-core project
+
+  This project packages the jnrpe-lib as a bundle to be used inside OSGI containers
+  (JBoss, Apache Karaf, Apache Felix, etc.).
+  This module is a submodule of the jnrpe-osgi project.
+  
+* The jnrpe-plugins-osgi project
+
+  This project packages the jnrpe-plugins as a bundle to be used inside OSGI containers
+  (JBoss, Apache Karaf, Apache Felix, etc.)
+  This module is a submodule of the jnrpe-osgi project.
+  
+* The jnrpe-plugins project
+
+  This project contains the implementation of all the plugins bundled with JNRPE.
+  
+* The jcheck_nrpe project
+
+  This project contains the JAVA implementation of a clone of the check_nrpe Nagios command.
+  This code can be used as a standalone application (like check_nrpe) or can be embedded inside
+  your own application to be able to invoke services on JNRPE or NRPE.
+  
+* The jnrpe-install project
+
+  This project contains the source of the JNRPE installer. The installer is built using the
+  izPack library.
+  
+* The jnrpe-debian project
+
+  This project bundles JNRPE as a debian file (.deb) installable on debian based systems.
+  

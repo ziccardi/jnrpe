@@ -25,8 +25,13 @@ import java.util.List;
  * Container class for command definition configuration.
  *
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public final class CommandDefinition {
+    /**
+     * Field EMPTY_ARRAY.
+     */
+    private final static String[] EMPTY_ARRAY = new String[0];
     /**
      * The command name.
      */
@@ -55,8 +60,8 @@ public final class CommandDefinition {
      *            The plugin associated with this command
      */
     public CommandDefinition(final String commandName, final String cmdPluginName) {
-        this.name = commandName;
-        this.pluginName = cmdPluginName;
+        name = commandName;
+        pluginName = cmdPluginName;
     }
 
     /**
@@ -72,8 +77,8 @@ public final class CommandDefinition {
     /**
      * Returns the command name.
      *
-     * @return The command name
-     */
+    
+     * @return The command name */
     public String getName() {
         return name;
     }
@@ -81,8 +86,8 @@ public final class CommandDefinition {
     /**
      * Returns the name of the plugin associated with this command.
      *
-     * @return The name of the plugin associated with this command
-     */
+    
+     * @return The name of the plugin associated with this command */
     public String getPluginName() {
         return pluginName;
     }
@@ -90,8 +95,8 @@ public final class CommandDefinition {
     /**
      * The raw command line of this command.
      *
-     * @return The raw command line
-     */
+    
+     * @return The raw command line */
     public String getArgs() {
         return argsString;
     }
@@ -101,8 +106,8 @@ public final class CommandDefinition {
      *
      * @param s
      *            The string to be elaborated
-     * @return The string with the quoted characters
-     */
+    
+     * @return The string with the quoted characters */
     private static String quote(final String s) {
         if (s.indexOf(' ') != -1) {
             return "\"" + s + "\"";
@@ -114,11 +119,11 @@ public final class CommandDefinition {
      * Merges the command line definition read from the server config file with.
      * the values received from check_nrpe and produces a clean command line.
      *
-     * @return a parsable command line or an empty array for empty command line.
-     */
+    
+     * @return a parsable command line or an empty array for empty command line. */
     public String[] getCommandLine() {
         String[] resAry = null;
-        String[] argsAry = argsString != null ? split(argsString) : new String[0];
+        String[] argsAry = argsString != null ? split(argsString) : EMPTY_ARRAY;
         List<String> argsList = new ArrayList<String>();
 
         int startIndex = 0;
@@ -152,8 +157,8 @@ public final class CommandDefinition {
      *
      * @param commandLine
      *            The raw command line
-     * @return the splitted command line.
-     */
+    
+     * @return the splitted command line. */
     private static String[] split(final String commandLine) {
         return StringUtils.split(commandLine, false);
     }
@@ -163,17 +168,26 @@ public final class CommandDefinition {
      *
      * @param arg
      *            The option to be added
-     * @return This object.
-     */
+    
+     * @return This object. */
     public CommandDefinition addArgument(final CommandOption arg) {
         optionsList.add(arg);
         return this;
     }
 
     /**
-     * @return all the command options.
-     */
+    
+     * @return all the command options. */
     public Collection<CommandOption> getOptions() {
         return optionsList;
+    }
+    
+    /**
+     * Method toString.
+     * @return String
+     */
+    @Override
+    public String toString() {
+        return "CommandDefinition [name=" + name + ", pluginName=" + pluginName + ", argsString=" + argsString + ", optionsList=" + optionsList + "]";
     }
 }

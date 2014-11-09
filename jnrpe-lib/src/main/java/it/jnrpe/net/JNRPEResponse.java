@@ -23,6 +23,7 @@ import java.util.Arrays;
  * This object represent a generic response packet.
  * 
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public final class JNRPEResponse extends JNRPEProtocolPacket {
     /**
@@ -39,9 +40,9 @@ public final class JNRPEResponse extends JNRPEProtocolPacket {
      * @param in
      *            The InputStream to read from
      * 
+    
      * @throws IOException
-     *             on any io exception
-     */
+     *             on any io exception */
     public JNRPEResponse(final InputStream in) throws IOException {
         super();
         fromInputStream(in);
@@ -60,12 +61,16 @@ public final class JNRPEResponse extends JNRPEProtocolPacket {
     /**
      * Returns the response message.
      * 
-     * @return the response message
-     */
+    
+     * @return the response message */
     public String getMessage() {
         return getPacketString();
     }
 
+    /**
+     * Method toString.
+     * @return String
+     */
     @Override
     public String toString() {
 

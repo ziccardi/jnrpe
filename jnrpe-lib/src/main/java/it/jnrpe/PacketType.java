@@ -19,6 +19,7 @@ package it.jnrpe;
  * Enums all the known packet types.
  *
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public enum PacketType {
     /**
@@ -48,8 +49,8 @@ public enum PacketType {
     /**
      * Return the integer value of the constant.
      *
-     * @return The integer value
-     */
+    
+     * @return The integer value */
     public int intValue() {
         return intValue;
     }
@@ -60,8 +61,8 @@ public enum PacketType {
      *
      * @param value
      *            The value to be converted
-     * @return The corresponding enumeration constant
-     */
+    
+     * @return The corresponding enumeration constant */
     public static PacketType fromIntValue(final int value) {
         switch (value) {
         case 1:

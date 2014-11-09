@@ -20,8 +20,14 @@ import java.math.BigDecimal;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+/**
+ */
 public class RangeParser_InfinityTest {
 
+    /**
+     * Method testImplicitNegativeInfinity.
+     * @throws RangeException
+     */
     @Test
     public void testImplicitNegativeInfinity() throws RangeException {
 
@@ -38,6 +44,10 @@ public class RangeParser_InfinityTest {
         Assert.assertFalse(rc.isPositiveInfinity());
     }
 
+    /**
+     * Method testExlicitNegativeInfinity.
+     * @throws RangeException
+     */
     @Test
     public void testExlicitNegativeInfinity() throws RangeException {
 
@@ -54,6 +64,10 @@ public class RangeParser_InfinityTest {
         Assert.assertFalse(rc.isPositiveInfinity());
     }
 
+    /**
+     * Method testImplicitPositiveInfinity.
+     * @throws RangeException
+     */
     @Test
     public void testImplicitPositiveInfinity() throws RangeException {
 
@@ -70,6 +84,10 @@ public class RangeParser_InfinityTest {
         Assert.assertTrue(rc.isPositiveInfinity());
     }
 
+    /**
+     * Method testExplicitPositiveInfinity.
+     * @throws RangeException
+     */
     @Test
     public void testExplicitPositiveInfinity() throws RangeException {
 
@@ -86,6 +104,10 @@ public class RangeParser_InfinityTest {
         Assert.assertTrue(rc.isPositiveInfinity());
     }
 
+    /**
+     * Method testImplicitPositiveNegativeInfinity.
+     * @throws RangeException
+     */
     @Test
     public void testImplicitPositiveNegativeInfinity() throws RangeException {
 
@@ -102,6 +124,10 @@ public class RangeParser_InfinityTest {
         Assert.assertTrue(rc.isPositiveInfinity());
     }
 
+    /**
+     * Method testExplicitPositiveNegativeInfinity.
+     * @throws RangeException
+     */
     @Test
     public void testExplicitPositiveNegativeInfinity() throws RangeException {
 

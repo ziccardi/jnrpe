@@ -19,6 +19,7 @@ package it.jnrpe.plugins;
  * Exception thrown in case of plugin configuration errors.
  *
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public class PluginConfigurationException extends Exception {
     /**

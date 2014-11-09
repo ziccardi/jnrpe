@@ -22,11 +22,20 @@ import java.lang.annotation.RetentionPolicy;
  * Plugin definition.
  *
  * @author Frederico Campos
+ * @version $Revision: 1.0 $
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Plugin {
+    /**
+     * Method name.
+     * @return String
+     */
     String name();
 
+    /**
+     * Method description.
+     * @return String
+     */
     String description();
 
 }

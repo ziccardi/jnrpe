@@ -20,6 +20,7 @@ package it.jnrpe.utils.thresholds;
  * right boundary ('..').
  *
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 class SeparatorStage extends Stage {
 
@@ -35,16 +36,31 @@ class SeparatorStage extends Stage {
         super("separator");
     }
 
+    /**
+     * Method parse.
+     * @param threshold String
+     * @param tc RangeConfig
+     * @return String
+     */
     @Override
     public String parse(final String threshold, final RangeConfig tc) {
         return threshold.substring(2);
     }
 
+    /**
+     * Method canParse.
+     * @param threshold String
+     * @return boolean
+     */
     @Override
     public boolean canParse(final String threshold) {
         return threshold.startsWith("..");
     }
 
+    /**
+     * Method expects.
+     * @return String
+     */
     @Override
     public String expects() {
         return "..";

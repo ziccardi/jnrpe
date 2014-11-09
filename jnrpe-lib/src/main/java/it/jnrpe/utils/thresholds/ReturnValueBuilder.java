@@ -28,6 +28,7 @@ import org.apache.commons.lang.StringUtils;
  * data will be generated.
  * 
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public final class ReturnValueBuilder {
     /**
@@ -78,8 +79,8 @@ public final class ReturnValueBuilder {
      * 
      * @param name
      *            The name of the plugin that is creating this result
-     * @return the newly created instance.
-     */
+    
+     * @return the newly created instance. */
     public static ReturnValueBuilder forPlugin(final String name) {
         return forPlugin(name, null);
     }
@@ -91,8 +92,8 @@ public final class ReturnValueBuilder {
      *            The name of the plugin that is creating this result
      * @param thr
      *            The threshold evaluator.
-     * @return the newly created instance.
-     */
+    
+     * @return the newly created instance. */
     public static ReturnValueBuilder forPlugin(final String name, final ThresholdsEvaluator thr) {
         if (thr != null) {
             return new ReturnValueBuilder(name, thr);
@@ -106,8 +107,8 @@ public final class ReturnValueBuilder {
      * 
      * @param pluginMetric
      *            The metric for which we want to compute the result Status.
-     * @return this
-     */
+    
+     * @return this */
     public ReturnValueBuilder withValue(final Metric pluginMetric) {
         if (thresholds.isMetricRequired(pluginMetric.getMetricName())) {
             Status newStatus = thresholds.evaluate(pluginMetric.getMetricName(), pluginMetric.getMetricValue());
@@ -152,8 +153,8 @@ public final class ReturnValueBuilder {
      * 
      * @param message
      *            The message to return.
-     * @return this
-     */
+    
+     * @return this */
     public ReturnValueBuilder withForcedMessage(final String message) {
         retValMessage = message;
         return this;
@@ -166,8 +167,8 @@ public final class ReturnValueBuilder {
      * 
      * @param forceStatus
      *            The status to be forced
-     * @return this
-     */
+    
+     * @return this */
     public ReturnValueBuilder withStatus(final Status forceStatus) {
         forcedStatus = forceStatus;
         return this;
@@ -176,8 +177,8 @@ public final class ReturnValueBuilder {
     /**
      * Builds the configured {@link ReturnValue} object.
      * 
-     * @return The {@link ReturnValue} object
-     */
+    
+     * @return The {@link ReturnValue} object */
     public ReturnValue create() {
         if (forcedStatus == null) {
             retVal.withStatus(status);
@@ -193,5 +194,15 @@ public final class ReturnValueBuilder {
         retVal.withMessage(msg.toString());
 
         return retVal;
+    }
+
+    /**
+     * Method toString.
+     * @return String
+     */
+    @Override
+    public String toString() {
+        return "ReturnValueBuilder [retVal=" + retVal + ", thresholds=" + thresholds + ", status=" + status + ", forcedStatus=" + forcedStatus
+                + ", pluginName=" + pluginName + ", retValMessage=" + retValMessage + "]";
     }
 }

@@ -19,6 +19,7 @@ package it.jnrpe.utils.thresholds;
  * The root of the parsing state machine.
  *
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 class StartStage extends Stage {
 
@@ -34,11 +35,23 @@ class StartStage extends Stage {
         super("root");
     }
 
+    /**
+     * Method canParse.
+     * @param threshold String
+     * @return boolean
+     */
     @Override
     public boolean canParse(final String threshold) {
         return false;
     }
 
+    /**
+     * Method parse.
+     * @param threshold String
+     * @param tc RangeConfig
+     * @return String
+     * @throws RangeException
+     */
     @Override
     public String parse(final String threshold, final RangeConfig tc) throws RangeException {
 
@@ -76,6 +89,10 @@ class StartStage extends Stage {
         return parsedThreshold;
     }
 
+    /**
+     * Method expects.
+     * @return String
+     */
     @Override
     public String expects() {
         return null;

@@ -22,6 +22,7 @@ import it.jnrpe.events.LogEvent.LogEventType;
  * A logger that can be used to integrate the JNRPE logging facilities.
  *  
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public final class JNRPELogger {
     
@@ -36,7 +37,7 @@ public final class JNRPELogger {
      * @param logSource the log events source
      */
     public JNRPELogger(final Object logSource) {
-        this.source = logSource;
+        source = logSource;
     }
     
     /**
@@ -163,5 +164,14 @@ public final class JNRPELogger {
      */
     public void fatal(final IJNRPEExecutionContext ctx, final String message, final Throwable thr) {
         ctx.getEventBus().post(new LogEvent(source, LogEventType.FATAL, message, thr));
+    }
+
+    /**
+     * Method toString.
+     * @return String
+     */
+    @Override
+    public String toString() {
+        return "JNRPELogger [source=" + source + "]";
     }
 }

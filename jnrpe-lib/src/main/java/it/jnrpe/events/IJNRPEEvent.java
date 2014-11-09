@@ -20,10 +20,23 @@ package it.jnrpe.events;
  * The interface that all the events must implement.
  *
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public interface IJNRPEEvent {
 
-    public String getEventName();
-    public String getMessage();
-    public Object getSource();
+    /**
+     * Method getEventName.
+     * @return String
+     */
+    String getEventName();
+    /**
+     * Method getMessage.
+     * @return String
+     */
+    String getMessage();
+    /**
+     * Method getSource.
+     * @return Object
+     */
+    Object getSource();
 }

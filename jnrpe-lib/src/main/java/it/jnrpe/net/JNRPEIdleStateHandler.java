@@ -26,9 +26,13 @@ import it.jnrpe.JNRPELogger;
  * Idle timeout handler.
  * 
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public final class JNRPEIdleStateHandler extends ChannelDuplexHandler {
 
+    /**
+     * Field LOG.
+     */
     private final JNRPELogger LOG = new JNRPELogger(this);
     
     /**
@@ -43,9 +47,16 @@ public final class JNRPEIdleStateHandler extends ChannelDuplexHandler {
      *            The JNRPE execution context.
      */
     public JNRPEIdleStateHandler(final IJNRPEExecutionContext ctx) {
-        this.jnrpeContext = ctx;
+        jnrpeContext = ctx;
     }
 
+    /**
+     * Method userEventTriggered.
+     * @param ctx ChannelHandlerContext
+     * @param evt Object
+     * @throws Exception
+     * @see io.netty.channel.ChannelInboundHandler#userEventTriggered(ChannelHandlerContext, Object)
+     */
     @Override
     public void userEventTriggered(final ChannelHandlerContext ctx, final Object evt) throws Exception {
         if (evt instanceof IdleStateEvent) {
@@ -62,5 +73,14 @@ public final class JNRPEIdleStateHandler extends ChannelDuplexHandler {
                 ctx.close();
             }
         }
+    }
+
+    /**
+     * Method toString.
+     * @return String
+     */
+    @Override
+    public String toString() {
+        return "JNRPEIdleStateHandler [LOG=" + LOG + ", jnrpeContext=" + jnrpeContext + "]";
     }
 }

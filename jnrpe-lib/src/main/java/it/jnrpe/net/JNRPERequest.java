@@ -21,6 +21,7 @@ import org.apache.commons.lang.StringUtils;
  * This object represent a generic request packet.
  * 
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public class JNRPERequest extends JNRPEProtocolPacket {
 
@@ -105,7 +106,7 @@ public class JNRPERequest extends JNRPEProtocolPacket {
 
         String tmpArgumentsString = argumentsString;
 
-        if (tmpArgumentsString != null && tmpArgumentsString.startsWith("!")) {
+        if (tmpArgumentsString != null && !tmpArgumentsString.isEmpty() && tmpArgumentsString.charAt(0) == '!') {
             tmpArgumentsString = tmpArgumentsString.substring(1);
         }
 
@@ -124,8 +125,8 @@ public class JNRPERequest extends JNRPEProtocolPacket {
     /**
      * Returns the query command.
      * 
-     * @return the query command
-     */
+    
+     * @return the query command */
     public final String getCommand() {
         // extracting command
         String[] partsAry = split(getPacketString());
@@ -136,8 +137,8 @@ public class JNRPERequest extends JNRPEProtocolPacket {
     /**
      * Returns the command arguments.
      * 
-     * @return the command arguments
-     */
+    
+     * @return the command arguments */
     public final String[] getArguments() {
         // extracting params
         String[] partsAry = split(getPacketString());
@@ -154,9 +155,18 @@ public class JNRPERequest extends JNRPEProtocolPacket {
      * 
      * @param sCommandLine
      *            The command line string
-     * @return The splitted string
-     */
+    
+     * @return The splitted string */
     private String[] split(final String sCommandLine) {
         return it.jnrpe.utils.StringUtils.split(sCommandLine, '!', false);
+    }
+
+    /**
+     * Method toString.
+     * @return String
+     */
+    @Override
+    public String toString() {
+        return "JNRPERequest []";
     }
 }

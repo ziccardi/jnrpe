@@ -20,8 +20,14 @@ import java.math.BigDecimal;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+/**
+ */
 public class RangeParser_InclusiveTest {
 
+    /**
+     * Method testInclusiveOk.
+     * @throws RangeException
+     */
     @Test
     public void testInclusiveOk() throws RangeException {
         RangeConfig rc = new RangeConfig();
@@ -37,6 +43,10 @@ public class RangeParser_InclusiveTest {
         Assert.assertFalse(rc.isPositiveInfinity());
     }
 
+    /**
+     * Method testInclusiveLeftOk.
+     * @throws RangeException
+     */
     @Test
     public void testInclusiveLeftOk() throws RangeException {
         RangeConfig rc = new RangeConfig();
@@ -52,6 +62,10 @@ public class RangeParser_InclusiveTest {
         Assert.assertFalse(rc.isPositiveInfinity());
     }
 
+    /**
+     * Method testInclusiveRightOk.
+     * @throws RangeException
+     */
     @Test
     public void testInclusiveRightOk() throws RangeException {
         RangeConfig rc = new RangeConfig();
@@ -67,6 +81,10 @@ public class RangeParser_InclusiveTest {
         Assert.assertFalse(rc.isPositiveInfinity());
     }
 
+    /**
+     * Method testExclusiveBothOk.
+     * @throws RangeException
+     */
     @Test
     public void testExclusiveBothOk() throws RangeException {
 
@@ -83,6 +101,10 @@ public class RangeParser_InclusiveTest {
         Assert.assertFalse(rc.isPositiveInfinity());
     }
 
+    /**
+     * Method testExplicitSignBothOk.
+     * @throws RangeException
+     */
     @Test
     public void testExplicitSignBothOk() throws RangeException {
 

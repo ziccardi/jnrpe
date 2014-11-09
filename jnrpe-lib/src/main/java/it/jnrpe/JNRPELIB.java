@@ -20,6 +20,7 @@ package it.jnrpe;
  * 
  * @author Massimiliano Ziccardi
  * 
+ * @version $Revision: 1.0 $
  */
 public final class JNRPELIB {
 

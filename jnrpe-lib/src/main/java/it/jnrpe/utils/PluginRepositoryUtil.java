@@ -43,6 +43,7 @@ import org.dom4j.io.DOMReader;
  * instead that using Java Code.
  * 
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public final class PluginRepositoryUtil {
 
@@ -62,9 +63,9 @@ public final class PluginRepositoryUtil {
      *            The classloader to be used to instantiate the plugin classes
      * @param in
      *            The stream to the XML file
+    
      * @throws PluginConfigurationException
-     *             -
-     */
+     *             - */
     public static void loadFromXmlPluginPackageDefinitions(final IPluginRepository repo, final ClassLoader cl, final InputStream in)
             throws PluginConfigurationException {
         for (PluginDefinition pd : loadFromXmlPluginPackageDefinitions(cl, in)) {
@@ -79,10 +80,10 @@ public final class PluginRepositoryUtil {
      *            Classloader to be used to load classes
      * @param in
      *            InputStream to the jnrpe_plugins.xml file
-     * @return a collection of all the declared plugins
-     * @throws PluginConfigurationException
-     *             on any error reading the plugin configuration
-     */
+    
+    
+     * @return a collection of all the declared plugins * @throws PluginConfigurationException
+     *             on any error reading the plugin configuration */
     @SuppressWarnings("unchecked")
     public static Collection<PluginDefinition> loadFromXmlPluginPackageDefinitions(final ClassLoader cl, final InputStream in)
             throws PluginConfigurationException {
@@ -99,7 +100,7 @@ public final class PluginRepositoryUtil {
 
             document = reader.read(loader.parse(in));
         } catch (Exception e) {
-            throw new PluginConfigurationException(e);
+            throw new PluginConfigurationException(e.getMessage(), e);
         }
 
         Element plugins = document.getRootElement();
@@ -108,10 +109,7 @@ public final class PluginRepositoryUtil {
 
         // iterate through child elements of root
         for (Iterator<Element> i = plugins.elementIterator(); i.hasNext();) {
-            Element plugin = i.next();
-
-            PluginDefinition pd = parsePluginDefinition(cl, plugin);
-            res.add(pd);
+            res.add(parsePluginDefinition(cl, i.next()));
         }
 
         return res;
@@ -124,10 +122,10 @@ public final class PluginRepositoryUtil {
      *            The classloader to be used to instantiate the plugin class
      * @param in
      *            The stream to the XML file
-     * @return The plugin definition
-     * @throws PluginConfigurationException
-     *             -
-     */
+    
+    
+     * @return The plugin definition * @throws PluginConfigurationException
+     *             - */
     public static PluginDefinition parseXmlPluginDefinition(final ClassLoader cl, final InputStream in) throws PluginConfigurationException {
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -140,7 +138,7 @@ public final class PluginRepositoryUtil {
 
             document = reader.read(loader.parse(in));
         } catch (Exception e) {
-            throw new PluginConfigurationException(e);
+            throw new PluginConfigurationException(e.getMessage(), e);
         }
 
         Element plugin = document.getRootElement();
@@ -161,10 +159,10 @@ public final class PluginRepositoryUtil {
      *            The attribute name
      * @param mandatory
      *            <code>true</code> if the attribute is mandatory
-     * @return the attribute value
-     * @throws PluginConfigurationException
-     *             if the attribute can't be found or is blank
-     */
+    
+    
+     * @return the attribute value * @throws PluginConfigurationException
+     *             if the attribute can't be found or is blank */
     private static String getAttributeValue(final Element element, final String attributeName, final boolean mandatory)
             throws PluginConfigurationException {
         String returnValue = element.attributeValue(attributeName);
@@ -186,10 +184,10 @@ public final class PluginRepositoryUtil {
      *            The classloader to be used to load classes
      * @param plugin
      *            The plugin XML element
-     * @return the parsed plugin definition
-     * @throws PluginConfigurationException
-     *             -
-     */
+    
+    
+     * @return the parsed plugin definition * @throws PluginConfigurationException
+     *             - */
     @SuppressWarnings("rawtypes")
     private static PluginDefinition parsePluginDefinition(final ClassLoader cl, final Element plugin) throws PluginConfigurationException {
 
@@ -210,21 +208,21 @@ public final class PluginRepositoryUtil {
 
         String pluginClass = getAttributeValue(plugin, "class", true);
 
-        Class c;
+        Class clazz;
         try {
-            c = LoadedClassCache.getClass(cl, pluginClass);
+            clazz = LoadedClassCache.getClass(cl, pluginClass);
 
-            if (!IPluginInterface.class.isAssignableFrom(c)) {
-                throw new PluginConfigurationException("Specified class '" + c.getName() + "' in the plugin.xml file does not implement "
+            if (!IPluginInterface.class.isAssignableFrom(clazz)) {
+                throw new PluginConfigurationException("Specified class '" + clazz.getName() + "' in the plugin.xml file does not implement "
                         + "the IPluginInterface interface");
             }
 
-            if (isAnnotated(c)) {
-                return loadFromPluginAnnotation(c);
+            if (isAnnotated(clazz)) {
+                return loadFromPluginAnnotation(clazz);
             }
 
         } catch (ClassNotFoundException e) {
-            throw new PluginConfigurationException(e);
+            throw new PluginConfigurationException(e.getMessage(), e);
         }
 
         // The class is not annotated not has an external definition file...
@@ -233,7 +231,7 @@ public final class PluginRepositoryUtil {
         String sDescription = getAttributeValue(plugin, "description", false);
 
         @SuppressWarnings("unchecked")
-        PluginDefinition pluginDef = new PluginDefinition(getAttributeValue(plugin, "name", true), sDescription, c);
+        PluginDefinition pluginDef = new PluginDefinition(getAttributeValue(plugin, "name", true), sDescription, clazz);
 
         parseCommandLine(pluginDef, plugin);
         return pluginDef;
@@ -261,12 +259,8 @@ public final class PluginRepositoryUtil {
                 return;
             }
 
-            for (Iterator i = options.elementIterator(); i.hasNext();) {
-                Element option = (Element) i.next();
-
-                PluginOption po = parsePluginOption(option);
-
-                pluginDef.addOption(po);
+            for (Iterator<Element> i = options.elementIterator(); i.hasNext();) {
+                pluginDef.addOption(parsePluginOption(i.next()));
             }
         }
     }
@@ -276,8 +270,8 @@ public final class PluginRepositoryUtil {
      * 
      * @param clazz
      *            The plugin class
-     * @return <code>true</code> if the class contains plugin
-     */
+    
+     * @return <code>true</code> if the class contains plugin */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     private static boolean isAnnotated(final Class clazz) {
         Plugin plugin = (Plugin) clazz.getAnnotation(Plugin.class);
@@ -289,8 +283,8 @@ public final class PluginRepositoryUtil {
      * 
      * @param clazz
      *            the plugin class
-     * @return PluginDefinition
-     */
+    
+     * @return PluginDefinition */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public static PluginDefinition loadFromPluginAnnotation(final Class clazz) {
         Plugin plugin = (Plugin) clazz.getAnnotation(Plugin.class);
@@ -309,8 +303,8 @@ public final class PluginRepositoryUtil {
      * 
      * @param option
      *            The plugin option XML definition
-     * @return The parsed plugin option
-     */
+    
+     * @return The parsed plugin option */
     private static PluginOption parsePluginOption(final Element option) {
         PluginOption po = new PluginOption();
         po.setArgName(option.attributeValue("argName"));
@@ -332,8 +326,8 @@ public final class PluginRepositoryUtil {
      * 
      * @param option
      *            the plugin option
-     * @return PluginOption
-     */
+    
+     * @return PluginOption */
     private static PluginOption parsePluginOption(final Option option) {
         PluginOption po = new PluginOption();
         po.setArgName(option.argName());

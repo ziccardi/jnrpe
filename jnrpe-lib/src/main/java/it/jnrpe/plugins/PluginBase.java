@@ -44,9 +44,13 @@ import java.util.Collections;
  * </ul>
  * 
  * @author Massimiliano Ziccardi
+ * @version $Revision: 1.0 $
  */
 public abstract class PluginBase implements IPluginInterfaceEx {
 
+    /**
+     * Field context.
+     */
     @Inject
     private IJNRPEExecutionContext context;
 
@@ -56,8 +60,8 @@ public abstract class PluginBase implements IPluginInterfaceEx {
     protected final JNRPELogger LOG = new JNRPELogger(this);
 
     /**
-     * @return the friendly name of this plugins.
-     */
+    
+     * @return the friendly name of this plugins. */
     protected abstract String getPluginName();
 
     /**
@@ -70,9 +74,9 @@ public abstract class PluginBase implements IPluginInterfaceEx {
      *            The {@link ThresholdsEvaluatorBuilder} object to be configured
      * @param cl
      *            The command line
+    
      * @throws BadThresholdException
-     *             -
-     */
+     *             - */
     protected void configureThresholdEvaluatorBuilder(final ThresholdsEvaluatorBuilder thrb, final ICommandLine cl) throws BadThresholdException {
         if (cl.hasOption("th")) {
             for (Object obj : cl.getOptionValues("th")) {
@@ -88,10 +92,10 @@ public abstract class PluginBase implements IPluginInterfaceEx {
      * 
      * @param cl
      *            The command line.
-     * @return All the collected metrics
-     * @throws MetricGatheringException
-     *             -
-     */
+    
+    
+     * @return All the collected metrics * @throws MetricGatheringException
+     *             - */
     protected Collection<Metric> gatherMetrics(final ICommandLine cl) throws MetricGatheringException {
         return Collections.emptyList();
     }
@@ -103,9 +107,10 @@ public abstract class PluginBase implements IPluginInterfaceEx {
      * 
      * @param cl
      *            The command line
-     * @return The return value to be sent to Nagios.
-     * @throws BadThresholdException
-     *             -
+    
+    
+     * @return The return value to be sent to Nagios. * @throws BadThresholdException
+     *             - * @see it.jnrpe.plugins.IPluginInterface#execute(ICommandLine)
      */
     public ReturnValue execute(final ICommandLine cl) throws BadThresholdException {
         ThresholdsEvaluatorBuilder thrb = new ThresholdsEvaluatorBuilder();
@@ -130,6 +135,10 @@ public abstract class PluginBase implements IPluginInterfaceEx {
     // this.context = ctx;
     // }
 
+    /**
+     * Method getContext.
+     * @return IJNRPEExecutionContext
+     */
     public IJNRPEExecutionContext getContext() {
         return context;
     }

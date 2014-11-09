@@ -23,15 +23,11 @@ import it.jnrpe.client.JNRPEClient;
 import it.jnrpe.commands.CommandDefinition;
 import it.jnrpe.commands.CommandOption;
 import it.jnrpe.commands.CommandRepository;
-import it.jnrpe.events.IJNRPEEvent;
 import it.jnrpe.events.LogEvent;
-import it.jnrpe.plugins.IPluginRepository;
 import it.jnrpe.plugins.PluginDefinition;
 import it.jnrpe.plugins.PluginOption;
 import it.jnrpe.plugins.PluginRepository;
 import it.jnrpe.utils.TimeUnit;
-
-import java.net.UnknownHostException;
 
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;

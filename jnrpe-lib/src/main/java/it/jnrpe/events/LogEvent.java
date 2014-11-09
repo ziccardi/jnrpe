@@ -20,6 +20,7 @@ package it.jnrpe.events;
  * 
  * @author Massimiliano Ziccardi
  *
+ * @version $Revision: 1.0 $
  */
 public final class LogEvent implements IJNRPEEvent {
    
@@ -84,10 +85,10 @@ public final class LogEvent implements IJNRPEEvent {
      * @param cause the cause (if any)
      */
     public LogEvent(final Object evtSource, final LogEventType type, final String logMessage, final Throwable cause) {
-        this.logType = type;
-        this.message = logMessage;
-        this.error = cause;
-        this.source = evtSource;
+        logType = type;
+        message = logMessage;
+        error = cause;
+        source = evtSource;
     }
 
     /**
@@ -98,45 +99,57 @@ public final class LogEvent implements IJNRPEEvent {
      * @param logMessage the event message
      */
     public LogEvent(final Object evtSource, final LogEventType type, final String logMessage) {
-        this.logType = type;
-        this.message = logMessage;
-        this.error = null;
-        this.source = evtSource;
+        logType = type;
+        message = logMessage;
+        error = null;
+        source = evtSource;
     }
     
     /**
-     * @return the event type
-     */
+    
+     * @return the event type */
     public LogEventType getLogType() {
         return logType;
     }
 
     /**
-     * @return the message
+    
+     * @return the message * @see it.jnrpe.events.IJNRPEEvent#getMessage()
      */
     public String getMessage() {
         return message;
     }
 
     /**
-     * @return the cause
-     */
+    
+     * @return the cause */
     public Throwable getCause() {
         return error;
     }
     
     /**
-     * @return the event originator
+    
+     * @return the event originator * @see it.jnrpe.events.IJNRPEEvent#getSource()
      */
     public Object getSource() {
         return source;
     }
 
     /**
-     * @return the event name
+    
+     * @return the event name * @see it.jnrpe.events.IJNRPEEvent#getEventName()
      */
     public String getEventName() {
         return getLogType().name();
+    }
+
+    /**
+     * Method toString.
+     * @return String
+     */
+    @Override
+    public String toString() {
+        return "LogEvent [logType=" + logType + ", message=" + message + ", error=" + error + ", source=" + source + "]";
     }
     
 }
