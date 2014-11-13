@@ -55,6 +55,9 @@ JNRPE Modules
   listeners will be able to receive it and react as needed. This is necessary when you need
   to receive informations from JNRPE plugins since their invocation is asynchronous. 
   
+  For more informations about jnrpe-lib and how to use it, look at 
+  the {{{../jnrpe-lib/index.html}jnrpe-lib documentation}}
+  
 * The jnrpe-server project
 
 [../images/jnrpe-server.png] jnrpe-lib project.
@@ -64,7 +67,12 @@ JNRPE Modules
   file. It than attach itself to the event bus and sends all the log events to SLF4j that
   in turn, writes them to the log file.
   
+  For more informations about jnrpe-server and how to use and configurate it, 
+  look at the {{{../jnrpe-server/index.html}jnrpe-server documentation}}
+  
 * The jnrpe-osgi-core project
+
+[../images/osgi-core.png] jnrpe-osgi-core project.
 
   This project packages the jnrpe-lib as a bundle to be used inside OSGI containers
   (JBoss, Apache Karaf, Apache Felix, etc.).
@@ -75,16 +83,26 @@ JNRPE Modules
   that they can be automatically loaded and unloaded through the bundle loading
   system.
   All the received log events are logged through the use of the OSGI Log Service.
-  
+  Asynchronous events can be intercepted by registering to the JNRPE event bus.
+    
+  For more informations about jnrpe-osgi-core and how to use it, look at 
+  the {{{../jnrpe-osgi/jnrpe-osgi-core/index.html}jnrpe-osgi-core documentation}}
+    
 * The jnrpe-plugins-osgi project
 
   This project packages the jnrpe-plugins as a bundle to be used inside OSGI containers
   (JBoss, Apache Karaf, Apache Felix, etc.)
   This module is a submodule of the jnrpe-osgi project.
   
+  For more informations about jnrpe-plugins-osgi and how to use it, look at 
+  the {{{../jnrpe-osgi/jnrpe-plugins-osgi/index.html}jnrpe-plugins-osgi documentation}}
+  
 * The jnrpe-plugins project
 
   This project contains the implementation of all the plugins bundled with JNRPE.
+  
+  For more informations about jnrpe-plugins, all contained plugins and how to use them, 
+  look at the {{{../jnrpe-plugins/index.html}jnrpe-plugins documentation}}
   
 * The jcheck_nrpe project
 
@@ -92,10 +110,18 @@ JNRPE Modules
   This code can be used as a standalone application (like check_nrpe) or can be embedded inside
   your own application to be able to invoke services on JNRPE or NRPE.
   
+  For more informations about jcheck_nrpe, how to use the command line and how embed it, 
+  look at the {{{../jcheck_nrpe/index.html}jcheck_nrpe documentation}}
+  
 * The jnrpe-install project
+
+[../images/install.png] jnrpe-lib project.
 
   This project contains the source of the JNRPE installer. The installer is built using the
   izPack library.
+  
+  For more informations about jnrpe-install 
+  look at the {{{../jnrpe-install/index.html}jnrpe-install documentation}}
   
 * The jnrpe-debian project
 

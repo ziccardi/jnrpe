@@ -2,15 +2,12 @@
 	<modelVersion>4.0.0</modelVersion>
 	
 	<parent>
-		<groupId>org.sonatype.oss</groupId>
-		<artifactId>oss-parent</artifactId>
-		<version>7</version>
-		<relativePath />
+		<groupId>net.sf.jnrpe</groupId>
+		<artifactId>jnrpe-osgi</artifactId>
+		<version>2.0.5-SNAPSHOT</version>
 	</parent>
 
-	<groupId>net.sf.jnrpe</groupId>
 	<artifactId>jnrpe-plugins-osgi</artifactId>
-	<version>2.0.5-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 	
 	<name>jnrpe-plugins-osgi</name>
@@ -44,13 +41,11 @@
 		<dependency>
 			<groupId>net.sf.jnrpe</groupId>
 			<artifactId>jnrpe-plugins</artifactId>
-			<version>0.7.5-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
 			<groupId>net.sf.jnrpe</groupId>
 			<artifactId>jnrpe-lib</artifactId>
-			<version>2.0.5-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -111,8 +106,21 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.6.3</version>
+				<extensions>true</extensions>
+				<configuration>
+					<serverId>ossrh</serverId>
+					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+					<autoReleaseAfterClose>true</autoReleaseAfterClose>
+				</configuration>
+			</plugin>
+		
+			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
+				<version>2.3.7</version>
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
@@ -121,7 +129,7 @@
 						<Bundle-Vendor>jnrpe.it</Bundle-Vendor>
 						<Bundle-Version>${project.version}</Bundle-Version>
 						<JNRPE-PluginPackage-Name>BASE</JNRPE-PluginPackage-Name>
-						<Import-Package>org.osgi.framework
+						<!-- <Import-Package>org.osgi.framework
 							,org.osgi.service.cm
 							,org.osgi.service.log
 							,org.osgi.util.tracker
@@ -129,26 +137,14 @@
 							,it.jnrpe.*
 							,!it.jnrpe.osgi
 							,!*
-						</Import-Package>
-						<Export-Package>it.jnrpe.plugin.*,!*</Export-Package>
+						</Import-Package> -->
+						<Import-Package>*</Import-Package>
+						<!-- <Export-Package>it.jnrpe.plugin.*,!*</Export-Package> -->
 
 						<Embed-Dependency>!org.osgi*,!jnrpe-lib,!jnrpe-osgi-core,!xml-apis*</Embed-Dependency>
 						<Embed-Transitive>true</Embed-Transitive>
 					</instructions>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<version>2.2.1</version>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -204,7 +200,7 @@
 					<execution>
 						<id>attach-sources</id>
 						<goals>
-							<goal>jar</goal>
+							<goal>jar-no-fork</goal>
 						</goals>
 					</execution>
 				</executions>
@@ -239,10 +235,4 @@
 			</plugin>
 		</plugins>
 	</build>
-	<distributionManagement>
-		<site>
-			<id>jnrpe-web</id>
-			<url>scp://shell.sourceforge.net/home/project-web/jnrpe/htdocs/jnrpe-plugins-osgi</url>
-		</site>
-	</distributionManagement>
 </project>

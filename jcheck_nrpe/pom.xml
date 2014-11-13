@@ -3,15 +3,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.sonatype.oss</groupId>
-		<artifactId>oss-parent</artifactId>
-		<version>7</version>
-		<relativePath />
+		<groupId>net.sf.jnrpe</groupId>
+		<artifactId>jnrpe-parent</artifactId>
+		<version>2.0.5-SNAPSHOT</version>
 	</parent>
 
-	<groupId>net.sf.jnrpe</groupId>
 	<artifactId>jcheck_nrpe</artifactId>
-	<version>2.0.5-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>jcheck_nrpe</name>
@@ -56,7 +53,6 @@ Both plain socket and SSL are supported.</description>
 		<dependency>
 			<groupId>net.sf.jnrpe</groupId>
 			<artifactId>jnrpe-lib</artifactId>
-			<version>2.0.5-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 
@@ -94,9 +90,20 @@ Both plain socket and SSL are supported.</description>
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.6.3</version>
+				<extensions>true</extensions>
+				<configuration>
+					<serverId>ossrh</serverId>
+					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+					<autoReleaseAfterClose>true</autoReleaseAfterClose>
+				</configuration>
+			</plugin>
+
+			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>findbugs-maven-plugin</artifactId>
-				<version>2.5.4</version>
 				<configuration>
 					<effort>Max</effort>
 					<threshold>Low</threshold>
@@ -132,7 +139,6 @@ Both plain socket and SSL are supported.</description>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.4</version>
 				<configuration>
 					<archive>
 						<manifest>
@@ -144,19 +150,6 @@ Both plain socket and SSL are supported.</description>
 					</archive>
 				</configuration>
 			</plugin>
-			<!-- <plugin> -->
-			<!-- <groupId>org.apache.maven.plugins</groupId> -->
-			<!-- <artifactId>maven-site-plugin</artifactId> -->
-			<!-- <executions> -->
-			<!-- <execution> -->
-			<!-- <id>jcheck-site</id> -->
-			<!-- <goals> -->
-			<!-- <goal>site</goal> -->
-			<!-- </goals> -->
-			<!-- <phase>package</phase> -->
-			<!-- </execution> -->
-			<!-- </executions> -->
-			<!-- </plugin> -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>appassembler-maven-plugin</artifactId>
@@ -207,12 +200,11 @@ Both plain socket and SSL are supported.</description>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>2.2.1</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
 						<goals>
-							<goal>jar</goal>
+							<goal>jar-no-fork</goal>
 						</goals>
 					</execution>
 				</executions>
@@ -249,12 +241,6 @@ Both plain socket and SSL are supported.</description>
 		</plugins>
 	</build>
 
-	<distributionManagement>
-		<site>
-			<id>jnrpe-web</id>
-			<url>scp://shell.sourceforge.net/home/project-web/jnrpe/htdocs/jcheck_nrpe</url>
-		</site>
-	</distributionManagement>
 	<issueManagement>
 		<system>jira</system>
 		<url>https://jnrpe-tracker.atlassian.net/</url>

@@ -22,27 +22,29 @@
 
 		</menu>
 
-		<menu name="Get JNRPE">
+		<menu name="Get JNRPE" inherit="top">
 			<item name="Download" href="download.html" />
-			<item name="Install" href="jnrpe-install/index.html" />
+			<item name="Install the server" href="jnrpe-install/index.html" />
+			<item name="Install the bundles" />
 		</menu>
 
-		<menu name="Development">
-			<item name="Getting the sources" href="docs/get_sources.html" />
-			<item name="Project Structure" href="docs/projects.html" />
-			<item name="JNRPE Blog" href="http://www.jnrpe.it/cms/" />
+		<menu name="Documentation" inherit="top">
+			<item name="Administration" collapse="true" href="#">
+				<item name="Installation" href="jnrpe-install/index.html" />
+				<item name="Configuration" href="jnrpe-server/index.html" />
+			</item>
+			<item name="Development" collapse="true" href="#">
+				<item name="Getting the sources" href="docs/get_sources.html" />
+				<item name="Knowing the modules" href="docs/projects.html" />
+				<item name="The JNRPE Library" href="jnrpe-lib/index.html" />
+				<item name="JNRPE Blog" href="http://www.jnrpe.it/cms/" />
+			</item>
 		</menu>
 
-		<menu name="Tutorials">
+		<menu name="Tutorials" inherit="top">
 			<item name="Writing JNRPE Java Nagios Plugins"
 				href="http://www.jnrpe.it/cms/index.php/home/tutorials/12-nagios/jnrpe/7-creating-plugins-with-java-part1" />
 		</menu>
-
-		<links>
-			<item name="Apache" href="http://www.apache.org/" />
-			<item name="JNRPE 1.x" href="jnrpe1.html" />
-			<item name="JNRPE 2.0" href="index.html" />
-		</links>
 
 		<menu name="Reports" ref="reports" inherit="bottom" />
 
@@ -64,7 +66,7 @@
 			<slogan>Java Nagios Remote Plugin Executor</slogan>
 			<titleTemplate>%2$s | %1$s</titleTemplate>
 			<toc>sidebar</toc>
-			<topNav>Get JNRPE|Development|Tutorials|reports</topNav>
+			<topNav>Get JNRPE|Documentation|Tutorials|reports</topNav>
 			<bottomNav>
 				<column>Documentation</column>
 			</bottomNav>
