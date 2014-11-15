@@ -9,10 +9,10 @@
 JNRPE Library
  
    The JNRPE library is the heart of the whole JNRPE package.
-   It allows to embed inside your application the JNRPE so that you will be able to answer to
-   check_nrpe queries.
+   Using this library you will be able to give your application the ability to answer
+   to check_nrpe queries.
    
-   If you need an example, feel free to use the sources of the JNRPE Server: it is built on top
+   A good example of an application embedding JNRPE is the JNRPE Server: it is built on top
    of this library.
    
 * Compiling against jnrpe-lib
@@ -36,11 +36,7 @@ JNRPE Library
   
   and put your sources under the 'java' directory.
   
-  Create a file called pom.xml in the same directory as 'src'. 
-  This are the jnrpe-lib data:
-  
-  * group-id : net.sf.jnrpe
-  * artifact-id : jnrpe-lib
+  Create the pom.xml in the same directory as 'src'. 
   
   Edit the pom.xml file according to the {{{http://maven.apache.org}maven documentation}} and insert the following 
   dependency:
@@ -63,9 +59,8 @@ JNRPE Library
 
 +------------+  
 
-** Custom compiling
+** Custom compilation
 
-  If you don't use maven, than you are on your own and you will have to manually download jnrpe-lib and all its dependecies 
-  manually.
+  If you don't use maven, than you are on your own and you will have to manually download jnrpe-lib and all its dependecies.
   
-  You can download jnrpe-lib  and its dependencies (deps.tar.gz) {{{https://sourceforge.net/projects/jnrpe/files/jnrpe_lib/}here}}
+  You can download those files from {{{https://sourceforge.net/projects/jnrpe/files/jnrpe_lib/}here}}

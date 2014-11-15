@@ -6,7 +6,7 @@
  2013/03/28
  -----
 
-Getting Started
+Embedding the JNRPE Library
 
   Through this tutorial we will refer to a very simple application that computes
   two random number between 1 and 100. 

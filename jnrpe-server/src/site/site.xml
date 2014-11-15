@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="JNRPE Server">
 
-
 	<body>
-		<menu name="JNRPE Server">
-			<item name="Overview" href="index.html" />
-			<item name="Download" href="download.html" />
-		</menu>
-		<menu name="User Guide">
+		<menu name="Documentation">
 			<item name="Usage Scenario" href="usage_scenario.html" />
 			<item name="Getting Started" href="getting_started.html" />
 			<item name="The JNRPE interactive console" href="jnrpe_console.html" />

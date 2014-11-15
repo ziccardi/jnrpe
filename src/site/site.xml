@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="JNRPE">
 
-
 	<poweredBy>
 		<logo name="Sourceforge" href="http://sourceforge.net/projects/jnrpe"
 			img="http://sourceforge.net/sflogo.php?group_id=204486&amp;type=2" />
@@ -19,19 +18,19 @@
 
 		<menu name="Main" inherit="top">
 			<item name="Welcome" href="index.html" />
-
 		</menu>
 
 		<menu name="Get JNRPE" inherit="top">
 			<item name="Download" href="download.html" />
-			<item name="Install the server" href="jnrpe-install/index.html" />
-			<item name="Install the bundles" />
 		</menu>
 
-		<menu name="Documentation" inherit="top">
+		<menu name="Documentation" >
 			<item name="Administration" collapse="true" href="#">
-				<item name="Installation" href="jnrpe-install/index.html" />
-				<item name="Configuration" href="jnrpe-server/index.html" />
+				<item name="Install the server" href="jnrpe-install/index.html" />
+				<item name="Install the OSGI bundles" />
+				
+				<item name="The JNRPE Server" href="jnrpe-server/index.html" />
+				<item name="The JNRPE Plugins" href="jnrpe-plugins/index.html" />
 			</item>
 			<item name="Development" collapse="true" href="#">
 				<item name="Getting the sources" href="docs/get_sources.html" />
@@ -39,11 +38,10 @@
 				<item name="The JNRPE Library" href="jnrpe-lib/index.html" />
 				<item name="JNRPE Blog" href="http://www.jnrpe.it/cms/" />
 			</item>
-		</menu>
-
-		<menu name="Tutorials" inherit="top">
-			<item name="Writing JNRPE Java Nagios Plugins"
-				href="http://www.jnrpe.it/cms/index.php/home/tutorials/12-nagios/jnrpe/7-creating-plugins-with-java-part1" />
+			<item name="Tutorials" collapse="true" href="#">
+				<item name="Writing JNRPE Java Nagios Plugins"
+					href="http://www.jnrpe.it/cms/index.php/home/tutorials/12-nagios/jnrpe/7-creating-plugins-with-java-part1" />
+			</item>
 		</menu>
 
 		<menu name="Reports" ref="reports" inherit="bottom" />
@@ -55,39 +53,26 @@
 		<version>1.1.1</version>
 	</skin>
 
-
 	<custom>
 		<reflowSkin>
-			<theme>bootswatch-spacelab</theme>
+			<theme>bootswatch-spruce</theme>
 			<highlightJs>true</highlightJs>
 			<brand>
 				<name>JNRPE</name>
 			</brand>
 			<slogan>Java Nagios Remote Plugin Executor</slogan>
 			<titleTemplate>%2$s | %1$s</titleTemplate>
-			<toc>sidebar</toc>
-			<topNav>Get JNRPE|Documentation|Tutorials|reports</topNav>
+			
+			<breadcrumbs>true</breadcrumbs>
+			
+			<topNav>Main|Get JNRPE|Documentation|reports</topNav>
 			<bottomNav>
 				<column>Documentation</column>
 			</bottomNav>
 			<bottomDescription>
 				A Java implementation of NRPE protocol and server
 			</bottomDescription>
-			<pages>
-				<index project="project-id">
-					<shortTitle>Welcome</shortTitle>
-					<breadcrumbs>true</breadcrumbs>
-					<toc>false</toc>
-					<sections>
-						<body />
-						<sidebar />
-						<columns>3</columns>
-					</sections>
-				</index>
-				<developer-info>
-					<toc>sidebar</toc>
-				</developer-info>
-			</pages>
+			<skinAttribution>false</skinAttribution>
 		</reflowSkin>
 	</custom>
 </project>

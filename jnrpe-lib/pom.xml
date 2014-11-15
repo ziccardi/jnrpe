@@ -30,12 +30,6 @@
 		</developer>
 	</developers>
 
-	<scm>
-		<connection>scm:git:https://github.com/ziccardi/jnrpe</connection>
-		<url>https://github.com/ziccardi/jnrpe/tree/master/jnrpe-parent/jnrpe-lib</url>
-		<developerConnection>scm:git:git@github.com:ziccardi/jnrpe.git</developerConnection>
-		<tag>HEAD</tag>
-	</scm>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<site.basedir>jnrpe-lib</site.basedir>
@@ -75,7 +69,6 @@
 		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
-			<version>6.8</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -109,22 +102,15 @@
 			</build>
 		</profile>
 	</profiles>
-	
+
 	<build>
 		<plugins>
-		
+
 			<plugin>
 				<groupId>org.sonatype.plugins</groupId>
 				<artifactId>nexus-staging-maven-plugin</artifactId>
-				<version>1.6.3</version>
-				<extensions>true</extensions>
-				<configuration>
-					<serverId>ossrh</serverId>
-					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-					<autoReleaseAfterClose>true</autoReleaseAfterClose>
-				</configuration>
 			</plugin>
-		
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
@@ -179,21 +165,6 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>findbugs-maven-plugin</artifactId>
-				<configuration>
-					<effort>Max</effort>
-					<threshold>Low</threshold>
-					<failOnError>false</failOnError>
-					<findbugsXmlOutput>true</findbugsXmlOutput>
-					<findbugsXmlWithMessages>true</findbugsXmlWithMessages>
-					<xmlOutput>true</xmlOutput>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>check</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -223,17 +194,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
-				<version>3.3</version>
-				<dependencies>
-					<dependency><!-- add support for ssh/scp -->
-						<groupId>org.apache.maven.wagon</groupId>
-						<artifactId>wagon-ssh</artifactId>
-						<version>1.0</version>
-					</dependency>
-				</dependencies>
-				<configuration>
-					<siteDirectory>${project.basedir}/src/site</siteDirectory>
-				</configuration>
 			</plugin>
 
 		</plugins>
@@ -246,10 +206,6 @@
 			<email>jeremiepanzer@gmail.com</email>
 		</contributor>
 	</contributors>
-	<issueManagement>
-		<system>jira</system>
-		<url>https://jnrpe-tracker.atlassian.net/</url>
-	</issueManagement>
 
 	<reporting>
 		<plugins>
@@ -296,16 +252,10 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>findbugs-maven-plugin</artifactId>
-				<version>2.5.4</version>
-				<configuration>
-					<effort>Max</effort>
-					<threshold>Low</threshold>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>2.10</version>
 			</plugin>
 
 		</plugins>

@@ -8,11 +8,11 @@
 
 	<version position="left" />
 
-	<bannerLeft>
-		<name>JNRPE</name>
-		<src>/../images/jnrpe.png
-		</src>
-		<href>http://jnrpe.sourceforge.net/</href>
-	</bannerLeft>
+	<body>
+		<menu name="Documentation">
+			<item name="Usage Scenario" href="usage_scenario.html" />
+			<item name="Embedding" href="embedding.html" />
+		</menu>
+	</body>
 
 </project>
