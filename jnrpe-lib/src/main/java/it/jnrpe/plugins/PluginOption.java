@@ -207,6 +207,7 @@ public final class PluginOption {
      * @return this */
     public PluginOption setArgName(final String argumentName) {
         argName = argumentName;
+        this.hasArgs = true;
         return this;
     }
 

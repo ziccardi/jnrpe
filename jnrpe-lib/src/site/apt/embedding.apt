@@ -16,48 +16,86 @@ Embedding the JNRPE Library
   
 +--------------------------+
   
-  ./check_nrpe -n -H 127.0.0.1 -c runTest -a random1 33:66 67:
+  ./check_nrpe -n -H 127.0.0.1 -c CheckExample -a random1 33:66 67:
   
 +--------------------------+  
+
+  or
   
-  Follows the example application:
++--------------------------+
+  
+  ./check_nrpe -n -H 127.0.0.1 -c CheckExample -a random1 33..66 67..inf
+  
++--------------------------+   
+  
+  Follows the object to be monitored:
   
 +---------------+
   
-  public class Example
-  {
-      private int m_iRandom1 = 0;
-      private int m_iRandom2 = 0;
-      private Random m_random = new Random();
-         
-      /**
-       * This method updates the variables with the next random number
-       */
-      public void updateVariables()
-      {
-          m_iRandom1 = m_random.nextInt(100);  // We want to values to be between 0 and 100
-          m_iRandom2 = m_random.nextInt(100);
-      }   
-      
-      
-      /**
-       * The main method
-       */
-      public static void main(String[] args) throws Exception
-      {
-         Example example = new Example();
-         example.updateVariables();
-      
-         // Change variable values every 5 seconds 
-         while(true)
-         {
-             Thread.sleep(5000);
-             example.updateVariables();
-         }
-      } 
+  package example;
+
+  import java.util.Random;
+
+  public class Example extends Thread {
+    private int random1 = 0;
+    private int random2 = 0;
+    private Random m_random = new Random();
+
+    /**
+     * This method updates the variables with the next random number
+     */
+    private void updateVariables() {
+    	// Random value between 0 and 100
+        random1 = m_random.nextInt(100); 
+        random2 = m_random.nextInt(100);
+    }
+
+    public int getRandom1() {
+        return random1;
+    }
+
+    public int getRandom2() {
+        return random2;
+    }
+
+    @Override
+    public void run() {
+        try {
+            while (true) {
+                Thread.sleep(5000);
+                updateVariables();
+                
+                System.out.println ("New values : random1=" + random1 + " - random2=" + random2);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
   }
-  
+
 +---------------+ 
+
+  Below the main application:
+  
++---------------+
+
+  package example;
+
+  import java.net.UnknownHostException;
+
+  public class ExampleApp {
+  
+    private void start() throws UnknownHostException {
+      Example example = new Example();
+      example.start();
+    }
+  
+    public static void main(String[] args) throws UnknownHostException {
+      new ExampleApp().start();  
+    }
+  }
+
++---------------+  
 
   As you can see, the application is very simple: every 5 seconds generates a new pair of random numbers.
   In the next section, we will add to the application the ability to answer to check_nrpe queries; to 
@@ -65,312 +103,381 @@ Embedding the JNRPE Library
 
 * Creating the JNRPE plugin
 
-  Every JNRPE plugin must implement the IPluginInterface interface:
+  Every JNRPE plugin must implement the IPluginInterface interface. To make the life easier, JNRPE gives
+  you a base class you can use to inherit from:
   
 +---------------+
 
-  public class ExamplePlugin implements IPluginInterface
-  {
-      private final Example m_instanceToCheck;
-      
-      public ExamplePlugin(Example ex)
-      {
-          m_instanceToCheck = ex;
-      }
-  
-      @Override
-      public ReturnValue execute(ICommandLine cl)
-      {
-          String sVariable = cl.getOptionValue("get");  // (1)
-          
-          if (sVariable.equalsIgnoreCase("random1")) 
-              return new ReturnValue("RANDOM1: " + m_instanceToCheck.getRandom1());  // (2)
-  
-          if (sVariable.equalsIgnoreCase("random2"))
-              return new ReturnValue("RANDOM2: " + m_instanceToCheck.getRandom2());  // (3)
-  
-          return new ReturnValue(IJNRPEConstants.STATE_UNKNOWN, sVariable + " is unknown");
-      }
+  @Plugin(name = "ExamplePlugin", description = "A Simple Example plugin")
+  @PluginOptions({
+        @Option(shortName = "g", longName = "get", 
+                description = "The name of the variable to be checked", 
+                required = true, hasArgs = true, 
+                argName = "variable", optionalArgs = false, option = "variable"),
+        @Option(shortName = "T", longName = "th", 
+                description = "The thresholds as new threshold format", 
+                required = false, hasArgs = true, argName = "thresholds", 
+                optionalArgs = false, option = "threshold"), })
+  public class ExamplePlugin extends PluginBase {
+
+    private final Example instanceToMonitor;
+    
+    public ExamplePlugin(final Example instanceToMonitor) {
+        this.instanceToMonitor = instanceToMonitor;
+    }
+
+    @Override
+    protected String getPluginName() {
+        return "ExamplePlugin";
+    }
   }
 
 +---------------+
 
-  This first version of the plugin always returns an OK state and, as text, the variable name and it's value.
-  It will accept a 'get' command that will need as argument the variable name ("--get <variable>").
-  
-  The code line identified by (1) means that we want the value of the 'get' option: the argument.
-  That means that if the plugin can be invoked with a command line like :
+  This is a very basic plugin that always returns an 'OK' status since you still didn't give JNRPE any
+  value to be checked. Those values are called 'metric' and can be configured by overriding the
   
 +---------------+
-  --get random1
-+---------------+
+
+protected Collection<Metric> gatherMetrics(ICommandLine cl) throws MetricGatheringException
+
++---------------+  
+  
+  method. The 'ICommandLine' parameter is exactly what the name says : the command line parameter passed
+  to the plugin. What parameter are accepted are configured through the annotations.
+  Our plugin will accept two parameters:
+  
+  * -g|--get <variablename> instructs the plugin to check the value of the variable 'variablename'. It can
+    be random1 or random 2
     
-  The line identified by (2) and by (3) are very simple: they returns an OK return value that has in the
-  text the name of the requested variable and its value and, as return code, the OK status.
+  * -T|--th <thresholds> configures the thresholds using the new 'treshold syntax' as specified in 
+  	http://nagios-plugins.org/doc/new-threshold-syntax.html. We will see later how to configure the plugin 
+  	to use the old threshold syntax (https://nagios-plugins.org/doc/guidelines.html#THRESHOLDFORMAT).
   
-  As far as we are, we created a plugin that is able to receive a single option (get) with a single argument
-  (the variable name).
+  Let's override the gatherMetrics method:
   
-  Now we have to describe this plugin to JNRPE.
-  To describe the plugin we have to instantiate a PluginDefinition object:
-  
-+----------------+
++---------------+ 
 
-  IPluginInterface tp = new ExamplePlugin(example);
-  PluginDefinition pluginDef = 
-                   new PluginDefinition("TestPlugin", "Simple Test Plugin description", tp)                  // (1)
-                   .addOption(new PluginOption()                                                             // (2)
-                               .setOption("g")            // The plugin accept the short form parameter 'g'  // (3)
-                               .setLongOpt("get")         // The long form parameter                         // (4)
-                               .setArgName("variable")    // The paramater has an argument called 'variable' // (5)
-                               .setArgsOptional(false)    // The parameter argument is mandatory             // (6)
-                               .setRequired(true)         // The parameter is mandatory                      // (7)
-                               );
-
-+----------------+
-
-  Lets analyze the code:
+  ...
   
-    * (1) Here we instantiate the plugin definition giving a plugin name (TestPlugin) and a short description.
   
-    * (2) Here we add an option to the plugin: take in mind that the plugins must be described as if they were 
-      'command line' application. Every plugin has a command line. You can repeat this line for every other 
-      option your plugin is able to handle.
+  @Override
+  protected Collection<Metric> gatherMetrics(ICommandLine cl) throws MetricGatheringException {
+
+      ArrayList<Metric> metrics = new ArrayList<Metric>();
+
+      String sVariable = cl.getOptionValue("get"); // (1)
+ 
+      if (sVariable.equalsIgnoreCase("random1")) { // (2)
+          
+          int val = instanceToMonitor.getRandom1();
+          
+          metrics.add(new Metric("random",                  // (3) - (3.1) 
+          		  "RANDOM1: " + val,                        // (3.2)
+                  new BigDecimal(val),                      // (3.3)
+                  new BigDecimal(0),                        // (3.4)
+                  new BigDecimal(100)));                    // (3.5)
+      } else if (sVariable.equalsIgnoreCase("random2")) {
+          int val = instanceToMonitor.getRandom2();
+          
+          metrics.add(new Metric("random", "RANDOM2: " + val, 
+                  new BigDecimal(val), 
+                  new BigDecimal(0), new BigDecimal(100)));
+      } else {
+          throw new MetricGatheringException("Unknown variable : " + sVariable, Status.UNKNOWN, null); // (4)
+      }
+      
+      return metrics; // (5)
+  }
+  
+  
+  ...
+
++---------------+ 
+  
+  The only work of the gatherMetrics method is, as the name implies, to gather the metrics to be monitored.
+  Our example is very easy:
+  
+  * (1) Gets the name of the variable to be checked from the command line
+  
+  * (2) Checks which variable must be checked
+  
+  * (3) Gathers the value and constructs the correct metric object. 
+  
+  * (3.1) Sets the name of the gathered metric. This name is VERY important since it must be specified on the
+    command line if you use the new threshold syntax or must be used to configure the old threshold format.
     
-    * (3) - (4) This lines describe the long option name (get) and the short option name (g). That means that the
-      parameter could be passed as '-g' or '--get'.
+  * (3.2) Setup the message to be returned
   
-    * (5) Here we describe the parameter of the 'get' option and we set its name as 'variable'
+  * (3.3) The current value of the metric
   
-    * (6) With this line, we instruct JNRPE to consider the argument as mandatory, 
-          i.e. you can't cal 'Test Plugin --get' but you have to specify an argument (TestPlugin --get random1)
-      like 'TestPlugin --get random1'
-    
-    * (7) Here we are saying that the plugin option is mandatory, i.e. the '--get' option must be present.
-  
-  Now that we have created the plugin, we have to register it inside the JNRPE plugins repository.
-  
-+----------------+
+  * (3.4) The minimum value (optional)
 
-  PluginRepository pluginRepository = new PluginRepository(); // Creates the repository
-  pluginRepository.addPluginDefinition(pluginDef);            // Adds our plugin to the repository
-
-+----------------+
+  * (3.5) The maximum value (optional)
   
-  Now the plugin is ready and JNRPE is aware of its existence. Since a plugin can be used to execute different tasks, now we
-  have to tell JNRPE how to use the plugin. We will accomplish that by creating a 'command' based on this plugin, much like as
-  you would do configuring NRPE or JNRPE.
+  * (4) In case of error, throws an exception.
   
-* Creating the command
+  * (5) Return the gathered metrics
 
-  As with plugins, all commands are described through a 'command definition' object.
-  In the following example we will define a command based on the 'TestPlugin' that will pass the 'get' parameter with the 
-  argument received by check_nrpe (or jCheckNRPE).
+
+  The plugin is now ready if you want to use the new threshold format.
+  Now we have to configure and run JNRPE. Let's change the main method as follows:
   
 +----------------+
 
-  CommandDefinition commandDef = new CommandDefinition("runTest", "TestPlugin")  // CommandName : runTest, plugin : TestPlugin
-              .addArgument(
-               new CommandOption("get", "$ARG1$")); // The command will pass a parameter called get to the plugi
-                                                    // The argument will the argument received from check_nrpe
-
-+----------------+  
-   
-   Again, as with plugins, now we have to register the command inside the command repository:
-   
-+----------------+
-
-  CommandRepository commandRepository = new CommandRepository();  // Creates the command repository
-  commandRepository.addCommandDefinition(commandDef);             // register the command inside the repository
-
-+----------------+
-
-  We are almost done: now we have to instantiate JNRPE and start listening for requests.
-  
-+----------------+
-
-  JNRPE engine = new JNRPE(pluginRepository, commandRepository); // JNRPE must be aware of both plugins and 
-                                                                 // commands repository
-  engine.addAcceptedHost("127.0.0.1");                           // Will accept requests from localhost
-  engine.listen("127.0.0.1", 5666);                              // Will listen on 127.0.0.1 on port 5666
-
-+----------------+
-
-  Follows the whole main method, completed with the code we discussed above.
-  
-+----------------+
-
-   public static void main(String[] args) throws InterruptedException
-   {
-       Example example = new Example();
-       example.updateVariables();
-       
-       // Instantiate the plugin
-       IPluginInterface tp = new ExamplePlugin(example);
-       
-       // Describe the plugin
-       PluginDefinition pluginDef = new PluginDefinition("TestPlugin", "Simple Test Plugin description", tp)  // PluginName : TestPlugin, 
-                   .addOption(new PluginOption()
-                               .setOption("g")            // The plugin accept the short form parameter 'g'
-                               .setLongOpt("get")         // The long form parameter
-                               .setArgName("variable")    // The paramater has an argument called 'variable'
-                               .setArgsOptional(false)    // The parameter argument is mandatory
-                               .setRequired(true)         // The parameter is mandatory
-                               );
-       
-       PluginRepository pluginRepository = new PluginRepository(); // Creates the repository
-       pluginRepository.addPluginDefinition(pluginDef);            // Adds our plugin to the repository
-       
-       // Describes the command
-       CommandDefinition commandDef = new CommandDefinition("runTest", "TestPlugin")  // CommandName : runTest, plugin : TestPlugin
-                   .addArgument(new CommandOption("get", "$ARG1$")); // The command will take a parameter called get that asks for an argument
-                                                                     // The argument will be replaced with what will be received by check_nrpe
-             
-       CommandRepository commandRepository = new CommandRepository();  // Creates the command repository
-       commandRepository.addCommandDefinition(commandDef);             // register the command inside the repository
+    private void start() throws UnknownHostException {
+        Example example = new Example();
+        example.start();
+        
+        ExamplePlugin examplePlugin = new ExamplePlugin(example);                                   // (1)
+        
+        PluginDefinition pluginDef = PluginRepositoryUtil.loadFromPluginAnnotation(examplePlugin);  // (2)
+        
+        IPluginRepository pluginRepo = new PluginRepository();                                      // (3)
+        pluginRepo.addPluginDefinition(pluginDef);                                                  // (4)
+        
+        CommandDefinition commandDef = new CommandDefinition("CheckExample", "ExamplePlugin")       // (5)
+            .addArgument(
+                    new CommandOption("get", "$ARG1$"))                                             // (6)
+            .addArgument(
+                    new CommandOption("th", "metric=random,warning=$ARG2$,critical=$ARG3$")         // (7)
+                    );
+        
+        CommandRepository commandRepo = new CommandRepository();                                    // (8)
+        commandRepo.addCommandDefinition(commandDef);                                               // (9)
+        
+        JNRPE jnrpe = JNRPEBuilder.forRepositories(pluginRepo, commandRepo)                                       
+            .acceptHost("127.0.0.1")                                                                
+            .acceptParams(true)                                                                     // (10)
+            .build();
             
-       JNRPE engine = new JNRPE(pluginRepository, commandRepository); // JNRPE must know both plugin and command repository
-       engine.addAcceptedHost("127.0.0.1");                           // Will accept requests from localhost
-       engine.listen("127.0.0.1", 5666);                              // Will listen on 127.0.0.1 on port 5666
-       
-      // This is just to update the variable values of the example and is
-      // not mandatory at all
-       while(true)
-       {
-           Thread.sleep(5000);
-           example.updateVariables();
-       }
-   }
+        jnrpe.listen("127.0.0.1", 5666);                                                            // (11)
+    }
 
 +----------------+
 
-  Run your java application, than try the following command:
+  The changes are very simple:
   
-+----------------+
-
-  check_nrpe -n -H 127.0.0.1 -c runTest -a random1
-
-+----------------+
-
-  You just executed your first JNRPE embedded plugin!
+  * (1) Instantiate our plugin
   
-* Adding some complexity
-
-  The plugin we've created in the previous paragraph always returns OK. In this chapter we will 
-  change it so that it will be able to return WARNING or CRITICAL depending on the value of the
-  random variables.
+  * (2) Load the plugin definition
   
-  To perform such checks, we will add a '-w|--warning' and a '-c|--critical' parameter to our plugin.
-  Both the -w and -c parameter will have an argument describing the waning/critical thresholds.
+  * (3) Instantiate a new PluginRepository
   
-  If the value will fall inside the warning or the critical threshold, the plugin will return 
-  a return status accordingly to the value.
+  * (4) Add the plugin definition to the list of plugins inside the plugin repository
   
-  Checking thresholds is very easy through the use of the ThresholdUtil class.
+  * (5) Create a new command definition (commands that will be invoked by check_nrpe). The command will be
+  called 'CheckExample' and will invoke the 'ExamplePlugin' plugin.
   
-  Below the plugin with the threshold handling code.
+  * (6) Add the 'get' option to the CheckExample command. The 'get' option will accept an argument that will
+  be replaced at runtime with first argument passed with check_nrpe
   
-+----------------+  
+  * (7) Add the 'th' option to the CheckExample command. The threshold will be evaluated as follows:
   
-  public class ExamplePlugin implements IPluginInterface
-  {
-      private final Example m_instanceToCheck;
+    * A warning will be returned if the value of the metric 'random' will fall inside the warning range.
+      The warning range has been configured as '$ARG2$' that, in turn, will be replaced with the second 
+      argument received from check_nrpe.
       
-      public ExamplePlugin(Example ex)
-      {
-          m_instanceToCheck = ex;
-      }
+    * A critical will be returned if the value of the metric 'random' will fall inside the critical range.
+      The critical range has been configured as '$ARG3$' that, in turn, will be replaced with the third 
+      argument received from check_nrpe. 
   
-      @Override
-      public ReturnValue execute(ICommandLine cl)
-      {
-          String sVariable = cl.getOptionValue("get");
-          
-          int iValue;
-          
-          if (sVariable.equalsIgnoreCase("random1"))
-              iValue = m_instanceToCheck.getRandom1();
-          else if (sVariable.equalsIgnoreCase("random2"))
-              iValue = m_instanceToCheck.getRandom2();
-          else
-              return new ReturnValue(IJNRPEConstants.STATE_UNKNOWN, sVariable + " is unknown");  //(1)
-          
-          String sCriticalThreshold = cl.getOptionValue("critical");                             //(2)
-          String sWarningThreshold = cl.getOptionValue("warning");                               //(3)
-          
-          if (ThresholdUtil.isValueInRange(sCriticalThreshold, iValue))                          //(4)
-              return new ReturnValue("CRITICAL - " + sVariable + " : " + iValue);
+  * (8) Instantiate the command repository
   
-          if (ThresholdUtil.isValueInRange(sWarningThreshold, iValue))                           //(5)
-              return new ReturnValue("WARNING - " + sVariable + " : " +iValue);
+  * (9) Add the command definition to the command repository
   
-          return new ReturnValue("OK - " + sVariable + " : " +iValue);                           //(6)
-      }
+  * (10) Build JNRPE with the configured repositories
+  and accept connections from 127.0.0.1 only. The acceptParams command means that JNRPE must resolve
+  the $ARGxx$ variables.
+  
+  * (11) Starts the server listening on port 5666 on the network address 127.0.0.1
+  
+  You are ready to go. Launch the application and then issue this command :
+  
++---------------+
+
+  ./check_nrpe -H 127.0.0.1 -c 'CheckExample' -a random1 10..67 67..inf
+
++---------------+
+
+  Run it many times (waiting at least 5 seconds between invokation) and see how the returned status changes
+  as the values of random1 changes.
+  
+  That's it: you've embedded JNRPE and created your plugin.
+  
+* Using old threshold syntax
+
+  If you want to support the old threshold syntax (as most of the plugins does), you must perform two operation:
+  
+  * Add the critical and warning parameter to the accepted command line
+  
+  * Configure the threshold builder
+  
+** Adding the critical and warning parameter
+
+  This is a trivial task : we just have to add the correct annotations.
+  
+  Change your example plugin annotation so that they looks as follows:
+  
++---------------+
+
+  @Plugin(name = "ExamplePlugin", description = "A Simple Example plugin")
+  @PluginOptions({
+        @Option(shortName = "g", longName = "get", 
+                description = "The name of the variable to be checked", 
+                required = true, hasArgs = true, 
+                argName = "variable", optionalArgs = false, option = "variable"),
+        @Option(shortName = "T", longName = "th", 
+                description = "The thresholds as new threshold format", 
+                required = false, hasArgs = true, argName = "thresholds", 
+                optionalArgs = false, option = "threshold"),
+        @Option(shortName = "c", longName = "critical", 						// (1)
+        		description = "The critical thresholds", 
+        		required = false, hasArgs = true, argName = "thresholds", 
+        		optionalArgs = false, option = "thresholds"), 
+        @Option(shortName = "w", longName = "warning", 							// (2)
+        		description = "The warning thresholds", 
+        		required = false, hasArgs = true, argName = "thresholds", 
+        		optionalArgs = false, option = "thresholds") }
+        )
+  public class ExamplePlugin extends PluginBase {
+
++---------------+
+ 
+   What we have done so far is:
+   
+   * (1) Add the critical command line parameter
+   
+   * (2) Add the warning command line parameter
+   
+   We have still to configure the threshold...
+   
+** Configure the old style thresholds
+
+  To manage old style threshold, you have to configure the threshold evaluator builder
+  by overriding the 
+  
++---------------+
+
+  protected void configureThresholdEvaluatorBuilder(ThresholdsEvaluatorBuilder thrb, ICommandLine cl) throws BadThresholdException
+
++---------------+
+ 
+  That's very easy to do:
+
++---------------+  
+
+    @Override
+    protected void configureThresholdEvaluatorBuilder(ThresholdsEvaluatorBuilder thrb, ICommandLine cl) throws BadThresholdException {
+        thrb.withLegacyThreshold("random",			// (1) 
+                null, 								// (2)
+                cl.getOptionValue("warning"), 		// (3)
+                cl.getOptionValue("critical"));		// (4)
+    }
+  
++---------------+ 
+
+  Here is what we have done:
+  
+  * (1) Configure a new legacy threshold for the metric 'random'. This name MUST be the same you used in the gatherMetric method.
+  
+  * (2) We don't have an 'OK' threshold since we want to be considered as 'ok' every value that is not critical nor warning
+  
+  * (3) We pass to the threshold evaluator the legacy threshold we received for the warning status
+  
+  * (4) We pass to the threshold evaluator the legacy threshold we received for the critical status
+  
+  That's all. Our plugin is now ready to receive the old threshold parameters.
+  However, we have to configure a new command that receive those new parameters.
+  
+  Before instantiating the JNRPE instance, add this code:
+  
++---------------+
+
+        CommandDefinition commandDefOldSyntax = 
+                    new CommandDefinition("LegacyCheckExample", "ExamplePlugin")                    // (9.1)
+        .addArgument(
+                new CommandOption("get", "$ARG1$"))                                                 // (9.2)
+        .addArgument(
+                new CommandOption("warning", "$ARG2$"))                                             // (9.3)
+        .addArgument(
+                new CommandOption("critical", "$ARG3$"));                                           // (9.4)
+        
+        commandRepo.addCommandDefinition(commandDefOldSyntax);                                      // (9.5)
+
++---------------+
+
+  Follows an explanation of the steps :
+  
+  * (9.1) Create a command definition for a command named 'LegacyCheckExample'. The command will invoke the
+  'ExamplePlugin' plugin.
+  
+  * (9.2) Add the get command line parameter as we did for the previous command.
+  
+  * (9.3) Add a warning command line parameter whose argument ($ARG2$) will be replaced with the second argument 
+  received from check_nrpe
+  
+  * (9.4) Add a critical command line parameter whose argument ($ARG2$) will be replaced with the third argument 
+  received from check_nrpe
+  
+  * (9.5) Add the new command to the command repository
+  
+  That's all. Now you can invoke your plugin by using both the old and the new threshold specification.
+  Run the application and try to invoke the following command:
+  
++---------------+
+
+  ./check_nrpe -H 127.0.0.1 -c 'LegacyCheckExample' -a random1 30:40 40:
+
++---------------+
+
+* Logging the plugin execution
+
+  All the plugins are executed asynchronously and JNRPE has been build with the idea that no constraints must
+  be forced on the users.
+  
+  That means that logs are sent asynchronously and must be received by registered listeners.
+  
+  If you extends the PluginBase class, you will have a variable named LOG that you can use to send log events.
+  As an example, lets add a debug log on each plugin execution.
+  
+  Add the following line at the beginnning of the 'gatherMetrics' method:
+  
++---------------+
+
+  LOG.debug(getContext(), "Gathering metrics...");
+
++---------------+
+  
+  Try to run the example again.
+  
+  You won't see any change... so... What happened to the log?
+  Well, you are sending log events, but noone is listening, so the event is simply lost.
+  
+  To listen to the events you must register your object. Add the following line at the end of your 'start' method:
+  
++---------------+
+
+  jnrpe.getExecutionContext().getEventBus().register(this);
+
++---------------+
+  
+  Run again you example.
+  
+  Still nothing: your message is still lost. That's why you still didn't tell JNRPE which method must be invoked
+  when an event is received. 
+  
+  Add this method to your ExampleApp class:
+  
++---------------+
+
+  @Subscribe
+  public final void receive(LogEvent logEvent) {
+      System.out.println (logEvent.getMessage());
   }
+
++---------------+
   
-+----------------+  
-
-  The line identified by (1) returns an UNKNOWN state if the requested variable is unknown.
-  The lines identified by (2) and (3) simply reads the values of the critical and warning 
-  threshold definitions.
+  and run the app again.
+  WOW! Your logs have been received!
   
-  The line identified by (4) checks if the requested variable value falls inside the
-  critical threshold read at line (2). If yes, than return a CRITICAL status. 
-  
-  The line identified by (5) hecks if the requested variable value falls inside the
-  warning threshold read at line (3). If yes, than return a WARNING status.
-  
-  At line (6) we simply return an OK status.
-  
-  Now that we have changed the plugin class, we have to change the plugin definition too to
-  describe the new 'warning' and 'critical' parameters:
-  
-+----------------+
-
-  PluginDefinition pluginDef = new PluginDefinition("TestPlugin", "Simple Test Plugin", tp)
-                  .addOption(new PluginOption()
-                              .setOption("g")
-                              .setLongOpt("get")
-                              .setArgName("variable")
-                              .setArgsOptional(false)
-                              .setRequired(true))
-                  .addOption(new PluginOption()
-                              .setOption("w")
-                              .setLongOpt("warning")
-                              .setArgName("value")
-                              .setArgsOptional(false)
-                              .setRequired(true))
-                  .addOption(new PluginOption()
-                              .setOption("c")
-                              .setLongOpt("critical")
-                              .setArgName("value")
-                              .setArgsOptional(false)
-                              .setRequired(true)
-                              );
-
-+----------------+
-
-  Now that the new parameters are defined, we can change our command definition:
-  
-+----------------+
-
-  CommandDefinition commandDef = new CommandDefinition("runTest", "TestPlugin")
-                  .addArgument(new CommandOption("get", "$ARG1$"))
-                  .addArgument(new CommandOption("warning", "$ARG2$"))
-                  .addArgument(new CommandOption("critical", "$ARG3$")
-                  );
-
-+----------------+  
-
-  Try to invoke the plugin through the command:
-  
-+----------------+
-
-  ./check_nrpe -n -H 127.0.0.1 -c runTest -a random1 33:66 67:
-
-+----------------+ 
-
-  Invoke it many time: you'll notice that sometime you'll get a warning state, sometime 
-  a critical and sometime an OK. 
-  
-  Good, you've embedded JNRPE into your application!

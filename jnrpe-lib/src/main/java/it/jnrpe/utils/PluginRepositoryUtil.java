@@ -285,19 +285,34 @@ public final class PluginRepositoryUtil {
      *            the plugin class
     
      * @return PluginDefinition */
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({ "rawtypes" })
     public static PluginDefinition loadFromPluginAnnotation(final Class clazz) {
+        return loadFromPluginAnnotation(clazz, null);
+    }
+
+    public static PluginDefinition loadFromPluginAnnotation(final IPluginInterface pluginInstance) {
+       return loadFromPluginAnnotation(pluginInstance.getClass(), pluginInstance);
+    }
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    private static PluginDefinition loadFromPluginAnnotation(final Class clazz, final IPluginInterface pluginInstance) {
         Plugin plugin = (Plugin) clazz.getAnnotation(Plugin.class);
         PluginOptions options = (PluginOptions) clazz.getAnnotation(PluginOptions.class);
         String name = plugin.name();
         String description = plugin.description();
-        PluginDefinition def = new PluginDefinition(name, description, clazz);
+        PluginDefinition def;
+        
+        if (pluginInstance == null) {
+            def = new PluginDefinition(name, description, clazz);
+        } else {
+            def = new PluginDefinition(name, description, pluginInstance);
+        }
         for (Option option : options.value()) {
             def.addOption(parsePluginOption(option));
         }
         return def;
     }
-
+    
     /**
      * Parses a plugin option XML definition.
      * 
