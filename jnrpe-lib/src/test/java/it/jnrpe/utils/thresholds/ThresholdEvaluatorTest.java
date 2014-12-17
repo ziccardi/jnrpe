@@ -17,6 +17,8 @@ package it.jnrpe.utils.thresholds;
 
 import static org.testng.Assert.assertEquals;
 import it.jnrpe.Status;
+import it.jnrpe.plugins.Metric;
+import it.jnrpe.plugins.MetricBuilder;
 import it.jnrpe.utils.BadThresholdException;
 
 import java.math.BigDecimal;
@@ -27,198 +29,213 @@ import org.testng.annotations.Test;
  */
 public class ThresholdEvaluatorTest {
 
-	// metric={metric},ok={range},warn={range},crit={range},unit={unit}prefix={SI
-	// prefix}
-	/**
-	 * Method testNoLevels.
-	 * @throws BadThresholdException
-	 */
-	@Test
-	public void testNoLevels() throws BadThresholdException {
-		ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
-				.withThreshold("metric=pippo").create();
-		Status s = ths.evaluate("pippo", new BigDecimal("10"));
-		assertEquals(s, Status.OK);
-	}
+    private final static String METRIC_NAME = "TESTMETRIC";
+    private final static String BAD_METRIC_NAME = "BAD_TESTMETRIC";
 
-	/**
-	 * Method testOnlyOKButCritical.
-	 * @throws BadThresholdException
-	 */
-	@Test
-	public void testOnlyOKButCritical() throws BadThresholdException {
-		ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
-				.withThreshold("metric=pippo,ok=50..100").create();
-		Status s = ths.evaluate("pippo", new BigDecimal("10"));
-		assertEquals(s, Status.CRITICAL);
-	}
+    private Metric buildMetric(int value) {
+        return buildMetric(new BigDecimal(value), METRIC_NAME);
+    }
+    
+    private Metric buildMetric(int value, Prefixes prefix) {
+        return buildMetric(new BigDecimal(value), METRIC_NAME, prefix);
+    }
+    
+    private Metric buildMetric(String value) {
+        return buildMetric(new BigDecimal(value), METRIC_NAME);
+    }
 
-	/**
-	 * Method testOnlyOK.
-	 * @throws BadThresholdException
-	 */
-	@Test
-	public void testOnlyOK() throws BadThresholdException {
-		ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
-				.withThreshold("metric=pippo,ok=50..100").create();
-		Status s = ths.evaluate("pippo", new BigDecimal("20"));
-		assertEquals(s, Status.CRITICAL);
-	}
+    private Metric buildMetric(int value, String metricName) {
+        return buildMetric(new BigDecimal(value), metricName);
+    }
+    
+    private Metric buildMetric(String value, String metricName) {
+        return buildMetric(new BigDecimal(value), metricName);
+    }
 
-	/**
-	 * Method testOkWarnCrit_ok.
-	 * @throws BadThresholdException
-	 */
-	@Test
-	public void testOkWarnCrit_ok() throws BadThresholdException {
-		ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
-				.withThreshold(
-						"metric=pippo,ok=50..100,warn=100..200,crit=200..300")
-				.create();
-		Status s = ths.evaluate("pippo", new BigDecimal("60"));
-		assertEquals(s, Status.OK);
-	}
+    private Metric buildMetric(BigDecimal value) {
+        return buildMetric(value, METRIC_NAME);
+    }
 
-	/**
-	 * Method testOkWarnCrit_warn.
-	 * @throws BadThresholdException
-	 */
-	@Test
-	public void testOkWarnCrit_warn() throws BadThresholdException {
-		ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
-				.withThreshold(
-						"metric=pippo,ok=50..100,warn=100..200,crit=200..300")
-				.create();
-		Status s = ths.evaluate("pippo", new BigDecimal("110"));
-		assertEquals(s, Status.WARNING);
-	}
+    private Metric buildMetric(BigDecimal value, String metricName) {
+        return MetricBuilder.forMetric(metricName).withValue(value).build();
+    }
+    
+    private Metric buildMetric(BigDecimal value, String metricName, Prefixes prefix) {
+        return MetricBuilder.forMetric(metricName).withValue(value).withPrefix(prefix).build();
+    }
 
-	/**
-	 * Method testOkWarnCrit_warnMega.
-	 * @throws BadThresholdException
-	 */
-	@Test
-	public void testOkWarnCrit_warnMega() throws BadThresholdException {
-		ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
-				.withThreshold(
-						"metric=pippo,ok=50..100,warn=100..200,crit=200..300,prefix=mega,unit=byte")
-				.create();
-		Status s = ths.evaluate("pippo", Prefixes.mega.convert(110));
-		assertEquals(s, Status.WARNING);
-	}
+    /**
+     * Method testNoLevels.
+     * 
+     * @throws BadThresholdException
+     */
+    @Test
+    public void testNoLevels() throws BadThresholdException {
+        ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder().withThreshold("metric="+METRIC_NAME+"").create();
+        Status s = ths.evaluate(buildMetric("10"));
+        assertEquals(s, Status.OK);
+    }
 
-	/**
-	 * Method testOkWarnCrit_crit.
-	 * @throws BadThresholdException
-	 */
-	@Test
-	public void testOkWarnCrit_crit() throws BadThresholdException {
-		ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
-				.withThreshold(
-						"metric=pippo,ok=50..100,warn=100..200,crit=200..300")
-				.create();
-		Status s = ths.evaluate("pippo", new BigDecimal("210"));
-		assertEquals(s, Status.CRITICAL);
-	}
+    /**
+     * Method testOnlyOKButCritical.
+     * 
+     * @throws BadThresholdException
+     */
+    @Test
+    public void testOnlyOKButCritical() throws BadThresholdException {
+        ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder().withThreshold("metric="+METRIC_NAME+",ok=50..100").create();
+        Status s = ths.evaluate(buildMetric("10"));
+        assertEquals(s, Status.CRITICAL);
+    }
 
-	/**
-	 * Method testNullMetricValue.
-	 * @throws BadThresholdException
-	 */
-	@Test(expectedExceptions = NullPointerException.class)
-	public void testNullMetricValue() throws BadThresholdException {
-		ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
-				.withThreshold(
-						"metric=pippo,ok=50..100,warn=100..200,crit=200..300")
-				.create();
-		ths.evaluate("pippo", null);
-	}
+    /**
+     * Method testOnlyOK.
+     * 
+     * @throws BadThresholdException
+     */
+    @Test
+    public void testOnlyOK() throws BadThresholdException {
+        ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder().withThreshold("metric="+METRIC_NAME+",ok=50..100").create();
+        Status s = ths.evaluate(buildMetric("20"));
+        assertEquals(s, Status.CRITICAL);
+    }
 
-	/**
-	 * Method testNullMetricName.
-	 * @throws BadThresholdException
-	 */
-	@Test(expectedExceptions = NullPointerException.class)
-	public void testNullMetricName() throws BadThresholdException {
-		ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
-				.withThreshold(
-						"metric=pippo,ok=50..100,warn=100..200,crit=200..300")
-				.create();
-		ths.evaluate(null, new BigDecimal("210"));
-	}
+    /**
+     * Method testOkWarnCrit_ok.
+     * 
+     * @throws BadThresholdException
+     */
+    @Test
+    public void testOkWarnCrit_ok() throws BadThresholdException {
+        ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder().withThreshold("metric="+METRIC_NAME+",ok=50..100,warn=100..200,crit=200..300").create();
+        Status s = ths.evaluate(buildMetric("60"));
+        assertEquals(s, Status.OK);
+    }
 
-	/**
-	 * Method testBadMetricPair.
-	 * @throws BadThresholdException
-	 */
-	@Test(expectedExceptions = BadThresholdException.class)
-	public void testBadMetricPair() throws BadThresholdException {
-		ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
-				.withThreshold("metric=,ok=50..100,warn=100..200,crit=200..300")
-				.create();
-		ths.evaluate(null, new BigDecimal("210"));
-	}
+    /**
+     * Method testOkWarnCrit_warn.
+     * 
+     * @throws BadThresholdException
+     */
+    @Test
+    public void testOkWarnCrit_warn() throws BadThresholdException {
+        ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder().withThreshold("metric="+METRIC_NAME+",ok=50..100,warn=100..200,crit=200..300").create();
+        Status s = ths.evaluate(buildMetric("110"));
+        assertEquals(s, Status.WARNING);
+    }
 
-	/**
-	 * Method testBadMetricPair2.
-	 * @throws BadThresholdException
-	 */
-	@Test(expectedExceptions = BadThresholdException.class)
-	public void testBadMetricPair2() throws BadThresholdException {
-		ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
-				.withThreshold("=pippo,ok=50..100,warn=100..200,crit=200..300")
-				.create();
-		ths.evaluate(null, new BigDecimal("210"));
-	}
+    /**
+     * Method testOkWarnCrit_warnMega.
+     * 
+     * @throws BadThresholdException
+     */
+    @Test
+    public void testOkWarnCrit_warnMega() throws BadThresholdException {
+        ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder().withThreshold(
+                "metric="+METRIC_NAME+",ok=50..100,warn=100..200,crit=200..300,prefix=mega,unit=byte").create();
+        Status s = ths.evaluate(buildMetric(110, Prefixes.mega));
+        assertEquals(s, Status.WARNING);
+    }
 
-	/**
-	 * Method testBadOkPair.
-	 * @throws BadThresholdException
-	 */
-	@Test(expectedExceptions = BadThresholdException.class)
-	public void testBadOkPair() throws BadThresholdException {
-		ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
-				.withThreshold("metric=pippo,ok=,warn=100..200,crit=200..300")
-				.create();
-		ths.evaluate(null, new BigDecimal("210"));
-	}
+    /**
+     * Method testOkWarnCrit_crit.
+     * 
+     * @throws BadThresholdException
+     */
+    @Test
+    public void testOkWarnCrit_crit() throws BadThresholdException {
+        ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder().withThreshold("metric="+METRIC_NAME+",ok=50..100,warn=100..200,crit=200..300").create();
+        Status s = ths.evaluate(buildMetric("210"));
+        assertEquals(s, Status.CRITICAL);
+    }
 
-	/**
-	 * Method testBadWarnPair.
-	 * @throws BadThresholdException
-	 */
-	@Test(expectedExceptions = BadThresholdException.class)
-	public void testBadWarnPair() throws BadThresholdException {
-		ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
-				.withThreshold("metric=pippo,ok=10..100,warn=,crit=200..300")
-				.create();
-		ths.evaluate(null, new BigDecimal("210"));
-	}
+    /**
+     * Method testNullMetricValue.
+     * 
+     * @throws BadThresholdException
+     */
+    @Test(expectedExceptions = NullPointerException.class)
+    public void testNullMetricValue() throws BadThresholdException {
+        ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder().withThreshold("metric="+METRIC_NAME+",ok=50..100,warn=100..200,crit=200..300").create();
+        ths.evaluate(buildMetric((BigDecimal)null));
+    }
 
-	/**
-	 * Method testBadCritPair.
-	 * @throws BadThresholdException
-	 */
-	@Test(expectedExceptions = BadThresholdException.class)
-	public void testBadCritPair() throws BadThresholdException {
-		ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
-				.withThreshold("metric=pippo,ok=10..100,warn=100..200,crit=")
-				.create();
-		ths.evaluate(null, new BigDecimal("210"));
-	}
+    /**
+     * Method testNullMetricName.
+     * 
+     * @throws BadThresholdException
+     */
+    @Test(expectedExceptions = NullPointerException.class)
+    public void testNullMetricName() throws BadThresholdException {
+        ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder().withThreshold("metric="+METRIC_NAME+",ok=50..100,warn=100..200,crit=200..300").create();
+        ths.evaluate(buildMetric(new BigDecimal("210"), null));
+    }
 
-	/**
-	 * Method testBadMetric.
-	 * @throws BadThresholdException
-	 */
-	@Test
-	public void testBadMetric() throws BadThresholdException {
-		ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
-				.withThreshold(
-						"metric=pippo,ok=10..100,warn=100..200,crit=200..inf")
-				.create();
-		Status s = ths.evaluate("pluto", new BigDecimal("210"));
-		assertEquals(s, Status.OK);
-	}
+    /**
+     * Method testBadMetricPair.
+     * 
+     * @throws BadThresholdException
+     */
+    @Test(expectedExceptions = BadThresholdException.class)
+    public void testBadMetricPair() throws BadThresholdException {
+        ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder().withThreshold("metric=,ok=50..100,warn=100..200,crit=200..300").create();
+        ths.evaluate(buildMetric(new BigDecimal("210"), null));
+    }
+
+    /**
+     * Method testBadMetricPair2.
+     * 
+     * @throws BadThresholdException
+     */
+    @Test(expectedExceptions = BadThresholdException.class)
+    public void testBadMetricPair2() throws BadThresholdException {
+        ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder().withThreshold("=pippo,ok=50..100,warn=100..200,crit=200..300").create();
+        ths.evaluate(buildMetric(new BigDecimal("210"), null));
+    }
+
+    /**
+     * Method testBadOkPair.
+     * 
+     * @throws BadThresholdException
+     */
+    @Test(expectedExceptions = BadThresholdException.class)
+    public void testBadOkPair() throws BadThresholdException {
+        ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder().withThreshold("metric="+METRIC_NAME+",ok=,warn=100..200,crit=200..300").create();
+        ths.evaluate(buildMetric(new BigDecimal("210"), null));
+    }
+
+    /**
+     * Method testBadWarnPair.
+     * 
+     * @throws BadThresholdException
+     */
+    @Test(expectedExceptions = BadThresholdException.class)
+    public void testBadWarnPair() throws BadThresholdException {
+        ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder().withThreshold("metric="+METRIC_NAME+",ok=10..100,warn=,crit=200..300").create();
+        ths.evaluate(buildMetric(new BigDecimal("210"), null));
+    }
+
+    /**
+     * Method testBadCritPair.
+     * 
+     * @throws BadThresholdException
+     */
+    @Test(expectedExceptions = BadThresholdException.class)
+    public void testBadCritPair() throws BadThresholdException {
+        ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder().withThreshold("metric="+METRIC_NAME+",ok=10..100,warn=100..200,crit=").create();
+        ths.evaluate(buildMetric(new BigDecimal("210"), null));
+    }
+
+    /**
+     * Method testBadMetric.
+     * 
+     * @throws BadThresholdException
+     */
+    @Test
+    public void testBadMetric() throws BadThresholdException {
+        ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder().withThreshold("metric="+METRIC_NAME+",ok=10..100,warn=100..200,crit=200..inf").create();
+        Status s = ths.evaluate(buildMetric(new BigDecimal("210"), BAD_METRIC_NAME));
+        assertEquals(s, Status.OK);
+    }
 
 }

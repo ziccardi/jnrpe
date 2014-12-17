@@ -15,6 +15,8 @@
  *******************************************************************************/
 package it.jnrpe.utils.thresholds;
 
+import it.jnrpe.plugins.Metric;
+
 import java.math.BigDecimal;
 
 /**
@@ -75,22 +77,22 @@ class Range extends RangeConfig {
         RangeStringParser.parse(range, this);
     }
 
-    /**
-     * Multiply the value with the right multiplier based on the prefix.
-     * 
-     * @param value
-     *            The value
-     * @param prefix
-     *            The prefix
-    
-     * @return The result */
-    private BigDecimal convert(final BigDecimal value, final Prefixes prefix) {
-        if (prefix == null) {
-            return value;
-        }
-
-        return prefix.convert(value);
-    }
+//    /**
+//     * Multiply the value with the right multiplier based on the prefix.
+//     * 
+//     * @param value
+//     *            The value
+//     * @param prefix
+//     *            The prefix
+//    
+//     * @return The result */
+//    private BigDecimal convert(final BigDecimal value, final Prefixes prefix) {
+//        if (prefix == null) {
+//            return value;
+//        }
+//
+//        return prefix.convert(value, Prefixes.RAW);
+//    }
 
     /**
      * Evaluates if the passed in value falls inside the range. The negation is
@@ -103,13 +105,15 @@ class Range extends RangeConfig {
     
      * @return <code>true</code> if the value falls inside the range. The
      *         negation ('^') is ignored. */
-    private boolean evaluate(final BigDecimal value, final Prefixes prefix) {
-        if (value == null) {
+    private boolean evaluate(final Metric metric, final Prefixes prefix) {
+        if (metric == null || metric.getMetricValue() == null) {
             throw new NullPointerException("Value can't be null");
         }
 
+        BigDecimal value = metric.getMetricValue(prefix);
+        
         if (!isNegativeInfinity()) {
-            switch (value.compareTo(convert(getLeftBoundary(), prefix))) {
+            switch (value.compareTo(getLeftBoundary())) {
             case 0:
                 if (!isLeftInclusive()) {
                     return false;
@@ -122,7 +126,7 @@ class Range extends RangeConfig {
         }
 
         if (!isPositiveInfinity()) {
-            switch (value.compareTo(convert(getRightBoundary(), prefix))) {
+            switch (value.compareTo(getRightBoundary())) {
             case 0:
                 if (!isRightInclusive()) {
                     return false;
@@ -140,10 +144,10 @@ class Range extends RangeConfig {
     /**
      * @param value
      *            The value to be evaluated.
-    
-     * @return Whether the passed in value falls inside this range. */
-    public boolean isValueInside(final BigDecimal value) {
-        return isValueInside(value, null);
+     * @return Whether the passed in value falls inside this range. 
+     */
+    public boolean isValueInside(final Metric metric) {
+        return isValueInside(metric, Prefixes.RAW);
     }
 
     /**
@@ -151,10 +155,10 @@ class Range extends RangeConfig {
      *            The value to be evaluated.
      * @param prefix
      *            Used to multiply the range boundaries.
-    
-     * @return Whether the passed in value falls inside this range. */
-    public boolean isValueInside(final BigDecimal value, final Prefixes prefix) {
-        boolean res = evaluate(value, prefix);
+     * @return Whether the passed in value falls inside this range. 
+     */
+    public boolean isValueInside(final Metric metric, final Prefixes prefix) {
+        boolean res = evaluate(metric, prefix);
 
         if (isNegate()) {
             return !res;
@@ -164,26 +168,8 @@ class Range extends RangeConfig {
     }
 
     /**
-     * @param value
-     *            The value to be evaluated.
-    
-     * @return Whether the passed in value falls inside this range. */
-    public boolean isValueInside(final int value) {
-        return isValueInside(new BigDecimal(value));
-    }
-
-    /**
-     * @param value
-     *            The value to be evaluated.
-    
-     * @return Whether the passed in value falls inside this range. */
-    public boolean isValueInside(final long value) {
-        return isValueInside(new BigDecimal(value));
-    }
-
-    /**
-    
-     * @return The unparsed range string. */
+     * @return The unparsed range string. 
+     */
     String getRangeString() {
         return rangeString;
     }

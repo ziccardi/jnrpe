@@ -1,0 +1,15 @@
+#Download jcheck_nrpe
+
+jcheck_nrpe is distributed under the [Apache License](http://jnrpe.sourceforge.net/license.html), version 2.0.
+
+## jCheckNRPE ${project.version}
+
+ Package                                         | Link                   
+-------------------------------------------------|--------------
+ ${project.name} ${project.version} (Binary tar.gz)  | [${project.name}-${project.version}-bin.tar.gz] (http://sourceforge.net/projects/jnrpe/files/jcheck_nrpe/jcheck_nrpe-${project.version}/${project.name}-${project.version}-bin.tar.gz/download) 
+ ${project.name} ${project.version} (Binary zip)     | [${project.name}-${project.version}-bin.zip] (http://sourceforge.net/projects/jnrpe/files/jcheck_nrpe/jcheck_nrpe-${project.version}/jcheck_nrpe-${project.version}-bin.zip/download)
+ ${project.name} ${project.version} (Binary tar.bz2) | [${project.name}-${project.version}-bin.tar.bz2] (http://sourceforge.net/projects/jnrpe/files/jcheck_nrpe/jcheck_nrpe-${project.version}/${project.name}-${project.version}-bin.tar.bz2/download)
+ ${project.name} ${project.version} (Source tar.gz)  | [${project.name}-${project.version}-src.tar.gz] (http://sourceforge.net/projects/jnrpe/files/jcheck_nrpe/jcheck_nrpe-${project.version}/${project.name}-${project.version}-src.tar.gz/download)
+ ${project.name} ${project.version} (Source zip)     | [${project.name}-${project.version}-src.zip] (http://sourceforge.net/projects/jnrpe/files/jcheck_nrpe/jcheck_nrpe-${project.version}/${project.name}-${project.version}-src.zip/download)
+ ${project.name} ${project.version} (Source tar.bz2) | [${project.name}-${project.version}-src.tar.bz2] (http://sourceforge.net/projects/jnrpe/files/jcheck_nrpe/jcheck_nrpe-${project.version}/${project.name}-${project.version}-src.tar.bz2/download) 
+

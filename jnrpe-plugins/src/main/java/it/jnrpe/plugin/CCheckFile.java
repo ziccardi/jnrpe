@@ -18,6 +18,8 @@ package it.jnrpe.plugin;
 import it.jnrpe.ICommandLine;
 import it.jnrpe.ReturnValue;
 import it.jnrpe.Status;
+import it.jnrpe.plugins.Metric;
+import it.jnrpe.plugins.MetricBuilder;
 import it.jnrpe.plugins.PluginBase;
 import it.jnrpe.plugins.annotations.Option;
 import it.jnrpe.plugins.annotations.Plugin;
@@ -135,24 +137,24 @@ public class CCheckFile extends PluginBase {
      *             -
      */
     private ReturnValue checkAge(final ICommandLine cl, final File f, final ReturnValue res) throws BadThresholdException {
+        
+        long lLastAccess = f.lastModified();
+        long lNow = System.currentTimeMillis();
+        BigDecimal lAge = new BigDecimal(String.valueOf((lNow - lLastAccess) / 1000));
+        
+        final Metric ageMetric = MetricBuilder.forMetric("age").withValue(lAge).build();
         if (cl.hasOption("critical")) {
-            long lLastAccess = f.lastModified();
-            long lNow = System.currentTimeMillis();
-            BigDecimal lAge = new BigDecimal(String.valueOf((lNow - lLastAccess) / 1000));
             String sCriticalThreshold = cl.getOptionValue("critical");
 
-            if (ThresholdUtil.isValueInRange(sCriticalThreshold, lAge)) {
+            if (ThresholdUtil.isValueInRange(sCriticalThreshold, ageMetric)) {
                 return updateRes(res, new ReturnValue(Status.CRITICAL, "FILE CRITICAL - File age : " + lAge + " seconds"));
             }
         }
 
         if (cl.hasOption("warning")) {
-            long lLastAccess = f.lastModified();
-            long lNow = System.currentTimeMillis();
-            BigDecimal lAge = new BigDecimal(String.valueOf((lNow - lLastAccess) / 1000));
             String sWarningThreshold = cl.getOptionValue("warning");
 
-            if (ThresholdUtil.isValueInRange(sWarningThreshold, lAge)) {
+            if (ThresholdUtil.isValueInRange(sWarningThreshold, ageMetric)) {
                 return updateRes(res, new ReturnValue(Status.WARNING, "FILE WARNING - File age : " + lAge + " seconds"));
             }
         }
@@ -174,20 +176,21 @@ public class CCheckFile extends PluginBase {
      *             -
      */
     private ReturnValue checkSize(final ICommandLine cl, final File f, final ReturnValue res) throws BadThresholdException {
+        BigDecimal bdSize = new BigDecimal(String.valueOf(f.length()));
+        Metric sizeMetric = MetricBuilder.forMetric("size").withValue(bdSize).withMinValue(0).build();
+        
         if (cl.hasOption("sizecritical")) {
             String sCriticalThreshold = cl.getOptionValue("sizecritical");
-            BigDecimal bdSize = new BigDecimal(String.valueOf(f.length()));
 
-            if (ThresholdUtil.isValueInRange(sCriticalThreshold, bdSize)) {
+            if (ThresholdUtil.isValueInRange(sCriticalThreshold, sizeMetric)) {
                 return updateRes(res, new ReturnValue(Status.CRITICAL, "FILE CRITICAL - File size : " + bdSize + " bytes"));
             }
         }
 
         if (cl.hasOption("sizewarning")) {
             String sWarningThreshold = cl.getOptionValue("sizewarning");
-            BigDecimal bdSize = new BigDecimal(String.valueOf(f.length()));
 
-            if (ThresholdUtil.isValueInRange(sWarningThreshold, bdSize)) {
+            if (ThresholdUtil.isValueInRange(sWarningThreshold, sizeMetric)) {
                 return updateRes(res, new ReturnValue(Status.WARNING, "FILE WARNING  - File size : " + bdSize + " bytes"));
             }
         }
@@ -241,10 +244,12 @@ public class CCheckFile extends PluginBase {
                 // return updateRes(res, new ReturnValue(Status.OK, "FILE OK"));
             }
 
-            if (ThresholdUtil.isValueInRange(sCriticalThreshold, iCount)) {
+            final Metric countMetric = MetricBuilder.forMetric("count").withMinValue(0).withValue(iCount).build();
+            
+            if (ThresholdUtil.isValueInRange(sCriticalThreshold, countMetric)) {
                 return updateRes(res, new ReturnValue(Status.CRITICAL, "FILE CRITICAL - String '" + sPattern + "' found " + iCount + " times"));
             }
-            if (ThresholdUtil.isValueInRange(sWarningThreshold, iCount)) {
+            if (ThresholdUtil.isValueInRange(sWarningThreshold, countMetric)) {
                 return updateRes(res, new ReturnValue(Status.WARNING, "FILE WARNING - String '" + sPattern + "' found " + iCount + " times"));
             }
 

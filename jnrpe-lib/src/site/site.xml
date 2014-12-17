@@ -8,11 +8,11 @@
 
 	<version position="left" />
 
-	<body>
+	<!-- <body>
 		<menu name="Documentation">
 			<item name="Usage Scenario" href="usage_scenario.html" />
 			<item name="Embedding" href="embedding.html" />
 		</menu>
-	</body>
+	</body> -->
 
 </project>

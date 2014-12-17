@@ -16,6 +16,7 @@
 package it.jnrpe.utils.thresholds;
 
 import it.jnrpe.Status;
+import it.jnrpe.plugins.Metric;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -77,7 +78,7 @@ public class ThresholdsEvaluator {
 
     /**
      * Evaluates the passed in value against the threshold configured inside
-     * this evaluator. If the threshold do not refer the passed in metric, than
+     * this evaluator. If the threshold do not refer the passed in metric, then
      * it is ignored and the next threshold is checked.
      *
      * @param metric
@@ -85,40 +86,21 @@ public class ThresholdsEvaluator {
      * @param value
      *            The value to be checked
     
-     * @return The status computed accordin to the rules specified for
-     *         {@link IThreshold#evaluate(BigDecimal)} */
-    final Status evaluate(final String metric, final int value) {
-        return evaluate(metric, new BigDecimal(value));
-    }
+     * @return The status computed according to the rules specified for
+     *         {@link IThreshold#evaluate(BigDecimal)} 
+     */
+    final Status evaluate(final Metric metric) {
 
-    /**
-     * Evaluates the passed in value against the threshold configured inside
-     * this evaluator. If the threshold do not refer the passed in metric, than
-     * it is ignored and the next threshold is checked.
-     *
-     * @param metric
-     *            The metric name
-     * @param value
-     *            The value to be checked
-    
-     * @return The status computed accordin to the rules specified for
-     *         {@link IThreshold#evaluate(BigDecimal)} */
-    final Status evaluate(final String metric, final BigDecimal value) {
-
-        if (value == null) {
+        if (metric == null || metric.getMetricValue() == null) {
             throw new NullPointerException("Metric value can't be null");
         }
 
-        if (metric == null) {
-            throw new NullPointerException("Metric name can't be null");
-        }
-
-        IThreshold thr = thresholdsMap.get(metric);
+        IThreshold thr = thresholdsMap.get(metric.getMetricName());
         if (thr == null) {
             return Status.OK;
         }
 
-        return thr.evaluate(value);
+        return thr.evaluate(metric);
     }
 
     /**

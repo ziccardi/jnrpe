@@ -19,6 +19,8 @@ import it.jnrpe.ICommandLine;
 import it.jnrpe.ReturnValue;
 import it.jnrpe.Status;
 import it.jnrpe.plugin.utils.ShellUtils;
+import it.jnrpe.plugins.Metric;
+import it.jnrpe.plugins.MetricBuilder;
 import it.jnrpe.plugins.PluginBase;
 import it.jnrpe.plugins.annotations.Option;
 import it.jnrpe.plugins.annotations.Plugin;
@@ -29,7 +31,6 @@ import it.jnrpe.utils.TimeUnit;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -205,13 +206,14 @@ public class CheckProcs extends PluginBase {
     private ReturnValue analyzeProcMetrics(List<Map<String, String>> output, ICommandLine cl, String critical, String warning, String message)
             throws Exception {
         int size = output.size();
+        Metric sizeMetric = MetricBuilder.forMetric("size").withMinValue(0).withValue(size).build();
         if (critical != null) {
-            if (ThresholdUtil.isValueInRange(critical, new BigDecimal(size))) {
+            if (ThresholdUtil.isValueInRange(critical, sizeMetric)) {
                 return new ReturnValue(Status.CRITICAL, "PROCS CRITICAL: " + message + " " + size + " processes.");
             }
         }
         if (warning != null) {
-            if (ThresholdUtil.isValueInRange(warning, new BigDecimal(size))) {
+            if (ThresholdUtil.isValueInRange(warning, sizeMetric)) {
                 return new ReturnValue(Status.WARNING, "PROCS WARNING: " + message + " " + size + " processes.");
             }
         }
@@ -254,7 +256,10 @@ public class CheckProcs extends PluginBase {
         List<Map<String, String>> list = new ArrayList<Map<String, String>>();
         for (Map<String, String> values : output) {
             int procValue = Integer.parseInt(values.get(metric.toLowerCase()));
-            if (ThresholdUtil.isValueInRange(value, procValue)) {
+            
+            Metric metricObj = MetricBuilder.forMetric(metric).withValue(procValue).build();
+            
+            if (ThresholdUtil.isValueInRange(value, metricObj)) {
                 list.add(values);
             }
         }

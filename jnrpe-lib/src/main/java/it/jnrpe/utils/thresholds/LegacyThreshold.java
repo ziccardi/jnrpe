@@ -16,8 +16,7 @@
 package it.jnrpe.utils.thresholds;
 
 import it.jnrpe.Status;
-
-import java.math.BigDecimal;
+import it.jnrpe.plugins.Metric;
 
 /**
  * This class represent a parser/evaluator for the old threshold syntax.
@@ -43,6 +42,9 @@ public class LegacyThreshold implements IThreshold {
      */
     private final String metricName;
 
+
+    private final Prefixes prefix;
+    
     /**
      * Builds and initializes the threshold object.
      *
@@ -55,13 +57,22 @@ public class LegacyThreshold implements IThreshold {
      * @param crit
      *            The critical range.
      */
+    public LegacyThreshold(final Prefixes prefix, final String metric, final LegacyRange ok, final LegacyRange warn, final LegacyRange crit) {
+        okRange = ok;
+        warnRange = warn;
+        critRange = crit;
+        metricName = metric;
+        this.prefix = prefix;
+    }
+
     public LegacyThreshold(final String metric, final LegacyRange ok, final LegacyRange warn, final LegacyRange crit) {
         okRange = ok;
         warnRange = warn;
         critRange = crit;
         metricName = metric;
+        this.prefix = Prefixes.RAW;
     }
-
+    
     /**
      * Evaluates the value against the specified ranges. The followed flow is:
      * <ol>
@@ -81,7 +92,7 @@ public class LegacyThreshold implements IThreshold {
     
      * @return the evaluated status. * @see it.jnrpe.utils.thresholds.IThreshold#evaluate(BigDecimal)
      */
-    public final Status evaluate(final BigDecimal value) {
+    public final Status evaluate(final Metric value) {
         if (critRange != null && critRange.isValueInside(value)) {
             return Status.CRITICAL;
         }
@@ -105,8 +116,8 @@ public class LegacyThreshold implements IThreshold {
     
      * @return wether this threshold is about the passed in metric. * @see it.jnrpe.utils.thresholds.IThreshold#isAboutMetric(String)
      */
-    public final boolean isAboutMetric(final String metric) {
-        return metricName.equalsIgnoreCase(metric);
+    public final boolean isAboutMetric(final Metric metric) {
+        return metricName.equalsIgnoreCase(metric.getMetricName());
     }
 
     /**
@@ -163,5 +174,9 @@ public class LegacyThreshold implements IThreshold {
     @Override
     public String toString() {
         return "LegacyThreshold [okRange=" + okRange + ", warnRange=" + warnRange + ", critRange=" + critRange + ", metricName=" + metricName + "]";
+    }
+    
+    public Prefixes getPrefix() {
+        return prefix;
     }
 }

@@ -15,6 +15,7 @@
  *******************************************************************************/
 package it.jnrpe.utils.thresholds;
 
+import it.jnrpe.plugins.Metric;
 import it.jnrpe.utils.BadThresholdException;
 
 import java.io.IOException;
@@ -30,6 +31,9 @@ import java.math.BigDecimal;
  * @version $Revision: 1.0 $
  */
 public class LegacyRange {
+    
+    private Prefixes prefix = Prefixes.RAW;
+    
     /**
      * When the current state is 'MINVAL', that means that the value we are
      * parsing is the definition of the minimum value.
@@ -83,6 +87,12 @@ public class LegacyRange {
      *             - */
     public LegacyRange(final String threshold) throws BadThresholdException {
         thresholdString = threshold;
+        parseRange();
+    }
+    
+    public LegacyRange(final String threshold, final Prefixes prefix) throws BadThresholdException {
+        thresholdString = threshold;
+        this.prefix = prefix;
         parseRange();
     }
 
@@ -211,24 +221,15 @@ public class LegacyRange {
      * 
      * @param value
      *            The value
-    
-     * @return <code>true</code> if the value falls inside the range.
-     *         <code>false</code> otherwise. */
-    public final boolean isValueInside(final BigDecimal value) {
-        return isValueInside(value, null);
-    }
-
-    /**
-     * Returns <code>true</code> if the value falls inside the range.
-     * 
-     * @param value
-     *            The value
      * @param prefix
      *            The prefix that identifies the multiplier
     
      * @return <code>true</code> if the value falls inside the range.
      *         <code>false</code> otherwise. */
-    public final boolean isValueInside(final BigDecimal value, final Prefixes prefix) {
+    public final boolean isValueInside(final Metric metric) {
+        
+        BigDecimal value = metric.getMetricValue(prefix);
+        
         boolean bRes = true;
         // Sets the minimum value of the range
         if (minVal != null) {
@@ -245,32 +246,8 @@ public class LegacyRange {
     }
 
     /**
-     * Returns <code>true</code> if the value falls inside the range.
-     * 
-     * @param value
-     *            The value
-    
-     * @return <code>true</code> if the value falls inside the range.
-     *         <code>false</code> otherwise. */
-    public final boolean isValueInside(final int value) {
-        return isValueInside(new BigDecimal(value));
-    }
-
-    /**
-     * Returns <code>true</code> if the value falls inside the range.
-     * 
-     * @param value
-     *            The value
-    
-     * @return <code>true</code> if the value falls inside the range.
-     *         <code>false</code> otherwise. */
-    public final boolean isValueInside(final long value) {
-        return isValueInside(new BigDecimal(value));
-    }
-
-    /**
-    
-     * @return The original unparsed threshold string. */
+     * @return The original unparsed threshold string. 
+     */
     final String getThresholdString() {
         return thresholdString;
     }

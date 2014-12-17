@@ -1,4 +1,4 @@
-<plugin name="CHECK_TOMCAT" class="it.jnrpe.plugin.CheckTomcat">
+<plugin name="CHECK_TOMCAT" class="it.jnrpe.plugin.tomcat.CheckTomcat">
 	<description>
 <![CDATA[
     Checks the tomcat /manager/status page for excessive memory usage or an excessive number of threads in use.

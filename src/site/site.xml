@@ -15,64 +15,48 @@
 		<href>http://jnrpe.sourceforge.net/</href>
 	</bannerLeft>
 	<body>
-
 		<menu name="Main" inherit="top">
 			<item name="Welcome" href="index.html" />
 		</menu>
 
-		<menu name="Get JNRPE" inherit="top">
-			<item name="Download" href="download.html" />
-		</menu>
-
-		<menu name="Documentation" >
-			<item name="Administration" collapse="true" href="#">
-				<item name="Install the server" href="jnrpe-install/index.html" />
-				<item name="Install the OSGI bundles" />
-				
+		<menu name="Overview" inherit="bottom">
+			<item name="Administration" collapse="true" href="administration.html">
+				<item name="Install the server" href="jnrpe-install/install.html" />
 				<item name="The JNRPE Server" href="jnrpe-server/index.html" />
 				<item name="The JNRPE Plugins" href="jnrpe-plugins/index.html" />
+				<item name="The JNRPE Client" href="jcheck_nrpe/index.html" />
 			</item>
-			<item name="Development" collapse="true" href="#">
+			<item name="Development" collapse="true" href="development.html">
 				<item name="Getting the sources" href="docs/get_sources.html" />
 				<item name="Knowing the modules" href="docs/projects.html" />
 				<item name="The JNRPE Library" href="jnrpe-lib/index.html" />
 				<item name="JNRPE Blog" href="http://www.jnrpe.it/cms/" />
 			</item>
-			<item name="Tutorials" collapse="true" href="#">
+			<item name="Tutorials" collapse="true" href="tutorials.html">
 				<item name="Writing JNRPE Java Nagios Plugins"
 					href="http://www.jnrpe.it/cms/index.php/home/tutorials/12-nagios/jnrpe/7-creating-plugins-with-java-part1" />
 			</item>
 		</menu>
 
+		<menu name="Get JNRPE" inherit="bottom">
+			<item name="Download" href="download.html" />
+		</menu>
+
 		<menu name="Reports" ref="reports" inherit="bottom" />
 
 	</body>
+
 	<skin>
-		<groupId>lt.velykis.maven.skins</groupId>
-		<artifactId>reflow-maven-skin</artifactId>
-		<version>1.1.1</version>
+		<groupId>org.apache.maven.skins</groupId>
+		<artifactId>maven-fluido-skin</artifactId>
+		<version>1.3.1</version>
 	</skin>
 
-	<custom>
-		<reflowSkin>
-			<theme>bootswatch-spruce</theme>
-			<highlightJs>true</highlightJs>
-			<brand>
-				<name>JNRPE</name>
-			</brand>
-			<slogan>Java Nagios Remote Plugin Executor</slogan>
-			<titleTemplate>%2$s | %1$s</titleTemplate>
-			
-			<breadcrumbs>true</breadcrumbs>
-			
-			<topNav>Main|Get JNRPE|Documentation|reports</topNav>
-			<bottomNav>
-				<column>Documentation</column>
-			</bottomNav>
-			<bottomDescription>
-				A Java implementation of NRPE protocol and server
-			</bottomDescription>
-			<skinAttribution>false</skinAttribution>
-		</reflowSkin>
-	</custom>
+  <custom>
+    <fluidoSkin>
+    <topBarEnabled>true</topBarEnabled>
+      <facebookLike />
+      <googlePlusOne />
+    </fluidoSkin>
+  </custom>
 </project>

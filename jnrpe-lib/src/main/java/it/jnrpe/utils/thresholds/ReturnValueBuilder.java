@@ -111,7 +111,7 @@ public final class ReturnValueBuilder {
      * @return this */
     public ReturnValueBuilder withValue(final Metric pluginMetric) {
         if (thresholds.isMetricRequired(pluginMetric.getMetricName())) {
-            Status newStatus = thresholds.evaluate(pluginMetric.getMetricName(), pluginMetric.getMetricValue());
+            Status newStatus = thresholds.evaluate(pluginMetric);
             if (newStatus.getSeverity() > status.getSeverity()) {
                 status = newStatus;
             }
@@ -120,9 +120,7 @@ public final class ReturnValueBuilder {
 
             formatResultMessage(pluginMetric);
 
-            retVal.withPerformanceData(pluginMetric.getMetricName(), pluginMetric.getMetricValue(), thr.getUnitString(),
-                    thr.getRangesAsString(Status.WARNING), thr.getRangesAsString(Status.CRITICAL), pluginMetric.getMinValue(),
-                    pluginMetric.getMaxValue());
+            retVal.withPerformanceData(pluginMetric, thr);
         }
         return this;
     }

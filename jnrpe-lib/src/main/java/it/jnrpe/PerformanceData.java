@@ -16,6 +16,9 @@
 package it.jnrpe;
 
 import it.jnrpe.ReturnValue.UnitOfMeasure;
+import it.jnrpe.plugins.Metric;
+import it.jnrpe.plugins.MetricValue;
+import it.jnrpe.utils.thresholds.Prefixes;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -30,17 +33,6 @@ import java.text.DecimalFormat;
  * @version $Revision: 1.0 $
  */
 class PerformanceData {
-
-    /**
-     * The label associated with this performance data. Can contain any
-     * characters except the equals sign or single quote (').
-     */
-    private final String label;
-
-    /**
-     * The value of this performance data.
-     */
-    private final BigDecimal performanceValue;
 
     /**
      * The Unit of Measure of {@link #performanceValue}, {@link #minimumValue}
@@ -67,24 +59,10 @@ class PerformanceData {
      */
     private final String criticalRange;
 
-    /**
-     * The minimum value that this performance data could reach. Can be
-     * <code>null</code>
-     */
-    private final BigDecimal minimumValue;
-
-    /**
-     * The maximum value that this performance data could reach. Can be
-     * <code>null</code>
-     */
-    private final BigDecimal maximumValue;
-
-    /**
-     * The performance data will be returned as string. This is the formatter
-     * for all the performance numbers.
-     */
-    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.000000");
-
+    private final Prefixes prefix;
+    
+    private Metric metric = null;
+    
     /**
      * Creates a performance data object.
      *
@@ -108,16 +86,13 @@ class PerformanceData {
      *            the maximum value that this performance data can reach. Can be
      *            null.
      */
-    PerformanceData(final String perfLabel, final BigDecimal value, final UnitOfMeasure uom, final String warnRange, final String critRange,
-            final BigDecimal minValue, final BigDecimal maxValue) {
-        label = perfLabel;
-        performanceValue = value;
+    PerformanceData(final Metric metric, final UnitOfMeasure uom, final String warnRange, final String critRange) {
+        this.metric = metric;
         unitOfMeasure = uom;
         warningRange = warnRange;
         criticalRange = critRange;
-        minimumValue = minValue;
-        maximumValue = maxValue;
         unit = null;
+        prefix = Prefixes.RAW;
     }
 
     /**
@@ -143,25 +118,28 @@ class PerformanceData {
      *            the maximum value that this performance data can reach. Can be
      *            null.
      */
-    PerformanceData(final String perfLabel, final BigDecimal value, final String unitofMeasure, final String warnRange,
-            final String critRange, final BigDecimal minValue, final BigDecimal maxValue) {
-        label = perfLabel;
-        performanceValue = value;
+    PerformanceData(final Metric metric, final Prefixes prefix, final String unitofMeasure, final String warnRange, final String critRange) {
+        this.metric = metric;
         unitOfMeasure = null;
         warningRange = warnRange;
         criticalRange = critRange;
-        minimumValue = minValue;
-        maximumValue = maxValue;
         unit = unitofMeasure;
+        this.prefix = prefix;
     }
 
     /**
-     * Produce a performance string accordin to Nagios specification based on
+     * Produce a performance string according to Nagios specification based on
      * the value of this performance data object.
      *
-     * @return a string that can be returned to Nagios */
+     * @return a string that can be returned to Nagios 
+     */
     public String toPerformanceString() {
-        final StringBuilder res = new StringBuilder().append(quote(label)).append('=').append(DECIMAL_FORMAT.format(performanceValue));
+        final StringBuilder res = 
+                new StringBuilder()
+                    .append(
+                            quote(metric.getMetricName()))
+                            .append('=')
+                            .append(((MetricValue)metric.getMetricValue(prefix)).toPrettyPrintedString());
 
         if (unitOfMeasure != null) {
             switch (unitOfMeasure) {
@@ -212,12 +190,12 @@ class PerformanceData {
             res.append(criticalRange);
         }
         res.append(';');
-        if (minimumValue != null) {
-            res.append(DECIMAL_FORMAT.format(minimumValue));
+        if (metric.getMinValue() != null) {
+            res.append(((MetricValue) metric.getMinValue(prefix)).toPrettyPrintedString());
         }
         res.append(';');
-        if (maximumValue != null) {
-            res.append(DECIMAL_FORMAT.format(maximumValue));
+        if (metric.getMaxValue() != null) {
+            res.append(((MetricValue) metric.getMaxValue(prefix)).toPrettyPrintedString());
         }
 
         while (res.charAt(res.length() - 1) == ';') {
@@ -249,8 +227,8 @@ class PerformanceData {
      */
     @Override
     public String toString() {
-        return "PerformanceData [label=" + label + ", performanceValue=" + performanceValue + ", unitOfMeasure=" + unitOfMeasure + ", unit=" + unit
-                + ", warningRange=" + warningRange + ", criticalRange=" + criticalRange + ", minimumValue=" + minimumValue + ", maximumValue="
-                + maximumValue + "]";
+        return "PerformanceData [label=" + metric.getMetricName() + ", performanceValue=" + metric.getMetricValue() + ", unitOfMeasure=" + unitOfMeasure + ", unit=" + unit
+                + ", warningRange=" + warningRange + ", criticalRange=" + criticalRange + ", minimumValue=" + metric.getMinValue() + ", maximumValue="
+                + metric.getMaxValue() + "]";
     }
 }

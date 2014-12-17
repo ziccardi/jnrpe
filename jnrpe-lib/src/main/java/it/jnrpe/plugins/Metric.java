@@ -15,6 +15,8 @@
  *******************************************************************************/
 package it.jnrpe.plugins;
 
+import it.jnrpe.utils.thresholds.Prefixes;
+
 import java.math.BigDecimal;
 
 /**
@@ -24,6 +26,9 @@ import java.math.BigDecimal;
  * @version $Revision: 1.0 $
  */
 public class Metric {
+    
+    private Prefixes prefix = Prefixes.RAW;
+    
     /**
      * The name of the metric.
      */
@@ -67,31 +72,61 @@ public class Metric {
      */
     public Metric(final String name, final String message, final BigDecimal value, final BigDecimal min, final BigDecimal max) {
         metricName = name;
-        metricValue = value;
-        minValue = min;
-        maxValue = max;
+        metricValue = convert(value);
+        minValue = convert(min);
+        maxValue = convert(max);
         metricMessage = message;
     }
 
-    /**
+    Metric(final String name, final String message, final BigDecimal value, final BigDecimal min, final BigDecimal max, final Prefixes prefix) {
+        metricName = name;
+        metricValue = convert(value);
+        minValue = convert(min);
+        maxValue = convert(max);
+        metricMessage = message;
+        this.prefix = prefix;
+    }
     
-     * @return The name of this metric. */
+    private MetricValue convert(Number val) {
+        if (val == null) {
+            return null;
+        }
+        
+        if (val instanceof MetricValue) {
+            return (MetricValue) val;
+        }
+        
+        return new MetricValue(val.toString());
+    }
+    
+    /**
+     * @return The name of this metric. 
+     */
     public final String getMetricName() {
         return metricName;
     }
 
-    /**
     
-     * @return The value of this metric. */
+    /**
+     * @return The value of this metric. 
+     */
     public final BigDecimal getMetricValue() {
         return metricValue;
     }
 
-    /**
+    public final BigDecimal getMetricValue(Prefixes outputPrefix) {
+        return prefix.convert(metricValue, outputPrefix);
+    }
     
-     * @return The minimum value for this metric. */
+    /**
+     * @return The minimum value for this metric. 
+     */
     public final BigDecimal getMinValue() {
         return minValue;
+    }
+    
+    public final BigDecimal getMinValue(Prefixes outputPrefix) {
+        return prefix.convert(minValue, outputPrefix);
     }
 
     /**
@@ -100,10 +135,14 @@ public class Metric {
     public final BigDecimal getMaxValue() {
         return maxValue;
     }
+    
+    public final BigDecimal getMaxValue(Prefixes outputPrefix) {
+        return prefix.convert(maxValue, outputPrefix);
+    }
 
     /**
-    
-     * @return The message associated with this metric. */
+     * @return The message associated with this metric. 
+     */
     public final String getMessage() {
         return metricMessage;
     }

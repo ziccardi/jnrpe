@@ -195,7 +195,7 @@ public final class PluginProxy extends PluginBase {
      */
     @Override
     protected String getPluginName() {
-        return null;
+        return proxyedPluginDefinition.getName();
     }
 
     /**

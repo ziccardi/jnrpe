@@ -19,6 +19,7 @@ import static org.testng.Assert.assertEquals;
 import it.jnrpe.ReturnValue;
 import it.jnrpe.Status;
 import it.jnrpe.plugins.Metric;
+import it.jnrpe.plugins.MetricBuilder;
 import it.jnrpe.utils.BadThresholdException;
 
 import java.math.BigDecimal;
@@ -142,9 +143,21 @@ public class ReturnValueBuilderTest {
             .withThreshold("metric=TEST_METRIC,ok=50..100,warn=100..200,crit=200..300,unit=byte,prefix=mega")
             .create();
         
+//        ReturnValue ret = ReturnValueBuilder.forPlugin("TEST_PLUGIN", ths)
+//            	.withValue(new Metric("TEST_METRIC", "TEST OK", Prefixes.mega.convert(60), new BigDecimal(0), new BigDecimal(100)))
+//            	.create();
+        
         ReturnValue ret = ReturnValueBuilder.forPlugin("TEST_PLUGIN", ths)
-            	.withValue(new Metric("TEST_METRIC", "TEST OK", Prefixes.mega.convert(60), new BigDecimal(0), new BigDecimal(100)))
-            	.create();
+                .withValue(
+                        MetricBuilder.forMetric("TEST_METRIC")
+                        .withMessage("TEST OK")
+                        .withValue(60)
+                        .withMinValue(0)
+                        .withMaxValue(100)
+                        .withPrefix(Prefixes.mega)
+                        .build()
+                        )
+                .create();
         
         assertEquals(ret.getStatus(), Status.OK);
     }

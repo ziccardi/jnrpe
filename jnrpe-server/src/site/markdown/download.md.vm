@@ -1,0 +1,37 @@
+#Download JNRPE Server
+
+  JNRPE Server is distributed in several formats for your convenience. 
+  Use a source archive if you intend to build JNRPE yourself. 
+  Otherwise, simply pick a ready-made binary distribution and follow 
+  the installation instructions given at the end of this document.
+
+  JNRPE is distributed under the [Apache License](http://jnrpe.sourceforge.net/license.html), version 2.0.
+
+## JNRPE Server ${project.version}
+
+ Package                                           | Link                   
+---------------------------------------------------|------------------------
+| JNRPE Server ${project.version} (Binary zip)     | [${project.name}-${project.version}-bin.zip](http://sourceforge.net/projects/jnrpe/files/jnrpe/jnrpe-server-${project.version}/jnrpe-server-${project.version}-bin.zip/download) 
+| JNRPE Server ${project.version} (Binary tar.gz)  | [${project.name}-${project.version}-bin.tar.gz](http://sourceforge.net/projects/jnrpe/files/jnrpe/jnrpe-server-${project.version}/jnrpe-server-${project.version}-bin.tar.gz/download) 
+| JNRPE Server ${project.version} (Binary tar.bz2) | [${project.name}-${project.version}-bin.tar.bz2](http://sourceforge.net/projects/jnrpe/files/jnrpe/jnrpe-server-${project.version}/jnrpe-server-${project.version}-bin.tar.bz2/download)
+| JNRPE Server ${project.version} (Source zip)     | [${project.name}-${project.version}-src.zip](http://sourceforge.net/projects/jnrpe/files/jnrpe/jnrpe-server-${project.version}/jnrpe-server-${project.version}-src.zip/download) 
+| JNRPE Server ${project.version} (Source tar.gz)  | [${project.name}-${project.version}-src.tar.gz](http://sourceforge.net/projects/jnrpe/files/jnrpe/jnrpe-server-${project.version}/jnrpe-server-${project.version}-src.tar.gz/download)
+| JNRPE Server ${project.version} (Source tar.bz2) | [${project.name}-${project.version}-src.tar.bz2](http://sourceforge.net/projects/jnrpe/files/jnrpe/jnrpe-server-${project.version}/jnrpe-server-${project.version}-src.tar.bz2/download)
+
+## Installation Instructions
+
+  JNRPE is a Java tool, so you must have Java installed in order to proceed (the Java Runtime Environment is sufficient). 
+  Additional optional installation steps are listed after the platform specific instructions.
+  
+### Windows
+
+  1. Unzip the distribution archive, i.e. jnrpe-server-${project.version}-bin.zip to the directory you wish to install 
+  JNRPE Server. These instructions assume you chose C:\Program Files\jnrpe-server-${project.version}. 
+  The subdirectory jnrpe-server-${project.version} will be created from the archive.
+  2. Make sure that JRE_HOME exists in your user variables or in the system variables and it is set to 
+  the location of your JRE (e.g. C:\Program Files\Java\jre) and that %JRE_HOME%\bin is in your Path environment variable.
+  3. Open a new command prompt (Winkey + R then type cmd) and run 
+     ```
+        jnrpe --version 
+     ```
+     to verify that it is correctly installed.

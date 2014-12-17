@@ -131,10 +131,6 @@ public abstract class PluginBase implements IPluginInterfaceEx {
 
     }
 
-    // public void setContext(IJNRPEExecutionContext ctx) {
-    // this.context = ctx;
-    // }
-
     /**
      * Method getContext.
      * @return IJNRPEExecutionContext

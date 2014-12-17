@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="JNRPE Plugins">
 
-	<body>
+	<!-- <body>
 		<menu name="Documentation">
 			<item name="Overview" href="index.html" />
 			<item name="The CHECK_BY_SSH plugin" href="plugins/check_by_ssh.html" />
@@ -21,6 +21,6 @@
 			<item name="The CHECK_USERS plugin" href="plugins/check_users.html" />
 			<item name="The EXEC plugin" href="plugins/exec.html" />
 		</menu>
-	</body>
+	</body> -->
 	
 </project> 

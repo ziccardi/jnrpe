@@ -15,9 +15,10 @@
  *******************************************************************************/
 package it.jnrpe;
 
-import it.jnrpe.utils.thresholds.ReturnValueBuilder;
+import it.jnrpe.plugins.Metric;
+import it.jnrpe.utils.thresholds.IThreshold;
+import it.jnrpe.utils.thresholds.Prefixes;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -245,52 +246,9 @@ public final class ReturnValue {
      *            applicable)
     
      * @return this */
-    public ReturnValue withPerformanceData(final String label, final Long value, final UnitOfMeasure uom, final String warningRange,
-            final String criticalRange, final Long minimumValue, final Long maximumValue) {
-        BigDecimal bdValue = null;
-        BigDecimal bdMin = null;
-        BigDecimal bdMax = null;
-
-        if (value != null) {
-            bdValue = new BigDecimal(value);
-        }
-        if (minimumValue != null) {
-            bdMin = new BigDecimal(minimumValue);
-        }
-        if (maximumValue != null) {
-            bdMax = new BigDecimal(maximumValue);
-        }
-
-        performanceDataList.add(new PerformanceData(label, bdValue, uom, warningRange, criticalRange, bdMin, bdMax));
-        return this;
-    }
-
-    /**
-     * Adds performance data to the plugin result. Thos data will be added to
-     * the output formatted as specified in Nagios specifications
-     * (http://nagiosplug.sourceforge.net/developer-guidelines.html#AEN201)
-     * 
-     * @param label
-     *            The label of the performance data we are adding
-     * @param value
-     *            The performance data value
-     * @param uom
-     *            The Unit Of Measure
-     * @param warningRange
-     *            The warning threshold used to check this metric (can be null)
-     * @param criticalRange
-     *            The critical threshold used to check this value (can be null)
-     * @param minimumValue
-     *            The minimum value for this metric (can be null if not
-     *            applicable)
-     * @param maximumValue
-     *            The maximum value for this metric (can be null if not
-     *            applicable)
-    
-     * @return this */
-    public ReturnValue withPerformanceData(final String label, final BigDecimal value, final UnitOfMeasure uom, final String warningRange,
-            final String criticalRange, final BigDecimal minimumValue, final BigDecimal maximumValue) {
-        performanceDataList.add(new PerformanceData(label, value, uom, warningRange, criticalRange, minimumValue, maximumValue));
+    public ReturnValue withPerformanceData(final Metric metric, final UnitOfMeasure uom, final String warningRange,
+            final String criticalRange) {
+        performanceDataList.add(new PerformanceData(metric, uom, warningRange, criticalRange));
         return this;
     }
 
@@ -317,10 +275,16 @@ public final class ReturnValue {
      *            applicable)
     
      * @return this */
-    public ReturnValue withPerformanceData(final String label, final BigDecimal value, final String unit, final String warningRange,
-            final String criticalRange, final BigDecimal minimumValue, final BigDecimal maximumValue) {
+//    public ReturnValue withPerformanceData(final Metric metric, Prefixes prefix, final String unit, final String warningRange,
+//            final String criticalRange) {
+//
+//        performanceDataList.add(new PerformanceData(metric, prefix, unit, warningRange, criticalRange));
+//        return this;
+//    }
 
-        performanceDataList.add(new PerformanceData(label, value, unit, warningRange, criticalRange, minimumValue, maximumValue));
+    public ReturnValue withPerformanceData(final Metric metric, IThreshold threshold) {
+
+        performanceDataList.add(new PerformanceData(metric, threshold.getPrefix(), threshold.getUnitString(), threshold.getRangesAsString(Status.WARNING), threshold.getRangesAsString(Status.CRITICAL)));
         return this;
     }
     

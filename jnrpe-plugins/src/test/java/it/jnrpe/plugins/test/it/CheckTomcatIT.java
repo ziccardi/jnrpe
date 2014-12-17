@@ -159,10 +159,11 @@ public class CheckTomcatIT implements ITConstants {
                 .addArgument(new CommandOption("username", "$ARG3$"))
                 .addArgument(new CommandOption("password", "$ARG4$"))
                 .addArgument(new CommandOption("warning", "$ARG5$"))
+                .addArgument(new CommandOption("percent"))
                 );
 
         JNRPEClient client = new JNRPEClient(BIND_ADDRESS, JNRPE_PORT, false);
-        ReturnValue ret = client.sendCommand("CHECK_THREAD_PERC_WARN", "127.0.0.1", TOMCAT_PORT, "tomcat", "tomcat", ":99.9%");
+        ReturnValue ret = client.sendCommand("CHECK_THREAD_PERC_WARN", "127.0.0.1", TOMCAT_PORT, "tomcat", "tomcat", ":99.9");
 
         Assert.assertEquals(ret.getStatus(), Status.WARNING, ret.getMessage());
     }
@@ -182,10 +183,11 @@ public class CheckTomcatIT implements ITConstants {
                 .addArgument(new CommandOption("username", "$ARG3$"))
                 .addArgument(new CommandOption("password", "$ARG4$"))
                 .addArgument(new CommandOption("critical", "$ARG5$"))
+                .addArgument(new CommandOption("percent"))
                 );
 
         JNRPEClient client = new JNRPEClient(BIND_ADDRESS, JNRPE_PORT, false);
-        ReturnValue ret = client.sendCommand("CHECK_THREAD_PERC_CRIT", "127.0.0.1", TOMCAT_PORT, "tomcat", "tomcat", ":99.9%");
+        ReturnValue ret = client.sendCommand("CHECK_THREAD_PERC_CRIT", "127.0.0.1", TOMCAT_PORT, "tomcat", "tomcat", ":99.9");
 
         Assert.assertEquals(ret.getStatus(), Status.CRITICAL, ret.getMessage());
     }
@@ -201,10 +203,11 @@ public class CheckTomcatIT implements ITConstants {
                 .addArgument(new CommandOption("username", "$ARG3$"))
                 .addArgument(new CommandOption("password", "$ARG4$"))
                 .addArgument(new CommandOption("warning", "$ARG5$"))
+                .addArgument(new CommandOption("percent"))
                 );
 
         JNRPEClient client = new JNRPEClient(BIND_ADDRESS, JNRPE_PORT, false);
-        ReturnValue ret = client.sendCommand("CHECK_MEM_PERC_WARNING", "127.0.0.1", TOMCAT_PORT, "tomcat", "tomcat", ":99.9%");
+        ReturnValue ret = client.sendCommand("CHECK_MEM_PERC_WARNING", "127.0.0.1", TOMCAT_PORT, "tomcat", "tomcat", ":99.9");
 
         Assert.assertEquals(ret.getStatus(), Status.WARNING, ret.getMessage());
     }
@@ -224,10 +227,11 @@ public class CheckTomcatIT implements ITConstants {
                 .addArgument(new CommandOption("username", "$ARG3$"))
                 .addArgument(new CommandOption("password", "$ARG4$"))
                 .addArgument(new CommandOption("critical", "$ARG5$"))
+                .addArgument(new CommandOption("percent"))
                 );
 
         JNRPEClient client = new JNRPEClient(BIND_ADDRESS, JNRPE_PORT, false);
-        ReturnValue ret = client.sendCommand("CHECK_MEM_PERC_WARNING", "127.0.0.1", TOMCAT_PORT, "tomcat", "tomcat", ":99.9%");
+        ReturnValue ret = client.sendCommand("CHECK_MEM_PERC_WARNING", "127.0.0.1", TOMCAT_PORT, "tomcat", "tomcat", ":99.9");
 
         Assert.assertEquals(ret.getStatus(), Status.CRITICAL, ret.getMessage());
     }
@@ -246,10 +250,11 @@ public class CheckTomcatIT implements ITConstants {
                 .addArgument(new CommandOption("username", "$ARG3$"))
                 .addArgument(new CommandOption("password", "$ARG4$"))
                 .addArgument(new CommandOption("critical", "$ARG5$"))
+                .addArgument(new CommandOption("percent"))
                 );
 
         JNRPEClient client = new JNRPEClient(BIND_ADDRESS, JNRPE_PORT, false);
-        ReturnValue ret = client.sendCommand("CHECK_MEM_PERC_OK", "127.0.0.1", TOMCAT_PORT, "tomcat", "tomcat", ":50%");
+        ReturnValue ret = client.sendCommand("CHECK_MEM_PERC_OK", "127.0.0.1", TOMCAT_PORT, "tomcat", "tomcat", ":50");
 
         Assert.assertEquals(ret.getStatus(), Status.OK, ret.getMessage());
     }

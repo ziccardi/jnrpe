@@ -42,10 +42,10 @@ public class ThresholdsEvaluatorBuilder {
      *
      * @param threshold
      *            The threhsold text
-    
-    
-     * @return this * @throws BadThresholdException
-     *             - */
+     * 
+     * 
+     * @return this * @throws BadThresholdException -
+     */
     public final ThresholdsEvaluatorBuilder withThreshold(final String threshold) throws BadThresholdException {
         thresholds.addThreshold(new Threshold(threshold));
         return this;
@@ -62,10 +62,11 @@ public class ThresholdsEvaluatorBuilder {
      *            The warning range (can be null)
      * @param critRange
      *            The critical range (can be null).
-    
-    
-     * @return this * @throws BadThresholdException
-     *             If the threshold can't be parsed. */
+     * 
+     * @return this 
+     * @throws BadThresholdException If the threshold can't be
+     *         parsed.
+     */
     public final ThresholdsEvaluatorBuilder withLegacyThreshold(final String metric, final String okRange, final String warnRange,
             final String critRange) throws BadThresholdException {
         LegacyRange ok = null, warn = null, crit = null;
@@ -84,15 +85,35 @@ public class ThresholdsEvaluatorBuilder {
         return this;
     }
 
+    public final ThresholdsEvaluatorBuilder withLegacyThreshold(final String metric, final String okRange, final String warnRange,
+            final String critRange, Prefixes prefix) throws BadThresholdException {
+        LegacyRange ok = null, warn = null, crit = null;
+
+        if (okRange != null) {
+            ok = new LegacyRange(okRange, prefix);
+        }
+        if (warnRange != null) {
+            warn = new LegacyRange(warnRange, prefix);
+        }
+        if (critRange != null) {
+            crit = new LegacyRange(critRange, prefix);
+        }
+
+        thresholds.addThreshold(new LegacyThreshold(prefix, metric, ok, warn, crit));
+        return this;
+    }
+
     /**
-    
-     * @return the threshold evaluator. */
+     * 
+     * @return the threshold evaluator.
+     */
     public final ThresholdsEvaluator create() {
         return thresholds;
     }
 
     /**
      * Method toString.
+     * 
      * @return String
      */
     @Override

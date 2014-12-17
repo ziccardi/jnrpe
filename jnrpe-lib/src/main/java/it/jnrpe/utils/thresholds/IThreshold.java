@@ -16,6 +16,7 @@
 package it.jnrpe.utils.thresholds;
 
 import it.jnrpe.Status;
+import it.jnrpe.plugins.Metric;
 
 import java.math.BigDecimal;
 
@@ -27,7 +28,7 @@ import java.math.BigDecimal;
  *
  * @version $Revision: 1.0 $
  */
-interface IThreshold {
+public interface IThreshold {
 
     /**
      * Returns <code>true</code> if this threshold references the passed in
@@ -38,7 +39,7 @@ interface IThreshold {
     
      * @return <code>true</code> if this threshold references the passed in
      *         metric. */
-    boolean isAboutMetric(final String metric);
+    boolean isAboutMetric(final Metric metric);
 
     /**
      * Evaluates the passed in value.
@@ -48,7 +49,7 @@ interface IThreshold {
     
      * @return <code>true</code> if the passed in value falls inside this
      *         thresholds. */
-    Status evaluate(final BigDecimal value);
+    Status evaluate(final Metric metric);
 
     /**
     
@@ -72,4 +73,6 @@ interface IThreshold {
     
      * @return The unit of measure. */
     String getUnitString();
+    
+    Prefixes getPrefix();
 }

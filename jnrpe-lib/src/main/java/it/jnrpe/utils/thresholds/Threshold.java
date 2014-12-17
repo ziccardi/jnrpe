@@ -16,9 +16,9 @@
 package it.jnrpe.utils.thresholds;
 
 import it.jnrpe.Status;
+import it.jnrpe.plugins.Metric;
 import it.jnrpe.utils.BadThresholdException;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,7 +75,7 @@ class Threshold implements IThreshold {
      * The prefix to be used to multiply the range values and divide the metric
      * values.
      */
-    private Prefixes prefix = null;
+    private Prefixes prefix = Prefixes.RAW;
 
     /**
      * Build a threshold object parsing the string received. A threshold can be
@@ -156,7 +156,7 @@ class Threshold implements IThreshold {
                 continue;
             }
             if ("prefix".equalsIgnoreCase(nameValuePair[0])) {
-                prefix = Prefixes.fromString(nameValuePair[1].toLowerCase());
+                prefix = Prefixes.fromString(nameValuePair[1]);
                 continue;
             }
 
@@ -250,28 +250,28 @@ class Threshold implements IThreshold {
     
      * @return The computes status. * @see it.jnrpe.utils.thresholds.IThreshold#evaluate(BigDecimal)
      */
-    public final Status evaluate(final BigDecimal value) {
+    public final Status evaluate(final Metric metric) {
         if (okThresholdList.isEmpty() && warningThresholdList.isEmpty() && criticalThresholdList.isEmpty()) {
             return Status.OK;
         }
 
-        BigDecimal convertedValue = value;
+        //BigDecimal metricValue = value;
 
         // Perform evaluation escalation
         for (Range range : okThresholdList) {
-            if (range.isValueInside(convertedValue, prefix)) {
+            if (range.isValueInside(metric, prefix)) {
                 return Status.OK;
             }
         }
 
         for (Range range : criticalThresholdList) {
-            if (range.isValueInside(convertedValue, prefix)) {
+            if (range.isValueInside(metric, prefix)) {
                 return Status.CRITICAL;
             }
         }
 
         for (Range range : warningThresholdList) {
-            if (range.isValueInside(convertedValue, prefix)) {
+            if (range.isValueInside(metric, prefix)) {
                 return Status.WARNING;
             }
         }
@@ -290,10 +290,14 @@ class Threshold implements IThreshold {
      * @return <code>true</code> if this threshold is about the passed in
      *         metric. * @see it.jnrpe.utils.thresholds.IThreshold#isAboutMetric(String)
      */
-    public final boolean isAboutMetric(final String metric) {
-        return metric.equalsIgnoreCase(metricName);
+    public final boolean isAboutMetric(final Metric metric) {
+        return metric.getMetricName().equalsIgnoreCase(metricName);
     }
 
+    public Prefixes getPrefix() {
+        return prefix;
+    }
+    
     /**
      * Method toString.
      * @return String

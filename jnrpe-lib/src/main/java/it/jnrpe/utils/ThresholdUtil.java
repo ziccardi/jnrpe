@@ -15,9 +15,9 @@
  *******************************************************************************/
 package it.jnrpe.utils;
 
+import it.jnrpe.plugins.Metric;
 import it.jnrpe.utils.thresholds.LegacyRange;
-
-import java.math.BigDecimal;
+import it.jnrpe.utils.thresholds.Prefixes;
 
 /**
  * Utility class for evaluating threshold This class conforms to the nagios
@@ -45,6 +45,7 @@ import java.math.BigDecimal;
  */
 @Deprecated
 public final class ThresholdUtil {
+    
     /**
      * Private default constructor to avoid instantiation.
      */
@@ -60,43 +61,14 @@ public final class ThresholdUtil {
      *            The range
      * @param value
      *            The value
-    
-    
-     * @return <code>true</code> if the value <code>iValue</code> falls into the * @throws BadThresholdException
-     *             - */
-    public static boolean isValueInRange(final String thresholdString, final int value) throws BadThresholdException {
-        return new LegacyRange(thresholdString).isValueInside(value);
+     * @return <code>true</code> if the value <code>iValue</code> falls into the range <code>sRange</code>.
+     * @throws BadThresholdException
+     */
+    public static boolean isValueInRange(final String thresholdString, final Metric metric) throws BadThresholdException {
+        return new LegacyRange(thresholdString).isValueInside(metric);
     }
-
-    /**
-     * Returns <code>true</code> if the value <code>dalue</code> falls into the
-     * range <code>sRange</code>.
-     *
-     * @param thresholdString
-     *            The range
-     * @param value
-     *            The value given range
     
-    
-     * @return <code>true</code> if the given value falls inside the given range * @throws BadThresholdException
-     *             - */
-    public static boolean isValueInRange(final String thresholdString, final BigDecimal value) throws BadThresholdException {
-        return new LegacyRange(thresholdString).isValueInside(value);
-    }
-
-    /**
-     * Returns <code>true</code> if the value <code>dalue</code> falls into the
-     * range <code>sRange</code>.
-     *
-     * @param thresholdString
-     *            The range
-     * @param value
-     *            The value given range
-    
-    
-     * @return <code>true</code> if the given value falls inside the given range * @throws BadThresholdException
-     *             - */
-    public static boolean isValueInRange(final String thresholdString, final Long value) throws BadThresholdException {
-        return new LegacyRange(thresholdString).isValueInside(new BigDecimal(value));
+    public static boolean isValueInRange(final String thresholdString, final Metric metric, final Prefixes prefix) throws BadThresholdException {
+        return new LegacyRange(thresholdString, prefix).isValueInside(metric);
     }
 }

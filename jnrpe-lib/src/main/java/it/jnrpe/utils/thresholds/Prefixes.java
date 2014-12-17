@@ -25,6 +25,9 @@ import java.math.BigDecimal;
  * @version $Revision: 1.0 $
  */
 public enum Prefixes {
+    
+    RAW(new BigDecimal(1)),
+    
     /**
      * Yotta : 10^24. You can use both yotta or Y (case sensitive) as unit of
      * prefix.
@@ -178,8 +181,20 @@ public enum Prefixes {
      *            The value
     
      * @return The multiplied value */
-    public BigDecimal convert(final BigDecimal value) {
-        return multiplier.multiply(value);
+    public BigDecimal convert(final BigDecimal value, final Prefixes output) {
+        
+        if (this == output) {
+            return value;
+        }
+        
+        // convert to raw...
+        BigDecimal rawValue = value.multiply(multiplier);
+        
+        if (output == RAW) {
+            return rawValue;
+        }
+        
+        return rawValue.divide(output.multiplier);
     }
 
     /**
@@ -189,8 +204,8 @@ public enum Prefixes {
      *            The value
     
      * @return The multiplied value */
-    public BigDecimal convert(final int value) {
-        return multiplier.multiply(new BigDecimal(value));
+    public BigDecimal convert(final int value, final Prefixes output) {
+        return convert(new BigDecimal(value), output);
     }
 
     /**
@@ -200,8 +215,8 @@ public enum Prefixes {
      *            The value
     
      * @return The multiplied value */
-    public BigDecimal convert(final long value) {
-        return multiplier.multiply(new BigDecimal(value));
+    public BigDecimal convert(final long value, final Prefixes output) {
+        return convert(new BigDecimal(value), output);
     }
 
     /**
@@ -211,8 +226,8 @@ public enum Prefixes {
      *            The value
     
      * @return The multiplied value */
-    public BigDecimal convert(final double value) {
-        return multiplier.multiply(new BigDecimal(value));
+    public BigDecimal convert(final double value, final Prefixes output) {
+        return convert(new BigDecimal(value), output);
     }
 
     /**
@@ -304,5 +319,14 @@ public enum Prefixes {
 
         return valueOf(prefixString);
         // throw new IllegalArgumentException(prefixString);
+    }
+    
+    @Override
+    public String toString() {
+        if (this == RAW) {
+            return "";
+        }
+        
+        return super.toString();
     }
 }

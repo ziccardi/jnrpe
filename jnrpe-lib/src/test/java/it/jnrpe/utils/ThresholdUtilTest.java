@@ -15,6 +15,9 @@
  *******************************************************************************/
 package it.jnrpe.utils;
 
+import it.jnrpe.plugins.Metric;
+import it.jnrpe.plugins.MetricBuilder;
+
 import java.math.BigDecimal;
 
 import org.testng.Assert;
@@ -25,17 +28,35 @@ import org.testng.annotations.Test;
 @SuppressWarnings("deprecation")
 public class ThresholdUtilTest {
 
+    private Metric buildMetric(int value) {
+        return MetricBuilder.forMetric("TEST_METRIC)")
+                .withValue(value)
+                .build();
+    }
+    
+    private Metric buildMetric(long value) {
+        return MetricBuilder.forMetric("TEST_METRIC)")
+                .withValue(value)
+                .build();
+    }
+    
+    private Metric buildMetric(BigDecimal value) {
+        return MetricBuilder.forMetric("TEST_METRIC)")
+                .withValue(value)
+                .build();
+    }
+    
     /**
      * Method testSimpleThreshold.
      * @throws BadThresholdException
      */
     @Test
     public void testSimpleThreshold() throws BadThresholdException {
-        Assert.assertTrue(ThresholdUtil.isValueInRange("10", 5));
-        Assert.assertTrue(ThresholdUtil.isValueInRange("10", 0));
-        Assert.assertTrue(ThresholdUtil.isValueInRange("10", 10));
-        Assert.assertFalse(ThresholdUtil.isValueInRange("10", -1));
-        Assert.assertFalse(ThresholdUtil.isValueInRange("10", 11));
+        Assert.assertTrue(ThresholdUtil.isValueInRange("10", buildMetric(5)));
+        Assert.assertTrue(ThresholdUtil.isValueInRange("10", buildMetric(0)));
+        Assert.assertTrue(ThresholdUtil.isValueInRange("10", buildMetric(10)));
+        Assert.assertFalse(ThresholdUtil.isValueInRange("10", buildMetric(-1)));
+        Assert.assertFalse(ThresholdUtil.isValueInRange("10", buildMetric(11)));
 
     }
 
@@ -45,11 +66,11 @@ public class ThresholdUtilTest {
      */
     @Test
     public void testToInfinity() throws BadThresholdException {
-        Assert.assertTrue(ThresholdUtil.isValueInRange("10:", 10));
-        Assert.assertTrue(ThresholdUtil.isValueInRange("10:", 100));
-        Assert.assertTrue(ThresholdUtil.isValueInRange("10:", 1000));
-        Assert.assertFalse(ThresholdUtil.isValueInRange("10:", 9));
-        Assert.assertFalse(ThresholdUtil.isValueInRange("10:", -11));
+        Assert.assertTrue(ThresholdUtil.isValueInRange("10:", buildMetric(10)));
+        Assert.assertTrue(ThresholdUtil.isValueInRange("10:", buildMetric(100)));
+        Assert.assertTrue(ThresholdUtil.isValueInRange("10:", buildMetric(1000)));
+        Assert.assertFalse(ThresholdUtil.isValueInRange("10:", buildMetric(9)));
+        Assert.assertFalse(ThresholdUtil.isValueInRange("10:", buildMetric(-11)));
     }
 
     /**
@@ -58,11 +79,11 @@ public class ThresholdUtilTest {
      */
     @Test
     public void testToInfinityExplicit() throws BadThresholdException {
-        Assert.assertTrue(ThresholdUtil.isValueInRange("10:~", 10));
-        Assert.assertTrue(ThresholdUtil.isValueInRange("10:~", 100));
-        Assert.assertTrue(ThresholdUtil.isValueInRange("10:~", 1000));
-        Assert.assertFalse(ThresholdUtil.isValueInRange("10:~", 9));
-        Assert.assertFalse(ThresholdUtil.isValueInRange("10:~", -11));
+        Assert.assertTrue(ThresholdUtil.isValueInRange("10:~", buildMetric(10)));
+        Assert.assertTrue(ThresholdUtil.isValueInRange("10:~", buildMetric(100)));
+        Assert.assertTrue(ThresholdUtil.isValueInRange("10:~", buildMetric(1000)));
+        Assert.assertFalse(ThresholdUtil.isValueInRange("10:~", buildMetric(9)));
+        Assert.assertFalse(ThresholdUtil.isValueInRange("10:~", buildMetric(-11)));
     }
 
     /**
@@ -71,13 +92,13 @@ public class ThresholdUtilTest {
      */
     @Test
     public void testNegativeInfinity() throws BadThresholdException {
-        Assert.assertTrue(ThresholdUtil.isValueInRange("~:10", 10));
-        Assert.assertTrue(ThresholdUtil.isValueInRange("~:10", -10));
-        Assert.assertTrue(ThresholdUtil.isValueInRange("~:10", -100));
-        Assert.assertTrue(ThresholdUtil.isValueInRange("~:10", -1000));
-        Assert.assertFalse(ThresholdUtil.isValueInRange("~:10", 11));
-        Assert.assertFalse(ThresholdUtil.isValueInRange("~:10", 100));
-        Assert.assertFalse(ThresholdUtil.isValueInRange("~:10", 1000));
+        Assert.assertTrue(ThresholdUtil.isValueInRange("~:10", buildMetric(10)));
+        Assert.assertTrue(ThresholdUtil.isValueInRange("~:10", buildMetric(-10)));
+        Assert.assertTrue(ThresholdUtil.isValueInRange("~:10", buildMetric(-100)));
+        Assert.assertTrue(ThresholdUtil.isValueInRange("~:10", buildMetric(-1000)));
+        Assert.assertFalse(ThresholdUtil.isValueInRange("~:10", buildMetric(11)));
+        Assert.assertFalse(ThresholdUtil.isValueInRange("~:10", buildMetric(100)));
+        Assert.assertFalse(ThresholdUtil.isValueInRange("~:10", buildMetric(1000)));
     }
 
     /**
@@ -86,12 +107,12 @@ public class ThresholdUtilTest {
      */
     @Test
     public void testBounded() throws BadThresholdException {
-        Assert.assertTrue(ThresholdUtil.isValueInRange("10:20", 10));
-        Assert.assertTrue(ThresholdUtil.isValueInRange("10:20", 15));
-        Assert.assertTrue(ThresholdUtil.isValueInRange("10:20", 20));
-        Assert.assertFalse(ThresholdUtil.isValueInRange("10:20", 9));
-        Assert.assertFalse(ThresholdUtil.isValueInRange("10:20", 21));
-        Assert.assertFalse(ThresholdUtil.isValueInRange("10:20", -10));
+        Assert.assertTrue(ThresholdUtil.isValueInRange("10:20", buildMetric(10)));
+        Assert.assertTrue(ThresholdUtil.isValueInRange("10:20", buildMetric(15)));
+        Assert.assertTrue(ThresholdUtil.isValueInRange("10:20", buildMetric(20)));
+        Assert.assertFalse(ThresholdUtil.isValueInRange("10:20", buildMetric(9)));
+        Assert.assertFalse(ThresholdUtil.isValueInRange("10:20", buildMetric(21)));
+        Assert.assertFalse(ThresholdUtil.isValueInRange("10:20", buildMetric(-10)));
     }
 
     /**
@@ -100,12 +121,12 @@ public class ThresholdUtilTest {
      */
     @Test
     public void testNegatedBounded() throws BadThresholdException {
-        Assert.assertFalse(ThresholdUtil.isValueInRange("@10:20", 10));
-        Assert.assertFalse(ThresholdUtil.isValueInRange("@10:20", 15));
-        Assert.assertFalse(ThresholdUtil.isValueInRange("@10:20", 20));
-        Assert.assertTrue(ThresholdUtil.isValueInRange("@10:20", 9));
-        Assert.assertTrue(ThresholdUtil.isValueInRange("@10:20", 21));
-        Assert.assertTrue(ThresholdUtil.isValueInRange("@10:20", -10));
+        Assert.assertFalse(ThresholdUtil.isValueInRange("@10:20", buildMetric(10)));
+        Assert.assertFalse(ThresholdUtil.isValueInRange("@10:20", buildMetric(15)));
+        Assert.assertFalse(ThresholdUtil.isValueInRange("@10:20", buildMetric(20)));
+        Assert.assertTrue(ThresholdUtil.isValueInRange("@10:20", buildMetric(9)));
+        Assert.assertTrue(ThresholdUtil.isValueInRange("@10:20", buildMetric(21)));
+        Assert.assertTrue(ThresholdUtil.isValueInRange("@10:20", buildMetric(-10)));
     }
 
     /**
@@ -114,7 +135,7 @@ public class ThresholdUtilTest {
      */
     @Test(expectedExceptions = BadThresholdException.class)
     public void testMalformedNegation() throws BadThresholdException {
-        ThresholdUtil.isValueInRange("10:@20", 10);
+        ThresholdUtil.isValueInRange("10:@20", buildMetric(10));
     }
 
     /**
@@ -123,7 +144,7 @@ public class ThresholdUtilTest {
      */
     @Test(expectedExceptions = BadThresholdException.class)
     public void testBadSeparator() throws BadThresholdException {
-        ThresholdUtil.isValueInRange("10:20:", 10);
+        ThresholdUtil.isValueInRange("10:20:", buildMetric(10));
     }
 
     /**
@@ -132,7 +153,7 @@ public class ThresholdUtilTest {
      */
     @Test(expectedExceptions = BadThresholdException.class)
     public void testEmptyNumbers() throws BadThresholdException {
-        ThresholdUtil.isValueInRange(":", 10);
+        ThresholdUtil.isValueInRange(":", buildMetric(10));
     }
 
     /**
@@ -141,7 +162,7 @@ public class ThresholdUtilTest {
      */
     @Test(expectedExceptions = BadThresholdException.class)
     public void testEmptyNumbersJustSign() throws BadThresholdException {
-        ThresholdUtil.isValueInRange("+:", 10);
+        ThresholdUtil.isValueInRange("+:", buildMetric(10));
     }
 
     /**
@@ -150,10 +171,10 @@ public class ThresholdUtilTest {
      */
     @Test
     public void testMissingLeft() throws BadThresholdException {
-        Assert.assertTrue(ThresholdUtil.isValueInRange(":20", 10));
-        Assert.assertTrue(ThresholdUtil.isValueInRange(":20", 20));
-        Assert.assertFalse(ThresholdUtil.isValueInRange(":20", 21));
-        Assert.assertFalse(ThresholdUtil.isValueInRange(":20", -5000));
+        Assert.assertTrue(ThresholdUtil.isValueInRange(":20", buildMetric(10)));
+        Assert.assertTrue(ThresholdUtil.isValueInRange(":20", buildMetric(20)));
+        Assert.assertFalse(ThresholdUtil.isValueInRange(":20", buildMetric(21)));
+        Assert.assertFalse(ThresholdUtil.isValueInRange(":20", buildMetric(-5000)));
     }
 
     /**
@@ -162,10 +183,10 @@ public class ThresholdUtilTest {
      */
     @Test
     public void testMissingRight() throws BadThresholdException {
-        Assert.assertFalse(ThresholdUtil.isValueInRange("20:", 10));
-        Assert.assertTrue(ThresholdUtil.isValueInRange("20:", 20));
-        Assert.assertTrue(ThresholdUtil.isValueInRange("20:", 21));
-        Assert.assertFalse(ThresholdUtil.isValueInRange("20:", -5000));
+        Assert.assertFalse(ThresholdUtil.isValueInRange("20:", buildMetric(10)));
+        Assert.assertTrue(ThresholdUtil.isValueInRange("20:", buildMetric(20)));
+        Assert.assertTrue(ThresholdUtil.isValueInRange("20:", buildMetric(21)));
+        Assert.assertFalse(ThresholdUtil.isValueInRange("20:", buildMetric(-5000)));
     }
 
     /**
@@ -174,10 +195,10 @@ public class ThresholdUtilTest {
      */
     @Test
     public void testMissingRightLong() throws BadThresholdException {
-        Assert.assertFalse(ThresholdUtil.isValueInRange("20:", 10L));
-        Assert.assertTrue(ThresholdUtil.isValueInRange("20:", 20L));
-        Assert.assertTrue(ThresholdUtil.isValueInRange("20:", 21L));
-        Assert.assertFalse(ThresholdUtil.isValueInRange("20:", -5000L));
+        Assert.assertFalse(ThresholdUtil.isValueInRange("20:", buildMetric(10L)));
+        Assert.assertTrue(ThresholdUtil.isValueInRange("20:", buildMetric(20L)));
+        Assert.assertTrue(ThresholdUtil.isValueInRange("20:", buildMetric(21L)));
+        Assert.assertFalse(ThresholdUtil.isValueInRange("20:", buildMetric(-5000L)));
     }
 
     /**
@@ -186,10 +207,10 @@ public class ThresholdUtilTest {
      */
     @Test
     public void testMissingRightBigDecimal() throws BadThresholdException {
-        Assert.assertFalse(ThresholdUtil.isValueInRange("20:", new BigDecimal(10)));
-        Assert.assertTrue(ThresholdUtil.isValueInRange("20:", new BigDecimal(20)));
-        Assert.assertTrue(ThresholdUtil.isValueInRange("20:", new BigDecimal(21)));
-        Assert.assertFalse(ThresholdUtil.isValueInRange("20:", new BigDecimal(-5000)));
+        Assert.assertFalse(ThresholdUtil.isValueInRange("20:", buildMetric(new BigDecimal(10))));
+        Assert.assertTrue(ThresholdUtil.isValueInRange("20:", buildMetric(new BigDecimal(20))));
+        Assert.assertTrue(ThresholdUtil.isValueInRange("20:", buildMetric(new BigDecimal(21))));
+        Assert.assertFalse(ThresholdUtil.isValueInRange("20:", buildMetric(new BigDecimal(-5000))));
     }
 
 }

@@ -47,7 +47,7 @@ public final class JNRPELogger {
      * @param message the message
      */
     public void trace(final IJNRPEExecutionContext ctx, final String message) {
-        ctx.getEventBus().post(new LogEvent(source, LogEventType.TRACE, message));
+        postEvent(ctx, new LogEvent(source, LogEventType.TRACE, message));
     }
 
     /**
@@ -58,7 +58,7 @@ public final class JNRPELogger {
      * @param thr the exception (if any)
      */
     public void trace(final IJNRPEExecutionContext ctx, final String message, final Throwable thr) {
-        ctx.getEventBus().post(new LogEvent(source, LogEventType.TRACE, message, thr));
+        postEvent(ctx, new LogEvent(source, LogEventType.TRACE, message, thr));
     }
     
     /**
@@ -68,7 +68,7 @@ public final class JNRPELogger {
      * @param message the message
      */
     public void debug(final IJNRPEExecutionContext ctx, final String message) {
-        ctx.getEventBus().post(new LogEvent(source, LogEventType.DEBUG, message));
+        postEvent(ctx, new LogEvent(source, LogEventType.DEBUG, message));
     }
 
     /**
@@ -79,7 +79,7 @@ public final class JNRPELogger {
      * @param thr the exception (if any)
      */
     public void debug(final IJNRPEExecutionContext ctx, final String message, final Throwable thr) {
-        ctx.getEventBus().post(new LogEvent(source, LogEventType.DEBUG, message, thr));
+        postEvent(ctx, new LogEvent(source, LogEventType.DEBUG, message, thr));
     }
     
     /**
@@ -89,7 +89,7 @@ public final class JNRPELogger {
      * @param message the message
      */
     public void info(final IJNRPEExecutionContext ctx, final String message) {
-        ctx.getEventBus().post(new LogEvent(source, LogEventType.INFO, message));
+        postEvent(ctx, new LogEvent(source, LogEventType.INFO, message));
     }
 
     /**
@@ -100,7 +100,7 @@ public final class JNRPELogger {
      * @param thr the exception (if any)
      */
     public void info(final IJNRPEExecutionContext ctx, final String message, final Throwable thr) {
-        ctx.getEventBus().post(new LogEvent(source, LogEventType.INFO, message, thr));
+        postEvent(ctx, new LogEvent(source, LogEventType.INFO, message, thr));
     }
     
     /**
@@ -110,7 +110,7 @@ public final class JNRPELogger {
      * @param message the message
      */
     public void warn(final IJNRPEExecutionContext ctx, final String message) {
-        ctx.getEventBus().post(new LogEvent(source, LogEventType.WARNING, message));
+        postEvent(ctx, new LogEvent(source, LogEventType.WARNING, message));
     }
 
     /**
@@ -121,7 +121,7 @@ public final class JNRPELogger {
      * @param thr the exception (if any)
      */
     public void warn(final IJNRPEExecutionContext ctx, final String message, final Throwable thr) {
-        ctx.getEventBus().post(new LogEvent(source, LogEventType.WARNING, message, thr));
+        postEvent(ctx, new LogEvent(source, LogEventType.WARNING, message, thr));
     }
     
     /**
@@ -131,7 +131,7 @@ public final class JNRPELogger {
      * @param message the message
      */
     public void error(final IJNRPEExecutionContext ctx, final String message) {
-        ctx.getEventBus().post(new LogEvent(source, LogEventType.ERROR, message));
+        postEvent(ctx, new LogEvent(source, LogEventType.ERROR, message));
     }
 
     /**
@@ -142,7 +142,7 @@ public final class JNRPELogger {
      * @param thr the exception (if any)
      */
     public void error(final IJNRPEExecutionContext ctx, final String message, final Throwable thr) {
-        ctx.getEventBus().post(new LogEvent(source, LogEventType.ERROR, message, thr));
+        postEvent(ctx, new LogEvent(source, LogEventType.ERROR, message, thr));
     }
     
     /**
@@ -152,7 +152,7 @@ public final class JNRPELogger {
      * @param message the message
      */
     public void fatal(final IJNRPEExecutionContext ctx, final String message) {
-        ctx.getEventBus().post(new LogEvent(source, LogEventType.FATAL, message));
+        postEvent(ctx, new LogEvent(source, LogEventType.FATAL, message));
     }
     
     /**
@@ -163,9 +163,18 @@ public final class JNRPELogger {
      * @param thr the exception (if any)
      */
     public void fatal(final IJNRPEExecutionContext ctx, final String message, final Throwable thr) {
-        ctx.getEventBus().post(new LogEvent(source, LogEventType.FATAL, message, thr));
+        postEvent(ctx, new LogEvent(source, LogEventType.FATAL, message, thr));
     }
 
+    private void postEvent(final IJNRPEExecutionContext ctx, LogEvent evt) {
+        if (ctx != null) {
+            ctx.getEventBus().post(evt);    
+        } else {
+            System.err.println (evt.getLogType() + " - " + evt.getMessage());
+        }
+        
+    }
+    
     /**
      * Method toString.
      * @return String

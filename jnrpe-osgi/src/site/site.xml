@@ -15,7 +15,7 @@
 		<href>http://jnrpe.sourceforge.net/</href>
 	</bannerLeft>
 
-	<body>
+	<!-- <body>
 		<menu name="JNRPE OSGI bundle">
 			<item name="Overview" href="index.html" />
 			<item name="Getting Started - Felix" href="felix/getting_started.html" />
@@ -28,5 +28,5 @@
 			<item name="JNRPE 2.0" href="index.html" />
 		</links>
 
-	</body>
+	</body> -->
 </project>

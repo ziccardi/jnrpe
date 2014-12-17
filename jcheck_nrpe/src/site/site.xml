@@ -8,27 +8,17 @@
 
 	<version position="left" />
 
-	<bannerLeft>
-		<name>JNRPE</name>
-		<src>/../images/jnrpe.png
-		</src>
-		<href>http://jnrpe.sourceforge.net/</href>
-	</bannerLeft>
-
 	<body>
-		<menu name="Main" inherit="top">
-			<item name="Welcome" href="/../index.html" />
-			<item name="Download" href="/../download.html" />
+		<menu name="JNRPE Server">
+			<item name="Usage Scenario" href="../jnrpe-server/usage_scenario.html" />
+			<item name="Getting Started" href="../jnrpe-server/getting_started.html" />
+			<item name="The JNRPE interactive console" href="../jnrpe-server/jnrpe_console.html" />
 		</menu>
-		<menu name="jcheck_nrpe">
-			<item name="Overview" href="index.html" />
-			<item name="Download" href="download.html" />
-		</menu>
-		<menu name="User Guide">
-			<item name="Command Line" href="command_line.html" />
+	
+		<menu name="JNRPE Client">
+			<item name="Command Line" href="index.html" />
 			<item name="Embedding" href="embedding.html" />
 		</menu>
-
-		<menu name="Reports" ref="reports" inherit="bottom" />
 	</body>
+	
 </project>

@@ -2,10 +2,10 @@
 <project name="JNRPE Install">
 
 
-	<body>
+	<!-- <body>
 		<menu name="JNRPE Install">
 			<item name="Overview" href="index.html" />
 			<item name="Download" href="download.html" />
 		</menu>
-	</body>
+	</body> -->
 </project>
