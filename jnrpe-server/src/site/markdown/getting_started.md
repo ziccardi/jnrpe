@@ -145,7 +145,7 @@ Where:
           </commands>
        </config>
 
-  * **\<server\**> - means we are starting the server section
+  * **\<server\>** - means we are starting the server section
   * **accept-params** : true - means we want JNRPE to expand the $ARG?$ macros. 
    If you set this to false, than parameters passed by check_nrpe will be ignored.
   * **backlog-size** : 256 - means that the maximum number of concurrent connection must be 
@@ -154,16 +154,16 @@ Where:
     any data in 5 seconds.
   * **write-timeout** : 60 - means that the connection will be closed if the server do not 
     writes any data for more than 60 seconds.
-  * **\<bind address="127.0.0.1:5666" SSL="false"/\**> - means we want JNRPE to listen on the 127.0.0.1 IP 
+  * **\<bind address="127.0.0.1:5666" SSL="false"/\>** - means we want JNRPE to listen on the 127.0.0.1 IP 
    at port 5666. You can repeat this setting more than one time to instruct JNRPE to 
    listen to many address.
    If you want the communication between check_nrpe and JNRPE to be encrypted (check_nrpe default) set
    SSL to 'true'.
-  * **\<plugin path="/usr/local/jnrpe/plugins"/\**> - means that in '/usr/local/jnrpe/plugins' 
+  * **\<plugin path="/usr/local/jnrpe/plugins"/\>** - means that in '/usr/local/jnrpe/plugins' 
    JNRPE will find all the installed plugins.
-  * **\<allow ip="127.0.0.1"/\**> - means that JNRPE must accept request coming from 
+  * **\<allow ip="127.0.0.1"/\>** - means that JNRPE must accept request coming from 
    127.0.0.1. You can repeat this line to accept requests from many addresses.
-  * **\<commands\**> - means that the command section is starting
+  * **\<commands\>** - means that the command section is starting
    Follows the command definition. The format is very simple:
 
         <command name="[COMMAND_NAME]" plugin_name="[PLUGIN_NAME]">
