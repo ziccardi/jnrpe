@@ -18,8 +18,6 @@ package it.jnrpe.utils.thresholds;
 import it.jnrpe.Status;
 import it.jnrpe.plugins.Metric;
 
-import java.math.BigDecimal;
-
 /**
  * This is the interface that all the threshold objects must implement. It is
  * internally used to evaluate legacy or new threshold format.
@@ -44,16 +42,17 @@ public interface IThreshold {
     /**
      * Evaluates the passed in value.
      *
-     * @param value
-     *            The value to be evaluated
-    
-     * @return <code>true</code> if the passed in value falls inside this
-     *         thresholds. */
+     * @param metric
+     *            The metric to be evaluated
+     *            
+     * @return <code>true</code> if the passed in metric value falls inside 
+     *         this thresholds. 
+     */
     Status evaluate(final Metric metric);
 
     /**
-    
-     * @return The name of the metric referred by this threshold. */
+     * @return The name of the metric referred by this threshold. 
+     */
     String getMetric();
 
     /**
@@ -63,16 +62,21 @@ public interface IThreshold {
      *
      * @param status
      *            The status for wich we want the range string
-    
-     * @return The requested range string. */
+     *            
+     * @return The requested range string. 
+     */
     String getRangesAsString(final Status status);
 
     /**
      * Returns the unit of measure as a string.
      * 
-    
-     * @return The unit of measure. */
+     * @return The unit of measure. 
+     */
     String getUnitString();
     
+    /**
+     * @return the prefix associated with the values of the ranges specified
+     * for this threshold object.
+     */
     Prefixes getPrefix();
 }

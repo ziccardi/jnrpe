@@ -105,9 +105,10 @@ class Threshold implements IThreshold {
      *
      * @param definition
      *            The threshold string
-    
+     *            
      * @throws BadThresholdException
-     *             - */
+     *             - 
+     */
     Threshold(final String definition) throws BadThresholdException {
         parse(definition);
     }
@@ -117,9 +118,9 @@ class Threshold implements IThreshold {
      *
      * @param definition
      *            The threshold definition
-    
      * @throws BadThresholdException
-     *             - */
+     *             - 
+     */
     private void parse(final String definition) throws BadThresholdException {
         String[] thresholdComponentAry = definition.split(",");
 
@@ -165,17 +166,17 @@ class Threshold implements IThreshold {
     }
 
     /**
-    
-     * @return The name of the metric associated to this threshold. * @see it.jnrpe.utils.thresholds.IThreshold#getMetric()
+     * @return The name of the metric associated to this threshold. 
+     * @see it.jnrpe.utils.thresholds.IThreshold#getMetric()
      */
     public final String getMetric() {
         return metricName;
     }
 
     /**
-    
      * @return The unit of measure attached to the appropriate prefix if
-     *         specified. * @see it.jnrpe.utils.thresholds.IThreshold#getUnitString()
+     *         specified. 
+     * @see it.jnrpe.utils.thresholds.IThreshold#getUnitString()
      */
     public final String getUnitString() {
         StringBuilder res = new StringBuilder();
@@ -198,8 +199,9 @@ class Threshold implements IThreshold {
      *
      * @param status
      *            The status for wich we are requesting the ranges.
-    
-     * @return the requested range list as comma separated string. * @see it.jnrpe.utils.thresholds.IThreshold#getRangesAsString(Status)
+     *            
+     * @return the requested range list as comma separated string. 
+     * @see it.jnrpe.utils.thresholds.IThreshold#getRangesAsString(Status)
      */
     public final String getRangesAsString(final Status status) {
         List<String> ranges = new ArrayList<String>();
@@ -231,7 +233,7 @@ class Threshold implements IThreshold {
     }
 
     /**
-     * Evaluates this threshold against the passed in value. The returned status
+     * Evaluates this threshold against the passed in metric. The returned status
      * is computed this way:
      * <ol>
      * <li>If at least one ok range is specified, if the value falls inside one
@@ -247,15 +249,14 @@ class Threshold implements IThreshold {
      * 
      * @param value
      *            The value to be evaluated.
-    
-     * @return The computes status. * @see it.jnrpe.utils.thresholds.IThreshold#evaluate(BigDecimal)
+     *            
+     * @return The computes status. 
+     * @see it.jnrpe.utils.thresholds.IThreshold#evaluate(Metric)
      */
     public final Status evaluate(final Metric metric) {
         if (okThresholdList.isEmpty() && warningThresholdList.isEmpty() && criticalThresholdList.isEmpty()) {
             return Status.OK;
         }
-
-        //BigDecimal metricValue = value;
 
         // Perform evaluation escalation
         for (Range range : okThresholdList) {
@@ -286,14 +287,17 @@ class Threshold implements IThreshold {
     /**
      * @param metric
      *            The name of the metric we want to evaluate.
-    
      * @return <code>true</code> if this threshold is about the passed in
-     *         metric. * @see it.jnrpe.utils.thresholds.IThreshold#isAboutMetric(String)
+     *         metric. 
+     * @see it.jnrpe.utils.thresholds.IThreshold#isAboutMetric(String)
      */
     public final boolean isAboutMetric(final Metric metric) {
         return metric.getMetricName().equalsIgnoreCase(metricName);
     }
 
+    /**
+     * @return the prefix to be used to interpret the range boundaries
+     */
     public Prefixes getPrefix() {
         return prefix;
     }

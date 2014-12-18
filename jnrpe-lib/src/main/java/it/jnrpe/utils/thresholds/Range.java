@@ -77,34 +77,18 @@ class Range extends RangeConfig {
         RangeStringParser.parse(range, this);
     }
 
-//    /**
-//     * Multiply the value with the right multiplier based on the prefix.
-//     * 
-//     * @param value
-//     *            The value
-//     * @param prefix
-//     *            The prefix
-//    
-//     * @return The result */
-//    private BigDecimal convert(final BigDecimal value, final Prefixes prefix) {
-//        if (prefix == null) {
-//            return value;
-//        }
-//
-//        return prefix.convert(value, Prefixes.RAW);
-//    }
-
     /**
      * Evaluates if the passed in value falls inside the range. The negation is
      * ignored.
      * 
-     * @param value
-     *            The value to evaluate
+     * @param metric
+     *            The metric to evaluate
      * @param prefix
-     *            Used to multiply the range boundaries.
-    
-     * @return <code>true</code> if the value falls inside the range. The
-     *         negation ('^') is ignored. */
+     *            Used to interpret the values of the range boundaries.
+     *            
+     * @return <code>true</code> if the metric value falls inside the range. 
+     *          The negation ('^') is ignored.
+     */
     private boolean evaluate(final Metric metric, final Prefixes prefix) {
         if (metric == null || metric.getMetricValue() == null) {
             throw new NullPointerException("Value can't be null");
@@ -142,20 +126,21 @@ class Range extends RangeConfig {
     }
 
     /**
-     * @param value
-     *            The value to be evaluated.
-     * @return Whether the passed in value falls inside this range. 
+     * @param metric
+     *            The metric to be evaluated.
+     *            
+     * @return Whether the passed in metric value falls inside this range. 
      */
     public boolean isValueInside(final Metric metric) {
         return isValueInside(metric, Prefixes.RAW);
     }
 
     /**
-     * @param value
-     *            The value to be evaluated.
+     * @param metric
+     *            The metric to be evaluated.
      * @param prefix
-     *            Used to multiply the range boundaries.
-     * @return Whether the passed in value falls inside this range. 
+     *            Used to interpret the values of the range boundaries
+     * @return Whether the passed in metric falls inside this range
      */
     public boolean isValueInside(final Metric metric, final Prefixes prefix) {
         boolean res = evaluate(metric, prefix);

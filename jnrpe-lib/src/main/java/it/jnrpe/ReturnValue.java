@@ -17,7 +17,6 @@ package it.jnrpe;
 
 import it.jnrpe.plugins.Metric;
 import it.jnrpe.utils.thresholds.IThreshold;
-import it.jnrpe.utils.thresholds.Prefixes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -147,7 +146,6 @@ public final class ReturnValue {
      * 
      * @param returnCode
      *            The return code
-    
      * @deprecated Use {@link #withStatus(Status)} instead.
      * @return this */
     @Deprecated
@@ -162,7 +160,6 @@ public final class ReturnValue {
      * 
      * @param status
      *            The status to be returned to Nagios
-    
      * @return this */
     public ReturnValue withStatus(final Status status) {
         if (status == null) {
@@ -178,7 +175,6 @@ public final class ReturnValue {
      * 
      * @param message
      *            The message to be returned
-    
      * @return this */
     public ReturnValue withMessage(final String message) {
         messageString = message;
@@ -228,22 +224,14 @@ public final class ReturnValue {
      * the output formatted as specified in Nagios specifications
      * (http://nagiosplug.sourceforge.net/developer-guidelines.html#AEN201)
      * 
-     * @param label
-     *            The label of the performance data we are adding
-     * @param value
-     *            The performance data value
+     * @param metric
+     *            The metric relative to this result
      * @param uom
      *            The Unit Of Measure
      * @param warningRange
      *            The warning threshold used to check this metric (can be null)
      * @param criticalRange
      *            The critical threshold used to check this value (can be null)
-     * @param minimumValue
-     *            The minimum value for this metric (can be null if not
-     *            applicable)
-     * @param maximumValue
-     *            The maximum value for this metric (can be null if not
-     *            applicable)
     
      * @return this */
     public ReturnValue withPerformanceData(final Metric metric, final UnitOfMeasure uom, final String warningRange,
@@ -257,12 +245,8 @@ public final class ReturnValue {
      * the output formatted as specified in Nagios specifications
      * (http://nagiosplug.sourceforge.net/developer-guidelines.html#AEN201)
      * 
-     * @param label
-     *            The label of the performance data we are adding
-     * @param value
-     *            The performance data value
-     * @param unit
-     *            The Unit Of Measure
+     * @param metric
+     *            The metric relative to this result
      * @param warningRange
      *            The warning threshold used to check this metric (can be null)
      * @param criticalRange
@@ -275,13 +259,6 @@ public final class ReturnValue {
      *            applicable)
     
      * @return this */
-//    public ReturnValue withPerformanceData(final Metric metric, Prefixes prefix, final String unit, final String warningRange,
-//            final String criticalRange) {
-//
-//        performanceDataList.add(new PerformanceData(metric, prefix, unit, warningRange, criticalRange));
-//        return this;
-//    }
-
     public ReturnValue withPerformanceData(final Metric metric, IThreshold threshold) {
 
         performanceDataList.add(new PerformanceData(metric, threshold.getPrefix(), threshold.getUnitString(), threshold.getRangesAsString(Status.WARNING), threshold.getRangesAsString(Status.CRITICAL)));

@@ -18,7 +18,6 @@ package it.jnrpe.utils.thresholds;
 import it.jnrpe.Status;
 import it.jnrpe.plugins.Metric;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -59,8 +58,9 @@ public class ThresholdsEvaluator {
      *
      * @param metricName
      *            The name of the metric
-    
-     * @return <code>true</code> if the metric is required. */
+     *            
+     * @return <code>true</code> if the metric is required. 
+     */
     final boolean isMetricRequired(final String metricName) {
         return thresholdsMap.containsKey(metricName);
     }
@@ -70,24 +70,22 @@ public class ThresholdsEvaluator {
      *
      * @param metric
      *            The metric name attached to the threshold.
-    
-     * @return The threshold */
+     * @return The threshold 
+     */
     final IThreshold getThreshold(final String metric) {
         return thresholdsMap.get(metric);
     }
 
     /**
-     * Evaluates the passed in value against the threshold configured inside
+     * Evaluates the passed in metric against the threshold configured inside
      * this evaluator. If the threshold do not refer the passed in metric, then
      * it is ignored and the next threshold is checked.
      *
      * @param metric
-     *            The metric name
-     * @param value
-     *            The value to be checked
+     *            The metric to be checked
     
      * @return The status computed according to the rules specified for
-     *         {@link IThreshold#evaluate(BigDecimal)} 
+     *         {@link IThreshold#evaluate(Metric)} 
      */
     final Status evaluate(final Metric metric) {
 

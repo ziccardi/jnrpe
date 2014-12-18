@@ -20,9 +20,6 @@ import it.jnrpe.plugins.Metric;
 import it.jnrpe.plugins.MetricValue;
 import it.jnrpe.utils.thresholds.Prefixes;
 
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-
 /**
  * This class holds the performance data to be returned with the result of the
  * plugin execution.
@@ -98,10 +95,14 @@ class PerformanceData {
     /**
      * Creates a performance data object.
      *
-     * @param perfLabel
-     *            The label identifying this performance data
-     * @param value
-     *            The performance value
+     * @param metric
+     *            The metric that contains the performance data
+     * @param prefix
+     *            The prefix to be used to prepare the data to be inserted into
+     *            the performance data line (mega, kilo, etc).
+     *            It is used to convert the value present inside the metric (for 
+     *            example, memory is usually returned in bytes. You could use 
+     *            mega here to visualize it as MegaBytes). 
      * @param unitofMeasure
      *            The Unit of Measure of <code>value</code>,
      *            <code>minValue</code> and <code>maxValue</code>
@@ -111,12 +112,6 @@ class PerformanceData {
      * @param critRange
      *            the critical range passed to the plugin that is generating
      *            this performance data. Can be null.
-     * @param minValue
-     *            the minimum value that this performance data can reach. Can be
-     *            null.
-     * @param maxValue
-     *            the maximum value that this performance data can reach. Can be
-     *            null.
      */
     PerformanceData(final Metric metric, final Prefixes prefix, final String unitofMeasure, final String warnRange, final String critRange) {
         this.metric = metric;

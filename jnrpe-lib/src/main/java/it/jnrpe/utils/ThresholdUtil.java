@@ -54,21 +54,40 @@ public final class ThresholdUtil {
     }
 
     /**
-     * Returns <code>true</code> if the value <code>iValue</code> falls into the
-     * range <code>sRange</code>.
+     * Returns <code>true</code> if the metric value <code>metric</code> 
+     * falls into the passed in <code>range</code>.
      *
-     * @param thresholdString
+     * @param range
      *            The range
-     * @param value
-     *            The value
-     * @return <code>true</code> if the value <code>iValue</code> falls into the range <code>sRange</code>.
+     * @param metric
+     *            The metric to be checked
+     *            
+     * @return <code>true</code> if the metric value <code>metric</code> 
+     *          falls into the passed in <code>range</code>.
      * @throws BadThresholdException
      */
-    public static boolean isValueInRange(final String thresholdString, final Metric metric) throws BadThresholdException {
-        return new LegacyRange(thresholdString).isValueInside(metric);
+    public static boolean isValueInRange(final String range, final Metric metric) throws BadThresholdException {
+        return new LegacyRange(range).isValueInside(metric);
     }
     
-    public static boolean isValueInRange(final String thresholdString, final Metric metric, final Prefixes prefix) throws BadThresholdException {
-        return new LegacyRange(thresholdString, prefix).isValueInside(metric);
+    /**
+     * Returns <code>true</code> if the metric value <code>metric</code> 
+     * falls into the passed in <code>range</code>.
+     * The metric value is transformed according to the passed in prefix.
+     * For example, if the metric is in {@link Prefixes#kilo} and the passed in prefix is
+     * {@link Prefixes#mega} then the value is converted from kilo to mega before being 
+     * evaluated.
+     *
+     * @param range
+     *            The range
+     * @param metric
+     *            The metric to be checked
+     *            
+     * @return <code>true</code> if the metric value <code>metric</code> 
+     *          falls into the passed in <code>range</code>.
+     * @throws BadThresholdException
+     */
+    public static boolean isValueInRange(final String range, final Metric metric, final Prefixes prefix) throws BadThresholdException {
+        return new LegacyRange(range, prefix).isValueInside(metric);
     }
 }

@@ -103,7 +103,7 @@ public final class ReturnValueBuilder {
 
     /**
      * Configure the {@link ReturnValue} we are building with the specified
-     * value.
+     * metric.
      * 
      * @param pluginMetric
      *            The metric for which we want to compute the result Status.
@@ -151,8 +151,9 @@ public final class ReturnValueBuilder {
      * 
      * @param message
      *            The message to return.
-    
-     * @return this */
+     * 
+     * @return this 
+     */
     public ReturnValueBuilder withForcedMessage(final String message) {
         retValMessage = message;
         return this;
@@ -165,8 +166,9 @@ public final class ReturnValueBuilder {
      * 
      * @param forceStatus
      *            The status to be forced
-    
-     * @return this */
+     * 
+     * @return this 
+     */
     public ReturnValueBuilder withStatus(final Status forceStatus) {
         forcedStatus = forceStatus;
         return this;
@@ -175,8 +177,8 @@ public final class ReturnValueBuilder {
     /**
      * Builds the configured {@link ReturnValue} object.
      * 
-    
-     * @return The {@link ReturnValue} object */
+     * @return The {@link ReturnValue} object 
+     */
     public ReturnValue create() {
         if (forcedStatus == null) {
             retVal.withStatus(status);

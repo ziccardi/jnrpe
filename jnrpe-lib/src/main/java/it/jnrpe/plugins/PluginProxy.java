@@ -111,9 +111,6 @@ public final class PluginProxy extends PluginBase {
             cliParser.setGroup(mainOptionsGroup);
             cliParser.setHelpFormatter(hf);
             CommandLine cl = cliParser.parse(argsAry);
-            /*if (proxiedPlugin instanceof IPluginInterfaceEx) {
-                ((IPluginInterfaceEx) proxiedPlugin).setContext(this.getContext());
-            }*/
             
             // Inject the context...
             InjectionUtils.inject(proxiedPlugin, getContext());

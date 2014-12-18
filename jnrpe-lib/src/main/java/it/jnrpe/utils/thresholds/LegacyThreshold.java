@@ -42,12 +42,18 @@ public class LegacyThreshold implements IThreshold {
      */
     private final String metricName;
 
-
+    /**
+     * The prefix to be used to interpret the boundaries of this
+     * range specification.
+     */
     private final Prefixes prefix;
     
     /**
      * Builds and initializes the threshold object.
      *
+     * @param prefix
+     *            The prefix to be used to interpret the boundaries of this
+     *            range specification
      * @param metric
      *            The metric associated with this threshold.
      * @param ok
@@ -65,6 +71,18 @@ public class LegacyThreshold implements IThreshold {
         this.prefix = prefix;
     }
 
+    /**
+     * Builds and initializes the threshold object.
+     *
+     * @param metric
+     *            The metric associated with this threshold.
+     * @param ok
+     *            The ok range.
+     * @param warn
+     *            The warning range.
+     * @param crit
+     *            The critical range.
+     */
     public LegacyThreshold(final String metric, final LegacyRange ok, final LegacyRange warn, final LegacyRange crit) {
         okRange = ok;
         warnRange = warn;
@@ -74,7 +92,10 @@ public class LegacyThreshold implements IThreshold {
     }
     
     /**
-     * Evaluates the value against the specified ranges. The followed flow is:
+     * Evaluates the metric value against the {@link #okRange}, 
+     * {@link #warnRange} and {@link #critRange}. 
+     * 
+     * The followed flow is:
      * <ol>
      * <li>If a critical range is defined and the value falls inside the
      * specified range, a {@link Status#CRITICAL} is returned.
@@ -89,8 +110,10 @@ public class LegacyThreshold implements IThreshold {
      * 
      * @param value
      *            The value to be evaluated.
-    
-     * @return the evaluated status. * @see it.jnrpe.utils.thresholds.IThreshold#evaluate(BigDecimal)
+     *            
+     * @return the evaluated status. 
+     * 
+     * @see it.jnrpe.utils.thresholds.IThreshold#evaluate(Metric)
      */
     public final Status evaluate(final Metric value) {
         if (critRange != null && critRange.isValueInside(value)) {
@@ -113,8 +136,9 @@ public class LegacyThreshold implements IThreshold {
     /**
      * @param metric
      *            The metric we want to evaluate.
-    
-     * @return wether this threshold is about the passed in metric. * @see it.jnrpe.utils.thresholds.IThreshold#isAboutMetric(String)
+     *            
+     * @return whether this threshold is about the passed in metric. 
+     * @see it.jnrpe.utils.thresholds.IThreshold#isAboutMetric(String)
      */
     public final boolean isAboutMetric(final Metric metric) {
         return metricName.equalsIgnoreCase(metric.getMetricName());
@@ -123,8 +147,8 @@ public class LegacyThreshold implements IThreshold {
     /**
      * The metric referred by this threshold.
      * 
-    
-     * @return the metric name. * @see it.jnrpe.utils.thresholds.IThreshold#getMetric()
+     * @return the metric name. 
+     * @see it.jnrpe.utils.thresholds.IThreshold#getMetric()
      */
     public final String getMetric() {
         return metricName;
@@ -133,8 +157,8 @@ public class LegacyThreshold implements IThreshold {
     /**
      * @param status
      *            the range we are interested in.
-    
-     * @return the requested unparsed range string. * @see it.jnrpe.utils.thresholds.IThreshold#getRangesAsString(Status)
+     * @return the requested unparsed range string. 
+     * @see it.jnrpe.utils.thresholds.IThreshold#getRangesAsString(Status)
      */
     public final String getRangesAsString(final Status status) {
         switch (status) {
@@ -160,8 +184,8 @@ public class LegacyThreshold implements IThreshold {
     }
 
     /**
-    
-     * @return the unit of measure as string. * @see it.jnrpe.utils.thresholds.IThreshold#getUnitString()
+     * @return the unit of measure as string. 
+     * @see it.jnrpe.utils.thresholds.IThreshold#getUnitString()
      */
     public final String getUnitString() {
         return null;
@@ -176,6 +200,10 @@ public class LegacyThreshold implements IThreshold {
         return "LegacyThreshold [okRange=" + okRange + ", warnRange=" + warnRange + ", critRange=" + critRange + ", metricName=" + metricName + "]";
     }
     
+    /**
+     * Returns the prefix configured for this threshold.
+     * @see #prefix
+     */
     public Prefixes getPrefix() {
         return prefix;
     }

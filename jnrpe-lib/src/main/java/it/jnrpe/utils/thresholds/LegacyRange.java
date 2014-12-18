@@ -32,6 +32,9 @@ import java.math.BigDecimal;
  */
 public class LegacyRange {
     
+    /**
+     * The prefix to be used to interpret the boundary of this range.
+     */
     private Prefixes prefix = Prefixes.RAW;
     
     /**
@@ -79,17 +82,32 @@ public class LegacyRange {
 
     /**
      * Builds the object with the specified range.
+     * Sets the default prefix as {@link Prefixes#RAW}
      * 
      * @param threshold
      *            The range
-    
+     *            
      * @throws BadThresholdException
-     *             - */
+     *             - 
+     */
     public LegacyRange(final String threshold) throws BadThresholdException {
         thresholdString = threshold;
         parseRange();
     }
     
+    /**
+     * Builds the object with the specified range and sets the prefix as
+     * specified by <code>prefix</code>
+     * 
+     * @param threshold
+     *            The range
+     * @param prefix
+     *            The prefix to be used to interpret the range boundary
+     *            values
+     *            
+     * @throws BadThresholdException
+     *             - 
+     */
     public LegacyRange(final String threshold, final Prefixes prefix) throws BadThresholdException {
         thresholdString = threshold;
         this.prefix = prefix;
@@ -100,9 +118,9 @@ public class LegacyRange {
      * Parses the range definition to evaluate the minimum and maximum
      * thresholds.
      * 
-    
      * @throws BadThresholdException
-     *             - */
+     *             - 
+     */
     private void parseRange() throws BadThresholdException {
 
         PushbackReader reader = new PushbackReader(new StringReader(thresholdString));
@@ -219,13 +237,13 @@ public class LegacyRange {
     /**
      * Returns <code>true</code> if the value falls inside the range.
      * 
-     * @param value
-     *            The value
-     * @param prefix
-     *            The prefix that identifies the multiplier
-    
-     * @return <code>true</code> if the value falls inside the range.
-     *         <code>false</code> otherwise. */
+     * @param metric
+     *            The metric to be checked
+     *            
+     * @return <code>true</code> if the metric value value falls inside the 
+     *          range.
+     *         <code>false</code> otherwise. 
+     */
     public final boolean isValueInside(final Metric metric) {
         
         BigDecimal value = metric.getMetricValue(prefix);

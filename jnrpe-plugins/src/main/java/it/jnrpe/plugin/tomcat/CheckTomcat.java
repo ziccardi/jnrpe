@@ -1,3 +1,18 @@
+/*******************************************************************************
+ * Copyright (c) 2007, 2014 Massimiliano Ziccardi
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *******************************************************************************/
 package it.jnrpe.plugin.tomcat;
 
 import it.jnrpe.ICommandLine;
@@ -8,13 +23,10 @@ import it.jnrpe.plugins.Metric;
 import it.jnrpe.plugins.MetricBuilder;
 import it.jnrpe.plugins.MetricGatheringException;
 import it.jnrpe.plugins.PluginBase;
-import it.jnrpe.plugins.PluginDefinition;
-import it.jnrpe.plugins.PluginProxy;
 import it.jnrpe.plugins.annotations.Option;
 import it.jnrpe.plugins.annotations.Plugin;
 import it.jnrpe.plugins.annotations.PluginOptions;
 import it.jnrpe.utils.BadThresholdException;
-import it.jnrpe.utils.PluginRepositoryUtil;
 import it.jnrpe.utils.thresholds.Prefixes;
 import it.jnrpe.utils.thresholds.ReturnValueBuilder;
 import it.jnrpe.utils.thresholds.ThresholdsEvaluatorBuilder;
@@ -54,8 +66,15 @@ import java.util.List;
         @Option(shortName = "T", longName = "timeout", description = "Connection timeout in seconds. Default is 10.", required = false, hasArgs = true, argName = "timeout", optionalArgs = false, option = "timeout"), })
 public class CheckTomcat extends PluginBase {
 
+    /**
+     * The dataprovider object. Used to retrieve the information from the 
+     * Tomcat application server.
+     */
     private IAppServerDataProvider dataProvider = new TomcatDataProvider();
 
+    /**
+     * The logger object.
+     */
     protected final JNRPELogger LOG = new JNRPELogger(this);
 
     /**
@@ -78,17 +97,36 @@ public class CheckTomcat extends PluginBase {
         return "CHECK_TOMCAT";
     }
 
+    /**
+     * Computes the percent value of the passed in <code>value</code>.
+     * 
+     * @param value the value to be converted to a percent value.
+     * @param maxValue the maximum value that <code>value</code> can
+     * assume
+     * 
+     * @return the value as percent
+     */
     private BigDecimal toPercent(BigDecimal value, BigDecimal maxValue) {
         
         return value.divide(maxValue, 4, RoundingMode.HALF_UP).multiply(new BigDecimal(100));
     }
     
+    /**
+     * Computes the percent value of the passed in <code>value</code>.
+     * 
+     * @param value the value to be converted to a percent value.
+     * @param maxValue the maximum value that <code>value</code> can
+     * assume
+     * 
+     * @return the value as percent
+     */
     private BigDecimal toPercent(long value, long maxValue) {
         return toPercent(new BigDecimal(value), new BigDecimal(maxValue));
     }
     
     /**
      * Gathers the metrics about the Tomcat JVM memory usage
+     * 
      * @return the gathered metrics
      * @throws MetricGatheringException
      */
@@ -207,7 +245,7 @@ public class CheckTomcat extends PluginBase {
     /**
      * Internally used to initialize the Tomcat connector.
      * 
-     * @param cl
+     * @param cl the received command line
      * @throws MetricGatheringException
      */
     private void init(ICommandLine cl) throws MetricGatheringException {
@@ -225,21 +263,56 @@ public class CheckTomcat extends PluginBase {
         }
     }
     
+    /**
+     * Return <code>true</code> if the received metricName is about a memory 
+     * metric.
+     * 
+     * @param metricName the metric to be checked
+     * 
+     * @return <code>true</code> if the received metricName is about a memory 
+     * metric
+     */
     private boolean isMemory(String metricName) {
         String tmp = metricName.toLowerCase();
         return tmp.equals("memory") || tmp.equals("memory%");
     }
     
+    /**
+     * Return <code>true</code> if the received metricName is about a threads 
+     * metric.
+     * 
+     * @param metricName the metric to be checked
+     * 
+     * @return <code>true</code> if the received metricName is about a threads 
+     * metric
+     */
     private boolean isThread(String metricName) {
         String tmp = metricName.toLowerCase();
         return tmp.endsWith("-threadInfo") || tmp.endsWith("-threadInfo%");
     }
     
+    /**
+     * Return <code>true</code> if the received metricName is about a percent 
+     * metric.
+     * 
+     * @param metricName the metric to be checked
+     * 
+     * @return <code>true</code> if the received metricName is about a percent 
+     * metric
+     */
     private boolean isPercent(String metricName) {
         return metricName.endsWith("%");
     }
     
-    public Prefixes getPrefix(ICommandLine cl) {
+    /**
+     * Returns the prefix to be used to create the metrics.
+     * 
+     * @param cl the received command line
+     * 
+     * @return the prefix to be used. Memory metrics are produced as 
+     * {@link Prefixes#mega}, while percent metrics are {@link Prefixes#RAW}.
+     */
+    private Prefixes getPrefix(ICommandLine cl) {
         
         if (cl.hasOption("memory") && !cl.hasOption("percent")) {
             return Prefixes.mega;
@@ -248,6 +321,13 @@ public class CheckTomcat extends PluginBase {
         return Prefixes.RAW;
     }
     
+    /**
+     * Update the return value of this plugin.
+     * 
+     * @param oldRet
+     * @param ret
+     * @return
+     */
     private ReturnValue updateRet(ReturnValue oldRet, ReturnValue ret) {
         if (oldRet == null) {
             return ret;
@@ -325,27 +405,5 @@ public class CheckTomcat extends PluginBase {
             LOG.info(getContext(), "Plugin execution failed : " + mge.getMessage(), mge);
             return ReturnValueBuilder.forPlugin(getPluginName()).withForcedMessage(mge.getMessage()).withStatus(mge.getStatus()).create();
         }
-    }
-    
-    public static void main(String[] args) throws BadThresholdException {
-        PluginDefinition pd = PluginRepositoryUtil.loadFromPluginAnnotation(CheckTomcat.class);
-
-//        ReturnValue rv = new PluginProxy(new CheckTomcat(), pd).execute(new String[] { "-h", "127.0.0.1", "-l", "manager", "-a", "manager", "--th",
-//                "metric=memory,warning=50..150,critical=150..inf,prefix=M,unit=byte" });
-        
-//        ReturnValue rv = new PluginProxy(new CheckTomcat(), pd).execute(new String[] { "-h", "127.0.0.1", "-l", "manager", "-a", "manager", 
-//                "--warning", "10:130",
-//                "--critical", "130:",
-//                "--memory"});
-        
-        ReturnValue rv = new PluginProxy(new CheckTomcat(), pd).execute(new String[] { "-h", "127.0.0.1", "-l", "manager", "-a", "manager", 
-                "--critical", "0.1:",
-                "--threads",
-                "--percent"
-                });
-
-        //ReturnValue ret = client.sendCommand("CHECK_MEM_PERC_WARNING", "127.0.0.1", TOMCAT_PORT, "tomcat", "tomcat", ":99.9%");
-        
-        System.out.println(rv.getMessage());
     }
 }

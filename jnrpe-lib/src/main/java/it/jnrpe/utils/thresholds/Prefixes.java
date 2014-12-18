@@ -26,6 +26,9 @@ import java.math.BigDecimal;
  */
 public enum Prefixes {
     
+    /**
+     * Used for raw values
+     */
     RAW(new BigDecimal(1)),
     
     /**
