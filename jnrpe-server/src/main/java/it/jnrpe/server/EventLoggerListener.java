@@ -46,8 +46,8 @@ public class EventLoggerListener {
      *            The event
      */
     @Subscribe
-    public final void receive(LogEvent logEvent) {
-        String sClassName = logEvent.getSource().getClass().getName();
+    public final void receive(final LogEvent logEvent) {
+        final String sClassName = logEvent.getSource().getClass().getName();
 
         Logger logger = loggersMap.get(sClassName);
 
@@ -56,11 +56,7 @@ public class EventLoggerListener {
             loggersMap.put(sClassName, logger);
         }
 
-        Throwable error = logEvent.getCause();
-
-        if (error != null) {
-            error.printStackTrace();
-        }
+        final Throwable error = logEvent.getCause();
 
         switch (logEvent.getLogType()) {
         case TRACE:

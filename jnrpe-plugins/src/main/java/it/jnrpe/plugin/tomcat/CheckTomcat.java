@@ -63,7 +63,8 @@ import java.util.List;
 
         @Option(shortName = "r", longName = "th", description = "Configure a threshold. Format : metric={metric},ok={range},warn={range},crit={range},unit={unit},prefix={SI prefix}", required = false, hasArgs = true, argName = "thresholds", optionalArgs = false, option = "thresholds"),
         @Option(shortName = "S", longName = "ssl", description = "Use ssl", required = false, hasArgs = false, argName = "ssl", optionalArgs = false, option = "ssl"),
-        @Option(shortName = "T", longName = "timeout", description = "Connection timeout in seconds. Default is 10.", required = false, hasArgs = true, argName = "timeout", optionalArgs = false, option = "timeout"), })
+        @Option(shortName = "T", longName = "timeout", description = "Connection timeout in seconds. Default is 10.", required = false, hasArgs = true, argName = "timeout", optionalArgs = false, option = "timeout"), 
+})
 public class CheckTomcat extends PluginBase {
 
     /**
@@ -146,12 +147,16 @@ public class CheckTomcat extends PluginBase {
                 .withMinValue(0, "#.##")
                 .withMaxValue(jvmMemory.getTotalMemory(), "#.##").build());
         
+        LOG.debug(getContext(), "Created metric : memory");
+        
         res.add(MetricBuilder.forMetric("memory%")
                 .withMessage("Used Memory : {0,number,#.##}%", percent.doubleValue())
                 .withValue(percent, "#.##")
                 .withMinValue(0, "#")
                 .withMaxValue(100, "#").build());
 
+        LOG.debug(getContext(), "Created metric : memory%");
+        
         for (MemoryPoolData mpd : dataProvider.getMemoryPoolData()) {
             res.add(MetricBuilder
                     .forMetric(mpd.getPoolName() + "-memoryPool")
@@ -164,6 +169,8 @@ public class CheckTomcat extends PluginBase {
                      .withMinValue(0, "#.##")
                     .withMaxValue(mpd.getUsageMax(), "#.##").build());
             
+            LOG.debug(getContext(), "Created metric : " + mpd.getPoolName() + "-memoryPool");
+            
             BigDecimal memoryPoolPercent = toPercent(mpd.getUsageUsed(), mpd.getUsageMax());
             
             res.add(MetricBuilder
@@ -172,7 +179,7 @@ public class CheckTomcat extends PluginBase {
                     .withValue(memoryPoolPercent, "#.##")
                     .withMinValue(0, "#")
                     .withMaxValue(mpd.getUsageMax(), "#").build());
-            LOG.debug(getContext(), "Created metric : " + mpd.getPoolName() + "-memoryPool");
+            LOG.debug(getContext(), "Created metric : " + mpd.getPoolName() + "-memoryPool%");;
         }
 
         return res;
@@ -192,8 +199,8 @@ public class CheckTomcat extends PluginBase {
 
         for (ThreadData td : dataProvider.getThreadData()) {
 
-            final String metricName = td.getConnectorName() + "-threadInfo";
-            final String percentMetricName = td.getConnectorName() + "-threadInfo%";
+            final String metricName = td.getConnectorName().replace("\"", "") + "-threadInfo";
+            final String percentMetricName = td.getConnectorName().replace("\"", "") + "-threadInfo%";
 
             res.add(MetricBuilder
                     .forMetric(metricName)
@@ -220,20 +227,6 @@ public class CheckTomcat extends PluginBase {
 
     @Override
     protected Collection<Metric> gatherMetrics(ICommandLine cl) throws MetricGatheringException {
-
-        String username = cl.getOptionValue("username");
-        String password = cl.getOptionValue("password");
-        int timeout = Integer.parseInt(cl.getOptionValue("timeout", DEFAULT_TIMEOUT));
-        String hostname = cl.getOptionValue("hostname");
-
-        String port = cl.getOptionValue("port", DEFAULT_PORT);
-        String uri = cl.getOptionValue("uri", DEFAULT_URI);
-        try {
-            this.dataProvider.init(hostname, uri, Integer.parseInt(port), username, password, cl.hasOption("ssl"), timeout);
-        } catch (Exception e) {
-            LOG.info(getContext(), "Plugin execution failed : " + e.getMessage(), e);
-            throw new MetricGatheringException(e.getMessage(), Status.UNKNOWN, e);
-        }
 
         Collection<Metric> metrics = new ArrayList<Metric>();
         metrics.addAll(gatherConnectorMetrics());

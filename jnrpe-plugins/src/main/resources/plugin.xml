@@ -10,7 +10,7 @@
     <plugin name="CHECK_MYSQL" definedIn="check_mysql_plugin.xml" />
     <plugin name="CHECK_MYSQL_QUERY" definedIn="check_mysql_query_plugin.xml" />
     <plugin name="CHECK_PGSQL" definedIn="check_pgsql_plugin.xml" />
-    <plugin name="CHECK_TOMCAT" definedIn="t.jnrpe.plugin.tomcat.CheckTomcat" />
+    <plugin name="CHECK_TOMCAT" class="it.jnrpe.plugin.tomcat.CheckTomcat" />
     <plugin name="CHECK_HTTP" definedIn="check_http_plugin.xml" />
     <plugin name="CHECK_BY_SSH" class="it.jnrpe.plugin.CheckBySsh" />
     <plugin name="CHECK_SSH" class="it.jnrpe.plugin.CheckSsh" />
