@@ -406,7 +406,7 @@ public class JNRPEClient {
 
             String sHost = (String) cli.getValue("--host");
             final Long port = (Long) cli.getValue("--port", Long.valueOf(DEFAULT_PORT));
-            String sCommand = (String) cli.getValue("--command");
+            String sCommand = (String) cli.getValue("--command", "_NRPE_CHECK");
 
             JNRPEClient client = new JNRPEClient(sHost, port.intValue(), !cli.hasOption("--nossl"));
             client.setTimeout(((Long) cli.getValue("--timeout", Long.valueOf(DEFAULT_TIMEOUT))).intValue());
