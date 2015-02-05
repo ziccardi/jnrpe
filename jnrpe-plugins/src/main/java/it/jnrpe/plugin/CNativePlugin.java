@@ -57,10 +57,18 @@ public class CNativePlugin extends PluginBase {
             System.arraycopy(vsParams, 0, vCommand, 1, vsParams.length);
             Process p = Runtime.getRuntime().exec(vCommand);
             BufferedReader br = (BufferedReader) streamMgr.handle(new BufferedReader(new InputStreamReader(p.getInputStream())));
-            String sMessage = br.readLine();
+            StringBuilder msg = new StringBuilder();
+            
+            for (String line = br.readLine(); line != null; line = br.readLine()) {
+                if (msg.length() != 0) {
+                    msg.append(System.lineSeparator());
+                }
+                msg.append(line);
+            }
+            
             int iReturnCode = p.waitFor();
 
-            return new ReturnValue(Status.fromIntValue(iReturnCode), sMessage);
+            return new ReturnValue(Status.fromIntValue(iReturnCode), msg.toString());
         } catch (Exception e) {
             String message = e.getMessage();
             
