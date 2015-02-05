@@ -93,8 +93,8 @@ public final class CommandInvoker {
      * @param argsAry
      *            The arguments to pass to the command as configured in the
      *            server configuration XML (with the $ARG?$ macros)
-    
-     * @return The result of the command */
+     * @return The result of the command 
+     */
     public ReturnValue invoke(final String commandName, final String[] argsAry) {
         if ("_NRPE_CHECK".equals(commandName)) {
             return new ReturnValue(Status.OK, JNRPELIB.VERSION);

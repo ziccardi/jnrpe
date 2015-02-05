@@ -165,9 +165,9 @@ class JNRPEProtocolPacket {
     /**
      * Validates the packet CRC.
      * 
-    
      * @throws BadCRCException
-     *             If the CRC can't be validated */
+     *             If the CRC can't be validated 
+     */
     public void validate() throws BadCRCException {
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
         DataOutputStream dout = new DataOutputStream(bout);
@@ -197,15 +197,15 @@ class JNRPEProtocolPacket {
     }
 
     /**
-    
-     * @return the received raw data buffer */
+     * @return the received raw data buffer 
+     */
     protected byte[] getBuffer() {
         return byteBufferAry;
     }
 
     /**
-    
-     * @return The string representation of the buffer. */
+     * @return The string representation of the buffer. 
+     */
     protected String getPacketString() {
         byte[] buffer = getBuffer();
         int zeroIndex = ArrayUtils.indexOf(buffer, (byte) 0);
