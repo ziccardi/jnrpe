@@ -1,9 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>net.sf.jnrpe</groupId>
 	<artifactId>jnrpe-parent</artifactId>
-	<version>2.0.6-SNAPSHOT</version>
+	<version>2.0.5-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Jnrpe Package</name>
@@ -59,10 +60,10 @@ It is fully compatible with check_nrpe and can be used to execute both old nativ
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jnrpe-lib.version>2.0.6-SNAPSHOT</jnrpe-lib.version>
-		<jnrpe-server.version>2.0.6-SNAPSHOT</jnrpe-server.version>
-		<jnrpe-plugins.version>0.7.6-SNAPSHOT</jnrpe-plugins.version>
-		<jcheck_nrpe.version>2.0.6-SNAPSHOT</jcheck_nrpe.version>
+		<jnrpe-lib.version>2.0.5-SNAPSHOT</jnrpe-lib.version>
+		<jnrpe-server.version>2.0.5-SNAPSHOT</jnrpe-server.version>
+		<jnrpe-plugins.version>0.7.5-SNAPSHOT</jnrpe-plugins.version>
+		<jcheck_nrpe.version>2.0.5-SNAPSHOT</jcheck_nrpe.version>
 	</properties>
 
 	<dependencyManagement>
