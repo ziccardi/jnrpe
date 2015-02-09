@@ -11,7 +11,7 @@
 	<bannerLeft>
 		<name>JNRPE</name>
 		<src>./images/jnrpe.png</src>
-		<href>http://jnrpe.sourceforge.net/</href>
+		<href>http://www.jnrpe.it/</href>
 	</bannerLeft>
 	
 	<body>
@@ -19,7 +19,7 @@
 			<item name="Welcome" href="index.html" />
 		</menu>
 
-		<menu name="Overview" inherit="top">
+		<menu name="Documentation" inherit="top">
 			<item name="Administration" collapse="true" href="administration.html">
 				<item name="Install the server" href="jnrpe-install/install.html" />
 				<item name="The JNRPE Server" href="jnrpe-server/index.html" />

@@ -8,7 +8,7 @@ The main reason for using JNRPE is to allow Nagios to monitor "local" resources 
 
 ##How JNRPE works
 
-![images/deployment.png](JNRPE deployment.)
+![JNRPE deployment.](images/deployment.png)
 
 The Nagios plugins will be executing as follows:
   
@@ -24,7 +24,13 @@ The Nagios plugins will be executing as follows:
   
 ##How to Get Support
 
-  TBD
+There are several places to obtain support for JNRPE. They are presented here in the order in which you should probably consult them.
+
+The documentation is the source of informations about JNRPE.
+
+The [tutorials](http://www.jnrpe.it/cms) is where you can find the solution to common tasks.
+
+The [Help Forum](http://sourceforge.net/p/jnrpe/discussion/730635/) is the place where you can ask for help to the community
  
 ##How can I Help?
 

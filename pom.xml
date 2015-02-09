@@ -10,7 +10,7 @@
 	<description>JNRPE is a Nagios addon that makes simple the implementation of Nagios plugins using the Java Language.
 
 It is fully compatible with check_nrpe and can be used to execute both old native Nagios plugins and the new Java Nagios Plugins.</description>
-	<url>http://jnrpe.sourceforge.net</url>
+	<url>http://www.jnrpe.it</url>
 
 	<licenses>
 		<license>
