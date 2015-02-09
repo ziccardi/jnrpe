@@ -3,7 +3,7 @@
 
 	<groupId>net.sf.jnrpe</groupId>
 	<artifactId>jnrpe-parent</artifactId>
-	<version>2.0.5</version>
+	<version>2.0.6-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Jnrpe Package</name>
@@ -59,10 +59,10 @@ It is fully compatible with check_nrpe and can be used to execute both old nativ
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jnrpe-lib.version>2.0.5</jnrpe-lib.version>
-		<jnrpe-server.version>2.0.5</jnrpe-server.version>
-		<jnrpe-plugins.version>0.7.5</jnrpe-plugins.version>
-		<jcheck_nrpe.version>2.0.5</jcheck_nrpe.version>
+		<jnrpe-lib.version>2.0.6-SNAPSHOT</jnrpe-lib.version>
+		<jnrpe-server.version>2.0.6-SNAPSHOT</jnrpe-server.version>
+		<jnrpe-plugins.version>0.7.6-SNAPSHOT</jnrpe-plugins.version>
+		<jcheck_nrpe.version>2.0.6-SNAPSHOT</jcheck_nrpe.version>
 	</properties>
 
 	<dependencyManagement>
@@ -379,7 +379,7 @@ It is fully compatible with check_nrpe and can be used to execute both old nativ
 		<url>http://github.com/ziccardi/jnrpe</url>
 		<connection>scm:git://github.com/ziccardi/jnrpe.git</connection>
 		<developerConnection>scm:git:git@github.com:ziccardi/jnrpe.git</developerConnection>
-		<tag>2.0.5</tag>
+		<tag>HEAD</tag>
 	</scm>
 
 </project>
