@@ -1,19 +1,82 @@
 #JNRPE Modules
 
-The JNRPE project is composed of many modules:
+The JNRPE project is composed of many modules that can be classified in three different macro groups:
+  * Installation packages
+  * Applications
+  * Libraries
+  * OSGI Bundles
+  * Plugins
+  
+The installation packages, as the name implies, are meant to be used to install JNRPE :
+
+  * jnrpe-debian
+  * jnrpe-install
+  
+The applications are those components that has a graphical or command line interface and can be used as they are:
+
+  * jnrpe-server
+  * jcheck_nrpe
+
+The libraries can be used to develop functionalities that uses JNRPE features:
   
   * jnrpe-lib
-  * jnrpe-server
+  * jcheck_nrpe
+
+The OSGI bundles can be installed inside any standard OSGI bundle (as of today, karaf and felix has been tested):
+
   * jnrpe-osgi-core (jnrpe-osgi)
   * jnrpe-plugins-osgi (jnrpe-osgi) 
+
+The plugins are pieces of software that JNRPE uses to execute the checks:
+
   * jnrpe-plugins
-  * jcheck_nrpe
-  * jnrpe-install
-  * jnrpe-debian
+
+
+
+## The Installation packages
+ 
+### The jnrpe-install project
+
+![jnrpe-lib project](../images/install.png)
+
+This project contains the source of the JNRPE installer. The installer is built using the
+izPack library.
+  
+For more informations about jnrpe-install 
+look at the [jnrpe-install documentation](../jnrpe-install/index.html)
+
+## The jnrpe-debian project
+
+This project bundles JNRPE as a debian file (.deb) installable on debian based systems.
+
+## The Applications
+ 
+###The jnrpe-server project
+
+![jnrpe-lib project](../images/jnrpe-server.png)
+
+This project is an implementation based on jnrpe-lib of a clone of the Nagios NRPE server.
+The JNRPE Server, embeds the jnrpe-lib library and configures it through a configuration
+file. It than attach itself to the event bus and sends all the log events to SLF4j that
+in turn, writes them to the log file.
+  
+For more informations about jnrpe-server and how to use and configurate it, 
+look at the {{{../jnrpe-server/index.html}jnrpe-server documentation}}
+
+### The jcheck_nrpe project
+
+This project contains the JAVA implementation of a clone of the check_nrpe Nagios command.
+This code can be used as a standalone application (like check_nrpe) or can be embedded inside
+your own application to be able to invoke services on JNRPE or NRPE.
+  
+For more informations about jcheck_nrpe, how to use the command line and how embed it, 
+look at the [jcheck_nrpe documentation](../jcheck_nrpe/index.html)
+
+## The libraries
   
 ## The jnrpe-lib project
 
-[../images/jnrpe-lib.png] jnrpe-lib project.
+![jnrpe-lib project](../images/jnrpe-lib.png)
 
 The jnrpe-lib project is the most important module: it contains the core implementation
 of the NRPE protocol and all the classes that allows the user to embed JNRPE funcionalities
@@ -36,22 +99,10 @@ o receive informations from JNRPE plugins since their invocation is asynchronous
  
 For more informations about jnrpe-lib and how to use it, look at 
 the [jnrpe-lib documentation](../jnrpe-lib/index.html)
- 
-##The jnrpe-server project
-
-![../images/jnrpe-server.png](jnrpe-lib project)
-
-This project is an implementation based on jnrpe-lib of a clone of the Nagios NRPE server.
-The JNRPE Server, embeds the jnrpe-lib library and configures it through a configuration
-file. It than attach itself to the event bus and sends all the log events to SLF4j that
-in turn, writes them to the log file.
-  
-For more informations about jnrpe-server and how to use and configurate it, 
-look at the {{{../jnrpe-server/index.html}jnrpe-server documentation}}
-  
+   
 ##The jnrpe-osgi-core project
 
-![../images/osgi-core.png](jnrpe-osgi-core project.)
+![jnrpe-osgi-core project](../images/osgi-core.png)
 
 This project packages the jnrpe-lib as a bundle to be used inside OSGI containers
 (JBoss, Apache Karaf, Apache Felix, etc.).
@@ -82,27 +133,5 @@ This project contains the implementation of all the plugins bundled with JNRPE.
   
 For more informations about jnrpe-plugins, all contained plugins and how to use them, 
 look at the [jnrpe-plugins documentation](../jnrpe-plugins/index.html)
-  
-## The jcheck_nrpe project
-
-This project contains the JAVA implementation of a clone of the check_nrpe Nagios command.
-This code can be used as a standalone application (like check_nrpe) or can be embedded inside
-your own application to be able to invoke services on JNRPE or NRPE.
-  
-For more informations about jcheck_nrpe, how to use the command line and how embed it, 
-look at the [jcheck_nrpe documentation](../jcheck_nrpe/index.html)
- 
-## The jnrpe-install project
-
-![../images/install.png] (jnrpe-lib project.)
-
-This project contains the source of the JNRPE installer. The installer is built using the
-izPack library.
-  
-For more informations about jnrpe-install 
-look at the [jnrpe-install documentation](../jnrpe-install/index.html)
-  
-## The jnrpe-debian project
-
-This project bundles JNRPE as a debian file (.deb) installable on debian based systems.
+     
   

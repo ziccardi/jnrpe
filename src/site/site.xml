@@ -10,16 +10,16 @@
 
 	<bannerLeft>
 		<name>JNRPE</name>
-		<src>./images/jnrpe.png
-		</src>
+		<src>./images/jnrpe.png</src>
 		<href>http://jnrpe.sourceforge.net/</href>
 	</bannerLeft>
+	
 	<body>
 		<menu name="Main" inherit="top">
 			<item name="Welcome" href="index.html" />
 		</menu>
 
-		<menu name="Overview" inherit="bottom">
+		<menu name="Overview" inherit="top">
 			<item name="Administration" collapse="true" href="administration.html">
 				<item name="Install the server" href="jnrpe-install/install.html" />
 				<item name="The JNRPE Server" href="jnrpe-server/index.html" />
@@ -43,6 +43,10 @@
 		</menu>
 
 		<menu name="Reports" ref="reports" inherit="bottom" />
+		
+		<menu name="Community" inherit="bottom">
+			<item name="Acknowledgment" href="acknowledgment.html" />
+		</menu>
 
 	</body>
 
@@ -54,9 +58,7 @@
 
   <custom>
     <fluidoSkin>
-    <topBarEnabled>true</topBarEnabled>
-      <facebookLike />
-      <googlePlusOne />
+    	<topBarEnabled>true</topBarEnabled>
     </fluidoSkin>
   </custom>
 </project>
