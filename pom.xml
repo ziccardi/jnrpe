@@ -49,13 +49,30 @@ It is fully compatible with check_nrpe and can be used to execute both old nativ
 		</mailingList>
 	</mailingLists>
 
-	<developers>
+		<developers>
 		<developer>
 			<id>mziccardi</id>
 			<name>Massimiliano Ziccardi</name>
 			<email>massimiliano.ziccardi@gmail.com</email>
 		</developer>
+		<developer>
+			<id>fcampos</id>
+			<name>Frederico Campos</name>
+			<email>frederico.campos@gmail.com</email>
+		</developer>
 	</developers>
+	<contributors>
+		<contributor>
+			<name>Athou</name>
+			<url>https://github.com/Athou</url>
+			<email>jeremiepanzer@gmail.com</email>
+		</contributor>
+		<contributor>
+			<name>Andres Gomez Casanova</name>
+			<url>https://github.com/angoca</url>
+			<email>angoca@yahoo.com</email>
+		</contributor>
+	</contributors>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
