@@ -231,12 +231,4 @@
 			</plugin>
 		</plugins>
 	</reporting>
-	<issueManagement>
-		<system>jira</system>
-		<url>https://jnrpe-tracker.atlassian.net/</url>
-	</issueManagement>
-	<scm>
-		<url>https://github.com/ziccardi/jnrpe/tree/master/jnrpe-parent/jnrpe-server</url>
-	  <tag>HEAD</tag>
-  </scm>
 </project>

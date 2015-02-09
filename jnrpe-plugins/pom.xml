@@ -40,12 +40,6 @@
 		<jettyVersion>7.2.0.v20101020</jettyVersion>
 	</properties>
 
-	<scm>
-		<connection>scm:git:https://github.com/ziccardi/jnrpe</connection>
-		<url>https://github.com/ziccardi/jnrpe/tree/master/jnrpe-parent/jnrpe-plugins</url>
-		<developerConnection>scm:git:git@github.com:ziccardi/jnrpe.git</developerConnection>
-		<tag>HEAD</tag>
-	</scm>
 
 	<dependencies>
 		<dependency>
@@ -409,8 +403,4 @@
 			</roles>
 		</contributor>
 	</contributors>
-	<issueManagement>
-		<system>jira</system>
-		<url>https://jnrpe-tracker.atlassian.net/</url>
-	</issueManagement>
 </project>

@@ -175,9 +175,5 @@
 			</plugin>
 		</plugins>
 	</build>
-	<scm>
-		<url>https://github.com/ziccardi/jnrpe/tree/master/jnrpe-parent/jnrpe-osgi/jnrpe-osgi-IT</url>
-	  <tag>HEAD</tag>
-  </scm>
 	<name>JNRPE OSGI Integration Tests</name>
 </project>

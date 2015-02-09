@@ -31,12 +31,6 @@ Both plain socket and SSL are supported.</description>
 		</developer>
 	</developers>
 
-	<scm>
-		<connection>scm:git:https://github.com/ziccardi/jnrpe</connection>
-		<url>https://github.com/ziccardi/jnrpe/tree/master/jnrpe-parent/jcheck_nrpe</url>
-		<developerConnection>scm:git:git@github.com:ziccardi/jnrpe.git</developerConnection>
-		<tag>HEAD</tag>
-	</scm>
 
 	<dependencies>
 		<dependency>
