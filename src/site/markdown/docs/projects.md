@@ -74,7 +74,7 @@ look at the [jcheck_nrpe documentation](../jcheck_nrpe/index.html)
 
 ## The libraries
   
-## The jnrpe-lib project
+### The jnrpe-lib project
 
 ![jnrpe-lib project](../images/jnrpe-lib.png)
 
@@ -99,8 +99,19 @@ o receive informations from JNRPE plugins since their invocation is asynchronous
  
 For more informations about jnrpe-lib and how to use it, look at 
 the [jnrpe-lib documentation](../jnrpe-lib/index.html)
+
+###The jcheck_nrpe project
+
+This project contains the JAVA implementation of a clone of the check_nrpe Nagios command.
+This code can be used as a standalone application (like check_nrpe) or can be embedded inside
+your own application to be able to invoke services on JNRPE or NRPE.
+  
+For more informations about jcheck_nrpe, how to use the command line and how embed it, 
+look at the [jcheck_nrpe documentation](../jcheck_nrpe/index.html)
+
+##The OSGI bundles
    
-##The jnrpe-osgi-core project
+###The jnrpe-osgi-core project
 
 ![jnrpe-osgi-core project](../images/osgi-core.png)
 
@@ -118,7 +129,7 @@ Asynchronous events can be intercepted by registering to the JNRPE event bus.
 For more informations about jnrpe-osgi-core and how to use it, look at 
 the [jnrpe-osgi-core documentation](../jnrpe-osgi/jnrpe-osgi-core/index.html)
     
-##The jnrpe-plugins-osgi project
+###The jnrpe-plugins-osgi project
 
 This project packages the jnrpe-plugins as a bundle to be used inside OSGI containers
 (JBoss, Apache Karaf, Apache Felix, etc.)
@@ -127,7 +138,8 @@ This module is a submodule of the jnrpe-osgi project.
 For more informations about jnrpe-plugins-osgi and how to use it, look at 
 the [jnrpe-plugins-osgi documentation](../jnrpe-osgi/jnrpe-plugins-osgi/index.html)
   
-## The jnrpe-plugins project
+##The plugins
+###The jnrpe-plugins project
 
 This project contains the implementation of all the plugins bundled with JNRPE.
   
