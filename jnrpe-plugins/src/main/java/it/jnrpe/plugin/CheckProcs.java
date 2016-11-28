@@ -77,6 +77,8 @@ public class CheckProcs extends PluginBase {
 
     private final static String[] DEFAULT_UNIX_CMD = new String[] { "/bin/ps", "-eo", "comm,pid,ppid,user,c,rss,vsz,time,args" };
 
+    private final static String[] DEFAULT_MAC_CMD = new String[] { "/bin/ps", "-eo", "comm,pid,ppid,user,cpu,rss,vsz,time,args" };
+
     private final static String METRIC_PROCS = "PROCS";
 
     private final static String METRIC_RSS = "RSS";
@@ -138,7 +140,7 @@ public class CheckProcs extends PluginBase {
 
             validateArguments(cl, windows, metric);
 
-            String output = exec(!windows);
+            String output = exec();
 
             List<Map<String, String>> result = windows ? parseWindowsOutput(output) : parseUnixOutput(output);
             return analyze(result, cl, metric);
@@ -294,16 +296,15 @@ public class CheckProcs extends PluginBase {
     /**
      * Execute a system command and return the output.
      * 
-     * @param command
      * @return String
      */
-    private String exec(boolean unix) throws Exception {
+    private String exec() throws Exception {
         String output = null;
         InputStream input = null;
         String[] command = null;
-        if (unix) {
+        if (!ShellUtils.isWindows()) {
             // write output to tmp file
-            command = DEFAULT_UNIX_CMD;
+            command = ShellUtils.isMac() ? DEFAULT_MAC_CMD : DEFAULT_UNIX_CMD;
             Process p = Runtime.getRuntime().exec(command);
             input = p.getInputStream();
 
@@ -510,7 +511,7 @@ public class CheckProcs extends PluginBase {
         for (int i = timeParts.length - 1, partType = 0; i >= 0; i--, partType++) {
             switch (partType) {
             case 0: // Seconds
-                seconds = Integer.parseInt(timeParts[i]);
+                seconds = Integer.parseInt(timeParts[i].split("\\.")[0]);
                 break;
             case 1: // Minutes
                 minutes = Integer.parseInt(timeParts[i]);

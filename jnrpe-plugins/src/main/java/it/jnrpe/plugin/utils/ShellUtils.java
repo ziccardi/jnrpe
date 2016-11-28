@@ -74,6 +74,11 @@ public final class ShellUtils {
         return os.contains("windows");
     }
 
+    public static boolean isMac() {
+        String OS = System.getProperty("os.name").toLowerCase();
+        return OS.contains("mac");
+    }
+
     /**
      * 
      * Check if name of process is a windows idle process.
