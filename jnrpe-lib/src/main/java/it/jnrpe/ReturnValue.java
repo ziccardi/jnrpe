@@ -100,7 +100,7 @@ public final class ReturnValue {
 
     /**
      * Initializes the return value object with the given message and with the
-     * {@link Status.OK} state.
+     * {@link Status#OK} state.
      * 
      * @param message
      *            The message
@@ -232,8 +232,8 @@ public final class ReturnValue {
      *            The warning threshold used to check this metric (can be null)
      * @param criticalRange
      *            The critical threshold used to check this value (can be null)
-    
-     * @return this */
+     * @return this
+     */
     public ReturnValue withPerformanceData(final Metric metric, final UnitOfMeasure uom, final String warningRange,
             final String criticalRange) {
         performanceDataList.add(new PerformanceData(metric, uom, warningRange, criticalRange));
@@ -247,18 +247,10 @@ public final class ReturnValue {
      * 
      * @param metric
      *            The metric relative to this result
-     * @param warningRange
-     *            The warning threshold used to check this metric (can be null)
-     * @param criticalRange
-     *            The critical threshold used to check this value (can be null)
-     * @param minimumValue
-     *            The minimum value for this metric (can be null if not
-     *            applicable)
-     * @param maximumValue
-     *            The maximum value for this metric (can be null if not
-     *            applicable)
-    
-     * @return this */
+     * @param threshold
+     *            The treshold to be evaluated
+     * @return this
+     */
     public ReturnValue withPerformanceData(final Metric metric, IThreshold threshold) {
 
         performanceDataList.add(new PerformanceData(metric, threshold.getPrefix(), threshold.getUnitString(), threshold.getRangesAsString(Status.WARNING), threshold.getRangesAsString(Status.CRITICAL)));

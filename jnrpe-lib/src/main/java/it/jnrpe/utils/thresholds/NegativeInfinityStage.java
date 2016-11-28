@@ -17,8 +17,8 @@ package it.jnrpe.utils.thresholds;
 
 /**
  * Parses a negative infinity (-inf). The '-' is optional: if the infinity is at
- * the left side of the range, than it is assumed to be negative infinity. See
- * {@link http://nagiosplugins.org/rfc/new_threshold_syntax}
+ * the left side of the range, than it is assumed to be negative infinity.
+ * @see <a href="http://nagiosplugins.org/rfc/new_threshold_syntax">Threshold syntax</a>
  *
  * Example Input : -inf..100
  *

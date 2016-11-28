@@ -86,7 +86,7 @@ public class MetricBuilder {
     /**
      * Sets the minimum value of the metric to be built.
      * 
-     * @param the minimum value of the metric
+     * @param value the minimum value of the metric
      * @return this
      */
     public MetricBuilder withMinValue(Number value) {
@@ -97,7 +97,7 @@ public class MetricBuilder {
     /**
      * Sets the minimum value of the metric to be built.
      * 
-     * @param the minimum value of the metric
+     * @param value the minimum value of the metric
      * @param prettyPrintFormat the format of the output (@see {@link DecimalFormat})
      * @return this
      */
@@ -109,7 +109,7 @@ public class MetricBuilder {
     /**
      * Sets the maximum value of the metric to be built.
      * 
-     * @param the maximum value of the metric
+     * @param value the maximum value of the metric
      * @return this
      */
     public MetricBuilder withMaxValue(Number value) {
@@ -120,7 +120,7 @@ public class MetricBuilder {
     /**
      * Sets the maximum value of the metric to be built.
      * 
-     * @param the maximum value of the metric
+     * @param value the maximum value of the metric
      * @param prettyPrintFormat the format of the output (@see {@link DecimalFormat})
      * @return this
      */
@@ -143,7 +143,7 @@ public class MetricBuilder {
     /**
      * Sets the message to be associated with this metric.
      * 
-     * @param prefix the message to be associated with this metric
+     * @param message the message to be associated with this metric
      * @return this
      */
     public MetricBuilder withMessage(String message) {
@@ -154,7 +154,7 @@ public class MetricBuilder {
     /**
      * Sets the message to be associated with this metric.
      * 
-     * @param prefix the message to be associated with this metric
+     * @param messagePattern the message pattern to be associated with this metric
      * @param params the parameter to pass to {@link MessageFormat} to 
      * create the complete message
      * @return this

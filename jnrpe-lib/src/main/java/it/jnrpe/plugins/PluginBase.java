@@ -32,7 +32,7 @@ import java.util.Collections;
  * 
  * This class gives you out of the box:
  * <ul>
- * <li>Logging through the {@link #log} variable.
+ * <li>Logging through the {@link #LOG} variable.
  * <li>Events: you can easily send events by using the sendEvent methods.
  * <li>Threshold evaluation: by overriding the
  * {@link #gatherMetrics(ICommandLine)} you can demand to this class all the

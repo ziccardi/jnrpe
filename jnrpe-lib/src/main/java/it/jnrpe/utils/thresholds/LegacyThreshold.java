@@ -138,7 +138,7 @@ public class LegacyThreshold implements IThreshold {
      *            The metric we want to evaluate.
      *            
      * @return whether this threshold is about the passed in metric. 
-     * @see it.jnrpe.utils.thresholds.IThreshold#isAboutMetric(String)
+     * @see it.jnrpe.utils.thresholds.IThreshold#isAboutMetric(Metric)
      */
     public final boolean isAboutMetric(final Metric metric) {
         return metricName.equalsIgnoreCase(metric.getMetricName());

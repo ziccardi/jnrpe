@@ -20,7 +20,7 @@ package it.jnrpe.net;
  *
  * @author Massimiliano Ziccardi
 
- * @deprecated since <unknown>
+ * @deprecated since 2.0
  * @version $Revision: 1.0 $
  */
 public interface IJNRPEConstants {
