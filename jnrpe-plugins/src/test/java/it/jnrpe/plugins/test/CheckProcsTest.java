@@ -25,7 +25,6 @@ import it.jnrpe.commands.CommandOption;
 import it.jnrpe.commands.CommandRepository;
 import it.jnrpe.plugin.CheckProcs;
 import it.jnrpe.plugin.utils.ShellUtils;
-import it.jnrpe.plugins.test.it.ITSetup;
 import it.jnrpe.test.utils.TestContext;
 import it.jnrpe.utils.internal.InjectionUtils;
 
@@ -34,10 +33,12 @@ import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
 
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.modules.junit4.PowerMockRunner;
 
-@Test
+@RunWith(PowerMockRunner.class)
 public class CheckProcsTest {
 
     private final static int SECOND = 1;
@@ -88,7 +89,7 @@ public class CheckProcsTest {
         Assert.assertEquals(res.size(), 1);
         Map<String, String> cols = res.get(0);
         Assert.assertNotNull(cols);
-        Assert.assertTrue(!cols.isEmpty(), "No columns has been extracted from windows output");
+        Assert.assertTrue("No columns has been extracted from windows output", !cols.isEmpty());
         Assert.assertEquals(cols.get("cpu"), "0");
         Assert.assertEquals(cols.get("command"), "System Idle Process");
         Assert.assertEquals(cols.get("pid"), "0");
@@ -114,7 +115,7 @@ public class CheckProcsTest {
         Assert.assertEquals(res.size(), 1);
         Map<String, String> cols = res.get(0);
         Assert.assertNotNull(cols);
-        Assert.assertTrue(!cols.isEmpty(), "No columns has been extracted from windows output");
+        Assert.assertTrue("No columns has been extracted from windows output", !cols.isEmpty());
         Assert.assertEquals(cols.get("cpu"), "0");
         Assert.assertEquals(cols.get("command"), "System Idle Process");
         Assert.assertEquals(cols.get("pid"), "0");
@@ -140,7 +141,7 @@ public class CheckProcsTest {
         Assert.assertEquals(res.size(), 1);
         Map<String, String> cols = res.get(0);
         Assert.assertNotNull(cols);
-        Assert.assertTrue(!cols.isEmpty(), "No columns has been extracted from windows output");
+        Assert.assertTrue("No columns has been extracted from windows output", !cols.isEmpty());
 
         System.out.println(cols);
         Assert.assertEquals(cols.get("cpu"), "0");

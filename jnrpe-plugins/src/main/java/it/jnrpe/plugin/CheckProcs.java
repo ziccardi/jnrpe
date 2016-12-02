@@ -413,7 +413,7 @@ public class CheckProcs extends PluginBase {
             // }
 
             Map<String, String> values = new HashMap<String, String>();
-            values.put(FILTER_COMMAND, line[0].trim());
+            values.put(FILTER_COMMAND, line[ShellUtils.isMac() ? 8 : 0].trim());
             values.put("pid", line[1].trim());
             values.put("ppid", line[2].trim());
             values.put(FILTER_USER, line[3].trim());

@@ -17,8 +17,6 @@ package it.jnrpe.plugins.test;
 
 import java.nio.charset.Charset;
 
-import org.testng.Assert;
-
 import it.jnrpe.JNRPEEventBus;
 import it.jnrpe.ReturnValue;
 import it.jnrpe.Status;
@@ -27,6 +25,7 @@ import it.jnrpe.test.utils.TestCommandLine;
 import it.jnrpe.test.utils.TestContext;
 import it.jnrpe.utils.BadThresholdException;
 import it.jnrpe.utils.internal.InjectionUtils;
+import org.junit.Assert;
 
 /**
  * Utility class to perform plugin tests using fluent api.
@@ -95,7 +94,7 @@ public final class PluginTester {
         if (retValue == null) {
             execute();
         }
-        Assert.assertEquals(retValue.getStatus(), status, retValue.getMessage());
+        Assert.assertEquals(retValue.getMessage(), status, retValue.getStatus());
     }
     
     /**
@@ -105,7 +104,7 @@ public final class PluginTester {
         try {
             retValue = jnrpePlugin.execute(cli);
         } catch (BadThresholdException e) {
-            Assert.fail("Failed with error: " + e.getMessage(), e);
+            Assert.fail("Failed with error: " + e.getMessage());
         }
     }
 }
