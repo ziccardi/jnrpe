@@ -94,6 +94,7 @@ public final class PluginTester {
         if (retValue == null) {
             execute();
         }
+
         Assert.assertEquals(retValue.getMessage(), status, retValue.getStatus());
     }
     

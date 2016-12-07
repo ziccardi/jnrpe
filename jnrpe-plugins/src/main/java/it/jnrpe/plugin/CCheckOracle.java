@@ -256,7 +256,10 @@ public class CCheckOracle extends PluginBase {
             if (cl.hasOption("tablespace")) {
                 metricList.addAll(checkTablespace(conn, cl));
             }
-            metricList.addAll(checkCache(conn, cl));
+
+            if (cl.hasOption("cache")) {
+                metricList.addAll(checkCache(conn, cl));
+            }
 
             return metricList;
         } catch (ClassNotFoundException cnfe) {

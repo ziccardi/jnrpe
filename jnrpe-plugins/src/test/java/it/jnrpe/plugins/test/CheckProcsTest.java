@@ -158,6 +158,25 @@ public class CheckProcsTest {
         return null;
     }
 
+    private final void checkProcsCommand(final String processName) throws Exception {
+        PluginTester.given(new CheckProcs())
+            .withOption("command", 'C', processName)
+            .withOption("warning", 'w', "1:")
+            .expect(Status.WARNING);
+
+        PluginTester.given(new CheckProcs())
+            .withOption("command", 'C', processName)
+            .withOption("warning", 'w', "1:")
+            .withOption("critical", 'c', "5:")
+            .expect(Status.WARNING);
+
+        PluginTester.given(new CheckProcs())
+            .withOption("command", 'C', processName)
+            .withOption("warning", 'w', "2:")
+            .withOption("critical", 'c', "3:")
+            .expect(Status.CRITICAL);
+    }
+
     /**
      * Test scan matches for a command.
      */
@@ -167,22 +186,7 @@ public class CheckProcsTest {
         PowerMockito.mockStatic(Shell.class);
         PowerMockito.when(Shell.getInstance()).thenReturn(mockedLinuxShell);
 
-        PluginTester.given(new CheckProcs())
-            .withOption("command", 'C', "TESTPROC")
-            .withOption("warning", 'w', "1:")
-            .expect(Status.WARNING);
-
-        PluginTester.given(new CheckProcs())
-          .withOption("command", 'C', "TESTPROC")
-          .withOption("warning", 'w', "1:")
-          .withOption("critical", 'c', "5:")
-          .expect(Status.WARNING);
-
-        PluginTester.given(new CheckProcs())
-          .withOption("command", 'C', "TESTPROC")
-          .withOption("warning", 'w', "2:")
-          .withOption("critical", 'c', "3:")
-          .expect(Status.CRITICAL);
+        checkProcsCommand("TESTPROC");
     }
 
     /**
@@ -193,23 +197,7 @@ public class CheckProcsTest {
         PowerMockito.mockStatic(Shell.class);
         PowerMockito.when(Shell.getInstance()).thenReturn(mockedMacShell);
 
-        PluginTester.given(new CheckProcs())
-            .withOption("command", 'C', "TESTPROC")
-            .withOption("warning", 'w', "1:")
-            .expect(Status.WARNING);
-
-        PluginTester.given(new CheckProcs())
-            .withOption("command", 'C', "TESTPROC")
-            .withOption("warning", 'w', "1:")
-            .withOption("critical", 'c', "5:")
-            .expect(Status.WARNING);
-
-        PluginTester.given(new CheckProcs())
-            .withOption("command", 'C', "TESTPROC")
-            .withOption("warning", 'w', "2:")
-            .withOption("critical", 'c', "3:")
-            .expect(Status.CRITICAL);
-
+        checkProcsCommand("TESTPROC");
     }
 
     /**
@@ -220,23 +208,7 @@ public class CheckProcsTest {
         PowerMockito.mockStatic(Shell.class);
         PowerMockito.when(Shell.getInstance()).thenReturn(mockedWindowsShell);
 
-        PluginTester.given(new CheckProcs())
-            .withOption("command", 'C', "TESTPROC.exe")
-            .withOption("warning", 'w', "1:")
-            .expect(Status.WARNING);
-
-        PluginTester.given(new CheckProcs())
-            .withOption("command", 'C', "TESTPROC.exe")
-            .withOption("warning", 'w', "1:")
-            .withOption("critical", 'c', "5:")
-            .expect(Status.WARNING);
-
-        PluginTester.given(new CheckProcs())
-            .withOption("command", 'C', "TESTPROC.exe")
-            .withOption("warning", 'w', "2:")
-            .withOption("critical", 'c', "3:")
-            .expect(Status.CRITICAL);
-
+        checkProcsCommand("TESTPROC.exe");
     }
 
     /**
@@ -259,7 +231,9 @@ public class CheckProcsTest {
      */
     @Test
     public final void checkProcsBasic() {
-        
+        PowerMockito.mockStatic(Shell.class);
+        PowerMockito.when(Shell.getInstance()).thenReturn(mockedLinuxShell);
+
         PluginTester.given(new CheckProcs())
             .withOption("warning", 'w', "1:")
             .expect(Status.WARNING);
