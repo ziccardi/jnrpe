@@ -16,10 +16,14 @@
 package it.jnrpe.plugins.test;
 
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
 
+import com.google.common.eventbus.Subscribe;
 import it.jnrpe.JNRPEEventBus;
 import it.jnrpe.ReturnValue;
 import it.jnrpe.Status;
+import it.jnrpe.events.LogEvent;
 import it.jnrpe.plugins.IPluginInterface;
 import it.jnrpe.test.utils.TestCommandLine;
 import it.jnrpe.test.utils.TestContext;
@@ -33,7 +37,25 @@ import org.junit.Assert;
  * @author Massimiliano Ziccardi
  */
 public final class PluginTester {
-    
+
+
+    public static class EventLoggerListener {
+        @Subscribe
+        public final void receive(final LogEvent logEvent) {
+            switch (logEvent.getLogType()) {
+                case ERROR:
+                case FATAL:
+                    System.out.println (logEvent.getMessage());
+
+                    if (logEvent.getCause() != null) {
+                        logEvent.getCause().printStackTrace();
+                    }
+                    break;
+            }
+        }
+    }
+
+
     /**
      * The plugin to be tested.
      */
@@ -67,7 +89,9 @@ public final class PluginTester {
      * @return this
      */
     public static PluginTester given(final IPluginInterface plugin) {
-        InjectionUtils.inject(plugin, new TestContext(new JNRPEEventBus(), Charset.defaultCharset(), null, null));
+        JNRPEEventBus bus = new JNRPEEventBus();
+        bus.register(new EventLoggerListener());
+        InjectionUtils.inject(plugin, new TestContext(bus, Charset.defaultCharset(), null, null));
         return new PluginTester(plugin);
     }
     
