@@ -79,22 +79,30 @@ public class CheckDisk extends PluginBase {
         }
     }
 
+    private long getFreeSpace(final String path) {
+        File f = new File(path);
+        return f.getFreeSpace();
+    }
+
+    private long getTotalSpace(final String path) {
+        File f = new File(path);
+        return f.getTotalSpace();
+    }
+
     @Override
     public final Collection<Metric> gatherMetrics(final ICommandLine cl) throws MetricGatheringException {
         String sPath = cl.getOptionValue("path");
 
-        File f = new File(sPath);
-
-        long lBytes = f.getFreeSpace();
-        long lTotalSpace = f.getTotalSpace();
+        long lBytes = getFreeSpace(sPath);
+        long lTotalSpace = getTotalSpace(sPath);
 
         String sFreeSpace = format(lBytes);
         String sUsedSpace = format(lTotalSpace - lBytes);
 
-        int iFreePercent = percent(lBytes, lTotalSpace);
+        int iFreePercent = lBytes == 0 ? 0 : percent(lBytes, lTotalSpace);
 
         String sFreePercent = String.valueOf(iFreePercent) + "%";
-        String sUsedPercent = String.valueOf(percent(lTotalSpace - lBytes, lTotalSpace)) + "%";
+        String sUsedPercent = lTotalSpace != lBytes ? String.valueOf(percent(lTotalSpace - lBytes, lTotalSpace)) : 100 + "%";
 
         List<Metric> res = new ArrayList<Metric>();
 

@@ -42,6 +42,8 @@ import java.util.Map;
  */
 public class CheckMysql extends PluginBase {
 
+    public static final String SLAVE_STATUS_QRY = "show slave status;";
+
     /**
      * Configures the threshold evaluator. This plugin supports both the legacy
      * threshold format and the new format specification.
@@ -154,7 +156,7 @@ public class CheckMysql extends PluginBase {
      */
     private Map<String, Integer> getSlaveStatus(final Connection conn) throws SQLException {
         Map<String, Integer> map = new HashMap<String, Integer>();
-        String query = "show slave status;";
+        String query = SLAVE_STATUS_QRY;
         Statement statement = null;
         ResultSet rs = null;
         try {
