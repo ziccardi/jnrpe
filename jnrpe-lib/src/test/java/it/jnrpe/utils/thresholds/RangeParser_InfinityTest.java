@@ -15,10 +15,10 @@
  *******************************************************************************/
 package it.jnrpe.utils.thresholds;
 
-import java.math.BigDecimal;
+import org.junit.Assert;
+import org.junit.Test;
 
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import java.math.BigDecimal;
 
 /**
  */
@@ -39,7 +39,7 @@ public class RangeParser_InfinityTest {
         Assert.assertTrue(rc.isRightInclusive());
         Assert.assertFalse(rc.isNegate());
         Assert.assertNull(rc.getLeftBoundary());
-        Assert.assertEquals(rc.getRightBoundary(), new BigDecimal("5000.1"));
+        Assert.assertEquals(new BigDecimal("5000.1"), rc.getRightBoundary());
         Assert.assertTrue(rc.isNegativeInfinity());
         Assert.assertFalse(rc.isPositiveInfinity());
     }
@@ -59,7 +59,7 @@ public class RangeParser_InfinityTest {
         Assert.assertTrue(rc.isRightInclusive());
         Assert.assertFalse(rc.isNegate());
         Assert.assertNull(rc.getLeftBoundary());
-        Assert.assertEquals(rc.getRightBoundary(), new BigDecimal("5000.1"));
+        Assert.assertEquals(new BigDecimal("5000.1"), rc.getRightBoundary());
         Assert.assertTrue(rc.isNegativeInfinity());
         Assert.assertFalse(rc.isPositiveInfinity());
     }
@@ -78,7 +78,7 @@ public class RangeParser_InfinityTest {
         Assert.assertTrue(rc.isLeftInclusive());
         Assert.assertTrue(rc.isRightInclusive());
         Assert.assertFalse(rc.isNegate());
-        Assert.assertEquals(rc.getLeftBoundary(), new BigDecimal("50"));
+        Assert.assertEquals(new BigDecimal("50"), rc.getLeftBoundary());
         Assert.assertNull(rc.getRightBoundary());
         Assert.assertFalse(rc.isNegativeInfinity());
         Assert.assertTrue(rc.isPositiveInfinity());
@@ -98,7 +98,7 @@ public class RangeParser_InfinityTest {
         Assert.assertTrue(rc.isLeftInclusive());
         Assert.assertTrue(rc.isRightInclusive());
         Assert.assertFalse(rc.isNegate());
-        Assert.assertEquals(rc.getLeftBoundary(), new BigDecimal("50"));
+        Assert.assertEquals(new BigDecimal("50"), rc.getLeftBoundary());
         Assert.assertNull(rc.getRightBoundary());
         Assert.assertFalse(rc.isNegativeInfinity());
         Assert.assertTrue(rc.isPositiveInfinity());

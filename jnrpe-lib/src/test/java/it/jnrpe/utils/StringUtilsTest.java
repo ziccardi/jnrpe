@@ -15,8 +15,8 @@
  *******************************************************************************/
 package it.jnrpe.utils;
 
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  */
@@ -74,7 +74,7 @@ public class StringUtilsTest {
          */
         public StringUtilSplitTester expect(String[] res) {
             String[] result = StringUtils.split(stringToBeSplitted, delimiter, ignoreQuotes);
-            Assert.assertEquals(result, res);
+            Assert.assertEquals(res, result);
             return this;
         }
     }

@@ -15,7 +15,7 @@
  *******************************************************************************/
 package it.jnrpe.utils.thresholds;
 
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 /**
  */
@@ -25,7 +25,7 @@ public class RangeParser_TestMalformed {
      * Method testExclusiveNegativeInfinite.
      * @throws Exception
      */
-    @Test(expectedExceptions = InvalidRangeSyntaxException.class)
+    @Test(expected = InvalidRangeSyntaxException.class)
     public void testExclusiveNegativeInfinite() throws Exception {
 
         RangeConfig rc = new RangeConfig();
@@ -37,7 +37,7 @@ public class RangeParser_TestMalformed {
      * Method testExclusivePositiveInfinite.
      * @throws Exception
      */
-    @Test(expectedExceptions = InvalidRangeSyntaxException.class)
+    @Test(expected = InvalidRangeSyntaxException.class)
     public void testExclusivePositiveInfinite() throws Exception {
 
         RangeConfig rc = new RangeConfig();
@@ -49,7 +49,7 @@ public class RangeParser_TestMalformed {
      * Method testLeftBoundaryGreaterThanRightBoundary.
      * @throws Exception
      */
-    @Test(expectedExceptions = RangeException.class)
+    @Test(expected = RangeException.class)
     public void testLeftBoundaryGreaterThanRightBoundary() throws Exception {
 
         RangeConfig rc = new RangeConfig();
@@ -61,7 +61,7 @@ public class RangeParser_TestMalformed {
      * Method testLeftBoundaryGreaterThanRightBoundary_infinity.
      * @throws Exception
      */
-    @Test(expectedExceptions = InvalidRangeSyntaxException.class)
+    @Test(expected = InvalidRangeSyntaxException.class)
     public void testLeftBoundaryGreaterThanRightBoundary_infinity() throws Exception {
 
         RangeConfig rc = new RangeConfig();
@@ -73,7 +73,7 @@ public class RangeParser_TestMalformed {
      * Method testRightIncomplete.
      * @throws Exception
      */
-    @Test(expectedExceptions = PrematureEndOfRangeException.class)
+    @Test(expected = PrematureEndOfRangeException.class)
     public void testRightIncomplete() throws Exception {
 
         RangeConfig rc = new RangeConfig();
@@ -85,7 +85,7 @@ public class RangeParser_TestMalformed {
      * Method testLeftIncomplete.
      * @throws Exception
      */
-    @Test(expectedExceptions = InvalidRangeSyntaxException.class)
+    @Test(expected = InvalidRangeSyntaxException.class)
     public void testLeftIncomplete() throws Exception {
 
         RangeConfig rc = new RangeConfig();
@@ -97,7 +97,7 @@ public class RangeParser_TestMalformed {
      * Method testLeftDoubleSign.
      * @throws Exception
      */
-    @Test(expectedExceptions = RangeException.class)
+    @Test(expected = RangeException.class)
     public void testLeftDoubleSign() throws Exception {
 
         RangeConfig rc = new RangeConfig();
@@ -109,7 +109,7 @@ public class RangeParser_TestMalformed {
      * Method testRightDoubleSign.
      * @throws Exception
      */
-    @Test(expectedExceptions = RangeException.class)
+    @Test(expected = RangeException.class)
     public void testRightDoubleSign() throws Exception {
 
         RangeConfig rc = new RangeConfig();
@@ -121,7 +121,7 @@ public class RangeParser_TestMalformed {
      * Method testBadLeftBoundary.
      * @throws Exception
      */
-    @Test(expectedExceptions = InvalidRangeSyntaxException.class)
+    @Test(expected = InvalidRangeSyntaxException.class)
     public void testBadLeftBoundary() throws Exception {
 
         RangeConfig rc = new RangeConfig();
@@ -133,7 +133,7 @@ public class RangeParser_TestMalformed {
      * Method testBadRightBoundary.
      * @throws Exception
      */
-    @Test(expectedExceptions = InvalidRangeSyntaxException.class)
+    @Test(expected = InvalidRangeSyntaxException.class)
     public void testBadRightBoundary() throws Exception {
 
         RangeConfig rc = new RangeConfig();

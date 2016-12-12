@@ -17,11 +17,10 @@ package it.jnrpe.utils;
 
 import it.jnrpe.plugins.Metric;
 import it.jnrpe.plugins.MetricBuilder;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.math.BigDecimal;
-
-import org.testng.Assert;
-import org.testng.annotations.Test;
 
 /**
  */
@@ -133,7 +132,7 @@ public class ThresholdUtilTest {
      * Method testMalformedNegation.
      * @throws BadThresholdException
      */
-    @Test(expectedExceptions = BadThresholdException.class)
+    @Test(expected = BadThresholdException.class)
     public void testMalformedNegation() throws BadThresholdException {
         ThresholdUtil.isValueInRange("10:@20", buildMetric(10));
     }
@@ -142,7 +141,7 @@ public class ThresholdUtilTest {
      * Method testBadSeparator.
      * @throws BadThresholdException
      */
-    @Test(expectedExceptions = BadThresholdException.class)
+    @Test(expected = BadThresholdException.class)
     public void testBadSeparator() throws BadThresholdException {
         ThresholdUtil.isValueInRange("10:20:", buildMetric(10));
     }
@@ -151,7 +150,7 @@ public class ThresholdUtilTest {
      * Method testEmptyNumbers.
      * @throws BadThresholdException
      */
-    @Test(expectedExceptions = BadThresholdException.class)
+    @Test(expected = BadThresholdException.class)
     public void testEmptyNumbers() throws BadThresholdException {
         ThresholdUtil.isValueInRange(":", buildMetric(10));
     }
@@ -160,7 +159,7 @@ public class ThresholdUtilTest {
      * Method testEmptyNumbersJustSign.
      * @throws BadThresholdException
      */
-    @Test(expectedExceptions = BadThresholdException.class)
+    @Test(expected = BadThresholdException.class)
     public void testEmptyNumbersJustSign() throws BadThresholdException {
         ThresholdUtil.isValueInRange("+:", buildMetric(10));
     }

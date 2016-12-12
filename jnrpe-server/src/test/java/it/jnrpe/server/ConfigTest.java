@@ -16,12 +16,11 @@
 package it.jnrpe.server;
 
 import it.jnrpe.server.CommandsSection.Command;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.io.File;
 import java.util.Collection;
-
-import org.testng.Assert;
-import org.testng.annotations.Test;
 
 /**
  * Tests the configuration objects.
@@ -35,24 +34,21 @@ public class ConfigTest {
 		CommandsSection cs = conf.getCommandSection();
 		Collection<Command> commands = cs.getAllCommands();
 
-		Assert.assertNotNull(commands, "Error parsing the commands");
-		Assert.assertFalse(commands.isEmpty(), "Error parsing the commands");
-		Assert.assertEquals(commands.size(), 1,
-				"Parsed commands should be exacly 1");
+		Assert.assertNotNull("Error parsing the commands", commands);
+		Assert.assertFalse("Error parsing the commands", commands.isEmpty());
+		Assert.assertEquals("Parsed commands should be exacly 1",1, commands.size());
 
 		Command command = commands.iterator().next();
-		Assert.assertEquals(command.getName(), "CHECK_AMQ_ENQ",
-				"Error parsing command name");
-		Assert.assertEquals(command.getPlugin(), "CHECK_JMX",
-				"Error parsing plugin name");
+		Assert.assertEquals("Error parsing command name", "CHECK_AMQ_ENQ", command.getName());
+		Assert.assertEquals("Error parsing plugin name", "CHECK_JMX", command.getPlugin());
 
-		Assert.assertEquals(
-				command.getCommandLine().trim(),
+		Assert.assertEquals("Error parsing command line",
 				"--url service:jmx:rmi:///jndi/rmi://$ARG1$/karaf-root "
 						+ "--username admin --password admin "
 						+ "--object org.apache.activemq:type=Broker,brokerName=amq,destinationType=Queue,destinationName=hin_q "
 						+ "--attribute EnqueueCount " + "--warning $ARG2$ "
-						+ "--critical $ARG3$", "Error parsing command line");
+						+ "--critical $ARG3$",
+			command.getCommandLine().trim());
 	}
 
 	/**
@@ -62,7 +58,6 @@ public class ConfigTest {
 	 * @throws Exception
 	 *             on any error
 	 */
-	@Test
 	public void testIniCommandWithCommaInParams() throws Exception {
 
 		File iniFile = new File(ConfigTest.class.getClassLoader()

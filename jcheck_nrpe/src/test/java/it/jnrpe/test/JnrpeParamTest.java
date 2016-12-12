@@ -29,12 +29,11 @@ import it.jnrpe.plugins.PluginOption;
 import it.jnrpe.plugins.PluginRepository;
 import it.jnrpe.utils.TimeUnit;
 
-import org.testng.Assert;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
-
 import com.google.common.eventbus.Subscribe;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 /**
  * Tests that JNRPE correctly passes and parse parameters.
@@ -49,7 +48,7 @@ public class JnrpeParamTest {
     /**
      * The JNRPE server engine.
      */
-    private JNRPE jnrpeServer;
+    private static JNRPE jnrpeServer;
 
     /**
      * Constructor.
@@ -66,7 +65,7 @@ public class JnrpeParamTest {
     }
     
     @BeforeClass
-    public final void setUp() throws Exception {
+    public static final void setUp() throws Exception {
         PluginRepository pr = new PluginRepository();
         CommandRepository cr = new CommandRepository();
 
@@ -84,7 +83,7 @@ public class JnrpeParamTest {
     }
 
     @AfterClass
-    public final void shutDown() {
+    public static final void shutDown() {
         try {
             Thread.sleep(TimeUnit.SECOND.convert(5));
         } catch (InterruptedException e) {
@@ -96,60 +95,18 @@ public class JnrpeParamTest {
         }
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public final void testNullProviders() {
         JNRPEBuilder.forRepositories(null, null);
     }
-
-//    @Test
-//    public final void testPortInUse() throws UnknownHostException {
-//        IPluginRepository pr = new PluginRepository();
-//        CommandRepository cr = new CommandRepository();
-//
-//        // TODO : this test should be rewritten
-//
-//        JNRPE instance1 = null, instance2 = null;
-//        try {
-//            instance1 = JNRPEBuilder.forRepositories(pr, cr).build();
-//            instance1.listen("127.0.0.1", 5666);
-//
-//            instance2 = JNRPEBuilder.forRepositories(pr, cr).withListener(new IJNRPEEventListener() {
-//                public void receive(Object sender, IJNRPEEvent event) {
-//                    if (event.getEventName().equals(LogEvent.ERROR.name())) {
-//                        m_sEventType = event.getEventName();
-//                        m_sEventMessage = (String) event.getEventParams().get("MESSAGE");
-//                    }
-//                }
-//            }).build();
-//            instance2.listen("127.0.0.1", 5666);
-//
-//            try {
-//                Thread.sleep(TimeUnit.SECOND.convert(3));
-//            } catch (InterruptedException e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
-//            }
-//
-//            Assert.assertNotNull(m_sEventMessage, "No event message received");
-//            Assert.assertNotNull(m_sEventType, "No event type received");
-//            Assert.assertEquals(m_sEventMessage.contains("Unable to listen on"), true, "No 'Unable to listen on' error received");
-//        } finally {
-//            if (instance1 != null) {
-//                instance1.shutdown();
-//            }
-//            if (instance2 != null) {
-//                instance2.shutdown();
-//            }
-//        }
-//    }
 
     @Test
     public final void testBadCommand() throws Exception {
         JNRPEClient client = new JNRPEClient("127.0.0.1", 5667, false);
         ReturnValue ret = client.sendCommand("BADCOMMAND", "-t", "pippo");
 
-        Assert.assertEquals(ret.getStatus(), Status.UNKNOWN);
-        Assert.assertEquals(ret.getMessage().contains("Bad command"), true);
+        Assert.assertEquals(Status.UNKNOWN, ret.getStatus());
+        Assert.assertEquals(true, ret.getMessage().contains("Bad command"));
     }
 
     @Test
@@ -157,8 +114,8 @@ public class JnrpeParamTest {
         JNRPEClient client = new JNRPEClient("127.0.0.1", 5667, false);
         ReturnValue ret = client.sendCommand("TESTCOMMAND", "NullPointerException");
 
-        Assert.assertEquals(ret.getStatus(), Status.UNKNOWN);
-        Assert.assertEquals(ret.getMessage(), "Plugin [TESTPLUGIN] execution error: Thrown NullPointerException as requested");
+        Assert.assertEquals(Status.UNKNOWN, ret.getStatus());
+        Assert.assertEquals("Plugin [TESTPLUGIN] execution error: Thrown NullPointerException as requested", ret.getMessage());
     }
 
     @Test
@@ -166,15 +123,15 @@ public class JnrpeParamTest {
         JNRPEClient client = new JNRPEClient("127.0.0.1", 5667, false);
         ReturnValue ret = client.sendCommand("TESTCOMMAND", "ReturnNull");
         Assert.assertEquals(ret.getStatus(), Status.UNKNOWN);
-        Assert.assertEquals(ret.getMessage().contains("returned null"), true, "Expected 'Command [XXX] with args [YYY] returned null' but got : '"
-                + ret.getMessage() + "'");
+        Assert.assertEquals("Expected 'Command [XXX] with args [YYY] returned null' but got : '"
+            + ret.getMessage() + "'", true, ret.getMessage().contains("returned null"));
     }
 
     @Test
     public final void testThrowRuntimeException() throws Exception {
         JNRPEClient client = new JNRPEClient("127.0.0.1", 5667, false);
         ReturnValue ret = client.sendCommand("TESTCOMMAND", "ThrowRuntimeException");
-        Assert.assertEquals(ret.getStatus(), Status.UNKNOWN);
-        Assert.assertEquals(ret.getMessage(), "Plugin [TESTPLUGIN] execution error: Thrown RuntimeException as requested");
+        Assert.assertEquals(Status.UNKNOWN, ret.getStatus());
+        Assert.assertEquals("Plugin [TESTPLUGIN] execution error: Thrown RuntimeException as requested", ret.getMessage());
     }
 }

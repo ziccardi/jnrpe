@@ -27,14 +27,10 @@ import it.jnrpe.plugins.PluginDefinition;
 import it.jnrpe.plugins.PluginOption;
 import it.jnrpe.plugins.PluginRepository;
 import it.jnrpe.utils.BadThresholdException;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.nio.charset.Charset;
-import java.util.Collections;
-
-import org.testng.Assert;
-import org.testng.annotations.Test;
-
-import com.google.common.eventbus.EventBus;
 
 /**
  */
@@ -205,7 +201,7 @@ public class CommandInvokerTest {
 
 		ReturnValue rv = invoker.invoke("ECHO", new String[] { "ECHO ME" });
 
-		Assert.assertEquals(rv.getMessage(), "ECHO ME");
+		Assert.assertEquals("ECHO ME", rv.getMessage());
 	}
 
 	/**
@@ -218,7 +214,7 @@ public class CommandInvokerTest {
 
 		ReturnValue rv = invoker.invoke("ECHO", new String[] { "ECHO ME" });
 
-		Assert.assertEquals(rv.getMessage(), "$ARG1$");
+		Assert.assertEquals("$ARG1$", rv.getMessage());
 	}
 
 }

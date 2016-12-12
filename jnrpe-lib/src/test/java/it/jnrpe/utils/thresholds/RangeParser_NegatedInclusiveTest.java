@@ -15,10 +15,10 @@
  *******************************************************************************/
 package it.jnrpe.utils.thresholds;
 
-import java.math.BigDecimal;
+import org.junit.Assert;
+import org.junit.Test;
 
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import java.math.BigDecimal;
 
 /**
  */
@@ -38,8 +38,7 @@ public class RangeParser_NegatedInclusiveTest {
         Assert.assertTrue(rc.isLeftInclusive());
         Assert.assertTrue(rc.isRightInclusive());
         Assert.assertTrue(rc.isNegate());
-        Assert.assertEquals(rc.getLeftBoundary(), new BigDecimal("10.23"));
-        Assert.assertEquals(rc.getRightBoundary(), new BigDecimal("5000.1"));
+        Assert.assertEquals(new BigDecimal("5000.1"), rc.getRightBoundary());
         Assert.assertFalse(rc.isNegativeInfinity());
         Assert.assertFalse(rc.isPositiveInfinity());
     }
@@ -58,8 +57,8 @@ public class RangeParser_NegatedInclusiveTest {
         Assert.assertTrue(rc.isLeftInclusive());
         Assert.assertFalse(rc.isRightInclusive());
         Assert.assertTrue(rc.isNegate());
-        Assert.assertEquals(rc.getLeftBoundary(), new BigDecimal("10.23"));
-        Assert.assertEquals(rc.getRightBoundary(), new BigDecimal("5000.1"));
+        Assert.assertEquals(new BigDecimal("10.23"), rc.getLeftBoundary());
+        Assert.assertEquals(new BigDecimal("5000.1"), rc.getRightBoundary());
         Assert.assertFalse(rc.isNegativeInfinity());
         Assert.assertFalse(rc.isPositiveInfinity());
     }
@@ -78,8 +77,8 @@ public class RangeParser_NegatedInclusiveTest {
         Assert.assertFalse(rc.isLeftInclusive());
         Assert.assertTrue(rc.isRightInclusive());
         Assert.assertTrue(rc.isNegate());
-        Assert.assertEquals(rc.getLeftBoundary(), new BigDecimal("10.23"));
-        Assert.assertEquals(rc.getRightBoundary(), new BigDecimal("5000.1"));
+        Assert.assertEquals(new BigDecimal("10.23"), rc.getLeftBoundary());
+        Assert.assertEquals(new BigDecimal("5000.1"), rc.getRightBoundary());
         Assert.assertFalse(rc.isNegativeInfinity());
         Assert.assertFalse(rc.isPositiveInfinity());
     }
@@ -98,8 +97,8 @@ public class RangeParser_NegatedInclusiveTest {
         Assert.assertFalse(rc.isLeftInclusive());
         Assert.assertFalse(rc.isRightInclusive());
         Assert.assertTrue(rc.isNegate());
-        Assert.assertEquals(rc.getLeftBoundary(), new BigDecimal("10.23"));
-        Assert.assertEquals(rc.getRightBoundary(), new BigDecimal("5000.1"));
+        Assert.assertEquals(new BigDecimal("10.23"), rc.getLeftBoundary());
+        Assert.assertEquals(new BigDecimal("5000.1"), rc.getRightBoundary());
         Assert.assertFalse(rc.isNegativeInfinity());
         Assert.assertFalse(rc.isPositiveInfinity());
     }

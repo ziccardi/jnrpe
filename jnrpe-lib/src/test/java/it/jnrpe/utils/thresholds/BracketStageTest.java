@@ -15,12 +15,10 @@
  *******************************************************************************/
 package it.jnrpe.utils.thresholds;
 
-import org.testng.annotations.Test;
-
 import it.jnrpe.utils.thresholds.BracketStage.ClosedBracketStage;
 import it.jnrpe.utils.thresholds.BracketStage.OpenBracketStage;
-import static org.testng.Assert.*;
-
+import org.junit.Test;
+import org.junit.Assert;
 /**
  */
 public class BracketStageTest {
@@ -31,7 +29,7 @@ public class BracketStageTest {
     @Test
     public void testCanParseNull() {
         OpenBracketStage stage = new OpenBracketStage();
-        assertFalse(stage.canParse(null));
+        Assert.assertFalse(stage.canParse(null));
     }
 
     /**
@@ -40,7 +38,7 @@ public class BracketStageTest {
     @Test
     public void testCanParseOpenForOpen() {
         OpenBracketStage stage = new OpenBracketStage();
-        assertTrue(stage.canParse("("));
+        Assert.assertTrue(stage.canParse("("));
     }
 
     /**
@@ -49,7 +47,7 @@ public class BracketStageTest {
     @Test
     public void testCanParseOpenForClose() {
         ClosedBracketStage stage = new ClosedBracketStage();
-        assertFalse(stage.canParse("("));
+        Assert.assertFalse(stage.canParse("("));
     }
 
     /**
@@ -58,7 +56,7 @@ public class BracketStageTest {
     @Test
     public void testCanParseCloseForClose() {
         ClosedBracketStage stage = new ClosedBracketStage();
-        assertTrue(stage.canParse(")"));
+        Assert.assertTrue(stage.canParse(")"));
     }
 
     /**
@@ -67,7 +65,7 @@ public class BracketStageTest {
     @Test
     public void testCanCloseForOpen() {
         OpenBracketStage stage = new OpenBracketStage();
-        assertFalse(stage.canParse(")"));
+        Assert.assertFalse(stage.canParse(")"));
     }
 
     /**
@@ -76,7 +74,7 @@ public class BracketStageTest {
     @Test
     public void testExpectsOpen() {
         OpenBracketStage stage = new OpenBracketStage();
-        assertEquals(stage.expects(), "(");
+        Assert.assertEquals(stage.expects(), "(");
     }
 
     /**
@@ -85,7 +83,7 @@ public class BracketStageTest {
     @Test
     public void testExpectsClosed() {
         ClosedBracketStage stage = new ClosedBracketStage();
-        assertEquals(stage.expects(), ")");
+        Assert.assertEquals(stage.expects(), ")");
     }
 
     /**
@@ -95,7 +93,7 @@ public class BracketStageTest {
     public void testParseOk() {
         ClosedBracketStage stage = new ClosedBracketStage();
 
-        assertEquals(stage.parse(")", new RangeConfig()), "");
+        Assert.assertEquals(stage.parse(")", new RangeConfig()), "");
     }
 
     /**
@@ -104,7 +102,7 @@ public class BracketStageTest {
     @Test
     public void testParseKo() {
         ClosedBracketStage stage = new ClosedBracketStage();
-        assertFalse(stage.canParse("a"));
+        Assert.assertFalse(stage.canParse("a"));
     }
 
 }

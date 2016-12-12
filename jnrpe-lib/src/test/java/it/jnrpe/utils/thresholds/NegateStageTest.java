@@ -15,11 +15,8 @@
  *******************************************************************************/
 package it.jnrpe.utils.thresholds;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
-
-import org.testng.annotations.Test;
+import org.junit.Test;
+import org.junit.Assert;
 
 /**
  */
@@ -31,7 +28,7 @@ public class NegateStageTest {
     @Test
     public void testCanParseNull() {
         NegateStage stage = new NegateStage();
-        assertFalse(stage.canParse(null));
+        Assert.assertFalse(stage.canParse(null));
     }
 
     /**
@@ -40,7 +37,7 @@ public class NegateStageTest {
     @Test
     public void testCanParseOk() {
         NegateStage stage = new NegateStage();
-        assertTrue(stage.canParse("^"));
+        Assert.assertTrue(stage.canParse("^"));
     }
 
     /**
@@ -49,7 +46,7 @@ public class NegateStageTest {
     @Test
     public void testCanParseKo() {
         NegateStage stage = new NegateStage();
-        assertFalse(stage.canParse("("));
+        Assert.assertFalse(stage.canParse("("));
     }
 
     /**
@@ -58,7 +55,7 @@ public class NegateStageTest {
     @Test
     public void testExpect() {
         NegateStage stage = new NegateStage();
-        assertEquals(stage.expects(), "^");
+        Assert.assertEquals(stage.expects(), "^");
     }
 
     /**
@@ -68,7 +65,7 @@ public class NegateStageTest {
     @Test
     public void testParseOk() throws InvalidRangeSyntaxException {
         NegateStage stage = new NegateStage();
-        assertEquals(stage.parse("^50..80", new RangeConfig()), "50..80");
+        Assert.assertEquals(stage.parse("^50..80", new RangeConfig()), "50..80");
     }
 
     /**
@@ -78,7 +75,7 @@ public class NegateStageTest {
     @Test
     public void testParseKo() throws InvalidRangeSyntaxException {
         NegateStage stage = new NegateStage();
-        assertFalse(stage.canParse("50..80"));
+        Assert.assertFalse(stage.canParse("50..80"));
     }
 
 }

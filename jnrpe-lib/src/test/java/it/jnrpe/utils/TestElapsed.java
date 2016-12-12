@@ -15,8 +15,8 @@
  *******************************************************************************/
 package it.jnrpe.utils;
 
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  */
@@ -60,32 +60,22 @@ public class TestElapsed {
             
             switch (unit) {
             case SECOND:
-                Assert.assertEquals(elapsed.getSeconds(), qty);
+                Assert.assertEquals(qty, elapsed.getSeconds());
                 break;
             case MINUTE:
-                Assert.assertEquals(elapsed.getMinutes(), qty);
+                Assert.assertEquals(qty, elapsed.getMinutes());
                 break;
             case HOUR:
-                Assert.assertEquals(elapsed.getHours(), qty);
+                Assert.assertEquals(qty, elapsed.getHours());
                 break;
             case DAY:
-                Assert.assertEquals(elapsed.getDays(), qty);
+                Assert.assertEquals(qty, elapsed.getDays());
                 break;
             default:
                 Assert.fail(unit + " is not supported");
                 break;
             }
             
-            return this;
-        }
-        
-        /**
-         * Method expectHours.
-         * @param hours long
-         * @return ElapsedTester
-         */
-        public ElapsedTester expectHours(long hours) {
-            Assert.assertEquals(elapsed.getHours(), hours);
             return this;
         }
     }
