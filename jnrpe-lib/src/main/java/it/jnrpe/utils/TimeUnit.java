@@ -56,7 +56,7 @@ public enum TimeUnit {
      * @param value
      *            the number of milliseconds
      */
-    private TimeUnit(final long value) {
+    TimeUnit(final long value) {
         milliseconds = value;
     }
 

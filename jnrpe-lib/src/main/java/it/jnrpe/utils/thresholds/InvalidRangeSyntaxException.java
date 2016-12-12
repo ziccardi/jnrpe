@@ -96,7 +96,7 @@ public class InvalidRangeSyntaxException extends RangeException {
      * @return the exception message */
     @Override
     public final String getMessage() {
-        String invalidRange = null;
+        final String invalidRange;
         
         String wholeRangeString = getWholeRangeString();
         

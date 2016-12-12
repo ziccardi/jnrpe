@@ -39,8 +39,8 @@ public class CommandInvokerTest {
 	/**
 	 * Field pluginRepository.
 	 */
-	private final PluginRepository pluginRepository = new PluginRepository();;
-	/**
+	private final PluginRepository pluginRepository = new PluginRepository();
+    /**
 	 * Field commandRepository.
 	 */
 	private final CommandRepository commandRepository = new CommandRepository();

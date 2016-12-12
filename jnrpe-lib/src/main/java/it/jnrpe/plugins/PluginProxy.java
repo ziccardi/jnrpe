@@ -96,12 +96,10 @@ public final class PluginProxy extends PluginBase {
     /**
      * Executes the proxied plugin passing the received arguments as parameters.
      * 
-     * @param argsAry
-     *            The parameters to be passed to the plugin
-    
-    
-     * @return The return value of the plugin. * @throws BadThresholdException
-     *             - */
+     * @param argsAry The parameters to be passed to the plugin
+     * @return The return value of the plugin.
+     * @throws BadThresholdException if an error occurs parsing the threshold
+     */
     public ReturnValue execute(final String[] argsAry) throws BadThresholdException {
         // CommandLineParser clp = new PosixParser();
         try {
@@ -126,8 +124,6 @@ public final class PluginProxy extends PluginBase {
             }
 
             return retValue;
-        } catch (BadThresholdException bte) {
-            throw bte;
         } catch (OptionException e) {
             
             String msg = e.getMessage();

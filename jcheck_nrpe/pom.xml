@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>net.sf.jnrpe</groupId>
 		<artifactId>jnrpe-parent</artifactId>
-		<version>2.0.6-SNAPSHOT</version>
+		<version>2.1.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>jcheck_nrpe</artifactId>
@@ -30,18 +30,10 @@ Both plain socket and SSL are supported.</description>
 		</developer>
 	</developers>
 
-
 	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.12</version>
-			<scope>test</scope>
-		</dependency>
 		<dependency>
 			<groupId>org.apache.mahout.commons</groupId>
 			<artifactId>commons-cli</artifactId>
-			<version>2.0-mahout</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.jnrpe</groupId>
@@ -63,7 +55,6 @@ Both plain socket and SSL are supported.</description>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-gpg-plugin</artifactId>
-						<version>1.4</version>
 						<executions>
 							<execution>
 								<id>sign-artifacts</id>
@@ -88,27 +79,6 @@ Both plain socket and SSL are supported.</description>
 			</plugin>
 
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>findbugs-maven-plugin</artifactId>
-			</plugin>
-			
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-release-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>default</id>
-						<goals>
-							<goal>perform</goal>
-						</goals>
-						<configuration>
-							<pomFileName>jcheck_nrpe/pom.xml</pomFileName>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
 				<configuration>
@@ -125,7 +95,6 @@ Both plain socket and SSL are supported.</description>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>appassembler-maven-plugin</artifactId>
-				<version>1.3</version>
 				<executions>
 					<execution>
 						<id>appassemble</id>
@@ -167,48 +136,6 @@ Both plain socket and SSL are supported.</description>
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<goals>
-							<goal>jar-no-fork</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9</version>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-site-plugin</artifactId>
-				<version>3.3</version>
-				<dependencies>
-					<dependency><!-- add support for ssh/scp -->
-						<groupId>org.apache.maven.wagon</groupId>
-						<artifactId>wagon-ssh</artifactId>
-						<version>1.0</version>
-					</dependency>
-				</dependencies>
-				<configuration>
-					<siteDirectory>${project.basedir}/src/site</siteDirectory>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>

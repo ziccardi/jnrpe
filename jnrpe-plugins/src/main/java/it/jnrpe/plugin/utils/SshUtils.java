@@ -33,23 +33,22 @@ public class SshUtils {
     /**
      * Default timeout.
      */
-    protected static final int DEFAULT_TIMEOUT = 10;
+    private static final int DEFAULT_TIMEOUT = 10;
 
     /**
      * Default HTTP port.
      */
-    protected static final int DEFAULT_PORT = 22;
+    private static final int DEFAULT_PORT = 22;
 
+    // TODO: this should throw a specific exception
     /**
      * Starts an ssh session
      * 
-     * @param cl
-     * @return
-     * @throws MetricGatheringException
-     * @throws Exception
-     *             Session
+     * @param cl the command line object
+     * @return an ssh session
+     * @throws Exception on any error
      */
-    public static Session getSession(final ICommandLine cl) throws MetricGatheringException, Exception {
+    public static Session getSession(final ICommandLine cl) throws Exception {
         JSch jsch = new JSch();
         Session session = null;
         int timeout = DEFAULT_TIMEOUT;

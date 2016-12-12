@@ -83,7 +83,7 @@ public class JNRPERequestDecoder extends ReplayingDecoder<JNRPERequestDecoder.ST
          * The next data we have to receive is DUMMY buffer.
          */
         DUMMY
-    };
+    }
 
     /**
      * Creates a new {@link JNRPERequestDecoder} object and sets the initial
@@ -94,11 +94,12 @@ public class JNRPERequestDecoder extends ReplayingDecoder<JNRPERequestDecoder.ST
     }
 
     /**
-     * Method decode.
-     * @param ctx ChannelHandlerContext
-     * @param in ByteBuf
-     * @param out List<Object>
-     * @throws Exception
+     * Netty decode method. @see {@link ReplayingDecoder#decode(ChannelHandlerContext, ByteBuf, List)}
+     *
+     * @param ctx teh context
+     * @param in data to be decoded
+     * @param out decoded data
+     * @throws Exception thrown in case of unknown packet received
      */
     @Override
     protected final void decode(final ChannelHandlerContext ctx, final ByteBuf in, final List<Object> out) throws Exception {
@@ -158,8 +159,8 @@ public class JNRPERequestDecoder extends ReplayingDecoder<JNRPERequestDecoder.ST
      * 
      * @param buff
      *            the '0' terminated string
-    
-     * @return the java string */
+     * @return the java string
+     */
     private String ztString2String(final byte[] buff) {
         return new String(buff, 0, ArrayUtils.indexOf(buff, (byte) 0));
     }

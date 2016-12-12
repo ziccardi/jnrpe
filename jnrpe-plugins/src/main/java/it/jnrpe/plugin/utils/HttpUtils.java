@@ -37,13 +37,13 @@ public class HttpUtils {
     /**
      * Do a http get request and return response
      * 
-     * @param url
-     * @param requestProps
-     * @param timeout
-     * @param includeHeaders
-     * @param ignoreBody
-     * @return
-     * @throws Exception
+     * @param url target url
+     * @param requestProps props to be requested
+     * @param timeout connection timeout
+     * @param includeHeaders whether to include headers or not
+     * @param ignoreBody whether to ignore body content or not
+     * @return server answer
+     * @throws Exception on any connection
      */
     public static String doGET(final URL url, final Properties requestProps, final Integer timeout, boolean includeHeaders, boolean ignoreBody)
             throws Exception {
@@ -52,14 +52,14 @@ public class HttpUtils {
 
     /**
      * Do a http head request and return response
-     * 
-     * @param url
-     * @param requestProps
-     * @param timeout
-     * @param includeHeaders
-     * @param ignoreBody
-     * @return
-     * @throws Exception
+     *
+     * @param url target url
+     * @param requestProps props to be requested
+     * @param timeout connection timeout
+     * @param includeHeaders whether to include headers or not
+     * @param ignoreBody whether to ignore body content or not
+     * @return server answer
+     * @throws Exception on any connection
      */
     public static String doHEAD(final URL url, final Properties requestProps, final Integer timeout, boolean includeHeaders, boolean ignoreBody)
             throws Exception {
@@ -68,15 +68,14 @@ public class HttpUtils {
 
     /**
      * Do a http post request and return response
-     * 
-     * @param url
-     * @param requestProps
-     * @param timeout
-     * @param encodedData
-     * @param includeHeaders
-     * @param ignoreBody
-     * @return
-     * @throws IOException
+     *
+     * @param url target url
+     * @param requestProps props to be requested
+     * @param timeout connection timeout
+     * @param includeHeaders whether to include headers or not
+     * @param ignoreBody whether to ignore body content or not
+     * @return server answer
+     * @throws IOException on any connection
      */
     public static String doPOST(final URL url, final Properties requestProps, final Integer timeout, final String encodedData,
             boolean includeHeaders, boolean ignoreBody) throws IOException {
@@ -89,9 +88,9 @@ public class HttpUtils {
     /**
      * Submits http post data to an HttpURLConnection.
      * 
-     * @param conn
-     * @param encodedData
-     * @throws IOException
+     * @param conn teh connection
+     * @param encodedData the encoded data to be sent
+     * @throws IOException on any connection
      */
     public static void sendPostData(HttpURLConnection conn, String encodedData) throws IOException {
 
@@ -131,9 +130,9 @@ public class HttpUtils {
     /**
      * Sets request headers for an http connection
      * 
-     * @param props
-     * @param conn
-     * @param timeout
+     * @param props properties to be sent
+     * @param conn the connection
+     * @param timeout the connection timeout
      */
     public static void setRequestProperties(final Properties props, HttpURLConnection conn, Integer timeout) {
         if (props != null) {
@@ -155,11 +154,11 @@ public class HttpUtils {
     /**
      * Parses an http request response
      * 
-     * @param conn
-     * @param includeHeaders
-     * @param ignoreBody
-     * @return
-     * @throws IOException
+     * @param conn the connection
+     * @param includeHeaders if include headers ot not
+     * @param ignoreBody if ignore body or not
+     * @return a string representing the received answer
+     * @throws IOException on any connection
      */
     public static String parseHttpResponse(HttpURLConnection conn, boolean includeHeaders, boolean ignoreBody) throws IOException {
         StringBuilder buff = new StringBuilder();

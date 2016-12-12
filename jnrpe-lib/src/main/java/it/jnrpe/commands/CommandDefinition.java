@@ -122,7 +122,6 @@ public final class CommandDefinition {
     
      * @return a parsable command line or an empty array for empty command line. */
     public String[] getCommandLine() {
-        String[] resAry = null;
         String[] argsAry = argsString != null ? split(argsString) : EMPTY_ARRAY;
         List<String> argsList = new ArrayList<String>();
 
@@ -139,7 +138,7 @@ public final class CommandDefinition {
             }
         }
 
-        resAry = new String[argsAry.length + argsList.size()];
+        String[] resAry = new String[argsAry.length + argsList.size()];
 
         for (String argString : argsList) {
             resAry[startIndex++] = argString;

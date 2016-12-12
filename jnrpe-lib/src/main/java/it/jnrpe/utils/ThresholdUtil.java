@@ -64,7 +64,7 @@ public final class ThresholdUtil {
      *            
      * @return <code>true</code> if the metric value <code>metric</code> 
      *          falls into the passed in <code>range</code>.
-     * @throws BadThresholdException
+     * @throws BadThresholdException if an error occurs parsing teh threshold
      */
     public static boolean isValueInRange(final String range, final Metric metric) throws BadThresholdException {
         return new LegacyRange(range).isValueInside(metric);

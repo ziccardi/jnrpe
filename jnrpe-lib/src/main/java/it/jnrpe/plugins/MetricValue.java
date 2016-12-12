@@ -148,28 +148,67 @@ public class MetricValue extends BigDecimal {
      * 
      * @param val The metric value as {@link BigDecimal}
      */
-    private MetricValue(BigDecimal var, DecimalFormat df) {
-        super(var.toPlainString());
+    private MetricValue(BigDecimal val, DecimalFormat df) {
+        super(val.toPlainString());
         DECIMAL_FORMAT = df;
     }
 
     @Override
     public BigDecimal multiply(BigDecimal multiplicand) {
-        MetricValue ret = new MetricValue(super.multiply(multiplicand), DECIMAL_FORMAT);
-        return ret;
+        return new MetricValue(super.multiply(multiplicand), DECIMAL_FORMAT);
     }
     
     @Override
     public BigDecimal divide(BigDecimal divisor) {
-        MetricValue ret = new MetricValue(super.divide(divisor), DECIMAL_FORMAT);
-        return ret;
+        return new MetricValue(super.divide(divisor), DECIMAL_FORMAT);
     }
-    
+
+    /**
+     * Returns the MetricValue representation of the passed in BigDecimal.
+     * If <code>val</code> is already a {@link MetricValue} object, val is returned.
+     *
+     * WARNING: as of this version, no check is performed that the passed in value format, if a {@link MetricValue},
+     * is equal to <code>format</code>
+     * @param val value to be converted
+     * @param format format of the resulting output
+     * @return the converted value
+     */
+    public static MetricValue valueOf(BigDecimal val, final String format) {
+        if (val instanceof MetricValue) {
+            // TODO: check that val.format == format
+            return (MetricValue) val;
+        }
+        return new MetricValue(val, new DecimalFormat(format));
+    }
+
+    /**
+     * Converts the passed in value using the default format ({see @link MetricValue#DEFAULT_FORMAT}
+     *
+     * WARNING: as of this version, no check is performed that the passed in value format, if a {@link MetricValue},
+     * is equal to <code>{@link MetricValue#DEFAULT_FORMAT}</code>
+     *
+     * @param val value to be converted
+     * @return the converted value
+     */
+    public static MetricValue valueOf(BigDecimal val) {
+        return valueOf(val, DEFAULT_FORMAT);
+    }
+
     /**
      * @return this value formatted with the passed in {@link DecimalFormat} 
      * pattern.
      */
     public String toPrettyPrintedString() {
         return DECIMAL_FORMAT.format(this);
+    }
+
+    @Override
+    public boolean equals(Object x) {
+        return super.equals(x);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }

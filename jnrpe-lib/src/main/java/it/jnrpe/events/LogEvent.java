@@ -53,8 +53,8 @@ public final class LogEvent implements IJNRPEEvent {
         /**
          * Fatal Log Event.
          */
-        FATAL;
-    };
+        FATAL
+    }
 
     /**
      * The log severity.

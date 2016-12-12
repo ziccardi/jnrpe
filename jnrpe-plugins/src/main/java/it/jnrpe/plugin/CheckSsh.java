@@ -53,15 +53,6 @@ import com.jcraft.jsch.Session;
         @Option(shortName = "t", longName = "timeout", description = "Seconds before connection times out (default: 10)", required = false, hasArgs = true, argName = "timeout", optionalArgs = false, option = "timeout") })
 public class CheckSsh extends PluginBase {
 
-    /**
-     * @TODO
-     * 
-     *       - ssh key authentication
-     * 
-     *       - remote-version check option
-     * 
-     */
-
     @Override
     protected String getPluginName() {
         return "CHECK_SSH";

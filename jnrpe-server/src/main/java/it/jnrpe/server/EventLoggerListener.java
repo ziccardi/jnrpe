@@ -40,10 +40,8 @@ public class EventLoggerListener {
     /**
      * This method receives the log event and logs it.
      * 
-     * @param sender
-     *            The source of the event
-     * @param event
-     *            The event
+     * @param logEvent
+     *            Event to be logged
      */
     @Subscribe
     public final void receive(final LogEvent logEvent) {

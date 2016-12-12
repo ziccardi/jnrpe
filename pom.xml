@@ -3,7 +3,7 @@
 
 	<groupId>net.sf.jnrpe</groupId>
 	<artifactId>jnrpe-parent</artifactId>
-	<version>2.0.6-SNAPSHOT</version>
+	<version>2.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Jnrpe Package</name>
@@ -12,7 +12,15 @@
 It is fully compatible with check_nrpe and can be used to execute both old native Nagios plugins and the new Java Nagios Plugins.</description>
 	<url>http://www.jnrpe.it</url>
 
-	<licenses>
+    <modules>
+        <module>jnrpe-server</module>
+        <module>jnrpe-install</module>
+        <module>jnrpe-lib</module>
+        <module>jcheck_nrpe</module>
+        <module>jnrpe-plugins</module>
+    </modules>
+
+    <licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
 			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
@@ -49,7 +57,7 @@ It is fully compatible with check_nrpe and can be used to execute both old nativ
 		</mailingList>
 	</mailingLists>
 
-		<developers>
+    <developers>
 		<developer>
 			<id>mziccardi</id>
 			<name>Massimiliano Ziccardi</name>
@@ -61,6 +69,7 @@ It is fully compatible with check_nrpe and can be used to execute both old nativ
 			<email>frederico.campos@gmail.com</email>
 		</developer>
 	</developers>
+
 	<contributors>
 		<contributor>
 			<name>Athou</name>
@@ -76,10 +85,25 @@ It is fully compatible with check_nrpe and can be used to execute both old nativ
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jnrpe-lib.version>2.0.6-SNAPSHOT</jnrpe-lib.version>
-		<jnrpe-server.version>2.0.6-SNAPSHOT</jnrpe-server.version>
-		<jnrpe-plugins.version>0.7.6-SNAPSHOT</jnrpe-plugins.version>
-		<jcheck_nrpe.version>2.0.6-SNAPSHOT</jcheck_nrpe.version>
+		<jnrpe-lib.version>${project.version}</jnrpe-lib.version>
+		<jnrpe-server.version>${project.version}</jnrpe-server.version>
+		<jnrpe-plugins.version>${project.version}</jnrpe-plugins.version>
+		<jcheck_nrpe.version>${project.version}</jcheck_nrpe.version>
+        <powermock.version>1.6.4</powermock.version>
+        <dom4j.version>1.6.1</dom4j.version>
+        <netty.version>4.0.19.Final</netty.version>
+        <guava.version>20.0</guava.version>
+        <jsch.version>0.1.54</jsch.version>
+        <dnsjava.version>2.1.7</dnsjava.version>
+        <commons-codec.version>1.10</commons-codec.version>
+        <commons-io.version>2.5</commons-io.version>
+        <commons-lang.version>2.6</commons-lang.version>
+        <commons-net.version>3.5</commons-net.version>
+        <commons-configuration.version>1.9</commons-configuration.version>
+        <commons-cli.version>2.0-mahout</commons-cli.version>
+        <slf4j.version>1.7.21</slf4j.version>
+        <log4j.version>1.2.17</log4j.version>
+        <jline.version>2.11</jline.version>
 	</properties>
 
 	<dependencyManagement>
@@ -106,12 +130,118 @@ It is fully compatible with check_nrpe and can be used to execute both old nativ
 			</dependency>
 
 			<dependency>
-				<groupId>org.testng</groupId>
-				<artifactId>testng</artifactId>
-				<version>6.8</version>
+				<groupId>dom4j</groupId>
+				<artifactId>dom4j</artifactId>
+				<version>${dom4j.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-all</artifactId>
+				<version>${netty.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>${guava.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.jcraft</groupId>
+				<artifactId>jsch</artifactId>
+				<version>${jsch.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>dnsjava</groupId>
+				<artifactId>dnsjava</artifactId>
+				<version>${dnsjava.version}</version>
+			</dependency>
+
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>${commons-codec.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
+            </dependency>
+
+			<dependency>
+				<groupId>commons-lang</groupId>
+				<artifactId>commons-lang</artifactId>
+				<version>${commons-lang.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>commons-net</groupId>
+				<artifactId>commons-net</artifactId>
+				<version>${commons-net.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>commons-configuration</groupId>
+				<artifactId>commons-configuration</artifactId>
+				<version>${commons-configuration.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.mahout.commons</groupId>
+				<artifactId>commons-cli</artifactId>
+				<version>${commons-cli.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-jcl</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>log4j</groupId>
+				<artifactId>log4j</artifactId>
+				<version>${log4j.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>jline</groupId>
+				<artifactId>jline</artifactId>
+				<version>${jline.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+
+	<dependencies>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+            <version>${powermock.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito</artifactId>
+            <version>${powermock.version}</version>
+            <scope>test</scope>
+        </dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
 
 	<build>
 		<pluginManagement>
@@ -177,13 +307,16 @@ It is fully compatible with check_nrpe and can be used to execute both old nativ
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-source-plugin</artifactId>
 					<version>2.2.1</version>
+					<executions>
+						<execution>
+							<id>attach-sources</id>
+							<goals>
+								<goal>jar-no-fork</goal>
+							</goals>
+						</execution>
+					</executions>
 				</plugin>
 
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>findbugs-maven-plugin</artifactId>
-					<version>2.5.4</version>
-				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-deploy-plugin</artifactId>
@@ -208,7 +341,7 @@ It is fully compatible with check_nrpe and can be used to execute both old nativ
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>findbugs-maven-plugin</artifactId>
-					<version>3.0.0</version>
+					<version>3.0.4</version>
 					<configuration>
 						<effort>Max</effort>
 						<threshold>Low</threshold>
@@ -254,14 +387,87 @@ It is fully compatible with check_nrpe and can be used to execute both old nativ
 					</configuration>
 				</plugin>
 				<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>2.10</version>
-			</plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-checkstyle-plugin</artifactId>
+					<version>2.10</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-gpg-plugin</artifactId>
+					<version>1.4</version>
+					<executions>
+						<execution>
+							<id>sign-artifacts</id>
+							<phase>verify</phase>
+							<goals>
+								<goal>sign</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>appassembler-maven-plugin</artifactId>
+					<version>1.3</version>
+					<executions>
+						<execution>
+							<id>appassemble</id>
+							<goals>
+								<goal>assemble</goal>
+							</goals>
+							<phase>package</phase>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<version>2.9</version>
+					<executions>
+						<execution>
+							<id>attach-javadocs</id>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<configuration>
+						<descriptors>
+							<descriptor>src/main/assembly/assembly.xml</descriptor>
+						</descriptors>
+						<attach>false</attach>
+					</configuration>
+					<executions>
+						<execution>
+							<id>jnrpe-plugins-zips</id>
+							<goals>
+								<goal>single</goal>
+							</goals>
+							<phase>package</phase>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jxr-plugin</artifactId>
+					<version>2.3</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-project-info-reports-plugin</artifactId>
+					<version>2.4</version>
+				</plugin>
+
 			</plugins>
 			
 		</pluginManagement>
+
 		<plugins>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
@@ -276,6 +482,17 @@ It is fully compatible with check_nrpe and can be used to execute both old nativ
 						<version>1.9</version>
 					</dependency>
 				</dependencies>
+				<executions>
+					<execution>
+						<id>default</id>
+						<goals>
+							<goal>perform</goal>
+						</goals>
+						<configuration>
+							<pomFileName>${project.basedir}/pom.xml</pomFileName>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -284,21 +501,6 @@ It is fully compatible with check_nrpe and can be used to execute both old nativ
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>findbugs-maven-plugin</artifactId>
-				<configuration>
-					<effort>Max</effort>
-					<threshold>Low</threshold>
-					<failOnError>false</failOnError>
-					<findbugsXmlOutput>true</findbugsXmlOutput>
-					<findbugsXmlWithMessages>true</findbugsXmlWithMessages>
-					<xmlOutput>true</xmlOutput>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>check</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -308,10 +510,14 @@ It is fully compatible with check_nrpe and can be used to execute both old nativ
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9</version>
 				<configuration>
 					<show>public</show>
 				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
 			</plugin>
 		</plugins>
 
@@ -322,12 +528,10 @@ It is fully compatible with check_nrpe and can be used to execute both old nativ
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jxr-plugin</artifactId>
-				<version>2.3</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-project-info-reports-plugin</artifactId>
-				<version>2.4</version>
 				<reportSets>
 					<reportSet>
 						<reports>
@@ -355,10 +559,10 @@ It is fully compatible with check_nrpe and can be used to execute both old nativ
 					</reportSet>
 				</reportSets>
 			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>findbugs-maven-plugin</artifactId>
-			</plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+            </plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
@@ -382,14 +586,6 @@ It is fully compatible with check_nrpe and can be used to execute both old nativ
 			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository>
 	</distributionManagement>
-	<modules>
-		<module>jnrpe-server</module>
-		<module>jnrpe-install</module>
-		<module>jnrpe-debian</module>
-		<module>jnrpe-lib</module>
-		<module>jcheck_nrpe</module>
-		<module>jnrpe-plugins</module>
-	</modules>
 
 	<scm>
 		<url>http://github.com/ziccardi/jnrpe</url>

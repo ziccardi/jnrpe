@@ -206,7 +206,7 @@ class Threshold implements IThreshold {
     public final String getRangesAsString(final Status status) {
         List<String> ranges = new ArrayList<String>();
 
-        List<Range> rangeList = null;
+        List<Range> rangeList;
 
         switch (status) {
         case OK:

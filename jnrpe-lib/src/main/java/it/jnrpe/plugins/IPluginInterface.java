@@ -27,14 +27,15 @@ import it.jnrpe.utils.BadThresholdException;
  * @version $Revision: 1.0 $
  */
 public interface IPluginInterface {
+
     /**
      * Executes the plugin.
      *
      * @param cl
-     *            The parsified command line arguments
-    
-    
-     * @return The result of the plugin * @throws BadThresholdException
-     *             - */
+     *            The parsed command line arguments
+     * @return The result of the plugin
+     * @throws BadThresholdException if failed parsing the threshold
+     *
+     */
     ReturnValue execute(ICommandLine cl) throws BadThresholdException;
 }

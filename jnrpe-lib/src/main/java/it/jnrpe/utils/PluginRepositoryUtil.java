@@ -76,14 +76,11 @@ public final class PluginRepositoryUtil {
     /**
      * Loads the plugins definitions from the jnrpe_plugins.xml file.
      * 
-     * @param cl
-     *            Classloader to be used to load classes
-     * @param in
-     *            InputStream to the jnrpe_plugins.xml file
-    
-    
-     * @return a collection of all the declared plugins * @throws PluginConfigurationException
-     *             on any error reading the plugin configuration */
+     * @param cl Classloader to be used to load classes
+     * @param in InputStream to the jnrpe_plugins.xml file
+     * @return a collection of all the declared plugins
+     * @throws PluginConfigurationException on any error reading the plugin configuration
+     */
     @SuppressWarnings("unchecked")
     public static Collection<PluginDefinition> loadFromXmlPluginPackageDefinitions(final ClassLoader cl, final InputStream in)
             throws PluginConfigurationException {
@@ -122,10 +119,9 @@ public final class PluginRepositoryUtil {
      *            The classloader to be used to instantiate the plugin class
      * @param in
      *            The stream to the XML file
-    
-    
-     * @return The plugin definition * @throws PluginConfigurationException
-     *             - */
+     * @return The plugin definition
+     * @throws PluginConfigurationException if an error occurs parsing the plugin definition
+     */
     public static PluginDefinition parseXmlPluginDefinition(final ClassLoader cl, final InputStream in) throws PluginConfigurationException {
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

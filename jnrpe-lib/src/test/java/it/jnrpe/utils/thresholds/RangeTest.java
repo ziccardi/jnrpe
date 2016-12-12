@@ -26,7 +26,7 @@ import java.math.BigDecimal;
  */
 public class RangeTest {
 
-    private final static Metric metricWithValue(String value) {
+    private static Metric metricWithValue(String value) {
         return MetricBuilder.forMetric("dummy")
                 .withValue(new BigDecimal(value)).build();
     }

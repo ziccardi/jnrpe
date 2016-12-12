@@ -73,11 +73,7 @@ abstract class BracketStage extends Stage {
      *         threshold */
     @Override
     public boolean canParse(final String threshold) {
-        if (threshold == null) {
-            return false;
-        }
-
-        return threshold.startsWith(bracket);
+        return threshold != null && threshold.startsWith(bracket);
     }
 
     /**
