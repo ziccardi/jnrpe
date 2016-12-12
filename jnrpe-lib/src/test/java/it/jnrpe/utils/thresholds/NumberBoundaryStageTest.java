@@ -15,12 +15,9 @@
  *******************************************************************************/
 package it.jnrpe.utils.thresholds;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertTrue;
 import it.jnrpe.utils.thresholds.NumberBoundaryStage.LeftBoundaryStage;
-
-import org.testng.annotations.Test;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  */
@@ -31,7 +28,7 @@ public class NumberBoundaryStageTest {
     @Test
     public void testCanParseNull() {
         LeftBoundaryStage stage = new LeftBoundaryStage();
-        assertFalse(stage.canParse(null));
+        Assert.assertFalse(stage.canParse(null));
     }
 
     /**
@@ -40,7 +37,7 @@ public class NumberBoundaryStageTest {
     @Test
     public void testCanParseWithoutSign() {
         LeftBoundaryStage stage = new LeftBoundaryStage();
-        assertTrue(stage.canParse("50"));
+        Assert.assertTrue(stage.canParse("50"));
     }
 
     /**
@@ -49,7 +46,7 @@ public class NumberBoundaryStageTest {
     @Test
     public void testCanParseWithSign() {
         LeftBoundaryStage stage = new LeftBoundaryStage();
-        assertTrue(stage.canParse("-80909"));
+        Assert.assertTrue(stage.canParse("-80909"));
     }
 
     /**
@@ -58,7 +55,7 @@ public class NumberBoundaryStageTest {
     @Test
     public void testCanParseDecimalWithSign() {
         LeftBoundaryStage stage = new LeftBoundaryStage();
-        assertTrue(stage.canParse("+80.909"));
+        Assert.assertTrue(stage.canParse("+80.909"));
     }
 
     /**
@@ -67,7 +64,7 @@ public class NumberBoundaryStageTest {
     @Test
     public void testCanParseEmptyString() {
         LeftBoundaryStage stage = new LeftBoundaryStage();
-        assertFalse(stage.canParse(""));
+        Assert.assertFalse(stage.canParse(""));
     }
 
     /**
@@ -77,14 +74,14 @@ public class NumberBoundaryStageTest {
     @Test
     public void testParseWhiteSpaces() throws Exception {
         LeftBoundaryStage stage = new LeftBoundaryStage();
-        assertFalse(stage.canParse("   "));
+        Assert.assertFalse(stage.canParse("   "));
     }
 
     /**
      * Method testCanParseJustSign.
      * @throws Exception
      */
-    @Test(expectedExceptions = InvalidRangeSyntaxException.class)
+    @Test(expected = InvalidRangeSyntaxException.class)
     public void testCanParseJustSign() throws Exception {
         LeftBoundaryStage stage = new LeftBoundaryStage();
         stage.parse("+..50", new RangeConfig());
@@ -94,7 +91,7 @@ public class NumberBoundaryStageTest {
      * Method testCanParseBadSign.
      * @throws Exception
      */
-    @Test(expectedExceptions = RangeException.class)
+    @Test(expected = RangeException.class)
     public void testCanParseBadSign() throws Exception {
         LeftBoundaryStage stage = new LeftBoundaryStage();
         stage.parse("50+..50", new RangeConfig());
@@ -106,6 +103,6 @@ public class NumberBoundaryStageTest {
     @Test
     public void testExpect() {
         LeftBoundaryStage stage = new LeftBoundaryStage();
-        assertEquals(stage.expects(), "+-[0-9]");
+        Assert.assertEquals("+-[0-9]", stage.expects());
     }
 }

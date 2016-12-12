@@ -49,6 +49,13 @@ public class CCheckOracle extends PluginBase {
      */
     private static final String PLUGIN_NAME = "CHECK_ORACLE";
 
+    public static final String QRY_CHECK_ALIVE = "SELECT SYSDATE FROM DUAL";
+    public static final String QRY_CHECK_TBLSPACE_PATTERN =
+        "select NVL(b.free,0.0),a.total,100 " + "- trunc(NVL(b.free,0.0)/a.total * 1000) / 10 prc" + " from ("
+        + " select tablespace_name,sum(bytes)/1024/1024 total" + " from dba_data_files group by tablespace_name) A" + " LEFT OUTER JOIN"
+        + " ( select tablespace_name,sum(bytes)/1024/1024 free" + " from dba_free_space group by tablespace_name) B"
+        + " ON a.tablespace_name=b.tablespace_name " + "WHERE a.tablespace_name='%s'";
+
     /**
      * Connects to the database.
      * 
@@ -96,7 +103,7 @@ public class CCheckOracle extends PluginBase {
 
         try {
             stmt = c.createStatement();
-            rs = stmt.executeQuery("SELECT SYSDATE FROM DUAL");
+            rs = stmt.executeQuery(QRY_CHECK_ALIVE);
 
             if (!rs.next()) {
                 // Should never happen...
@@ -135,11 +142,7 @@ public class CCheckOracle extends PluginBase {
         String sTablespace = cl.getOptionValue("tablespace").toUpperCase();
 
         // FIXME : a prepared satement should be used
-        final String sQry = "select NVL(b.free,0.0),a.total,100 " + "- trunc(NVL(b.free,0.0)/a.total * 1000) / 10 prc" + " from ("
-                + " select tablespace_name,sum(bytes)/1024/1024 total" + " from dba_data_files group by tablespace_name) A" + " LEFT OUTER JOIN"
-                + " ( select tablespace_name,sum(bytes)/1024/1024 free" + " from dba_free_space group by tablespace_name) B"
-                + " ON a.tablespace_name=b.tablespace_name " + "WHERE a.tablespace_name='" + sTablespace + "'";
-
+        final String sQry = String.format(QRY_CHECK_TBLSPACE_PATTERN, sTablespace);
         Statement stmt = null;
         ResultSet rs = null;
 
@@ -256,7 +259,10 @@ public class CCheckOracle extends PluginBase {
             if (cl.hasOption("tablespace")) {
                 metricList.addAll(checkTablespace(conn, cl));
             }
-            metricList.addAll(checkCache(conn, cl));
+
+            if (cl.hasOption("cache")) {
+                metricList.addAll(checkCache(conn, cl));
+            }
 
             return metricList;
         } catch (ClassNotFoundException cnfe) {

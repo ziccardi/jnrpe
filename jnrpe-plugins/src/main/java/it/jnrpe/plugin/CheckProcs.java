@@ -18,7 +18,8 @@ package it.jnrpe.plugin;
 import it.jnrpe.ICommandLine;
 import it.jnrpe.ReturnValue;
 import it.jnrpe.Status;
-import it.jnrpe.plugin.utils.ShellUtils;
+import it.jnrpe.plugin.utils.Shell;
+import it.jnrpe.plugin.utils.WindowsShell;
 import it.jnrpe.plugins.Metric;
 import it.jnrpe.plugins.MetricBuilder;
 import it.jnrpe.plugins.PluginBase;
@@ -68,7 +69,6 @@ import org.apache.commons.io.IOUtils;
         @Option(shortName = "C", longName = "command", description = "Only scan for exact matches of COMMAND (without path).", required = false, hasArgs = true, argName = "command", optionalArgs = false, option = "command"),
         @Option(shortName = "u", longName = "user", description = "Only scan for exact matches of USER", required = false, hasArgs = true, argName = "user", optionalArgs = false, option = "user") })
 public class CheckProcs extends PluginBase {
-
     private final static int SECONDS_IN_MINUTE = 60;
     private final static int SECONDS_IN_HOUR = SECONDS_IN_MINUTE * 60;
     private final static int SECONDS_IN_DAY = SECONDS_IN_HOUR * 24;
@@ -77,7 +77,7 @@ public class CheckProcs extends PluginBase {
 
     private final static String[] DEFAULT_UNIX_CMD = new String[] { "/bin/ps", "-eo", "comm,pid,ppid,user,c,rss,vsz,time,args" };
 
-    private final static String[] DEFAULT_MAC_CMD = new String[] { "/bin/ps", "-eo", "comm,pid,ppid,user,cpu,rss,vsz,time,args" };
+    private final static String[] DEFAULT_MAC_CMD = new String[] { "/bin/ps", "-o", "comm,pid,ppid,user,cpu,rss,vsz,time,args", "-ef"};
 
     private final static String METRIC_PROCS = "PROCS";
 
@@ -123,14 +123,10 @@ public class CheckProcs extends PluginBase {
 
     /**
      * Execute the plugin
-     * 
-     * @param cl
-     * @return
-     * @throws BadThresholdException
      */
     @Override
     public ReturnValue execute(final ICommandLine cl) throws BadThresholdException {
-        boolean windows = ShellUtils.isWindows();
+        boolean windows = Shell.getInstance().isWindows();
         try {
             String metric = cl.getOptionValue("metric");
             if (metric == null) {
@@ -153,16 +149,11 @@ public class CheckProcs extends PluginBase {
     /**
      * Checks command line arguments for operating system specific filters and
      * metrics
-     * 
-     * @param output
-     * @param cl
-     * @param metric
-     * @return
      */
     private void validateArguments(ICommandLine cl, boolean windows, String metric) throws Exception {
         if (windows) {
             if (METRIC_VSZ.equals(metric) || METRIC_RSS.equals(metric) || METRIC_ELAPSED.endsWith(metric)) {
-                throw new Exception("Metric " + metric + " not supported in Wndows.");
+                throw new Exception("Metric " + metric + " not supported in Windows.");
             } else {
                 for (String opt : UNIX_ONLY) {
                     if (cl.getOptionValue("opt") != null) {
@@ -179,11 +170,6 @@ public class CheckProcs extends PluginBase {
 
     /**
      * Analyze output and gather metrics
-     * 
-     * @param output
-     * @param cl
-     * @param metric
-     * @return
      */
     private ReturnValue analyze(List<Map<String, String>> output, ICommandLine cl, String metric) {
         Map<String, String> filterAndValue = getFilterAndValue(cl);
@@ -224,14 +210,6 @@ public class CheckProcs extends PluginBase {
 
     /**
      * Analyze process cpu thresholds
-     * 
-     * @param output
-     * @param cl
-     * @param critical
-     * @param warning
-     * @param message
-     * @return
-     * @throws Exception
      */
     private ReturnValue analyzeMetrics(List<Map<String, String>> output, ICommandLine cl, String critical, String warning, String message,
             String metric) throws Exception {
@@ -301,21 +279,12 @@ public class CheckProcs extends PluginBase {
     private String exec() throws Exception {
         String output = null;
         InputStream input = null;
-        String[] command = null;
-        if (!ShellUtils.isWindows()) {
+        if (!Shell.getInstance().isWindows()) {
             // write output to tmp file
-            command = ShellUtils.isMac() ? DEFAULT_MAC_CMD : DEFAULT_UNIX_CMD;
-            Process p = Runtime.getRuntime().exec(command);
-            input = p.getInputStream();
-
-            ByteArrayOutputStream bout = new ByteArrayOutputStream();
-            IOUtils.copy(input, bout);
-            output = getFormattedOutput(new String(bout.toByteArray(), "UTF-8"));
-            input.close();
-
+            String[] command = Shell.getInstance().isMac() ? DEFAULT_MAC_CMD : DEFAULT_UNIX_CMD;
+            output = getFormattedOutput(Shell.getInstance().executeSystemCommandAndGetOutput(command, "UTF-8"));
         } else {
-            command = DEFAULT_WINDOWS_CMD;
-            output = ShellUtils.executeSystemCommandAndGetOutput(command, "CP437");
+            output = Shell.getInstance().executeSystemCommandAndGetOutput(DEFAULT_WINDOWS_CMD, "CP437");
         }
 
         return output;
@@ -328,6 +297,7 @@ public class CheckProcs extends PluginBase {
         String out = "";
         StringBuilder lines = new StringBuilder();
         String[] splittedLines = output.split("\n");
+
         for (int i = 0; i < splittedLines.length; i++) {
             if (i == 0) {
                 continue;
@@ -365,14 +335,15 @@ public class CheckProcs extends PluginBase {
             }
 
             Map<String, String> values = new HashMap<String, String>();
-            String[] line = l.replaceAll("\"", "").split(",");
-            values.put(FILTER_COMMAND, line[0]);
-            values.put("pid", line[1]);
-            values.put(FILTER_MEMORY, String.valueOf(convertToMemoryInt(line[4])));
-            values.put(FILTER_USER, line[6]);
+            //String[] line = l.replaceAll("\"", "").split(",");
+            String[] line = l.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
+            values.put(FILTER_COMMAND, line[0].replaceAll("\"", ""));
+            values.put("pid", line[1].replaceAll("\"", ""));
+            values.put(FILTER_MEMORY, String.valueOf(convertToMemoryInt(line[4].replaceAll("\"", ""))));
+            values.put(FILTER_USER, line[6].replaceAll("\"", ""));
             int seconds = 0;
-            if (!ShellUtils.isWindowsIdleProc(line[0])) {
-                seconds = convertToSeconds(line[7].trim());
+            if (!((WindowsShell)Shell.getInstance()).isIdleProc(line[0].replaceAll("\"", ""))) {
+                seconds = convertToSeconds(line[7].replaceAll("\"", "").trim());
             }
             totalRunTime += seconds;
             values.put(cpu, Integer.toString(seconds));
@@ -400,6 +371,7 @@ public class CheckProcs extends PluginBase {
         List<Map<String, String>> info = new ArrayList<Map<String, String>>();
         output = output.replaceAll("\"", "");
         String[] lines = output.split("\n");
+
         for (String l : lines) {
             if (l.startsWith("PID")) {
                 continue;
@@ -413,7 +385,7 @@ public class CheckProcs extends PluginBase {
             // }
 
             Map<String, String> values = new HashMap<String, String>();
-            values.put(FILTER_COMMAND, line[0].trim());
+            values.put(FILTER_COMMAND, line[Shell.getInstance().isMac() ? 8 : 0].trim());
             values.put("pid", line[1].trim());
             values.put("ppid", line[2].trim());
             values.put(FILTER_USER, line[3].trim());
@@ -453,6 +425,7 @@ public class CheckProcs extends PluginBase {
                 String filterValue = entry.getValue();
                 if (filter.contains(FILTER_COMMAND) || filter.contains(FILTER_USER) || FILTER_ARG_ARRAY.equals(filter)
                         || filter.contains(FILTER_PPID)) {
+
                     if (!map.get(filter).contains(filterValue)) {
                         matchesAll = false;
                         break;

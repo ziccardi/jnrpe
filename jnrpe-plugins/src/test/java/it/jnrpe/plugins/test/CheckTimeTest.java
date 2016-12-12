@@ -20,88 +20,100 @@ import it.jnrpe.plugin.CheckTime;
 import it.jnrpe.test.utils.TimeServer;
 import it.jnrpe.test.utils.TimeServer.TimeServerDelegate;
 import it.jnrpe.utils.TimeUnit;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.util.Date;
 
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
-
 /**
  * Test for the check_time plugin.
- * 
+ *
  * @author Massimiliano Ziccardi
  */
 public class CheckTimeTest implements TimeServerDelegate {
-    
+
     /**
      * Port where the timeserver will listen.
      */
     private static final int TIME_SERVER_PORT = 2000;
-    
+
     /**
      * The time server.
      */
-    private TimeServer timeServer;
-    
+    private static TimeServer timeServer;
+
     /**
      * Starts the time server.
      * @throws Exception thrown on error starting the time server
      */
     @BeforeClass
-    public final void setup() throws Exception {
-        timeServer = new TimeServer(TIME_SERVER_PORT, this);
+    public static final void setup() throws Exception {
+        timeServer = new TimeServer(TIME_SERVER_PORT, new TimeServerDelegate() {
+
+            public void serverDidStart() {
+
+            }
+
+            public void serverDidStop() {
+
+            }
+
+            public void serverStoppedWithError(Throwable thr) {
+
+            }
+        });
         timeServer.start();
     }
-    
+
     /**
      * Stops the time server.
      * @throws Exception
      */
     @AfterClass
-    public final void shutdown() {
+    public static final void shutdown() {
         if (timeServer != null) {
-            timeServer.shutdown();    
+            timeServer.shutdown();
         }
     }
 
     /**
      * Checks that the test exits with success state if no 
      * threshold are specified and the TimeServer is reachable.
-     * 
+     *
      * @throws Exception on check exception
      */
     @Test
     public final void testNoThresholds() throws Exception {
-        
+
         PluginTester.given(new CheckTime())
             .withOption("hostname", 'H', "127.0.0.1")
             .withOption("port", 'p', "2000")
             .expect(Status.OK);
-        
+
     }
-    
+
     /**
      * Checks that test exits with a critical state if
      * the TimeServer is unreachable.
-     * 
+     *
      * @throws Exception on check exception
      */
     @Test
     public final void testNoTimeServer() throws Exception {
-        
+
         PluginTester.given(new CheckTime())
             .withOption("hostname", 'H', "127.0.0.1")
             .withOption("port", 'p', "2001")
             .expect(Status.CRITICAL);
-        
+
     }
-    
+
     /**
      * Checks that the test return a critical status if the 
      * difference between machine time and the time returned
      * by the TimeServer is greater than 5 seconds.
-     * 
+     *
      * @throws Exception on check exception
      */
     @Test
@@ -111,22 +123,22 @@ public class CheckTimeTest implements TimeServerDelegate {
         long now = System.currentTimeMillis();
         long tenSecondsInFuture = TimeUnit.SECOND.convert(10) + now;
         timeServer.setNextTime(new Date(tenSecondsInFuture));
-        
+
         // Perform the check
         PluginTester.given(new CheckTime())
-        .withOption("hostname", 'H', "127.0.0.1")
+            .withOption("hostname", 'H', "127.0.0.1")
             .withOption("port", 'p', "2000")
             .withOption("critical-variance", 'c', "5:")
-        .expect(Status.CRITICAL);
-        
+            .expect(Status.CRITICAL);
+
     }
-    
+
     /**
      * Called when the timeserver starts.
      */
     public void serverDidStart() {
         // TODO Auto-generated method stub
-        
+
     }
 
     /**
@@ -134,7 +146,7 @@ public class CheckTimeTest implements TimeServerDelegate {
      */
     public void serverDidStop() {
         // TODO Auto-generated method stub
-        
+
     }
 
     /**
@@ -143,6 +155,6 @@ public class CheckTimeTest implements TimeServerDelegate {
      */
     public void serverStoppedWithError(final Throwable thr) {
         // TODO Auto-generated method stub
-        
+
     }
 }

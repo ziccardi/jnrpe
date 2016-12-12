@@ -21,11 +21,12 @@ import org.apache.commons.cli2.CommandLine;
 import org.apache.commons.cli2.Group;
 import org.apache.commons.cli2.builder.GroupBuilder;
 import org.apache.commons.cli2.commandline.Parser;
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import org.junit.Assert;
+import org.junit.runner.RunWith;
+import org.powermock.modules.junit4.PowerMockRunner;
 
+@RunWith(PowerMockRunner.class)
 public class TestCommandLineParsing {
-    @Test
     public void testNoArgumentsOption() throws Exception {
         ClassLoader cl = TestCommandLineParsing.class.getClassLoader();
         PluginDefinition pluginDef =

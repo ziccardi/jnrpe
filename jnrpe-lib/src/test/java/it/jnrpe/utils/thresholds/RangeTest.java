@@ -17,11 +17,10 @@ package it.jnrpe.utils.thresholds;
 
 import it.jnrpe.plugins.Metric;
 import it.jnrpe.plugins.MetricBuilder;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.math.BigDecimal;
-
-import org.testng.Assert;
-import org.testng.annotations.Test;
 
 /**
  */
@@ -200,7 +199,7 @@ public class RangeTest {
      * 
      * @throws Exception
      */
-    @Test(expectedExceptions = RangeException.class)
+    @Test(expected = RangeException.class)
     public void testNull() throws Exception {
         new Range(null);
     }
@@ -210,7 +209,7 @@ public class RangeTest {
      * 
      * @throws Exception
      */
-    @Test(expectedExceptions = NullPointerException.class)
+    @Test(expected = NullPointerException.class)
     public void testEvaluateNull() throws Exception {
         Range range = new Range("10..200");
         range.isValueInside(null);
@@ -221,7 +220,7 @@ public class RangeTest {
      * 
      * @throws Exception
      */
-    @Test(expectedExceptions = InvalidRangeSyntaxException.class)
+    @Test(expected = InvalidRangeSyntaxException.class)
     public void testWhiteString() throws Exception {
         new Range("   ");
     }

@@ -1,166 +1,151 @@
-/*******************************************************************************
- * Copyright (c) 2007, 2014 Massimiliano Ziccardi
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
 package it.jnrpe.plugins.test;
 
 import it.jnrpe.Status;
-import it.jnrpe.client.JNRPEClientException;
 import it.jnrpe.plugin.mysql.CheckMysql;
+import it.jnrpe.plugin.mysql.Mysql;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
-import org.testng.annotations.Test;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
-import com.mysql.jdbc.Driver;
-
-/**
- * Tests the check mysql plugin.
- * 
- * @author Massimiliano Ziccardi
- *
- */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({CheckMysql.class, Mysql.class})
 public class CheckMySQLTest {
 
+    private CheckMysql prepareForTesting(final long connectionDelay) throws Exception {
+        CheckMysql checkMySql = PowerMockito.spy(new CheckMysql());
+
+        // Mock Database Connection
+        final Connection conn = Mockito.mock(Connection.class);
+        Statement st = Mockito.mock(Statement.class);
+        ResultSet rs = Mockito.mock(ResultSet.class);
+        Mockito.when(conn.createStatement()).thenReturn(st);
+        Mockito.when(st.executeQuery(CheckMysql.SLAVE_STATUS_QRY)).thenReturn(rs);
+
+        Mockito.when(rs.next()).thenReturn(true, false);
+        Mockito.when(rs.getInt("Slave_IO_Running")).thenReturn(1);
+        Mockito.when(rs.getInt("Slave_SQL_Running")).thenReturn(1);
+        Mockito.when(rs.getInt("Seconds_Behind_Master")).thenReturn(4);
+
+        Mysql m = PowerMockito.mock(Mysql.class);
+
+        PowerMockito.when(m.getConnection()).then(new Answer<Connection>() {
+            public Connection answer(InvocationOnMock invocationOnMock) throws Throwable {
+                Thread.sleep(connectionDelay);
+                return conn;
+            }
+        });
+
+        PowerMockito.whenNew(Mysql.class).withAnyArguments().thenReturn(m);
+
+
+        return checkMySql;
+    }
+
     @Test
-    public void checkConnectionOk() throws JNRPEClientException {
-        Driver.setConnectionTime(0);
-        
+    public void checkConnectionOk() throws Exception {
+
         PluginTester
-            .given(new CheckMysql())
-                .withOption("hostname", 'h', "localhost")
-                .withOption("port", 'p', "3306")
-                .withOption("database", 'd', "mockdb")
-                .withOption("user", 'u', "dbadmin")
-                .withOption("password", 'p', "dbadminpwd")
-                .withOption("warning", 'w', "3:5")
-                .withOption("critical", 'c', "5:")
+            .given(prepareForTesting(0))
+            .withOption("hostname", 'h', "localhost")
+            .withOption("port", 'p', "3306")
+            .withOption("database", 'd', "mockdb")
+            .withOption("user", 'u', "dbadmin")
+            .withOption("password", 'p', "dbadminpwd")
+            .withOption("warning", 'w', "3:5")
+            .withOption("critical", 'c', "5:")
             .expect(Status.OK);
-        
+
     }
 
     @Test
-    public void checkConnectionWarning() throws JNRPEClientException {
-        
-        Driver.setConnectionTime(3000);
-        Driver.QUERY_TIME = 0;
-        
+    public void checkConnectionWarning() throws Exception {
+
         PluginTester
-            .given(new CheckMysql())
-                .withOption("hostname", 'h', "localhost")
-                .withOption("port", 'p', "3306")
-                .withOption("database", 'd', "mockdb")
-                .withOption("user", 'u', "dbadmin")
-                .withOption("password", 'p', "dbadminpwd")
-                .withOption("warning", 'w', "3:5")
-                .withOption("critical", 'c', "5:")
+            .given(prepareForTesting(3000))
+            .withOption("hostname", 'h', "localhost")
+            .withOption("port", 'p', "3306")
+            .withOption("database", 'd', "mockdb")
+            .withOption("user", 'u', "dbadmin")
+            .withOption("password", 'p', "dbadminpwd")
+            .withOption("warning", 'w', "3:5")
+            .withOption("critical", 'c', "5:")
             .expect(Status.WARNING);
-        
-        Driver.setConnectionTime(0);
+
     }
 
     @Test
-    public void checkConnectionCritical() throws JNRPEClientException {
-        Driver.setConnectionTime(5000);
-        
+    public void checkConnectionCritical() throws Exception {
+
         PluginTester
-            .given(new CheckMysql())
-                .withOption("hostname", 'h', "localhost")
-                .withOption("port", 'p', "3306")
-                .withOption("database", 'd', "mockdb")
-                .withOption("user", 'u', "dbadmin")
-                .withOption("password", 'p', "dbadminpwd")
-                .withOption("warning", 'w', "3:5")
-                .withOption("critical", 'c', "5:")
+            .given(prepareForTesting(5000))
+            .withOption("hostname", 'h', "localhost")
+            .withOption("port", 'p', "3306")
+            .withOption("database", 'd', "mockdb")
+            .withOption("user", 'u', "dbadmin")
+            .withOption("password", 'p', "dbadminpwd")
+            .withOption("warning", 'w', "3:5")
+            .withOption("critical", 'c', "5:")
             .expect(Status.CRITICAL);
-        
-        Driver.setConnectionTime(0);
     }
 
     @Test
-    public void checkSlavesOk() throws JNRPEClientException {
-        
+    public void checkSlavesOk() throws Exception {
+
         PluginTester
-            .given(new CheckMysql())
-                .withOption("hostname", 'h', "localhost")
-                .withOption("port", 'p', "3306")
-                .withOption("database", 'd', "mockdb")
-                .withOption("user", 'u', "dbadmin")
-                .withOption("password", 'p', "dbadminpwd")
-                .withOption("warning", 'w', "5:8")
-                .withOption("critical", 'c', "8:")
-                .withOption("check-slave", 's', null)
+            .given(prepareForTesting(0))
+            .withOption("hostname", 'h', "localhost")
+            .withOption("port", 'p', "3306")
+            .withOption("database", 'd', "mockdb")
+            .withOption("user", 'u', "dbadmin")
+            .withOption("password", 'p', "dbadminpwd")
+            .withOption("warning", 'w', "5:8")
+            .withOption("critical", 'c', "8:")
+            .withOption("check-slave", 's', null)
             .expect(Status.OK);
-        
+
     }
 
     @Test
-    public void checkSlavesWarning() throws JNRPEClientException {
-        
-        Driver.setSlaveStatus(true, true, 6);
+    public void checkSlavesWarning() throws Exception {
 
         PluginTester
-            .given(new CheckMysql())
-                .withOption("hostname", 'h', "localhost")
-                .withOption("port", 'p', "3306")
-                .withOption("database", 'd', "mockdb")
-                .withOption("user", 'u', "dbadmin")
-                .withOption("password", 'p', "dbadminpwd")
-                .withOption("warning", 'w', "5:8")
-                .withOption("critical", 'c', "8:")
-                .withOption("check-slave", 's', null)
+            .given(prepareForTesting(0))
+            .withOption("hostname", 'h', "localhost")
+            .withOption("port", 'p', "3306")
+            .withOption("database", 'd', "mockdb")
+            .withOption("user", 'u', "dbadmin")
+            .withOption("password", 'p', "dbadminpwd")
+            .withOption("warning", 'w', "3:8")
+            .withOption("critical", 'c', "8:")
+            .withOption("check-slave", 's', null)
             .expect(Status.WARNING);
-        
-        Driver.setSlaveStatus(true, true, 0);
-        
+
     }
 
     @Test
-    public void checkSlavesCritical() throws JNRPEClientException {
-        
-        Driver.setSlaveStatus(true, true, 10);
+    public void checkSlavesCritical() throws Exception {
 
         PluginTester
-            .given(new CheckMysql())
-                .withOption("hostname", 'h', "localhost")
-                .withOption("port", 'p', "3306")
-                .withOption("database", 'd', "mockdb")
-                .withOption("user", 'u', "dbadmin")
-                .withOption("password", 'p', "dbadminpwd")
-                .withOption("warning", 'w', "5:8")
-                .withOption("critical", 'c', "8:")
-                .withOption("check-slave", 's', null)
+            .given(prepareForTesting(0))
+            .withOption("hostname", 'h', "localhost")
+            .withOption("port", 'p', "3306")
+            .withOption("database", 'd', "mockdb")
+            .withOption("user", 'u', "dbadmin")
+            .withOption("password", 'p', "dbadminpwd")
+            .withOption("warning", 'w', "2:3")
+            .withOption("critical", 'c', "4:")
+            .withOption("check-slave", 's', null)
             .expect(Status.CRITICAL);
-    
-        Driver.setSlaveStatus(true, true, 0);
-            
+
     }
 
-    @Test
-    public void checkSlavesNotRunningCritical() throws JNRPEClientException {
-        Driver.setSlaveStatus(false, true, 0);
-
-        PluginTester
-            .given(new CheckMysql())
-                .withOption("hostname", 'h', "localhost")
-                .withOption("port", 'p', "3306")
-                .withOption("database", 'd', "mockdb")
-                .withOption("user", 'u', "dbadmin")
-                .withOption("password", 'p', "dbadminpwd")
-                .withOption("warning", 'w', "5:8")
-                .withOption("critical", 'c', "8:")
-                .withOption("check-slave", 's', null)
-            .expect(Status.CRITICAL);
-        
-        Driver.setSlaveStatus(true, true, 0);
-    }
 }

@@ -36,18 +36,42 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jettyVersion>7.2.0.v20101020</jettyVersion>
+		<jettyVersion>9.3.9.v20160517</jettyVersion>
+		<powermock.version>1.6.4</powermock.version>
 	</properties>
 
 
 	<dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+            <version>${powermock.version}</version>
+            <scope>test</scope>
+        </dependency>
 		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<version>6.8</version>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-api-mockito</artifactId>
+			<version>${powermock.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-server</artifactId>
+			<version>${jettyVersion}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.sshd/sshd-core -->
+		<dependency>
+			<groupId>org.apache.sshd</groupId>
+			<artifactId>sshd-core</artifactId>
+			<version>1.3.0</version>
+			<scope>test</scope>
+		</dependency>
+        <dependency>
 			<groupId>net.sf.jnrpe</groupId>
 			<artifactId>jnrpe-lib</artifactId>
 			<scope>provided</scope>
@@ -332,58 +356,6 @@
 						<goals>
 							<goal>integration-test</goal>
 							<goal>verify</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.cargo</groupId>
-				<artifactId>cargo-maven2-plugin</artifactId>
-				<configuration>
-					<wait>false</wait>
-					<container>
-						<containerId>tomcat7x</containerId>
-						<zipUrlInstaller>
-							<url>https://archive.apache.org/dist/tomcat/tomcat-7/v7.0.54/bin/apache-tomcat-7.0.54.zip</url>
-							<extractDir>${basedir}/target/tomcat/</extractDir>
-							<downloadDir>${basedir}/target/tomcat/</downloadDir>
-						</zipUrlInstaller>
-						<output>${basedir}/target/tomcat/tomcat-7.0.40.log</output>
-						<log>${basedir}/target/tomcat/cargo.log</log>
-
-					</container>
-					<configuration>
-						<!-- <home>${basedir}/target/tomcat/apache-tomcat-7.0.40/apache-tomcat-7.0.40</home> -->
-						<type>standalone</type>
-						<properties>
-							<cargo.logging>high</cargo.logging>
-							<cargo.servlet.port>7070</cargo.servlet.port>
-							<cargo.tomcat.ajp.port>7009</cargo.tomcat.ajp.port>
-						</properties>
-						<files>
-							<copy>
-								<file>${basedir}/tomcat-confs/tomcat-users.xml</file>
-								<tofile>conf/tomcat-users.xml</tofile>
-								<configfile>true</configfile>
-								<overwrite>true</overwrite>
-							</copy>
-						</files>
-					</configuration>
-				</configuration>
-				<executions>
-					<execution>
-						<id>start-container</id>
-						<phase>pre-integration-test</phase>
-						<goals>
-
-							<goal>start</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>stop-container</id>
-						<phase>post-integration-test</phase>
-						<goals>
-							<goal>stop</goal>
 						</goals>
 					</execution>
 				</executions>

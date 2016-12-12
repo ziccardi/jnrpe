@@ -15,10 +15,8 @@
  *******************************************************************************/
 package it.jnrpe.utils.thresholds;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
-
-import org.testng.annotations.Test;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  */
@@ -31,7 +29,7 @@ public class SeparatorStageTest {
     public void testParseOk() {
         SeparatorStage stage = new SeparatorStage();
 
-        assertEquals(stage.parse("..10", new RangeConfig()), "10");
+        Assert.assertEquals("10", stage.parse("..10", new RangeConfig()));
     }
 
     /**
@@ -40,7 +38,7 @@ public class SeparatorStageTest {
     @Test
     public void testParseKo() {
         SeparatorStage stage = new SeparatorStage();
-        assertFalse(stage.canParse("a"));
+        Assert.assertFalse(stage.canParse("a"));
     }
 
 }

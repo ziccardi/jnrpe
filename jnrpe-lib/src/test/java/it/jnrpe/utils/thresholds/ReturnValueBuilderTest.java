@@ -15,16 +15,16 @@
  *******************************************************************************/
 package it.jnrpe.utils.thresholds;
 
-import static org.testng.Assert.assertEquals;
 import it.jnrpe.ReturnValue;
 import it.jnrpe.Status;
 import it.jnrpe.plugins.Metric;
 import it.jnrpe.plugins.MetricBuilder;
 import it.jnrpe.utils.BadThresholdException;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.math.BigDecimal;
 
-import org.testng.annotations.Test;
 
 /**
  */
@@ -45,7 +45,7 @@ public class ReturnValueBuilderTest {
         	.withValue(new Metric("TEST_METRIC", "TEST OK", new BigDecimal(10), new BigDecimal(0), new BigDecimal(100)))
         	.create();
         
-        assertEquals(ret.getStatus(), Status.OK);
+        Assert.assertEquals(Status.OK, ret.getStatus());
     }
 
     /**
@@ -61,8 +61,8 @@ public class ReturnValueBuilderTest {
         ReturnValue ret = ReturnValueBuilder.forPlugin("TEST_PLUGIN", ths)
             	.withValue(new Metric("TEST_METRIC", "TEST OK", new BigDecimal(10), new BigDecimal(0), new BigDecimal(100)))
             	.create();
-        
-        assertEquals(ret.getStatus(), Status.CRITICAL);
+
+        Assert.assertEquals(Status.CRITICAL, ret.getStatus());
     }
 
     /**
@@ -78,8 +78,8 @@ public class ReturnValueBuilderTest {
         ReturnValue ret = ReturnValueBuilder.forPlugin("TEST_PLUGIN", ths)
             	.withValue(new Metric("TEST_METRIC", "TEST OK", new BigDecimal(51), new BigDecimal(0), new BigDecimal(100)))
             	.create();
-        
-        assertEquals(ret.getStatus(), Status.OK);
+
+        Assert.assertEquals(Status.OK, ret.getStatus());
     }
 
     /**
@@ -95,8 +95,8 @@ public class ReturnValueBuilderTest {
         ReturnValue ret = ReturnValueBuilder.forPlugin("TEST_PLUGIN", ths)
             	.withValue(new Metric("TEST_METRIC", "TEST OK", new BigDecimal(60), new BigDecimal(0), new BigDecimal(100)))
             	.create();
-        
-        assertEquals(ret.getStatus(), Status.OK);
+
+        Assert.assertEquals(Status.OK, ret.getStatus());
     }
 
     /**
@@ -112,8 +112,8 @@ public class ReturnValueBuilderTest {
         ReturnValue ret = ReturnValueBuilder.forPlugin("TEST_PLUGIN", ths)
             	.withValue(new Metric("TEST_METRIC", "TEST OK", new BigDecimal(110), new BigDecimal(0), new BigDecimal(100)))
             	.create();
-        
-        assertEquals(ret.getStatus(), Status.WARNING);
+
+        Assert.assertEquals(Status.WARNING, ret.getStatus());
     }
     
     /**
@@ -129,8 +129,8 @@ public class ReturnValueBuilderTest {
         ReturnValue ret = ReturnValueBuilder.forPlugin("TEST_PLUGIN", ths)
             	.withValue(new Metric("TEST_METRIC", "TEST OK", new BigDecimal(210), new BigDecimal(0), new BigDecimal(100)))
             	.create();
-        
-        assertEquals(ret.getStatus(), Status.CRITICAL);
+
+        Assert.assertEquals(Status.CRITICAL, ret.getStatus());
     }
 
     /**
@@ -142,10 +142,6 @@ public class ReturnValueBuilderTest {
         ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder()
             .withThreshold("metric=TEST_METRIC,ok=50..100,warn=100..200,crit=200..300,unit=byte,prefix=mega")
             .create();
-        
-//        ReturnValue ret = ReturnValueBuilder.forPlugin("TEST_PLUGIN", ths)
-//            	.withValue(new Metric("TEST_METRIC", "TEST OK", Prefixes.mega.convert(60), new BigDecimal(0), new BigDecimal(100)))
-//            	.create();
         
         ReturnValue ret = ReturnValueBuilder.forPlugin("TEST_PLUGIN", ths)
                 .withValue(
@@ -159,6 +155,6 @@ public class ReturnValueBuilderTest {
                         )
                 .create();
         
-        assertEquals(ret.getStatus(), Status.OK);
+        Assert.assertEquals(Status.OK, ret.getStatus());
     }
 }

@@ -17,8 +17,18 @@ package it.jnrpe.plugins.test;
 
 import it.jnrpe.Status;
 import it.jnrpe.plugin.CheckUsers;
+import it.jnrpe.plugins.Metric;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Matchers;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
-import org.testng.annotations.Test;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * Unit test for the check_users plugin.
@@ -27,36 +37,47 @@ import org.testng.annotations.Test;
  * @author Massimiliano Ziccardi
  */
 // Massimiliano - 2014-07-07 - Rewrote the tests using the fluent api and moved 
-// from Integration Tests to Unit tests. 
+// from Integration Tests to Unit tests.
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(CheckUsers.class)
 public class CheckUsersTest {
-    
+
+    private CheckUsers getMock(int numberOfUsers) throws Exception {
+        CheckUsers cu = PowerMockito.spy(new CheckUsers());
+        List<Metric> metrics = new ArrayList<Metric>();
+        metrics.add(new Metric("users", "", new BigDecimal(numberOfUsers), null, null));
+
+        PowerMockito.doReturn(metrics).when(cu, "gatherMetrics", Matchers.any());
+
+        return cu;
+    }
+
     @Test
     public void checkUsersOk() throws Exception {
-
-        PluginTester.given(new CheckUsers())
+        PluginTester.given(getMock(5))
             .withOption("warning", 'w', "10:")
             .withOption("critical", 'c', "20:")
             .expect(Status.OK);
-        
+
     }
 
     @Test
     public void checkUsersWarning() throws Exception {
-        
-        PluginTester.given(new CheckUsers())
-            .withOption("warning", 'w', "0:")
+
+        PluginTester.given(getMock(15))
+            .withOption("warning", 'w', "10:")
             .withOption("critical", 'c', "20:")
             .expect(Status.WARNING);
-        
+
     }
 
     @Test
     public void checkUsersCritical() throws Exception {
-        
-        PluginTester.given(new CheckUsers())
-            .withOption("warning", 'w', "~:0")
-            .withOption("critical", 'c', "0:")
+
+        PluginTester.given(getMock(25))
+            .withOption("warning", 'w', "10:")
+            .withOption("critical", 'c', "20:")
             .expect(Status.CRITICAL);
-        
+
     }
 }

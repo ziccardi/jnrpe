@@ -15,15 +15,15 @@
  *******************************************************************************/
 package it.jnrpe.utils.thresholds;
 
-import static org.testng.Assert.assertEquals;
 import it.jnrpe.Status;
 import it.jnrpe.plugins.Metric;
 import it.jnrpe.plugins.MetricBuilder;
 import it.jnrpe.utils.BadThresholdException;
+import org.junit.Test;
+import org.junit.Assert;
 
 import java.math.BigDecimal;
 
-import org.testng.annotations.Test;
 
 /**
  */
@@ -62,7 +62,7 @@ public class LegacyThresholdEvaluatorTest {
 
         ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder().withLegacyThreshold(METRIC_NAME, null, null, null).create();
         Status s = ths.evaluate(buildMetric(10));
-        assertEquals(s, Status.OK);
+        Assert.assertEquals(Status.OK, s);
     }
 
     /**
@@ -74,7 +74,7 @@ public class LegacyThresholdEvaluatorTest {
     public void testOnlyOKButCritical() throws BadThresholdException {
         ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder().withLegacyThreshold(METRIC_NAME, "10:20", null, null).create();
         Status s = ths.evaluate(buildMetric(30));
-        assertEquals(s, Status.CRITICAL);
+        Assert.assertEquals(Status.CRITICAL, s);
     }
 
     /**
@@ -86,7 +86,7 @@ public class LegacyThresholdEvaluatorTest {
     public void testOkWarnCrit_ok() throws BadThresholdException {
         ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder().withLegacyThreshold(METRIC_NAME, "50:100", "100:200", "200:300").create();
         Status s = ths.evaluate(buildMetric(60));
-        assertEquals(s, Status.OK);
+        Assert.assertEquals(Status.OK, s);
     }
 
     /**
@@ -98,7 +98,7 @@ public class LegacyThresholdEvaluatorTest {
     public void testOkWarnCrit_warn() throws BadThresholdException {
         ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder().withLegacyThreshold(METRIC_NAME, "50:100", "100:200", "200:300").create();
         Status s = ths.evaluate(buildMetric(110));
-        assertEquals(s, Status.WARNING);
+        Assert.assertEquals(Status.WARNING, s);
     }
 
     /**
@@ -110,7 +110,7 @@ public class LegacyThresholdEvaluatorTest {
     public void testOkWarnCrit_crit() throws BadThresholdException {
         ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder().withLegacyThreshold(METRIC_NAME, "50:100", "100:200", "200:300").create();
         Status s = ths.evaluate(buildMetric(210));
-        assertEquals(s, Status.CRITICAL);
+        Assert.assertEquals(Status.CRITICAL, s);
     }
 
     /**
@@ -118,7 +118,7 @@ public class LegacyThresholdEvaluatorTest {
      * 
      * @throws BadThresholdException
      */
-    @Test(expectedExceptions = NullPointerException.class)
+    @Test(expected = NullPointerException.class)
     public void testNullMetricValue() throws BadThresholdException {
         ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder().withLegacyThreshold(METRIC_NAME, "50:100", "100:200", "200:300").create();
         ths.evaluate(buildMetric(null));
@@ -129,7 +129,7 @@ public class LegacyThresholdEvaluatorTest {
      * 
      * @throws BadThresholdException
      */
-    @Test(expectedExceptions = NullPointerException.class)
+    @Test(expected = NullPointerException.class)
     public void testNullMetricName() throws BadThresholdException {
         ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder().withLegacyThreshold(METRIC_NAME, "50:100", "100:200", "200:300").create();
         ths.evaluate(null);
@@ -140,7 +140,7 @@ public class LegacyThresholdEvaluatorTest {
      * 
      * @throws BadThresholdException
      */
-    @Test(expectedExceptions = NullPointerException.class)
+    @Test(expected = NullPointerException.class)
     public void testBadMetricPair() throws BadThresholdException {
         ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder().withLegacyThreshold(METRIC_NAME, "50.:100", "100:200", "200:300").create();
         ths.evaluate(null);
@@ -151,11 +151,11 @@ public class LegacyThresholdEvaluatorTest {
      * 
      * @throws BadThresholdException
      */
-    @Test(expectedExceptions = BadThresholdException.class)
+    @Test(expected = BadThresholdException.class)
     public void testBadMetric() throws BadThresholdException {
         ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder().withLegacyThreshold(METRIC_NAME, "50..:100", "100:200", "200:300").create();
         Status s = ths.evaluate(buildMetric(210, BAD_METRIC_NAME));
-        assertEquals(s, Status.OK);
+        Assert.assertEquals(Status.OK, s);
     }
 
 }

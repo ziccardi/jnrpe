@@ -15,8 +15,8 @@
  *******************************************************************************/
 package it.jnrpe.utils;
 
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  */
@@ -32,8 +32,7 @@ public class TimeTest {
      */
     @Test
     public void unitConvertSecondsToMillisTest() {
-        
-        Assert.assertEquals(TimeUnit.SECOND.convert(SECS), 86400000);
+        Assert.assertEquals(86400000, TimeUnit.SECOND.convert(SECS));
     }
     
     /**
@@ -41,7 +40,7 @@ public class TimeTest {
      */
     @Test
     public void unitConvertSecondsToMinutesTest() {
-        Assert.assertEquals(TimeUnit.SECOND.convert(SECS, TimeUnit.MINUTE), 24*60);
+        Assert.assertEquals(24*60, TimeUnit.SECOND.convert(SECS, TimeUnit.MINUTE));
     }
     
     /**
@@ -49,7 +48,7 @@ public class TimeTest {
      */
     @Test
     public void unitConvertSecondsToHoursTest() {
-        Assert.assertEquals(TimeUnit.SECOND.convert(SECS, TimeUnit.HOUR), 24);
+        Assert.assertEquals(24, TimeUnit.SECOND.convert(SECS, TimeUnit.HOUR));
     }
     
     /**
@@ -57,7 +56,7 @@ public class TimeTest {
      */
     @Test
     public void unitConvertSecondsToDayTest() {
-        Assert.assertEquals(TimeUnit.SECOND.convert(SECS, TimeUnit.DAY), 1);
+        Assert.assertEquals(1, TimeUnit.SECOND.convert(SECS, TimeUnit.DAY));
     }
 
     /**
@@ -65,7 +64,7 @@ public class TimeTest {
      */
     @Test
     public void unitConvertDayToSecond() {
-        Assert.assertEquals(TimeUnit.DAY.convert(1, TimeUnit.SECOND), 86400);
+        Assert.assertEquals(86400, TimeUnit.DAY.convert(1, TimeUnit.SECOND));
     }
     
     /**
@@ -73,7 +72,7 @@ public class TimeTest {
      */
     @Test
     public void unitConvertDayToMinute() {
-        Assert.assertEquals(TimeUnit.DAY.convert(1, TimeUnit.MINUTE), 60*24);
+        Assert.assertEquals(60*24, TimeUnit.DAY.convert(1, TimeUnit.MINUTE));
     }
     
     /**
@@ -81,7 +80,7 @@ public class TimeTest {
      */
     @Test
     public void unitConvertDayToHour() {
-        Assert.assertEquals(TimeUnit.DAY.convert(1, TimeUnit.HOUR), 24);
+        Assert.assertEquals(24, TimeUnit.DAY.convert(1, TimeUnit.HOUR));
     }
     
     /**
@@ -89,7 +88,7 @@ public class TimeTest {
      */
     @Test
     public void unitConvertMinuteToSeconds() {
-        Assert.assertEquals(TimeUnit.MINUTE.convert(30, TimeUnit.SECOND), 1800);
+        Assert.assertEquals(1800, TimeUnit.MINUTE.convert(30, TimeUnit.SECOND));
     }
     
     /**
@@ -97,6 +96,6 @@ public class TimeTest {
      */
     @Test
     public void unitConvertMinuteToHour() {
-        Assert.assertEquals(TimeUnit.MINUTE.convert(90, TimeUnit.HOUR), 1);
+        Assert.assertEquals(1, TimeUnit.MINUTE.convert(90, TimeUnit.HOUR));
     }
 }

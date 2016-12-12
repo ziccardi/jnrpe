@@ -1,83 +1,217 @@
-/*******************************************************************************
- * Copyright (c) 2007, 2014 Massimiliano Ziccardi
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *******************************************************************************/
 package it.jnrpe.plugins.test;
 
+import it.jnrpe.ICommandLine;
 import it.jnrpe.Status;
-import it.jnrpe.client.JNRPEClientException;
 import it.jnrpe.plugin.CCheckOracle;
+import it.jnrpe.plugins.Metric;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Matchers;
+import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
-import org.testng.annotations.Test;
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
+import static org.mockito.Matchers.any;
+
+/**
+ * Created by ziccardi on 06/12/2016.
+ */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest( { CCheckOracle.class, Connection.class } )
 public class CheckOracleTest {
 
     @Test
-    public void checkIsAliveOk() throws JNRPEClientException {
-        
-        PluginTester.given(new CCheckOracle())
+    public void checkIsAliveOk() throws Exception {
+
+        CCheckOracle checkOracle = PowerMockito.spy(new CCheckOracle());
+
+        // Returned metric
+        List<Metric> metricList = new ArrayList<Metric>();
+        metricList.add(new Metric("conn", "Connection time : 10s", new BigDecimal(10), new BigDecimal(0), null));
+
+        //PowerMockito.when(checkOracle, "getConnection").;
+        PowerMockito.doReturn(null).when(checkOracle, "getConnection", any(ICommandLine.class));
+        PowerMockito.doReturn(metricList).when(checkOracle, "checkAlive", Matchers.any(), Matchers.any());
+
+        PluginTester.given(checkOracle)
             .withOption("username", 'u', "scott")
             .withOption("password", 'p', "tiger")
             .withOption("db", 'd', "mockdb")
             .withOption("server", 's', "127.0.0.1")
             .withOption("alive", 'a', null)
             .expect(Status.OK);
-        
     }
-    
-    @Test
-    public void checkTablespaceOk() throws JNRPEClientException {
 
-        PluginTester.given(new CCheckOracle())
+    /**
+     * This class is to overcome PowerMock bug when mocking interfaces
+     * https://github.com/powermock/powermock/issues/717
+     */
+    abstract class MyConn implements Connection {
+
+    }
+
+    private CCheckOracle prepareForTablespaceTesting(final long connectionDelay) throws Exception {
+        CCheckOracle checkOracle = PowerMockito.spy(new CCheckOracle());
+
+        // Mock Database Connection
+        final Connection conn = Mockito.mock(Connection.class);
+        Statement st = Mockito.mock(Statement.class);
+        ResultSet rs = Mockito.mock(ResultSet.class);
+
+        String qry = String.format(CCheckOracle.QRY_CHECK_TBLSPACE_PATTERN, "MYTBLSPACE");
+
+        Mockito.when(conn.createStatement()).thenReturn(st);
+        Mockito.when(st.executeQuery(qry)).thenReturn(rs);
+        Mockito.when(rs.next()).thenReturn(true);
+
+        Mockito.when(rs.getBigDecimal(1)).thenReturn(new BigDecimal(100));
+        Mockito.when(rs.getBigDecimal(2)).thenReturn(new BigDecimal(500));
+        Mockito.when(rs.getBigDecimal(3)).thenReturn(new BigDecimal(80));
+
+        // Mock test methods
+        PowerMockito.doReturn(new ArrayList<Metric>()).when(checkOracle, "checkAlive", any(), any());
+
+        PowerMockito.doReturn(conn).when(checkOracle, "getConnection", any(ICommandLine.class));
+        PowerMockito.doAnswer(new Answer<Connection>() {
+            public Connection answer(InvocationOnMock invocation){
+                try {
+                    Thread.sleep(connectionDelay);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                return conn;
+            }
+        }).when(checkOracle, "getConnection", any(ICommandLine.class));
+        return checkOracle;
+    }
+
+    @Test
+    public void checkTablespaceOk() throws Exception {
+        PluginTester.given(prepareForTablespaceTesting(0))
             .withOption("username", 'u', "scott")
             .withOption("password", 'p', "tiger")
             .withOption("db", 'd', "mockdb")
             .withOption("server", 's', "127.0.0.1")
-            .withOption("tablespace", 't', "system")
-            .withOption("warning", 'w', "70:")
-            .withOption("critical", 'c', "80:")
+            .withOption("tablespace", 't', "MYTBLSPACE")
+            .withOption("warning", 'w', ":70")
+            .withOption("critical", 'c', ":60")
             .expect(Status.OK);
-        
     }
 
     @Test
-    public void checkTablespaceWarning() throws JNRPEClientException {
-        
-        PluginTester.given(new CCheckOracle())
+    public void checkTablespaceWarning() throws Exception {
+        PluginTester.given(prepareForTablespaceTesting(0))
             .withOption("username", 'u', "scott")
             .withOption("password", 'p', "tiger")
             .withOption("db", 'd', "mockdb")
             .withOption("server", 's', "127.0.0.1")
-            .withOption("tablespace", 't', "user")
-            .withOption("warning", 'w', "70:")
-            .withOption("critical", 'c', "80:")
+            .withOption("tablespace", 't', "MYTBLSPACE")
+            .withOption("warning", 'w', ":80")
+            .withOption("critical", 'c', "81:")
             .expect(Status.WARNING);
-
     }
-    
-    @Test
-    public void checkTablespaceCritical() throws JNRPEClientException {
 
-        PluginTester.given(new CCheckOracle())
+    @Test
+    public void checkTablespaceCritical() throws Exception {
+        PluginTester.given(prepareForTablespaceTesting(0))
             .withOption("username", 'u', "scott")
             .withOption("password", 'p', "tiger")
             .withOption("db", 'd', "mockdb")
             .withOption("server", 's', "127.0.0.1")
-            .withOption("tablespace", 't', "temp")
-            .withOption("warning", 'w', "70:")
-            .withOption("critical", 'c', "80:")
-            .expect(Status.CRITICAL);
-        
+            .withOption("tablespace", 't', "MYTBLSPACE")
+            .withOption("warning", 'w', ":80")
+            .withOption("critical", 'c', ":60")
+            .expect(Status.WARNING);
     }
+
+    @Test
+    public void checkIsAliveOkNewThresholdSyntax() throws Exception {
+        PluginTester.given(prepareForTablespaceTesting(0))
+            .withOption("username", 'u', "scott")
+            .withOption("password", 'p', "tiger")
+            .withOption("db", 'd', "mockdb")
+            .withOption("server", 's', "127.0.0.1")
+            .withOption("th", 't', "metric=conn,ok=0..10,warn=10..20,crit=20..inf,unit=s")
+            .withOption("alive", 'a', null)
+            .expect(Status.OK);
+    }
+
+    @Test
+    public void checkIsAliveWarningNewThresholdSyntax() throws Exception {
+
+        CCheckOracle checkOracle = PowerMockito.spy(new CCheckOracle());
+
+        // Returned metric
+        List<Metric> metricList = new ArrayList<Metric>();
+        metricList.add(new Metric("conn", "Connection time : 15s", new BigDecimal(15), new BigDecimal(0), null));
+
+        PowerMockito.doReturn(null).when(checkOracle, "getConnection", any(ICommandLine.class));
+        PowerMockito.doReturn(metricList).when(checkOracle, "checkAlive", Matchers.any(), Matchers.any());
+
+        PluginTester.given(checkOracle)
+            .withOption("username", 'u', "scott")
+            .withOption("password", 'p', "tiger")
+            .withOption("db", 'd', "mockdb")
+            .withOption("server", 's', "127.0.0.1")
+            .withOption("th", 't', "metric=conn,ok=0..10,warn=10..20,crit=20..inf,unit=s")
+            .withOption("alive", 'a', null)
+            .expect(Status.WARNING);
+    }
+
+    @Test
+    public void checkIsAliveCriticalNewThresholdSyntax() throws Exception {
+
+        CCheckOracle checkOracle = PowerMockito.spy(new CCheckOracle());
+
+        // Returned metric
+        List<Metric> metricList = new ArrayList<Metric>();
+        metricList.add(new Metric("conn", "Connection time : 15s", new BigDecimal(15), new BigDecimal(0), null));
+
+        PowerMockito.doReturn(null).when(checkOracle, "getConnection", any(ICommandLine.class));
+        PowerMockito.doReturn(metricList).when(checkOracle, "checkAlive", Matchers.any(), Matchers.any());
+
+        PluginTester.given(checkOracle)
+            .withOption("username", 'u', "scott")
+            .withOption("password", 'p', "tiger")
+            .withOption("db", 'd', "mockdb")
+            .withOption("server", 's', "127.0.0.1")
+            .withOption("th", 't', "metric=conn,ok=0..10,warn=10..15,crit=15..inf,unit=s")
+            .withOption("alive", 'a', null)
+            .expect(Status.CRITICAL);
+    }
+
+    @Test
+    public void checkIsAliveKo() throws Exception {
+        CCheckOracle checkOracle = PowerMockito.spy(new CCheckOracle());
+
+        // Returned metric
+        List<Metric> metricList = new ArrayList<Metric>();
+        metricList.add(new Metric("conn", "Connection time : 15s", new BigDecimal(15), new BigDecimal(0), null));
+
+        PowerMockito.doThrow(new SQLException("Connection failed")).when(checkOracle, "getConnection", any(ICommandLine.class));
+        PowerMockito.doReturn(metricList).when(checkOracle, "checkAlive", Matchers.any(), Matchers.any());
+
+        PluginTester.given(checkOracle)
+            .withOption("username", 'u', "scott")
+            .withOption("password", 'p', "tiger")
+            .withOption("db", 'd', "mockdb")
+            .withOption("server", 's', "127.0.0.1")
+            .withOption("th", 't', "metric=conn,ok=0..10,warn=10..15,crit=15..inf,unit=s")
+            .withOption("alive", 'a', null)
+            .expect(Status.CRITICAL);
+    }
+
+
+
 }
