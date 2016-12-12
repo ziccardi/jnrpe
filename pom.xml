@@ -386,7 +386,6 @@ It is fully compatible with check_nrpe and can be used to execute both old nativ
 		<module>jnrpe-server</module>
 		<module>jnrpe-install</module>
 		<module>jnrpe-debian</module>
-		<module>jnrpe-osgi</module>
 		<module>jnrpe-lib</module>
 		<module>jcheck_nrpe</module>
 		<module>jnrpe-plugins</module>
