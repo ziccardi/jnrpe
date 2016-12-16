@@ -90,10 +90,7 @@ class NegativeInfinityStage extends Stage {
      *         threshold */
     @Override
     public boolean canParse(final String threshold) {
-        if (threshold == null) {
-            return false;
-        }
-        return threshold.startsWith("inf") || threshold.startsWith("-inf");
+        return threshold != null && (threshold.startsWith("inf") || threshold.startsWith("-inf"));
     }
 
     /**

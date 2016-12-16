@@ -16,6 +16,7 @@
 package it.jnrpe.utils.thresholds;
 
 import java.math.BigDecimal;
+import java.util.Locale;
 
 /**
  * Enumeration of accepted prefixes.
@@ -178,12 +179,13 @@ public enum Prefixes {
     }
 
     /**
-     * Multiplies the value with the multiplier associated with this prefix.
-     * 
-     * @param value
-     *            The value
-    
-     * @return The multiplied value */
+     * Converted the value from the format represented by this prefix to the format represented by the
+     * <code>output</code> prefix.
+     *
+     * @param value The value to be converted
+     * @param output the output scale
+     * @return The converted value
+     */
     public BigDecimal convert(final BigDecimal value, final Prefixes output) {
         
         if (this == output) {
@@ -201,34 +203,37 @@ public enum Prefixes {
     }
 
     /**
-     * Multiplies the value with the multiplier associated with this prefix.
+     * Converted the value from the format represented by this prefix to the format represented by the
+     * <code>output</code> prefix.
      * 
-     * @param value
-     *            The value
-    
-     * @return The multiplied value */
+     * @param value The value to be converted
+     * @param output the output scale
+     * @return The converted value
+     */
     public BigDecimal convert(final int value, final Prefixes output) {
         return convert(new BigDecimal(value), output);
     }
 
     /**
-     * Multiplies the value with the multiplier associated with this prefix.
-     * 
-     * @param value
-     *            The value
-    
-     * @return The multiplied value */
+     * Converted the value from the format represented by this prefix to the format represented by the
+     * <code>output</code> prefix.
+     *
+     * @param value The value to be converted
+     * @param output the output scale
+     * @return The converted value
+     */
     public BigDecimal convert(final long value, final Prefixes output) {
         return convert(new BigDecimal(value), output);
     }
 
     /**
-     * Multiplies the value with the multiplier associated with this prefix.
-     * 
-     * @param value
-     *            The value
-    
-     * @return The multiplied value */
+     * Converted the value from the format represented by this prefix to the format represented by the
+     * <code>output</code> prefix.
+     *
+     * @param value The value to be converted
+     * @param output the output scale
+     * @return The converted value
+     */
     public BigDecimal convert(final double value, final Prefixes output) {
         return convert(new BigDecimal(value), output);
     }
@@ -238,8 +243,8 @@ public enum Prefixes {
      * 
      * @param prefixChar
      *            The prefix
-    
-     * @return The enumeration */
+     * @return The enumeration
+     */
     public static Prefixes fromChar(final char prefixChar) {
         switch (prefixChar) {
         case 'Y':
@@ -290,14 +295,14 @@ public enum Prefixes {
      * 
      * @param prefixString
      *            The prefix
-    
-     * @return The enumeration */
+     * @return The enumeration
+     */
     public static Prefixes fromString(final String prefixString) {
         if (prefixString.length() == 1) {
             return fromChar(prefixString.charAt(0));
         }
 
-        String lowercasePrefix = prefixString.toLowerCase();
+        String lowercasePrefix = prefixString.toLowerCase(Locale.getDefault());
         if ("da".equals(lowercasePrefix)) {
             return deka;
         }
@@ -321,7 +326,6 @@ public enum Prefixes {
         }
 
         return valueOf(prefixString);
-        // throw new IllegalArgumentException(prefixString);
     }
     
     @Override

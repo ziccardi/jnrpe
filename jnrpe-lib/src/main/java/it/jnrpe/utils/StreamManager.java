@@ -102,13 +102,10 @@ public final class StreamManager {
     /**
      * Returns an InputStream on the given file.
      *
-     * @param f
-     *            The file attached to the returned stream to be automatically
-     *            closed when {@link #closeAll()} is called.
-    
-    
-     * @return The stream to the passed in file * @throws FileNotFoundException
-     *             If the file does not exists */
+     * @param f The file attached to the returned stream to be automatically closed when {@link #closeAll()} is called.
+     * @return The stream to the passed in file
+     * @throws FileNotFoundException If the file does not exists
+     */
     public InputStream getInputStream(final File f) throws FileNotFoundException {
         return handle(new FileInputStream(f));
     }
@@ -116,13 +113,10 @@ public final class StreamManager {
     /**
      * Returns an OutputStream on the given file.
      *
-     * @param f
-     *            The file attached to the returned stream to be automatically
-     *            closed when {@link #closeAll()} is called.
-    
-    
-     * @return The stream to the passed in file * @throws FileNotFoundException
-     *             If the file does not exists */
+     * @param f The file attached to the returned stream to be automatically closed when {@link #closeAll()} is called.
+     * @return The stream to the passed in file
+     * @throws FileNotFoundException If the file does not exists
+     */
     public OutputStream getOutputStream(final File f) throws FileNotFoundException {
         return handle(new FileOutputStream(f));
     }

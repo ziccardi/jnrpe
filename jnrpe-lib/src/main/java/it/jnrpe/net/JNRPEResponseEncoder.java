@@ -37,13 +37,13 @@ public class JNRPEResponseEncoder extends MessageToByteEncoder<JNRPEResponse> {
 
     /**
      * Method encode.
+     * See {@link MessageToByteEncoder#encode(ChannelHandlerContext, Object, ByteBuf)}
      * @param ctx ChannelHandlerContext
      * @param msg JNRPEResponse
      * @param out ByteBuf
-     * @throws Exception
      */
     @Override
-    protected final void encode(final ChannelHandlerContext ctx, final JNRPEResponse msg, final ByteBuf out) throws Exception {
+    protected final void encode(final ChannelHandlerContext ctx, final JNRPEResponse msg, final ByteBuf out) {
         msg.updateCRC();
         out.writeShort(msg.getPacketVersion().intValue());
         out.writeShort(msg.getPacketType().intValue());

@@ -29,12 +29,10 @@ public interface IPluginRepository {
      * Returns an instance of the plugin declared inside the plugin definition.
      * identified by the passed name.
      * 
-     * @param name
-     *            The name of the plugin to be instantiated.
-    
-    
-     * @return The plugin instance * @throws UnknownPluginException
-     *             if no plugins with the given name exists */
+     * @param name The name of the plugin to be instantiated.
+     * @return The plugin instance
+     * @throws UnknownPluginException if no plugins with the given name exists
+     */
     IPluginInterface getPlugin(final String name) throws UnknownPluginException;
 
     /**

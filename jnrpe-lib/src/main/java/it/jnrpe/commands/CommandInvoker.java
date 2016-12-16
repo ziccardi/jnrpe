@@ -129,7 +129,7 @@ public final class CommandInvoker {
             String[] commandLine = cd.getCommandLine();
 
             if (acceptParams) {
-                for (int j = 0; commandLine != null && j < commandLine.length; j++) {
+                for (int j = 0; j < commandLine.length; j++) {
                     for (int i = 0; i < argsAry.length; i++) {
                         commandLine[j] = commandLine[j].replaceAll("\\$[Aa][Rr][Gg]" + (i + 1) + "\\$", Matcher.quoteReplacement(argsAry[i]));
                     }

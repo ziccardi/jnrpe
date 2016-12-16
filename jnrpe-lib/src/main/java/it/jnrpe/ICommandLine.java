@@ -30,8 +30,8 @@ public interface ICommandLine {
      *
      * @param optionName
      *            The option name
-    
-     * @return The value of the option */
+     * @return The value of the option
+     */
     String getOptionValue(String optionName);
 
     /**
@@ -39,8 +39,8 @@ public interface ICommandLine {
      *
      * @param optionName
      *            The option name
-    
-     * @return An ordered list of values */
+     * @return An ordered list of values
+     */
     List<String> getOptionValues(String optionName);
 
     /**
@@ -51,8 +51,8 @@ public interface ICommandLine {
      *            The option name
      * @param defaultValue
      *            The default value
-    
-     * @return The option value or, if not specified, the default value */
+     * @return The option value or, if not specified, the default value
+     */
     String getOptionValue(String optionName, String defaultValue);
 
     /**
@@ -60,8 +60,8 @@ public interface ICommandLine {
      *
      * @param shortOptionName
      *            The option short name
-    
-     * @return The option value */
+     * @return The option value
+     */
     String getOptionValue(char shortOptionName);
 
     /**
@@ -69,8 +69,8 @@ public interface ICommandLine {
      *
      * @param shortOptionName
      *            The option short name
-    
-     * @return An ordered list of values */
+     * @return An ordered list of values
+     */
     List<String> getOptionValues(char shortOptionName);
 
     /**
@@ -81,8 +81,8 @@ public interface ICommandLine {
      *            The option short name
      * @param defaultValue
      *            The default value
-    
-     * @return The option value or, if not specified, the default value */
+     * @return The option value or, if not specified, the default value
+     */
     String getOptionValue(char shortOptionName, String defaultValue);
 
     /**
@@ -90,8 +90,8 @@ public interface ICommandLine {
      *
      * @param optionName
      *            The option name
-    
-     * @return <code>true</code> if the option is present */
+     * @return <code>true</code> if the option is present
+     */
     boolean hasOption(String optionName);
 
     /**
@@ -99,7 +99,7 @@ public interface ICommandLine {
      *
      * @param shortOptionName
      *            The option short name
-    
-     * @return <code>true</code> if the specified option is present */
+     * @return <code>true</code> if the specified option is present
+     */
     boolean hasOption(char shortOptionName);
 }

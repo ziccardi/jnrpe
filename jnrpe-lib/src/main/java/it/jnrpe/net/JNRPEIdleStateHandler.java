@@ -54,11 +54,10 @@ public final class JNRPEIdleStateHandler extends ChannelDuplexHandler {
      * Method userEventTriggered.
      * @param ctx ChannelHandlerContext
      * @param evt Object
-     * @throws Exception
      * @see io.netty.channel.ChannelInboundHandler#userEventTriggered(ChannelHandlerContext, Object)
      */
     @Override
-    public void userEventTriggered(final ChannelHandlerContext ctx, final Object evt) throws Exception {
+    public void userEventTriggered(final ChannelHandlerContext ctx, final Object evt) {
         if (evt instanceof IdleStateEvent) {
             IdleStateEvent e = (IdleStateEvent) evt;
             if (e.state() == IdleState.READER_IDLE) {

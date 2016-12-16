@@ -17,7 +17,6 @@ package it.jnrpe;
 
 import it.jnrpe.ReturnValue.UnitOfMeasure;
 import it.jnrpe.plugins.Metric;
-import it.jnrpe.plugins.MetricValue;
 import it.jnrpe.utils.thresholds.Prefixes;
 
 /**
@@ -32,15 +31,12 @@ import it.jnrpe.utils.thresholds.Prefixes;
 class PerformanceData {
 
     /**
-     * The Unit of Measure of {@link #performanceValue}, {@link #minimumValue}
-     * and {@link #maximumValue}. With the new threshold format this won't be
-     * used anymore.
+     * The Unit of Measure to be used to interpret this performance data.
      */
     private final UnitOfMeasure unitOfMeasure;
 
     /**
-     * The unit of {@link #performanceValue}, {@link #minimumValue} and
-     * {@link #maximumValue}.
+     * The Unit of Measure to be used to interpret this performance data.
      */
     private final String unit;
 
@@ -63,25 +59,14 @@ class PerformanceData {
     /**
      * Creates a performance data object.
      *
-     * @param perfLabel
-     *            The label identifying this performance data
-     * @param value
-     *            The performance value
      * @param uom
-     *            The Unit of Measure of <code>value</code>,
-     *            <code>minValue</code> and <code>maxValue</code>
+     *            The Unit of Measure to be used to interpret metric and ranges
      * @param warnRange
      *            the warning range passed to the plugin that is generating this
      *            performance data. Can be null.
      * @param critRange
      *            the critical range passed to the plugin that is generating
      *            this performance data. Can be null.
-     * @param minValue
-     *            the minimum value that this performance data can reach. Can be
-     *            null.
-     * @param maxValue
-     *            the maximum value that this performance data can reach. Can be
-     *            null.
      */
     PerformanceData(final Metric metric, final UnitOfMeasure uom, final String warnRange, final String critRange) {
         this.metric = metric;
@@ -134,7 +119,7 @@ class PerformanceData {
                     .append(
                             quote(metric.getMetricName()))
                             .append('=')
-                            .append(((MetricValue)metric.getMetricValue(prefix)).toPrettyPrintedString());
+                            .append((metric.getMetricValue(prefix)).toPrettyPrintedString());
 
         if (unitOfMeasure != null) {
             switch (unitOfMeasure) {
@@ -186,11 +171,11 @@ class PerformanceData {
         }
         res.append(';');
         if (metric.getMinValue() != null) {
-            res.append(((MetricValue) metric.getMinValue(prefix)).toPrettyPrintedString());
+            res.append(metric.getMinValue(prefix).toPrettyPrintedString());
         }
         res.append(';');
         if (metric.getMaxValue() != null) {
-            res.append(((MetricValue) metric.getMaxValue(prefix)).toPrettyPrintedString());
+            res.append(metric.getMaxValue(prefix).toPrettyPrintedString());
         }
 
         while (res.charAt(res.length() - 1) == ';') {
@@ -213,7 +198,7 @@ class PerformanceData {
             return lbl;
         }
 
-        return new StringBuilder().append('\'').append(lbl).append('\'').toString();
+        return new StringBuffer("'").append(lbl).append('\'').toString();
     }
 
     /**

@@ -70,10 +70,7 @@ class NegateStage extends Stage {
      * @return <code>true</code> if this object can consume a part of the
      *         threshold */
     public boolean canParse(final String threshold) {
-        if (threshold == null) {
-            return false;
-        }
-        return !threshold.isEmpty() && threshold.charAt(0) == '^';
+        return threshold != null && !threshold.isEmpty() && threshold.charAt(0) == '^';
     }
 
     /**

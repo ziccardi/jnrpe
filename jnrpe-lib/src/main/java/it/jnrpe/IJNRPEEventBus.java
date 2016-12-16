@@ -17,7 +17,7 @@ package it.jnrpe;
 
 /**
  * The event bus that will dispatch all the events regarding JNRPE.
- * 
+ *
  * @author Massimiliano Ziccardi
  * @version $Revision: 1.0 $
  */
@@ -25,15 +25,15 @@ public interface IJNRPEEventBus {
 
     /**
      * Registers an event listener.
-     * 
+     *
      * The method that will receive the event must be marked with the {@link com.google.common.eventbus.Subscribe} annotation.
      * @param object the event listener.
      */
     void register(final Object object);
-    
+
     /**
      * This method must be called to post a new event.
-     * 
+     *
      * @param event The vent object
      */
     void post(final Object event);

@@ -127,7 +127,7 @@ public class LegacyRange {
 
         StringBuilder currentParsedBuffer = new StringBuilder();
 
-        byte b = 0;
+        byte b;
 
         try {
             while ((b = (byte) reader.read()) != -1) {

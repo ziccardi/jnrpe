@@ -43,17 +43,17 @@ public class Metric {
     /**
      * The value of this metric.
      */
-    private final BigDecimal metricValue;
+    private final MetricValue metricValue;
 
     /**
      * The maximum value for this metric.
      */
-    private final BigDecimal minValue;
+    private final MetricValue minValue;
 
     /**
      * The minimum value for this metric.
      */
-    private final BigDecimal maxValue;
+    private final MetricValue maxValue;
 
     /**
      * Builds and initializes a metric object.
@@ -87,13 +87,13 @@ public class Metric {
         this.prefix = prefix;
     }
     
-    private MetricValue convert(Number val) {
+    private static MetricValue convert(Number val) {
         if (val == null) {
             return null;
         }
         
-        if (val instanceof MetricValue) {
-            return (MetricValue) val;
+        if (val instanceof BigDecimal) {
+            return MetricValue.valueOf((BigDecimal) val);
         }
         
         return new MetricValue(val.toString());
@@ -110,34 +110,34 @@ public class Metric {
     /**
      * @return The value of this metric. 
      */
-    public final BigDecimal getMetricValue() {
+    public final MetricValue getMetricValue() {
         return metricValue;
     }
 
-    public final BigDecimal getMetricValue(Prefixes outputPrefix) {
-        return prefix.convert(metricValue, outputPrefix);
+    public final MetricValue getMetricValue(Prefixes outputPrefix) {
+        return convert(prefix.convert(metricValue, outputPrefix));
     }
     
     /**
      * @return The minimum value for this metric. 
      */
-    public final BigDecimal getMinValue() {
+    public final MetricValue getMinValue() {
         return minValue;
     }
     
-    public final BigDecimal getMinValue(Prefixes outputPrefix) {
-        return prefix.convert(minValue, outputPrefix);
+    public final MetricValue getMinValue(Prefixes outputPrefix) {
+        return convert(prefix.convert(minValue, outputPrefix));
     }
 
     /**
     
      * @return The maximum value for this metric. */
-    public final BigDecimal getMaxValue() {
+    public final MetricValue getMaxValue() {
         return maxValue;
     }
     
-    public final BigDecimal getMaxValue(Prefixes outputPrefix) {
-        return prefix.convert(maxValue, outputPrefix);
+    public final MetricValue getMaxValue(Prefixes outputPrefix) {
+        return convert(prefix.convert(maxValue, outputPrefix));
     }
 
     /**

@@ -74,7 +74,7 @@ public final class ReturnValue {
          * counter.
          */
         counter
-    };
+    }
 
     /**
      * The performance data to attach to the result string.
