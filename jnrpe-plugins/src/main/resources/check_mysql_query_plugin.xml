@@ -1,0 +1,53 @@
+<plugin name="CHECK_MYSQL_QUERY" class="it.jnrpe.plugin.mysql.CheckMysqlQuery">
+	<description>
+        <![CDATA[
+Checks a mysql query result against threshold levels
+A query is required. The result from the query should be numeric.
+For extra security, create a user with minimal access.
+            
+EXAMPLES
+The example will be based upon the following command definition (ini file)
+            
+check_mysql : CHECK_MYSQL_QUERY --database $ARG1$ --hostname $ARG2$ --port $ARG3$ --socket $ARG4$ --user $ARG5$ --password $ARG6$ --query $ARG7$
+            
+* Example 1 (Windows and Unix)
+            
+check_nrpe -H myjnrpeserver -c check_mysql_query -a 'test-db localhost 3306 mysql-user mysql-pwd 'select count(*) from user_table'
+            
+        ]]>
+	</description>
+	<command-line>
+		<options>
+			<option shortName="H" longName="hostname"
+				description="Host name, IP Address, or unix socket (must be an absolute path). Default is 'localhost'"
+				required="false" hasArgs="true" argName="hostname" optionalArgs="false" />
+			<option shortName="P" longName="port" description="Port number (default: 3306)"
+				required="false" hasArgs="true" argName="port" optionalArgs="false" />
+			<option shortName="d" longName="database"
+				description="Check database with indicated name. Default is 'mydb'."
+				required="false" hasArgs="true" argName="database" optionalArgs="false" />
+			<option shortName="u" longName="user"
+				description="Connect using the indicated username" required="false"
+				hasArgs="true" argName="user" optionalArgs="false" />
+
+			<option shortName="p" longName="password"
+				description="Use the indicated password to authenticate the connection"
+				required="false" hasArgs="true" argName="password" optionalArgs="false" />
+			<option shortName="S" longName="check-slave"
+				description="Check if the slave thread is running properly."
+				required="false" hasArgs="false" argName="check-slave" />
+			<option shortName="w" longName="warning"
+				description="Exit with WARNING status if slave server is more than INTEGER seconds behind master. To be used with the check-slave option."
+				required="false" hasArgs="true" argName="warning" optionalArgs="false" />
+			<option shortName="w" longName="critical"
+				description="Exit with CRITICAL status if slave server is more than INTEGER seconds behind master. To be used with the check-slave option."
+				required="false" hasArgs="true" argName="critical" optionalArgs="false" />
+
+			<option shortName="q" longName="query"
+				description="SQL query to run. Only first column in first row will be read"
+				required="false" hasArgs="true" argName="critical" optionalArgs="false" />
+
+
+		</options>
+	</command-line>
+</plugin>    

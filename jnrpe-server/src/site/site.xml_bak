@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="JNRPE">
+
+<poweredBy>
+    <logo name="Sourceforge" href="http://sourceforge.net/projects/jnrpe"
+          img="http://sourceforge.net/sflogo.php?group_id=204486&amp;type=2"/>
+  </poweredBy>
+
+
+	<bannerLeft>
+		<name>JNRPE</name>
+		<src>./images/jnrpe.png
+		</src>
+		<href>http://jnrpe.sourceforge.net/</href>
+	</bannerLeft>
+	<body>
+		<links>
+			<item name="Apache" href="http://www.apache.org/" />
+			<item name="JNRPE 1.x" href="jnrpe1.html" />
+			<item name="JNRPE 2.0" href="index.html" />
+		</links>
+
+        <menu name="Main">
+            <item name="Welcome" href="index.html" />
+        </menu>
+
+		<menu name="Get JNRPE">
+			<item name="Download" href="download.html" />
+            <item name="Release Notes" href="release-notes.html" />
+            <item name="License" href="license.html" />
+	    </menu>
+	    
+	    <menu name="About JNRPE" >
+			<item name="General Information" href="about.html" />
+			<item name="For JNRPE 1.x Users" href="jnrpe1.html" />
+		</menu>
+
+        <menu name="Documentation">
+            <item name="JNRPE Server" href="server.html" />
+            <item name="JNRPE Plugins" href="jnrpe_plugins.html" />
+            <item name="Embedding JNRPE" href="embedding.html" />
+        </menu>
+
+		<menu ref="reports" />
+
+	</body>
+	<skin>
+		<groupId>org.apache.maven.skins</groupId>
+		<artifactId>maven-stylus-skin</artifactId>
+		<version>1.2</version>
+	</skin>
+</project>

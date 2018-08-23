@@ -1,0 +1,26 @@
+<digester-rules>
+	<pattern value="command-line/options">
+		<object-create-rule classname="it.jnrpe.server.xml.XMLOptions" />
+	</pattern>
+
+	<pattern value="command-line/options/option">
+		<object-create-rule classname="it.jnrpe.server.xml.XMLOption" />
+		<set-properties-rule>
+			<!-- <option opt="" hasArgs="" argsCount="" required="" optionalArgs="" 
+				argName="" argCount="" longOpt="" type="" valueSeparator="" description=""/> -->
+
+			<alias attr-name="opt" prop-name="option" />
+			<alias attr-name="hasArgs" prop-name="hasArgs" />
+			<alias attr-name="argsCount" prop-name="argsCount" />
+			<alias attr-name="required" prop-name="required" />
+			<alias attr-name="optionalArgs" prop-name="argsOptional" />
+			<alias attr-name="argName" prop-name="argName" />
+			<alias attr-name="longOpt" prop-name="longOpt" />
+			<alias attr-name="type" prop-name="type" />
+			<alias attr-name="valueSeparator" prop-name="valueSeparator" />
+			<alias attr-name="description" prop-name="description" />
+		</set-properties-rule>
+
+		<set-next-rule methodname="addOption" />
+	</pattern>
+</digester-rules>

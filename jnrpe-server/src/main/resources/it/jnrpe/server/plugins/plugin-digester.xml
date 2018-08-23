@@ -1,0 +1,48 @@
+<digester-rules>
+	<pattern value="plugins">
+		<object-create-rule classname="it.jnrpe.server.plugins.XMLPluginPackage" />
+	</pattern>
+
+	<pattern value="plugins/plugin">
+		<object-create-rule classname="it.jnrpe.server.plugins.XMLPluginDefinition" />
+		<set-properties-rule>
+			<alias attr-name="name" prop-name="name" />
+			<alias attr-name="class" prop-name="pluginClass" />
+		</set-properties-rule>
+
+		<set-next-rule methodname="addPluginDefinition" />
+	</pattern>
+
+	<pattern value="plugins/plugin/description">
+		<call-method-rule methodname="setDescription"
+			paramcount="0" />
+	</pattern>
+
+	<pattern value="plugins/plugin/command-line/options">
+		<object-create-rule classname="it.jnrpe.server.plugins.xml.XMLPluginOptions" />
+
+		<set-next-rule methodname="setOptions" />
+	</pattern>
+
+	<pattern value="plugins/plugin/command-line/options/option">
+		<object-create-rule classname="it.jnrpe.server.plugins.xml.XMLPluginOption" />
+		<set-properties-rule>
+			<!-- <option opt="" hasArgs="" argsCount="" required="" optionalArgs="" 
+				argName="" argCount="" longOpt="" type="" valueSeparator="" description=""/> -->
+
+			<alias attr-name="shortName" prop-name="option" />
+			<alias attr-name="hasArgs" prop-name="hasArgs" />
+			<alias attr-name="argsCount" prop-name="argsCount" />
+			<alias attr-name="required" prop-name="required" />
+			<alias attr-name="optionalArgs" prop-name="argsOptional" />
+			<alias attr-name="argName" prop-name="argName" />
+			<alias attr-name="longName" prop-name="longOpt" />
+			<alias attr-name="type" prop-name="type" />
+			<alias attr-name="valueSeparator" prop-name="valueSeparator" />
+			<alias attr-name="description" prop-name="description" />
+		</set-properties-rule>
+
+		<set-next-rule methodname="addOption" />
+	</pattern>
+
+</digester-rules>

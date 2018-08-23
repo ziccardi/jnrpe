@@ -1,0 +1,13 @@
+<command-line>
+	<options>
+		<!-- <option opt="" hasArgs="" argsCount="" required="" optionalArgs="" 
+			argName="" longOpt="" type="" valueSeparator="" description=""/> -->
+		<option opt="h" longOpt="help" description="show this message"
+			hasArgs="true" argName="plugin name" optionalArgs="true" />
+		<option opt="c" longOpt="conf" description="the configuration file"
+			required="true" hasArgs="true" argName="file" />
+		<option opt="l" longOpt="list" description="lists all the installed plugins" />
+		<option opt="v" longOpt="version" hasArgs="false"
+			description="print the server version number" />
+	</options>
+</command-line>

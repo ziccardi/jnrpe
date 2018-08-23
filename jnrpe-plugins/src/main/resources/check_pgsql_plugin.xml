@@ -1,0 +1,49 @@
+<plugin name="CHECK_PGSQL" class="it.jnrpe.plugin.CheckPgsql">
+	<description>
+        <![CDATA[
+This plugin tests connections to a PostgreSQL  database server
+
+EXAMPLES
+The example will be based upon the following command definition (ini file)
+
+check_pgsql : CHECK_PSQL --database $ARG1$ --hostname $ARG2$ --port $ARG3$ --logname $ARG4$ --password $ARG5$ --warning $ARG6$ --critical $ARG7$
+
+* Example 1 (Windows and Unix)
+
+  check_nrpe -H myjnrpeserver -c CHECK_PSQL -a 'test-db!localhost!3306!pg-user!pg-pwd!2:!10:'
+
+        ]]>
+	</description>
+	<command-line>
+		<options>
+			<option shortName="H" longName="hostname"
+				description="Host name, IP Address, or unix socket (must be an absolute path). Default is 'localhost'"
+				required="false" hasArgs="true" argName="hostname" optionalArgs="false" />
+			<option shortName="P" longName="port" description="Port number (default: 5432)"
+				required="false" hasArgs="true" argName="port" optionalArgs="false" />
+			<option shortName="d" longName="database"
+				description="Check database with indicated name. Default is 'mydb'."
+				required="false" hasArgs="true" argName="database" optionalArgs="false" />
+			<option shortName="l" longName="logname"
+				description="Connect using the indicated username" required="false"
+				hasArgs="true" argName="logname" optionalArgs="false" />
+			<option shortName="t" longName="timeout"
+				description="Seconds before connection times out (default: 10)"
+				required="false" hasArgs="true" argName="timeout" optionalArgs="false" />
+			<option shortName="p" longName="password"
+				description="Use the indicated password to authenticate the connection"
+				required="false" hasArgs="true" argName="password" optionalArgs="false" />
+			<option shortName="w" longName="warning"
+				description="Response time to result in warning status (seconds)"
+				required="false" hasArgs="true" argName="warning" optionalArgs="false" />
+			<option shortName="w" longName="critical"
+				description="Response time to result in critical status (seconds)"
+				required="false" hasArgs="true" argName="critical" optionalArgs="false" />
+
+			<option shortName="T" longName="th"
+				description="Configure a threshold. Format : metric={metric},ok={range},warn={range},crit={range},unit={unit},prefix={SI prefix}"
+				hasArgs="true" required="false" />
+
+		</options>
+	</command-line>
+</plugin>

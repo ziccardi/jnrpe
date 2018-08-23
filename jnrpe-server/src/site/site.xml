@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="JNRPE Server">
+
+	<body>
+		<menu name="JNRPE Server">
+			<item name="Usage Scenario" href="usage_scenario.html" />
+			<item name="Getting Started" href="getting_started.html" />
+			<item name="The JNRPE interactive console" href="jnrpe_console.html" />
+		</menu>
+		
+		<menu name="JNRPE Client">
+			<item name="Command Line" href="../jcheck_nrpe/index.html" />
+			<item name="Embedding" href="../jcheck_nrpe/embedding.html" />
+		</menu>
+	</body>
+
+</project>

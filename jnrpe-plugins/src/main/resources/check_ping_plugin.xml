@@ -1,0 +1,37 @@
+<plugin name="CHECK_PING" class="it.jnrpe.plugin.CheckPing">
+	<description>
+<![CDATA[
+    Use ping to check connection statistics for a remote host.
+]]>
+	</description>
+	<command-line>
+		<options>
+			<option shortName="h" longName="hostname"
+				description="Hostname or IP address  to ping" required="true"
+				hasArgs="true" argName="hostname" optionalArgs="false" />
+
+			<option shortName="p" longName="packets"
+				description="Number of ICMP ECHO packets to send, default is 5."
+				required="false" hasArgs="true" argName="port" optionalArgs="false" />
+
+			<option shortName="4" longName="use-ipv4" description="Use IPv4 connection."
+				required="false" hasArgs="true" argName="port" optionalArgs="false" />
+
+			<option shortName="6" longName="use-ipv6" description="Use IPv6 connection."
+				required="false" hasArgs="true" argName="port" optionalArgs="false" />
+
+			<option shortName="w" longName="warning"
+				description="Warning threshold for round trip average time in milliseconds"
+				required="false" hasArgs="true" argName="port" optionalArgs="false" />
+
+			<option shortName="c" longName="critical"
+				description="Critical threshold for round trip average time in milliseconds"
+				required="false" hasArgs="true" argName="port" optionalArgs="false" />
+
+			<option shortName="t" longName="timeout"
+				description="Seconds before connection times out (default: 10)"
+				required="false" hasArgs="true" argName="port" optionalArgs="false" />
+
+		</options>
+	</command-line>
+</plugin>

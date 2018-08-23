@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="JNRPE Library">
+
+	<poweredBy>
+		<logo name="Sourceforge" href="http://sourceforge.net/projects/jnrpe"
+			img="http://sourceforge.net/sflogo.php?group_id=204486&amp;type=2" />
+	</poweredBy>
+
+	<version position="left" />
+
+	<!-- <body>
+		<menu name="Documentation">
+			<item name="Usage Scenario" href="usage_scenario.html" />
+			<item name="Embedding" href="embedding.html" />
+		</menu>
+	</body> -->
+
+</project>

@@ -1,0 +1,597 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>net.sf.jnrpe</groupId>
+	<artifactId>jnrpe-parent</artifactId>
+	<version>2.1.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>Jnrpe Package</name>
+	<description>JNRPE is a Nagios addon that makes simple the implementation of Nagios plugins using the Java Language.
+
+It is fully compatible with check_nrpe and can be used to execute both old native Nagios plugins and the new Java Nagios Plugins.</description>
+	<url>http://www.jnrpe.it</url>
+
+    <modules>
+        <module>jnrpe-server</module>
+        <module>jnrpe-install</module>
+        <module>jnrpe-lib</module>
+        <module>jcheck_nrpe</module>
+        <module>jnrpe-plugins</module>
+    </modules>
+
+    <licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<issueManagement>
+		<url>http://github.com/ziccardi/jnrpe/issues</url>
+		<system>GitHub</system>
+	</issueManagement>
+
+	<mailingLists>
+		<mailingList>
+			<name>User List</name>
+			<subscribe>https://lists.sourceforge.net/lists/listinfo/jnrpe-users</subscribe>
+			<unsubscribe>https://lists.sourceforge.net/lists/listinfo/jnrpe-users</unsubscribe>
+			<post>jnrpe-users@lists.sourceforge.net</post>
+			<archive>http://sourceforge.net/mailarchive/forum.php?forum_name=jnrpe-users</archive>
+		</mailingList>
+		<mailingList>
+			<name>Development List</name>
+			<subscribe>https://lists.sourceforge.net/lists/listinfo/jnrpe-devel</subscribe>
+			<unsubscribe>https://lists.sourceforge.net/lists/listinfo/jnrpe-devel</unsubscribe>
+			<post>jnrpe-devel@lists.sourceforge.net</post>
+			<archive>http://sourceforge.net/mailarchive/forum.php?forum_name=jnrpe-devel</archive>
+		</mailingList>
+		<mailingList>
+			<name>Announce List</name>
+			<subscribe>https://lists.sourceforge.net/lists/listinfo/jnrpe-announce</subscribe>
+			<unsubscribe>https://lists.sourceforge.net/lists/listinfo/jnrpe-announce</unsubscribe>
+			<post>jnrpe-announce@lists.sourceforge.net</post>
+			<archive>http://sourceforge.net/mailarchive/forum.php?forum_name=jnrpe-announce</archive>
+		</mailingList>
+	</mailingLists>
+
+    <developers>
+		<developer>
+			<id>mziccardi</id>
+			<name>Massimiliano Ziccardi</name>
+			<email>massimiliano.ziccardi@gmail.com</email>
+		</developer>
+		<developer>
+			<id>fcampos</id>
+			<name>Frederico Campos</name>
+			<email>frederico.campos@gmail.com</email>
+		</developer>
+	</developers>
+
+	<contributors>
+		<contributor>
+			<name>Athou</name>
+			<url>https://github.com/Athou</url>
+			<email>jeremiepanzer@gmail.com</email>
+		</contributor>
+		<contributor>
+			<name>Andres Gomez Casanova</name>
+			<url>https://github.com/angoca</url>
+			<email>angoca@yahoo.com</email>
+		</contributor>
+	</contributors>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<jnrpe-lib.version>${project.version}</jnrpe-lib.version>
+		<jnrpe-server.version>${project.version}</jnrpe-server.version>
+		<jnrpe-plugins.version>${project.version}</jnrpe-plugins.version>
+		<jcheck_nrpe.version>${project.version}</jcheck_nrpe.version>
+        <powermock.version>1.6.4</powermock.version>
+        <dom4j.version>1.6.1</dom4j.version>
+        <netty.version>4.0.19.Final</netty.version>
+        <guava.version>20.0</guava.version>
+        <jsch.version>0.1.54</jsch.version>
+        <dnsjava.version>2.1.7</dnsjava.version>
+        <commons-codec.version>1.10</commons-codec.version>
+        <commons-io.version>2.5</commons-io.version>
+        <commons-lang.version>2.6</commons-lang.version>
+        <commons-net.version>3.5</commons-net.version>
+        <commons-configuration.version>1.9</commons-configuration.version>
+        <commons-cli.version>2.0-mahout</commons-cli.version>
+        <slf4j.version>1.7.21</slf4j.version>
+        <log4j.version>1.2.17</log4j.version>
+        <jline.version>2.11</jline.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>net.sf.jnrpe</groupId>
+				<artifactId>jnrpe-lib</artifactId>
+				<version>${jnrpe-lib.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.sf.jnrpe</groupId>
+				<artifactId>jnrpe-server</artifactId>
+				<version>${jnrpe-server.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.sf.jnrpe</groupId>
+				<artifactId>jnrpe-plugins</artifactId>
+				<version>${jnrpe-plugins.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.sf.jnrpe</groupId>
+				<artifactId>jcheck_nrpe</artifactId>
+				<version>${jcheck_nrpe.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>dom4j</groupId>
+				<artifactId>dom4j</artifactId>
+				<version>${dom4j.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-all</artifactId>
+				<version>${netty.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>${guava.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.jcraft</groupId>
+				<artifactId>jsch</artifactId>
+				<version>${jsch.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>dnsjava</groupId>
+				<artifactId>dnsjava</artifactId>
+				<version>${dnsjava.version}</version>
+			</dependency>
+
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>${commons-codec.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
+            </dependency>
+
+			<dependency>
+				<groupId>commons-lang</groupId>
+				<artifactId>commons-lang</artifactId>
+				<version>${commons-lang.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>commons-net</groupId>
+				<artifactId>commons-net</artifactId>
+				<version>${commons-net.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>commons-configuration</groupId>
+				<artifactId>commons-configuration</artifactId>
+				<version>${commons-configuration.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.mahout.commons</groupId>
+				<artifactId>commons-cli</artifactId>
+				<version>${commons-cli.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-jcl</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>log4j</groupId>
+				<artifactId>log4j</artifactId>
+				<version>${log4j.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>jline</groupId>
+				<artifactId>jline</artifactId>
+				<version>${jline.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+            <version>${powermock.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito</artifactId>
+            <version>${powermock.version}</version>
+            <scope>test</scope>
+        </dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<!-- Ignore/Execute plugin execution -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<!-- copy-dependency plugin -->
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-dependency-plugin</artifactId>
+										<versionRange>[1.0.0,)</versionRange>
+										<goals>
+											<goal>copy-dependencies</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-enforcer-plugin</artifactId>
+										<versionRange>[1.0.0,)</versionRange>
+										<goals>
+											<goal>enforce</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.1</version>
+					<configuration>
+						<encoding>${project.build.sourceEncoding}</encoding>
+						<source>1.5</source>
+						<target>1.5</target>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>2.3.2</version>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>2.2.1</version>
+					<executions>
+						<execution>
+							<id>attach-sources</id>
+							<goals>
+								<goal>jar-no-fork</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>2.7</version>
+					<configuration>
+						<skip>true</skip>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.sonatype.plugins</groupId>
+					<artifactId>nexus-staging-maven-plugin</artifactId>
+					<version>1.6.3</version>
+					<extensions>true</extensions>
+					<configuration>
+						<serverId>ossrh</serverId>
+						<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+						<autoReleaseAfterClose>true</autoReleaseAfterClose>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>findbugs-maven-plugin</artifactId>
+					<version>3.0.4</version>
+					<configuration>
+						<effort>Max</effort>
+						<threshold>Low</threshold>
+						<failOnError>false</failOnError>
+						<findbugsXmlOutput>true</findbugsXmlOutput>
+						<findbugsXmlWithMessages>true</findbugsXmlWithMessages>
+						<xmlOutput>true</xmlOutput>
+					</configuration>
+					<executions>
+						<execution>
+							<goals>
+								<goal>check</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-site-plugin</artifactId>
+					<version>3.4</version>
+					<dependencies>
+						<dependency><!-- add support for ssh/scp -->
+							<groupId>org.apache.maven.wagon</groupId>
+							<artifactId>wagon-ssh</artifactId>
+							<version>1.0</version>
+						</dependency>
+						<dependency>
+							<groupId>lt.velykis.maven.skins</groupId>
+							<artifactId>reflow-velocity-tools</artifactId>
+							<version>1.1.1</version>
+						</dependency>
+						
+						<!-- Reflow skin requires Velocity >= 1.7 -->
+						<!-- <dependency>
+							<groupId>org.apache.velocity</groupId>
+							<artifactId>velocity</artifactId>
+							<version>1.7</version>
+						</dependency> -->
+					</dependencies>
+					<configuration>
+						<siteDirectory>${project.basedir}/src/site</siteDirectory>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-checkstyle-plugin</artifactId>
+					<version>2.10</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-gpg-plugin</artifactId>
+					<version>1.4</version>
+					<executions>
+						<execution>
+							<id>sign-artifacts</id>
+							<phase>verify</phase>
+							<goals>
+								<goal>sign</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>appassembler-maven-plugin</artifactId>
+					<version>1.3</version>
+					<executions>
+						<execution>
+							<id>appassemble</id>
+							<goals>
+								<goal>assemble</goal>
+							</goals>
+							<phase>package</phase>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<version>2.9</version>
+					<executions>
+						<execution>
+							<id>attach-javadocs</id>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<configuration>
+						<descriptors>
+							<descriptor>src/main/assembly/assembly.xml</descriptor>
+						</descriptors>
+						<attach>false</attach>
+					</configuration>
+					<executions>
+						<execution>
+							<id>jnrpe-plugins-zips</id>
+							<goals>
+								<goal>single</goal>
+							</goals>
+							<phase>package</phase>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jxr-plugin</artifactId>
+					<version>2.3</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-project-info-reports-plugin</artifactId>
+					<version>2.4</version>
+				</plugin>
+
+			</plugins>
+			
+		</pluginManagement>
+
+		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.4.2</version>
+				<configuration>
+					<tagNameFormat>@{project.version}</tagNameFormat>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.maven.scm</groupId>
+						<artifactId>maven-scm-provider-gitexe</artifactId>
+						<version>1.9</version>
+					</dependency>
+				</dependencies>
+				<executions>
+					<execution>
+						<id>default</id>
+						<goals>
+							<goal>perform</goal>
+						</goals>
+						<configuration>
+							<pomFileName>${project.basedir}/pom.xml</pomFileName>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>findbugs-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<show>public</show>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+			</plugin>
+		</plugins>
+
+	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jxr-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>dependencies</report>
+							<report>issue-tracking</report>
+							<report>index</report>
+							<report>project-team</report>
+							<report>modules</report>
+							<report>mailing-list</report>
+							<report>summary</report>
+							<report>license</report>
+							<report>scm</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>javadoc</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+            </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+			</plugin>
+
+		</plugins>
+
+	</reporting>
+
+	<distributionManagement>
+		<site>
+			<id>jnrpe-web</id>
+			<url>scp://jnrpe.it/home/jnrpe/www</url>
+		</site>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+	</distributionManagement>
+
+	<scm>
+		<url>http://github.com/ziccardi/jnrpe</url>
+		<connection>scm:git://github.com/ziccardi/jnrpe.git</connection>
+		<developerConnection>scm:git:git@github.com:ziccardi/jnrpe.git</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
+
+</project>

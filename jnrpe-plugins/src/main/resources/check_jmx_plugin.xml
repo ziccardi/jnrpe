@@ -1,0 +1,45 @@
+<plugin name="CHECK_JMX" class="it.jnrpe.plugin.jmx.CCheckJMX">
+	<description>
+<![CDATA[
+    WARNING: THIS PLUGIN, REQUIRES JDK 1.5 OR GREATER!
+    This plugin is used to test JMX values. It's based on 'jmxquery' (http://code.google.com/p/jmxquery/)
+    Follows an example. For easiness, the parameters are shown as you would pass them on the command line.
+    
+    EXAMPLE (to monitor pre 7.1 version JBOSS memory usage):
+    -U service:jmx:rmi://127.0.0.1/jndi/rmi://127.0.0.1:1090/jmxconnector -O jboss.system:type=ServerInfo -A TotalMemory -w 731847066: -c 1045495808 
+]]>
+	</description>
+	<command-line>
+		<options>
+			<option shortName="U" longName="url" hasArgs="true" argName="url"
+				required="true"
+				description="JMX URL, for example: 'service:jmx:rmi:///jndi/rmi://localhost:1616/jmxrmi'" />
+			<option shortName="O" longName="object" hasArgs="true"
+				argName="name" required="true"
+				description="Object name to be checked, for example, 'java.lang:type=Memory'" />
+			<option shortName="A" longName="attribute" hasArgs="true"
+				argName="name" required="true"
+				description="Attribute of the object to be checked, for example, 'NonHeapMemoryUsage'" />
+			<option shortName="K" longName="attributekey" hasArgs="true"
+				argName="name" required="false"
+				description="Attribute key for -A attribute compound data, for example, 'used'" />
+			<option shortName="I" longName="infoattribute" hasArgs="true"
+				argName="name" required="false"
+				description="Attribute of the object containing information for text output" />
+			<option shortName="J" longName="infokey" hasArgs="true"
+				argName="name" required="false"
+				description="Attribute key for -I attribute compound data, for example, 'used'" />
+			<option shortName="J" longName="infokey" hasArgs="true"
+				argName="name" required="false"
+				description="Attribute key for -I attribute compound data, for example, 'used'" />
+			<option shortName="w" longName="warning" hasArgs="true"
+				argName="range" required="true" description="Warning range" />
+			<option shortName="c" longName="critical" hasArgs="true"
+				argName="range" required="true" description="Critical range" />
+			<option shortName="u" longName="username" hasArgs="true"
+				argName="username" required="false" description="monitorRole jmx username" />
+			<option shortName="p" longName="password" hasArgs="true"
+				argName="password" required="false" description="monitorRole jmx password" />
+		</options>
+	</command-line>
+</plugin>

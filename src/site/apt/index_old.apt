@@ -1,0 +1,51 @@
+ -----
+ JNRPE Package
+ -----
+ Massimiliano Ziccardi
+ -----
+ 2013-02-18
+ -----
+
+
+
+Welcome to the JNRPE package
+
+  The JNRPE aims to give you all the tools you need to be able to write and execute {{{http://www.nagios.com/#ref=maxzjnrpe}Nagios}} plugins using the
+  JAVA language. 
+  It comprises many modules:
+  
+  * {{{./jnrpe-server/index.html}JNRPE Server}} : a server that is able, similarly to NRPE, to execute {{{http://www.nagios.com/#ref=maxzjnrpe}Nagios}} plugin. In addition to NRPE, JNRPE is able
+    to execute JAVA plugin without instantiating a new JVM for every execution.
+    It is able to execute both JAVA and native plugins. You can, for example, run with JNRPE all the plugins already bundled with
+    {{{http://www.nagios.com/#ref=maxzjnrpe}Nagios}}.
+  
+  * {{{./jnrpe-lib/index.html}JNRPE Library}} : it is the core of JNRPE and implements all the logic of instantiating and executing plugins in response
+    of check_nrpe queries. It can be embedded inside your own application to allow you to easily answer to check_nrpe queries.
+  
+  * {{{./jcheck_nrpe/index.html}jcheck_nrpe}} : it is a java implementation of the check_nrpe utils. It can be used to invoke both JNRPE and NRPE.
+    You can embed it inside your application to call NRPE or JNRPE.
+  
+  * {{{./jnrpe-plugins/index.html}JNRPE Plugins}} : it is a package containing some JAVA plugin you can get out of the box with JNRPE. These plugins are
+    full java, so you don't have to bother issues about operating systems, hardware architecture, recompiling from sources, etc.
+  
+  * {{{./jnrpe-install/index.html}JNRPE Install}} : it is a graphical user interface that allows you to easily install JNRPE on both windows and linux/unix.
+  
+* How to Get Support
+
+ Support for JNRPE is offered mainly through the forum and the mailing lists.
+ 
+ If the problem has not been reported before, the recommended way to get help is to subscribe to the
+ {{{http://sourceforge.net/projects/jnrpe/forums/forum/730634}JNRPE forum}}.
+ 
+* How can I Help?
+
+ JNRPE is an open source community and welcomes contributions. 
+ If you'd like to get involved, please send me an e-mail.
+ 
+* Donations
+
+ If you would like to support the continued development of JNRPE, you can make a donation 
+ like 5-10 Euros/US$ or whatever you feel that JNRPE is worth to you. 
+ Please note that this is not payment for JNRPE, but an optional donation to the project -- JNRPE is always free to use.
+ 
+ Click {{{http://sourceforge.net/donate/index.php?group_id=204486}here}} to make a donation.
