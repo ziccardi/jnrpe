@@ -35,60 +35,6 @@ import org.apache.commons.lang.ArrayUtils;
 public class JNRPERequestDecoder extends ReplayingDecoder<Void> {
 
     /**
-     * The packet buffer length in bytes.
-     */
-    private static final int PACKETBUFFER_LENGTH = 1024;
-
-    /**
-     * The size of the random byte array.
-     */
-    private static final int DUMMYLENGTH = 2;
-
-    /**
-     * The decoded protocol packet.
-     */
-    private IJNRPEProtocolPacket packet;
-
-    /**
-     * The decoded packet version.
-     */
-    private PacketVersion packetVersion;
-
-//    /**
-//     * The NETTY {@link ReplayingDecoder} will be called many times until all
-//     * the data has been received from the server. This enum will be used to
-//     * store the decoding process progress.
-//     *
-//     * @author Massimiliano Ziccardi
-//     */
-//    protected enum STAGE {
-//        /**
-//         * The next data we have to receive is the PACKET_VERSION.
-//         */
-//        PACKET_VERSION,
-//        /**
-//         * The next data we have to receive is the REQUST TYPE CODE.
-//         */
-//        PACKET_TYPE_CODE,
-//        /**
-//         * The next data we have to receive is the request CRC.
-//         */
-//        CRC,
-//        /**
-//         * The next data we have to receive is the RESULT CODE.
-//         */
-//        RESULT_CODE,
-//        /**
-//         * The next data we have to receive is DATA BUFFER.
-//         */
-//        BUFFER,
-//        /**
-//         * The next data we have to receive is DUMMY buffer.
-//         */
-//        DUMMY
-//    }
-
-    /**
      * Creates a new {@link JNRPERequestDecoder} object
      */
     public JNRPERequestDecoder() {
@@ -105,67 +51,5 @@ public class JNRPERequestDecoder extends ReplayingDecoder<Void> {
     @Override
     protected final void decode(final ChannelHandlerContext ctx, final ByteBuf in, final List<Object> out) throws Exception {
         out.add(new JNRPERequest(JNRPEProtocolPacketFactory.produce(in)));
-//        STAGE stage = state();
-//
-//        switch (stage) {
-//        case PACKET_VERSION:
-//            packetVersion = PacketVersion.fromIntValue(in.readShort());
-//            checkpoint(STAGE.PACKET_TYPE_CODE);
-//        case PACKET_TYPE_CODE:
-//            PacketType type = PacketType.fromIntValue(in.readShort());
-//            switch (type) {
-//            case QUERY:
-//                packet = new JNRPERequest();
-//                break;
-//            case RESPONSE:
-//                packet = new JNRPEResponse();
-//                break;
-//            default:
-//                throw new Exception("Unknown packet type: " + stage);
-//            }
-//
-//            packet.setPacketVersion(packetVersion);
-//            checkpoint(STAGE.CRC);
-//        case CRC:
-//            packet.setCRC(in.readInt());
-//            checkpoint(STAGE.RESULT_CODE);
-//        case RESULT_CODE:
-//            packet.setResultCode(in.readShort());
-//            checkpoint(STAGE.BUFFER);
-//        case BUFFER:
-//            byte[] buff = new byte[PACKETBUFFER_LENGTH];
-//            in.readBytes(buff);
-//            packet.setBuffer(ztString2String(buff));
-//            checkpoint(STAGE.DUMMY);
-//        case DUMMY:
-//            byte[] dummy = new byte[DUMMYLENGTH];
-//            packet.setDummy(dummy);
-//            out.add(packet);
-//            reset();
-//            break;
-//        default:
-//            throw new Error("Shouldn't reach here.");
-//        }
     }
-
-    /**
-     * Convert a '0' terminated string to a java string.
-     * 
-     * @param buff
-     *            the '0' terminated string
-     * @return the java string
-     */
-    private String ztString2String(final byte[] buff) {
-        return new String(buff, 0, ArrayUtils.indexOf(buff, (byte) 0));
-    }
-
-    /**
-     * Method toString.
-     * @return String
-     */
-    @Override
-    public String toString() {
-        return "JNRPERequestDecoder [packet=" + packet + ", packetVersion=" + packetVersion + "]";
-    }
-
 }

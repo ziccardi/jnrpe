@@ -17,6 +17,17 @@ public class JNRPEClientIT {
         client.enableWeakCipherSuites();
         ReturnValue ret = client.sendQuery();
 
-        Assert.assertEquals(ret.getStatus(), Status.UNKNOWN);
+        Assert.assertEquals(Status.OK, ret.getStatus());
+    }
+
+    @Test
+    public void testExecCommand() throws Exception {
+        JNRPEClient client = new JNRPEClient("127.0.0.1", 5666, true);
+        client.enableWeakCipherSuites();
+        ReturnValue ret = client.sendCommand("check_total_procs");
+
+        Assert.assertTrue(ret.getMessage().startsWith("PROCS"));
+        Assert.assertTrue(ret.getMessage().indexOf("procs=") != -1);
+        Assert.assertTrue(ret.getMessage().indexOf("processes") != -1);
     }
 }
