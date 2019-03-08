@@ -29,6 +29,14 @@ public class JNRPERequest {
 
     private IJNRPEProtocolPacket packet;
 
+    /**
+     * Creates and empty request.
+     */
+    public JNRPERequest() {
+        this.packet = JNRPEProtocolPacketFactory.createNew();
+        this.packet.setType(PacketType.QUERY);
+    }
+
     JNRPERequest(IJNRPEProtocolPacket packet) {
         this.packet = packet;
     }
