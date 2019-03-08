@@ -292,8 +292,8 @@ It is fully compatible with check_nrpe and can be used to execute both old nativ
 					<version>3.1</version>
 					<configuration>
 						<encoding>${project.build.sourceEncoding}</encoding>
-						<source>1.5</source>
-						<target>1.5</target>
+						<source>1.8</source>
+						<target>1.8</target>
 					</configuration>
 				</plugin>
 
@@ -518,6 +518,17 @@ It is fully compatible with check_nrpe and can be used to execute both old nativ
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>2.22.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 

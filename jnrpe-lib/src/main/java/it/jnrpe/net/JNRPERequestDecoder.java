@@ -16,11 +16,14 @@
 package it.jnrpe.net;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ReplayingDecoder;
 
 import java.util.List;
 
+import it.jnrpe.net.packet.IJNRPEProtocolPacket;
+import it.jnrpe.net.packet.JNRPEProtocolPacketFactory;
 import org.apache.commons.lang.ArrayUtils;
 
 /**
@@ -29,7 +32,7 @@ import org.apache.commons.lang.ArrayUtils;
  * @author Massimiliano Ziccardi
  * @version $Revision: 1.0 $
  */
-public class JNRPERequestDecoder extends ReplayingDecoder<JNRPERequestDecoder.STAGE> {
+public class JNRPERequestDecoder extends ReplayingDecoder<Void> {
 
     /**
      * The packet buffer length in bytes.
@@ -44,53 +47,51 @@ public class JNRPERequestDecoder extends ReplayingDecoder<JNRPERequestDecoder.ST
     /**
      * The decoded protocol packet.
      */
-    private JNRPEProtocolPacket packet;
+    private IJNRPEProtocolPacket packet;
 
     /**
      * The decoded packet version.
      */
     private PacketVersion packetVersion;
 
-    /**
-     * The NETTY {@link ReplayingDecoder} will be called many times until all
-     * the data has been received from the server. This enum will be used to
-     * store the decoding process progress.
-     * 
-     * @author Massimiliano Ziccardi
-     */
-    protected enum STAGE {
-        /**
-         * The next data we have to receive is the PACKET_VERSION.
-         */
-        PACKET_VERSION,
-        /**
-         * The next data we have to receive is the REQUST TYPE CODE.
-         */
-        PACKET_TYPE_CODE,
-        /**
-         * The next data we have to receive is the request CRC.
-         */
-        CRC,
-        /**
-         * The next data we have to receive is the RESULT CODE.
-         */
-        RESULT_CODE,
-        /**
-         * The next data we have to receive is DATA BUFFER.
-         */
-        BUFFER,
-        /**
-         * The next data we have to receive is DUMMY buffer.
-         */
-        DUMMY
-    }
+//    /**
+//     * The NETTY {@link ReplayingDecoder} will be called many times until all
+//     * the data has been received from the server. This enum will be used to
+//     * store the decoding process progress.
+//     *
+//     * @author Massimiliano Ziccardi
+//     */
+//    protected enum STAGE {
+//        /**
+//         * The next data we have to receive is the PACKET_VERSION.
+//         */
+//        PACKET_VERSION,
+//        /**
+//         * The next data we have to receive is the REQUST TYPE CODE.
+//         */
+//        PACKET_TYPE_CODE,
+//        /**
+//         * The next data we have to receive is the request CRC.
+//         */
+//        CRC,
+//        /**
+//         * The next data we have to receive is the RESULT CODE.
+//         */
+//        RESULT_CODE,
+//        /**
+//         * The next data we have to receive is DATA BUFFER.
+//         */
+//        BUFFER,
+//        /**
+//         * The next data we have to receive is DUMMY buffer.
+//         */
+//        DUMMY
+//    }
 
     /**
-     * Creates a new {@link JNRPERequestDecoder} object and sets the initial
-     * state at {@link STAGE#PACKET_VERSION}.
+     * Creates a new {@link JNRPERequestDecoder} object
      */
     public JNRPERequestDecoder() {
-        super(STAGE.PACKET_VERSION);
     }
 
     /**
@@ -103,55 +104,48 @@ public class JNRPERequestDecoder extends ReplayingDecoder<JNRPERequestDecoder.ST
      */
     @Override
     protected final void decode(final ChannelHandlerContext ctx, final ByteBuf in, final List<Object> out) throws Exception {
-        
-        STAGE stage = state();
-        
-        switch (stage) {
-        case PACKET_VERSION:
-            packetVersion = PacketVersion.fromIntValue(in.readShort());
-            checkpoint(STAGE.PACKET_TYPE_CODE);
-        case PACKET_TYPE_CODE:
-            PacketType type = PacketType.fromIntValue(in.readShort());
-            switch (type) {
-            case QUERY:
-                packet = new JNRPERequest();
-                break;
-            case RESPONSE:
-                packet = new JNRPEResponse();
-                break;
-            default:
-                throw new Exception("Unknown packet type: " + stage);
-            }
-
-            packet.setPacketVersion(packetVersion);
-            checkpoint(STAGE.CRC);
-        case CRC:
-            packet.setCRC(in.readInt());
-            checkpoint(STAGE.RESULT_CODE);
-        case RESULT_CODE:
-            packet.setResultCode(in.readShort());
-            checkpoint(STAGE.BUFFER);
-        case BUFFER:
-            byte[] buff = new byte[PACKETBUFFER_LENGTH];
-            in.readBytes(buff);
-            packet.setBuffer(ztString2String(buff));
-            checkpoint(STAGE.DUMMY);
-        case DUMMY:
-            byte[] dummy = new byte[DUMMYLENGTH];
-            packet.setDummy(dummy);
-            out.add(packet);
-            reset();
-            break;
-        default:
-            throw new Error("Shouldn't reach here.");
-        }
-    }
-
-    /**
-     * Resets the decoder to the initial state.
-     */
-    private void reset() {
-        checkpoint(STAGE.PACKET_VERSION);
+        out.add(new JNRPERequest(JNRPEProtocolPacketFactory.produce(in)));
+//        STAGE stage = state();
+//
+//        switch (stage) {
+//        case PACKET_VERSION:
+//            packetVersion = PacketVersion.fromIntValue(in.readShort());
+//            checkpoint(STAGE.PACKET_TYPE_CODE);
+//        case PACKET_TYPE_CODE:
+//            PacketType type = PacketType.fromIntValue(in.readShort());
+//            switch (type) {
+//            case QUERY:
+//                packet = new JNRPERequest();
+//                break;
+//            case RESPONSE:
+//                packet = new JNRPEResponse();
+//                break;
+//            default:
+//                throw new Exception("Unknown packet type: " + stage);
+//            }
+//
+//            packet.setPacketVersion(packetVersion);
+//            checkpoint(STAGE.CRC);
+//        case CRC:
+//            packet.setCRC(in.readInt());
+//            checkpoint(STAGE.RESULT_CODE);
+//        case RESULT_CODE:
+//            packet.setResultCode(in.readShort());
+//            checkpoint(STAGE.BUFFER);
+//        case BUFFER:
+//            byte[] buff = new byte[PACKETBUFFER_LENGTH];
+//            in.readBytes(buff);
+//            packet.setBuffer(ztString2String(buff));
+//            checkpoint(STAGE.DUMMY);
+//        case DUMMY:
+//            byte[] dummy = new byte[DUMMYLENGTH];
+//            packet.setDummy(dummy);
+//            out.add(packet);
+//            reset();
+//            break;
+//        default:
+//            throw new Error("Shouldn't reach here.");
+//        }
     }
 
     /**

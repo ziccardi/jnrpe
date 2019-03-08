@@ -15,6 +15,8 @@
  *******************************************************************************/
 package it.jnrpe.net;
 
+import it.jnrpe.net.packet.IJNRPEProtocolPacket;
+import it.jnrpe.net.packet.JNRPEProtocolPacketFactory;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -23,13 +25,20 @@ import org.apache.commons.lang.StringUtils;
  * @author Massimiliano Ziccardi
  * @version $Revision: 1.0 $
  */
-public class JNRPERequest extends JNRPEProtocolPacket {
+public class JNRPERequest {
+
+    private IJNRPEProtocolPacket packet;
 
     /**
      * Creates and empty request.
      */
     public JNRPERequest() {
-        setPacketType(PacketType.QUERY);
+        this.packet = JNRPEProtocolPacketFactory.createNew();
+        this.packet.setType(PacketType.QUERY);
+    }
+
+    JNRPERequest(IJNRPEProtocolPacket packet) {
+        this.packet = packet;
     }
 
     /**
@@ -41,8 +50,10 @@ public class JNRPERequest extends JNRPEProtocolPacket {
      *            The arguments
      */
     public JNRPERequest(final String commandName, final String... arguments) {
+        this.packet = JNRPEProtocolPacketFactory.createNew();
+        this.packet.setType(PacketType.QUERY);
         init(commandName, arguments);
-        updateCRC();
+        this.packet.updateCRC();
     }
 
     /**
@@ -116,9 +127,8 @@ public class JNRPERequest extends JNRPEProtocolPacket {
             fullCommandString = commandName;
         }
 
-        setPacketVersion(PacketVersion.VERSION_2);
-        super.setPacketType(PacketType.QUERY);
-        super.setBuffer(fullCommandString);
+        this.packet.setType(PacketType.QUERY);
+        this.packet.setBuffer(fullCommandString);
         // updateCRC();
     }
 
@@ -129,7 +139,7 @@ public class JNRPERequest extends JNRPEProtocolPacket {
      * @return the query command */
     public final String getCommand() {
         // extracting command
-        String[] partsAry = split(getPacketString());
+        String[] partsAry = split(this.packet.getBufferAsString());
 
         return partsAry[0];
     }
@@ -141,7 +151,7 @@ public class JNRPERequest extends JNRPEProtocolPacket {
      * @return the command arguments */
     public final String[] getArguments() {
         // extracting params
-        String[] partsAry = split(getPacketString());
+        String[] partsAry = split(this.packet.getBufferAsString());
         String[] argsAry = new String[partsAry.length - 1];
 
         System.arraycopy(partsAry, 1, argsAry, 0, argsAry.length);
@@ -168,5 +178,13 @@ public class JNRPERequest extends JNRPEProtocolPacket {
     @Override
     public String toString() {
         return "JNRPERequest []";
+    }
+
+    public byte[] toByteArray() {
+        return this.packet.toByteArray();
+    }
+
+    public boolean isValid() {
+        return this.packet.isValid();
     }
 }

@@ -15,6 +15,9 @@
  *******************************************************************************/
 package it.jnrpe.net;
 
+import it.jnrpe.net.packet.IJNRPEProtocolPacket;
+import it.jnrpe.net.packet.JNRPEProtocolPacketFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -25,13 +28,17 @@ import java.util.Arrays;
  * @author Massimiliano Ziccardi
  * @version $Revision: 1.0 $
  */
-public final class JNRPEResponse extends JNRPEProtocolPacket {
+public final class JNRPEResponse {
+
+    private final IJNRPEProtocolPacket packet;
+
     /**
      * Default constructor.
      */
     public JNRPEResponse() {
         super();
-        setPacketType(PacketType.RESPONSE);
+        this.packet = JNRPEProtocolPacketFactory.createNew();
+        this.packet.setType(PacketType.RESPONSE);
     }
 
     /**
@@ -45,7 +52,7 @@ public final class JNRPEResponse extends JNRPEProtocolPacket {
      *             on any io exception */
     public JNRPEResponse(final InputStream in) throws IOException {
         super();
-        fromInputStream(in);
+        this.packet = JNRPEProtocolPacketFactory.produce(in);
     }
 
     /**
@@ -55,7 +62,7 @@ public final class JNRPEResponse extends JNRPEProtocolPacket {
      *            the response message
      */
     public void setMessage(final String message) {
-        setBuffer(message);
+        this.packet.setBuffer(message);
     }
 
     /**
@@ -64,7 +71,7 @@ public final class JNRPEResponse extends JNRPEProtocolPacket {
     
      * @return the response message */
     public String getMessage() {
-        return getPacketString();
+        return this.packet.getBufferAsString();
     }
 
     /**
@@ -74,8 +81,21 @@ public final class JNRPEResponse extends JNRPEProtocolPacket {
     @Override
     public String toString() {
 
-        return "JNRPEResponse [getPacketType()=" + getPacketType() + ", getPacketVersion()=" + getPacketVersion() + ", getResultCode()="
-                + getResultCode() + ", getBuffer()=" + Arrays.toString(getBuffer()) + "]";
+        return "JNRPEResponse [getPacketType()=" + this.packet.getType() + ", getPacketVersion()=" + this.packet.getVersion() + ", getResultCode()="
+                + this.packet.getResultCode() + ", getBuffer()=" + this.packet.getBufferAsString() + "]";
     }
 
+    public void setResult(int code, String message) {
+        this.packet.setResultCode(code);
+        this.packet.setBuffer(message);
+    }
+
+    public byte[] toByteArray() {
+        this.packet.updateCRC();
+        return this.packet.toByteArray();
+    }
+
+    public int getResultCode() {
+        return this.packet.getResultCode();
+    }
 }

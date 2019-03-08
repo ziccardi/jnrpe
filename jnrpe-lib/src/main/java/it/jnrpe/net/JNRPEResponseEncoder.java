@@ -44,13 +44,14 @@ public class JNRPEResponseEncoder extends MessageToByteEncoder<JNRPEResponse> {
      */
     @Override
     protected final void encode(final ChannelHandlerContext ctx, final JNRPEResponse msg, final ByteBuf out) {
-        msg.updateCRC();
-        out.writeShort(msg.getPacketVersion().intValue());
-        out.writeShort(msg.getPacketType().intValue());
-        out.writeInt(msg.getCRC());
-        out.writeShort(msg.getResultCode());
-        out.writeBytes(msg.getBuffer());
-        out.writeBytes(msg.getDummy());
+        out.writeBytes(msg.toByteArray());
+//        msg.updateCRC();
+//        out.writeShort(msg.getPacketVersion().intValue());
+//        out.writeShort(msg.getPacketType().intValue());
+//        out.writeInt(msg.getCRC());
+//        out.writeShort(msg.getResultCode());
+//        out.writeBytes(msg.getBuffer());
+//        out.writeBytes(msg.getDummy());
     }
 
 }
