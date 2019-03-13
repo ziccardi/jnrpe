@@ -90,11 +90,11 @@ class Range extends RangeConfig {
      *          The negation ('^') is ignored.
      */
     private boolean evaluate(final Metric metric, final Prefixes prefix) {
-        if (metric == null || metric.getMetricValue() == null) {
+        if (metric == null || metric.getValue() == null) {
             throw new NullPointerException("Value can't be null");
         }
 
-        BigDecimal value = metric.getMetricValue(prefix);
+        Comparable value = metric.getValue();
         
         if (!isNegativeInfinity()) {
             switch (value.compareTo(getLeftBoundary())) {

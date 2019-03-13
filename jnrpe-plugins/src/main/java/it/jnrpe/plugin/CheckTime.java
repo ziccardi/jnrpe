@@ -144,8 +144,19 @@ public class CheckTime extends PluginBase {
                 msg += "ahead";
             }
         }
-        metrics.add(new Metric("offset", msg, new BigDecimal(TimeUnit.MILLISECOND.convert(diff, TimeUnit.SECOND)), null, null));
-        metrics.add(new Metric("time", "", new BigDecimal(TimeUnit.MILLISECOND.convert(elapsed, TimeUnit.SECOND)), null, null));
+        //metrics.add(new Metric("offset", msg, new BigDecimal(TimeUnit.MILLISECOND.convert(diff, TimeUnit.SECOND)), null, null));
+        metrics.add(
+                Metric.forMetric("offset", Long.class)
+                .withMessage(msg)
+                .withValue(TimeUnit.MILLISECOND.convert(diff, TimeUnit.SECOND))
+                .build()
+        );
+        //metrics.add(new Metric("time", "", new BigDecimal(TimeUnit.MILLISECOND.convert(elapsed, TimeUnit.SECOND)), null, null));
+        metrics.add(
+                Metric.forMetric("time", Long.class)
+                .withValue(TimeUnit.MILLISECOND.convert(elapsed, TimeUnit.SECOND))
+                .build()
+        );
     }
 
     private String getMessage(final Elapsed elapsed) {

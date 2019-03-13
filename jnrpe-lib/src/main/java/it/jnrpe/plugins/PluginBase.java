@@ -54,6 +54,16 @@ public abstract class PluginBase implements IPluginInterfaceEx {
     @Inject
     private IJNRPEExecutionContext context;
 
+    private final String displayName;
+
+    public PluginBase() {
+        this.displayName = null;
+    }
+
+    public PluginBase(final String displayName) {
+        this.displayName = displayName;
+    }
+
     /**
      * The logger object.
      */
@@ -63,6 +73,10 @@ public abstract class PluginBase implements IPluginInterfaceEx {
      * @return the friendly name of this plugins. 
      */
     protected abstract String getPluginName();
+
+    public final String getDisplayName() {
+        return displayName != null ? displayName : getPluginName();
+    }
 
     /**
      * Override this method if you don't use the new threshold syntax. Here you
@@ -116,7 +130,7 @@ public abstract class PluginBase implements IPluginInterfaceEx {
     public ReturnValue execute(final ICommandLine cl) throws BadThresholdException {
         ThresholdsEvaluatorBuilder thrb = new ThresholdsEvaluatorBuilder();
         configureThresholdEvaluatorBuilder(thrb, cl);
-        ReturnValueBuilder builder = ReturnValueBuilder.forPlugin(getPluginName(), thrb.create());
+        ReturnValueBuilder builder = ReturnValueBuilder.forPlugin(getDisplayName(), thrb.create());
 
         try {
             Collection<Metric> metrics = gatherMetrics(cl);
@@ -127,7 +141,7 @@ public abstract class PluginBase implements IPluginInterfaceEx {
 
             return builder.create();
         } catch (MetricGatheringException mge) {
-            return ReturnValueBuilder.forPlugin(getPluginName()).withForcedMessage(mge.getMessage()).withStatus(mge.getStatus()).create();
+            return ReturnValueBuilder.forPlugin(getDisplayName()).withForcedMessage(mge.getMessage()).withStatus(mge.getStatus()).create();
         }
 
     }

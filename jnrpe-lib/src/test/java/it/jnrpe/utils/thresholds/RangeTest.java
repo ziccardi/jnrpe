@@ -16,7 +16,6 @@
 package it.jnrpe.utils.thresholds;
 
 import it.jnrpe.plugins.Metric;
-import it.jnrpe.plugins.MetricBuilder;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -27,8 +26,10 @@ import java.math.BigDecimal;
 public class RangeTest {
 
     private static Metric metricWithValue(String value) {
-        return MetricBuilder.forMetric("dummy")
+        return Metric.forMetric("dummy", BigDecimal.class)
                 .withValue(new BigDecimal(value)).build();
+//        return MetricBuilder.forMetric("dummy")
+//                .withValue(new BigDecimal(value)).build();
     }
     
     /**

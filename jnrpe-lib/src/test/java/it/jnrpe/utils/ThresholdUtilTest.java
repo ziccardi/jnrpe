@@ -16,7 +16,6 @@
 package it.jnrpe.utils;
 
 import it.jnrpe.plugins.Metric;
-import it.jnrpe.plugins.MetricBuilder;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -28,19 +27,19 @@ import java.math.BigDecimal;
 public class ThresholdUtilTest {
 
     private Metric buildMetric(int value) {
-        return MetricBuilder.forMetric("TEST_METRIC)")
+        return Metric.forMetric("TEST_METRIC)", Integer.class)
                 .withValue(value)
                 .build();
     }
     
     private Metric buildMetric(long value) {
-        return MetricBuilder.forMetric("TEST_METRIC)")
+        return Metric.forMetric("TEST_METRIC)", Long.class)
                 .withValue(value)
                 .build();
     }
     
     private Metric buildMetric(BigDecimal value) {
-        return MetricBuilder.forMetric("TEST_METRIC)")
+        return Metric.forMetric("TEST_METRIC)", BigDecimal.class)
                 .withValue(value)
                 .build();
     }

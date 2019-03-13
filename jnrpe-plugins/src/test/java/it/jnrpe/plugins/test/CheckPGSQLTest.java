@@ -63,7 +63,14 @@ public class CheckPGSQLTest {
         CheckPgsql check = prepareForTesting(0);
 
         List<Metric> metrics = new ArrayList<Metric>();
-        metrics.add(new Metric("conn", "Connection time : 6s", new BigDecimal(6), new BigDecimal(0), null));
+        //metrics.add(new Metric("conn", "Connection time : 6s", new BigDecimal(6), new BigDecimal(0), null));
+        metrics.add(
+                Metric.forMetric("conn", Integer.class)
+                .withMessage("Connection time : 6s")
+                .withValue(6)
+                .withMinValue(0)
+                .build()
+        );
         PowerMockito.doReturn(metrics).when(check, "gatherMetrics", Matchers.any());
 
         PluginTester.given(check)
@@ -96,7 +103,14 @@ public class CheckPGSQLTest {
         CheckPgsql check = prepareForTesting(0);
 
         List<Metric> metrics = new ArrayList<Metric>();
-        metrics.add(new Metric("conn", "Connection time : 3s", new BigDecimal(3), new BigDecimal(0), null));
+        //metrics.add(new Metric("conn", "Connection time : 3s", new BigDecimal(3), new BigDecimal(0), null));
+        metrics.add(
+                Metric.forMetric("conn", Integer.class)
+                .withMessage("Connection time : 3s")
+                .withValue(3)
+                .withMinValue(0)
+                .build()
+        );
         PowerMockito.doReturn(metrics).when(check, "gatherMetrics", Matchers.any());
 
         PluginTester.given(check)
@@ -115,7 +129,14 @@ public class CheckPGSQLTest {
         CheckPgsql check = prepareForTesting(0);
 
         List<Metric> metrics = new ArrayList<Metric>();
-        metrics.add(new Metric("conn", "Connection time : 6s", new BigDecimal(6), new BigDecimal(0), null));
+        //metrics.add(new Metric("conn", "Connection time : 6s", new BigDecimal(6), new BigDecimal(0), null));
+        metrics.add(
+                Metric.forMetric("conn", Integer.class)
+                .withMessage("Connection time : 6s")
+                .withValue(6)
+                .withMinValue(0)
+                .build()
+        );
         PowerMockito.doReturn(metrics).when(check, "gatherMetrics", Matchers.any());
 
         PluginTester.given(check)
@@ -135,7 +156,13 @@ public class CheckPGSQLTest {
         CheckPgsql check = prepareForTesting(0);
 
         List<Metric> metrics = new ArrayList<Metric>();
-        metrics.add(new Metric("conn", "Connection time : 6s", new BigDecimal(6), new BigDecimal(0), null));
+        metrics.add(
+                Metric.forMetric("conn", Integer.class)
+                        .withMessage("Connection time : 6s")
+                        .withValue(6)
+                        .withMinValue(0)
+                        .build()
+        );
         PowerMockito.doReturn(metrics).when(check, "gatherMetrics", Matchers.any());
 
         PluginTester.given(check)

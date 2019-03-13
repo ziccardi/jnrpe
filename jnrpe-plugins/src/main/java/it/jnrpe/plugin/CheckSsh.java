@@ -74,7 +74,11 @@ public class CheckSsh extends PluginBase {
 
             channel.setOutputStream(System.out);
             channel.connect();
-            metrics.add(new Metric("connected", "", new BigDecimal(1), null, null));
+            metrics.add(
+                    Metric.forMetric("connected", Integer.class)
+                    .withValue(1)
+                    .build()
+                    );
             channel.disconnect();
             session.disconnect();
 
@@ -82,7 +86,11 @@ public class CheckSsh extends PluginBase {
             
             String message = e.getMessage();
             
-            metrics.add(new Metric("connected", message, new BigDecimal(0), null, null));
+            metrics.add(
+                    Metric.forMetric("conneected", Integer.class)
+                    .withMessage(message)
+                    .withValue(0)
+                    .build());
             LOG.debug(getContext(), message, e);
         }
         return metrics;

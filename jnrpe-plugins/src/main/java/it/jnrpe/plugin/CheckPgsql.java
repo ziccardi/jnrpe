@@ -96,8 +96,14 @@ public class CheckPgsql extends PluginBase {
         Long end = System.currentTimeMillis();
         Long elapsed = Long.valueOf((end - start) / 1000);
 
-        metricList.add(new Metric("conn", "Connection time : " + elapsed + "s", new BigDecimal(elapsed), new BigDecimal(0), null));
-
+        //metricList.add(new Metric("conn", "Connection time : " + elapsed + "s", new BigDecimal(elapsed), new BigDecimal(0), null));
+        metricList.add(
+                Metric.forMetric("conn", Long.class)
+                .withMessage("Connection time : " + elapsed + "s")
+                .withValue(elapsed)
+                .withMinValue(0L)
+                .build()
+        );
         return metricList;
     }
 

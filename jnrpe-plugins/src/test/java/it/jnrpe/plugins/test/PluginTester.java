@@ -113,13 +113,24 @@ public final class PluginTester {
      * 
      * @param status the status to be checked
      */
-    public void expect(final Status status) {
+    public PluginTester expect(final Status status) {
         
         if (retValue == null) {
             execute();
         }
 
         Assert.assertEquals(retValue.getMessage(), status, retValue.getStatus());
+        return this;
+    }
+
+    public PluginTester expect(final String message) {
+
+        if (retValue == null) {
+            execute();
+        }
+
+        Assert.assertEquals(message, retValue.getMessage());
+        return this;
     }
     
     /**

@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This object take responsability of checking a pair value-metric agains all
+ * This object take responsibility of checking a pair value-metric agains all
  * the ranges defined for such metric and returns the right {@link Status}
  * object.
  *
@@ -89,11 +89,11 @@ public class ThresholdsEvaluator {
      */
     final Status evaluate(final Metric metric) {
 
-        if (metric == null || metric.getMetricValue() == null) {
-            throw new NullPointerException("Metric value can't be null");
+        if (metric == null || metric.getValue() == null) {
+            throw new IllegalArgumentException("Metric value can't be null");
         }
 
-        IThreshold thr = thresholdsMap.get(metric.getMetricName());
+        IThreshold thr = thresholdsMap.get(metric.getName());
         if (thr == null) {
             return Status.OK;
         }

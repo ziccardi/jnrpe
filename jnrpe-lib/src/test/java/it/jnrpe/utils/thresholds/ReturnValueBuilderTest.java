@@ -18,7 +18,6 @@ package it.jnrpe.utils.thresholds;
 import it.jnrpe.ReturnValue;
 import it.jnrpe.Status;
 import it.jnrpe.plugins.Metric;
-import it.jnrpe.plugins.MetricBuilder;
 import it.jnrpe.utils.BadThresholdException;
 import org.junit.Assert;
 import org.junit.Test;
@@ -42,7 +41,14 @@ public class ReturnValueBuilderTest {
             .create();
 
         ReturnValue ret = ReturnValueBuilder.forPlugin("TEST_PLUGIN", ths)
-        	.withValue(new Metric("TEST_METRIC", "TEST OK", new BigDecimal(10), new BigDecimal(0), new BigDecimal(100)))
+        	.withValue(
+        	        Metric.forMetric("TEST_METRIC", Integer.class)
+                            .withMessage("TEST_OK")
+                            .withValue(10)
+                            .withMinValue(0)
+                            .withMaxValue(100)
+                            .build()
+        	        )
         	.create();
         
         Assert.assertEquals(Status.OK, ret.getStatus());
@@ -59,7 +65,14 @@ public class ReturnValueBuilderTest {
             .create();
         
         ReturnValue ret = ReturnValueBuilder.forPlugin("TEST_PLUGIN", ths)
-            	.withValue(new Metric("TEST_METRIC", "TEST OK", new BigDecimal(10), new BigDecimal(0), new BigDecimal(100)))
+            	.withValue(
+                        Metric.forMetric("TEST_METRIC", Integer.class)
+                                .withMessage("TEST_OK")
+                                .withValue(10)
+                                .withMinValue(0)
+                                .withMaxValue(100)
+                                .build()
+                )
             	.create();
 
         Assert.assertEquals(Status.CRITICAL, ret.getStatus());
@@ -76,7 +89,15 @@ public class ReturnValueBuilderTest {
             .create();
         
         ReturnValue ret = ReturnValueBuilder.forPlugin("TEST_PLUGIN", ths)
-            	.withValue(new Metric("TEST_METRIC", "TEST OK", new BigDecimal(51), new BigDecimal(0), new BigDecimal(100)))
+            	.withValue(
+                        Metric.forMetric("TEST_METRIC", Integer.class)
+                                .withMessage("TEST_OK")
+                                .withValue(51)
+                                .withMinValue(0)
+                                .withMaxValue(100)
+                                .build()
+
+                )
             	.create();
 
         Assert.assertEquals(Status.OK, ret.getStatus());
@@ -93,7 +114,15 @@ public class ReturnValueBuilderTest {
             .create();
         
         ReturnValue ret = ReturnValueBuilder.forPlugin("TEST_PLUGIN", ths)
-            	.withValue(new Metric("TEST_METRIC", "TEST OK", new BigDecimal(60), new BigDecimal(0), new BigDecimal(100)))
+            	.withValue(
+                        Metric.forMetric("TEST_METRIC", Integer.class)
+                                .withMessage("TEST_OK")
+                                .withValue(60)
+                                .withMinValue(0)
+                                .withMaxValue(100)
+                                .build()
+
+                )
             	.create();
 
         Assert.assertEquals(Status.OK, ret.getStatus());
@@ -110,7 +139,15 @@ public class ReturnValueBuilderTest {
             .create();
         
         ReturnValue ret = ReturnValueBuilder.forPlugin("TEST_PLUGIN", ths)
-            	.withValue(new Metric("TEST_METRIC", "TEST OK", new BigDecimal(110), new BigDecimal(0), new BigDecimal(100)))
+            	.withValue(
+                        Metric.forMetric("TEST_METRIC", Integer.class)
+                                .withMessage("TEST_OK")
+                                .withValue(110)
+                                .withMinValue(0)
+                                .withMaxValue(100)
+                                .build()
+
+                )
             	.create();
 
         Assert.assertEquals(Status.WARNING, ret.getStatus());
@@ -127,7 +164,15 @@ public class ReturnValueBuilderTest {
             .create();
         
         ReturnValue ret = ReturnValueBuilder.forPlugin("TEST_PLUGIN", ths)
-            	.withValue(new Metric("TEST_METRIC", "TEST OK", new BigDecimal(210), new BigDecimal(0), new BigDecimal(100)))
+            	.withValue(
+                        Metric.forMetric("TEST_METRIC", Integer.class)
+                                .withMessage("TEST_OK")
+                                .withValue(210)
+                                .withMinValue(0)
+                                .withMaxValue(100)
+                                .build()
+
+                )
             	.create();
 
         Assert.assertEquals(Status.CRITICAL, ret.getStatus());
@@ -145,12 +190,12 @@ public class ReturnValueBuilderTest {
         
         ReturnValue ret = ReturnValueBuilder.forPlugin("TEST_PLUGIN", ths)
                 .withValue(
-                        MetricBuilder.forMetric("TEST_METRIC")
+                        Metric.forMetric("TEST_METRIC", Integer.class)
                         .withMessage("TEST OK")
                         .withValue(60)
                         .withMinValue(0)
                         .withMaxValue(100)
-                        .withPrefix(Prefixes.mega)
+                        //.withPrefix(Prefixes.mega)
                         .build()
                         )
                 .create();

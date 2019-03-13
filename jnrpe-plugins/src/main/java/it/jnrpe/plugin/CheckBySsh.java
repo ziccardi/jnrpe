@@ -102,7 +102,12 @@ public class CheckBySsh extends PluginBase {
             channel = session.openChannel("exec");
 
             hasSession = true;
-            metrics.add(new Metric("session", "", new BigDecimal(1), null, null));
+            //metrics.add(new Metric("session", "", new BigDecimal(1), null, null));
+            metrics.add(
+                    Metric.forMetric("session", Integer.class)
+                    .withValue(1)
+                    .build()
+            );
         } catch (Exception e) {
             // metrics.add(new Metric("session",
             // "SSH not started, permission denied. " + e.getMessage(),
@@ -126,7 +131,10 @@ public class CheckBySsh extends PluginBase {
 
         try {
             channel.connect();
-            metrics.add(new Metric("connected", "", new BigDecimal(1), null, null));
+            metrics.add(
+                    Metric.forMetric("connected", Integer.class)
+                    .withValue(1)
+                    .build());
         } catch (JSchException e2) {
             // e2.printStackTrace();
             throw new MetricGatheringException(e2.getMessage(), Status.UNKNOWN, e2);
@@ -162,7 +170,10 @@ public class CheckBySsh extends PluginBase {
 
         session.disconnect();
         long response = (System.currentTimeMillis() - then) / 1000;
-        metrics.add(new Metric("response", "", new BigDecimal(response), null, null));
+        metrics.add(
+                Metric.forMetric("response", Long.class)
+                .withValue(response)
+                .build());
         // sb.append("\nexit-status: " + channel.getExitStatus());
         String msg = "";
         switch (channel.getExitStatus()) {
@@ -176,7 +187,12 @@ public class CheckBySsh extends PluginBase {
             break;
         }
 
-        metrics.add(new Metric("result", msg + " " + sb.toString(), new BigDecimal(Utils.getIntValue(exitStatus == 0)), null, null));
+        metrics.add(
+                Metric.forMetric("result", Integer.class)
+                .withMessage(msg + " " + sb.toString())
+                .withValue(Utils.getIntValue(exitStatus == 0))
+                .build());
+                //new Metric("result", msg + " " + sb.toString(), new BigDecimal(Utils.getIntValue(exitStatus == 0)), null, null));
         return metrics;
     }
 }

@@ -17,7 +17,6 @@ package it.jnrpe.utils.thresholds;
 
 import it.jnrpe.Status;
 import it.jnrpe.plugins.Metric;
-import it.jnrpe.plugins.MetricBuilder;
 import it.jnrpe.utils.BadThresholdException;
 import org.junit.Test;
 import org.junit.Assert;
@@ -48,7 +47,7 @@ public class LegacyThresholdEvaluatorTest {
     }
     
     private Metric buildMetric(BigDecimal value, String metricName) {
-        return MetricBuilder.forMetric(metricName)
+        return Metric.forMetric(metricName, BigDecimal.class)
                 .withValue(value).build();
     }
     
@@ -118,7 +117,7 @@ public class LegacyThresholdEvaluatorTest {
      * 
      * @throws BadThresholdException
      */
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testNullMetricValue() throws BadThresholdException {
         ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder().withLegacyThreshold(METRIC_NAME, "50:100", "100:200", "200:300").create();
         ths.evaluate(buildMetric(null));
@@ -129,7 +128,7 @@ public class LegacyThresholdEvaluatorTest {
      * 
      * @throws BadThresholdException
      */
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testNullMetricName() throws BadThresholdException {
         ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder().withLegacyThreshold(METRIC_NAME, "50:100", "100:200", "200:300").create();
         ths.evaluate(null);
@@ -140,7 +139,7 @@ public class LegacyThresholdEvaluatorTest {
      * 
      * @throws BadThresholdException
      */
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testBadMetricPair() throws BadThresholdException {
         ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder().withLegacyThreshold(METRIC_NAME, "50.:100", "100:200", "200:300").create();
         ths.evaluate(null);

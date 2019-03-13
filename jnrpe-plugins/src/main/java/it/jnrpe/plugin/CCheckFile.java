@@ -19,7 +19,6 @@ import it.jnrpe.ICommandLine;
 import it.jnrpe.ReturnValue;
 import it.jnrpe.Status;
 import it.jnrpe.plugins.Metric;
-import it.jnrpe.plugins.MetricBuilder;
 import it.jnrpe.plugins.PluginBase;
 import it.jnrpe.plugins.annotations.Option;
 import it.jnrpe.plugins.annotations.Plugin;
@@ -142,7 +141,7 @@ public class CCheckFile extends PluginBase {
         long lNow = System.currentTimeMillis();
         BigDecimal lAge = new BigDecimal(String.valueOf((lNow - lLastAccess) / 1000));
         
-        final Metric ageMetric = MetricBuilder.forMetric("age").withValue(lAge).build();
+        final Metric ageMetric = Metric.forMetric("age", BigDecimal.class).withValue(lAge).build();
         if (cl.hasOption("critical")) {
             String sCriticalThreshold = cl.getOptionValue("critical");
 
@@ -177,7 +176,7 @@ public class CCheckFile extends PluginBase {
      */
     private ReturnValue checkSize(final ICommandLine cl, final File f, final ReturnValue res) throws BadThresholdException {
         BigDecimal bdSize = new BigDecimal(String.valueOf(f.length()));
-        Metric sizeMetric = MetricBuilder.forMetric("size").withValue(bdSize).withMinValue(0).build();
+        Metric sizeMetric = Metric.forMetric("size", BigDecimal.class).withValue(bdSize).withMinValue(new BigDecimal(0)).build();
         
         if (cl.hasOption("sizecritical")) {
             String sCriticalThreshold = cl.getOptionValue("sizecritical");
@@ -244,7 +243,7 @@ public class CCheckFile extends PluginBase {
                 // return updateRes(res, new ReturnValue(Status.OK, "FILE OK"));
             }
 
-            final Metric countMetric = MetricBuilder.forMetric("count").withMinValue(0).withValue(iCount).build();
+            final Metric countMetric = Metric.forMetric("count", Integer.class).withMinValue(0).withValue(iCount).build();
             
             if (ThresholdUtil.isValueInRange(sCriticalThreshold, countMetric)) {
                 return updateRes(res, new ReturnValue(Status.CRITICAL, "FILE CRITICAL - String '" + sPattern + "' found " + iCount + " times"));

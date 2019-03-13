@@ -24,7 +24,7 @@ import it.jnrpe.utils.BadThresholdException;
  *
  * @version $Revision: 1.0 $
  */
-public class ThresholdsEvaluatorBuilder {
+public class ThresholdsEvaluatorBuilder<T extends Comparable> {
 
     /**
      * The threshold evaluator instance.

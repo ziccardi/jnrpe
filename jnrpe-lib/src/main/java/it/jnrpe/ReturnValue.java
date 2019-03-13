@@ -212,11 +212,11 @@ public final class ReturnValue {
         if (performanceDataList.isEmpty()) {
             return messageString;
         }
-        StringBuilder res = new StringBuilder(messageString).append('|');
+        StringBuilder res = new StringBuilder(messageString).append(";| ");
         for (PerformanceData pd : performanceDataList) {
             res.append(pd.toPerformanceString()).append(' ');
         }
-        return res.toString();
+        return res.toString().trim();
     }
 
     /**

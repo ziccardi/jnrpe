@@ -114,72 +114,27 @@ class PerformanceData {
      * @return a string that can be returned to Nagios 
      */
     public String toPerformanceString() {
-        final StringBuilder res = 
-                new StringBuilder()
-                    .append(
-                            quote(metric.getMetricName()))
-                            .append('=')
-                            .append((metric.getMetricValue(prefix)).toPrettyPrintedString());
+        final StringBuilder res = new StringBuilder()
+                .append(this.quote(metric.getName()))
+                .append('=')
+                .append(metric.getOutputMetric())
+                .append(metric.getUOM())
+                .append(';');
 
-        if (unitOfMeasure != null) {
-            switch (unitOfMeasure) {
-            case milliseconds:
-                res.append("ms");
-                break;
-            case microseconds:
-                res.append("us");
-                break;
-            case seconds:
-                res.append('s');
-                break;
-            case bytes:
-                res.append('B');
-                break;
-            case kilobytes:
-                res.append("KB");
-                break;
-            case megabytes:
-                res.append("MB");
-                break;
-            case gigabytes:
-                res.append("GB");
-                break;
-            case terabytes:
-                res.append("TB");
-                break;
-            case percentage:
-                res.append('%');
-                break;
-            case counter:
-                res.append('c');
-                break;
-            default:
-            }
-        }
-
-        if (unit != null) {
-            res.append(unit);
-        }
-
-        res.append(';');
-        if (warningRange != null) {
-            res.append(warningRange);
+        if (this.metric.getWarningThreshold() != null) {
+            res.append(this.metric.getWarningThreshold());
         }
         res.append(';');
-        if (criticalRange != null) {
-            res.append(criticalRange);
+        if (this.metric.getCriticalThreshold() != null) {
+            res.append(this.metric.getCriticalThreshold());
         }
         res.append(';');
-        if (metric.getMinValue() != null) {
-            res.append(metric.getMinValue(prefix).toPrettyPrintedString());
+        if (this.metric.getMin() != null) {
+            res.append(this.metric.getMin());
         }
         res.append(';');
-        if (metric.getMaxValue() != null) {
-            res.append(metric.getMaxValue(prefix).toPrettyPrintedString());
-        }
-
-        while (res.charAt(res.length() - 1) == ';') {
-            res.deleteCharAt(res.length() - 1);
+        if (this.metric.getMax() != null) {
+            res.append(this.metric.getMax());
         }
 
         return res.toString();
@@ -207,8 +162,8 @@ class PerformanceData {
      */
     @Override
     public String toString() {
-        return "PerformanceData [label=" + metric.getMetricName() + ", performanceValue=" + metric.getMetricValue() + ", unitOfMeasure=" + unitOfMeasure + ", unit=" + unit
-                + ", warningRange=" + warningRange + ", criticalRange=" + criticalRange + ", minimumValue=" + metric.getMinValue() + ", maximumValue="
-                + metric.getMaxValue() + "]";
+        return "PerformanceData [label=" + metric.getName() + ", performanceValue=" + metric.getValue() + ", unitOfMeasure=" + unitOfMeasure + ", unit=" + unit
+                + ", warningRange=" + warningRange + ", criticalRange=" + criticalRange + ", minimumValue=" + metric.getMin() + ", maximumValue="
+                + metric.getMax() + "]";
     }
 }

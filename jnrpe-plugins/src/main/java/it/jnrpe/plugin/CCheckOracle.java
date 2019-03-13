@@ -112,7 +112,14 @@ public class CCheckOracle extends PluginBase {
 
             long elapsed = (System.currentTimeMillis() - lStart) / 1000L;
 
-            metricList.add(new Metric("conn", "Connection time : " + elapsed + "s", new BigDecimal(elapsed), new BigDecimal(0), null));
+            //metricList.add(new Metric("conn", "Connection time : " + elapsed + "s", new BigDecimal(elapsed), new BigDecimal(0), null));
+            metricList.add(
+                    Metric.forMetric("conn", Long.class)
+                    .withMessage("Connection time : " + elapsed + "s")
+                    .withValue(elapsed)
+                    .withMinValue(0L)
+                    .build()
+            );
 
             return metricList;
 
@@ -157,16 +164,31 @@ public class CCheckOracle extends PluginBase {
                 throw new SQLException("Tablespace " + cl.getOptionValue("tablespace") + " not found.");
             }
 
-            BigDecimal tsFree = rs.getBigDecimal(1);
-            BigDecimal tsTotal = rs.getBigDecimal(2);
-            BigDecimal tsPct = rs.getBigDecimal(3);
+            long tsFree = rs.getLong(1);
+            long tsTotal = rs.getLong(2);
+            int tsPct = rs.getInt(3);
             //
-            metricList.add(new Metric("tblspace_freepct", cl.getOptionValue("tablespace") + " : " + tsPct + "% free", tsPct, new BigDecimal(0),
-                    new BigDecimal(100)));
+            //metricList.add(new Metric("tblspace_freepct", cl.getOptionValue("tablespace") + " : " + tsPct + "% free", tsPct, new BigDecimal(0),
+            //        new BigDecimal(100)));
 
-            metricList.add(new Metric("tblspace_free", cl.getOptionValue("tablespace") + " : " + tsFree + "MB free", tsPct, new BigDecimal(0),
-                    tsTotal));
-
+            metricList.add(
+                    Metric.forMetric("tblspace_freepct", Integer.class)
+                    .withMessage(cl.getOptionValue("tablespace") + " : " + tsPct + "% free")
+                    .withValue(tsPct)
+                    .withMinValue(0)
+                    .withMaxValue(100)
+                    .build()
+            );
+            //metricList.add(new Metric("tblspace_free", cl.getOptionValue("tablespace") + " : " + tsFree + "MB free", tsPct, new BigDecimal(0),
+            //        tsTotal));
+            metricList.add(
+                    Metric.forMetric("tblspace_free", Long.class)
+                    .withMessage(cl.getOptionValue("tablespace") + " : " + tsFree + "MB free")
+                    .withValue((long)tsPct)
+                    .withMinValue(0L)
+                    .withMaxValue(tsTotal)
+                    .build()
+            );
             return metricList;
 
         } finally {
@@ -206,18 +228,34 @@ public class CCheckOracle extends PluginBase {
             rs = stmt.executeQuery(sQry1);
             rs.next();
 
-            BigDecimal buf_hr = rs.getBigDecimal(1);
+            int buf_hr = rs.getInt(1);
 
             rs = stmt.executeQuery(sQry2);
             rs.next();
 
-            BigDecimal lib_hr = rs.getBigDecimal(1);
+            int lib_hr = rs.getInt(1);
 
             String libHitRate = "Cache Hit Rate {1,number,0.#}% Lib";
             String buffHitRate = "Cache Hit Rate {1,number,0.#}% Buff";
 
-            metricList.add(new Metric("cache_buf", MessageFormat.format(buffHitRate, buf_hr), buf_hr, new BigDecimal(0), new BigDecimal(100)));
-            metricList.add(new Metric("cache_lib", MessageFormat.format(libHitRate, lib_hr), lib_hr, new BigDecimal(0), new BigDecimal(100)));
+            //metricList.add(new Metric("cache_buf", MessageFormat.format(buffHitRate, buf_hr), buf_hr, new BigDecimal(0), new BigDecimal(100)));
+            metricList.add(
+                    Metric.forMetric("cache_buf", Integer.class)
+                    .withMessage(MessageFormat.format(buffHitRate, buf_hr))
+                    .withValue(buf_hr)
+                    .withMinValue(0)
+                    .withMaxValue(100)
+                    .build()
+            );
+            //metricList.add(new Metric("cache_lib", MessageFormat.format(libHitRate, lib_hr), lib_hr, new BigDecimal(0), new BigDecimal(100)));
+            metricList.add(
+                    Metric.forMetric("cache_lib", Integer.class)
+                    .withMessage(MessageFormat.format(libHitRate, lib_hr))
+                    .withValue(lib_hr)
+                    .withMinValue(0)
+                    .withMaxValue(100)
+                    .build()
+            );
 
             return metricList;
         } finally {

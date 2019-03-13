@@ -86,9 +86,17 @@ public class CheckUsers extends PluginBase {
         String os = System.getProperty("os.name").toLowerCase();
         try {
             if (os.contains("linux")) {
-                metricList.add(new Metric("users", "", new BigDecimal(getLinuxLoggedInUsers()), null, null));
+                metricList.add(
+                        Metric.forMetric("users", Integer.class)
+                        .withValue(getLinuxLoggedInUsers())
+                        .build());
+                        //new Metric("users", "", new BigDecimal(getLinuxLoggedInUsers()), null, null));
             } else if (os.contains("windows")) {
-                metricList.add(new Metric("users", "", new BigDecimal(getWindowsLoggedInUsers()), null, null));
+                metricList.add(
+                        Metric.forMetric("users", Integer.class)
+                        .withValue(getWindowsLoggedInUsers())
+                        .build());
+                        //new Metric("users", "", new BigDecimal(getWindowsLoggedInUsers()), null, null));
             }
 
             return metricList;

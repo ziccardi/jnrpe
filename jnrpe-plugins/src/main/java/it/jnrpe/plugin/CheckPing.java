@@ -164,8 +164,16 @@ public class CheckPing extends PluginBase {
         roundTripAvg = (double) time / packets;
         packetLossPerc = (int) (packetLoss / packets) * 100;
 
-        metrics.add(new Metric(RTA, "", new BigDecimal(roundTripAvg), null, null));
-        metrics.add(new Metric(PACKET_LOSS, "", new BigDecimal(packetLossPerc), null, null));
+        metrics.add(
+                Metric.forMetric(RTA, Double.class)
+                .withValue(roundTripAvg)
+                .build());
+                //new Metric(RTA, "", new BigDecimal(roundTripAvg), null, null));
+        metrics.add(
+                Metric.forMetric(PACKET_LOSS, Integer.class)
+                .withValue(packetLossPerc)
+                .build());
+                //new Metric(PACKET_LOSS, "", new BigDecimal(packetLossPerc), null, null));
 
         return metrics;
     }

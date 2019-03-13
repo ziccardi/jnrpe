@@ -321,8 +321,13 @@ public class CheckHttp extends PluginBase {
         redirectedUrl = String.valueOf(conn.getURL());
 
         if (!redirectedUrl.equals(initialUrl)) {
-            Metric metric = new Metric("onredirect", "", new BigDecimal(1), null, null);
-            metrics.add(metric);
+            //Metric metric = new Metric("onredirect", "", new BigDecimal(1), null, null);
+            metrics.add(
+                    Metric.forMetric("onredirect", Integer.class)
+                    .withValue(1)
+                    .build()
+
+            );
         }
         return response;
     }
@@ -342,14 +347,20 @@ public class CheckHttp extends PluginBase {
      */
     private List<Metric> analyzeResponse(final ICommandLine opt, final String response, final int elapsed) throws MetricGatheringException {
         List<Metric> metrics = new ArrayList<Metric>();
-        metrics.add(new Metric("time", "", new BigDecimal(elapsed), null, null));
+        metrics.add(Metric.forMetric("time", Integer.class)
+            .withValue(elapsed)
+            .build());
+        //metrics.add(new Metric("time", "", new BigDecimal(elapsed), null, null));
 
         if (!opt.hasOption("certificate")) {
             if (opt.hasOption("string")) {
                 boolean found = false;
                 String string = opt.getOptionValue("string");
                 found = response.contains(string);
-                metrics.add(new Metric("string", "", new BigDecimal(Utils.getIntValue(found)), null, null));
+                //metrics.add(new Metric("string", "", new BigDecimal(Utils.getIntValue(found)), null, null));
+                metrics.add(Metric.forMetric("string",Integer.class)
+                    .withValue(Utils.getIntValue(found))
+                    .build());
             }
             if (opt.hasOption("expect")) {
                 int count = 0;
@@ -359,7 +370,14 @@ public class CheckHttp extends PluginBase {
                         count++;
                     }
                 }
-                metrics.add(new Metric("expect", String.valueOf(count) + " times. ", new BigDecimal(count), null, null));
+                //metrics.add(new Metric("expect", String.valueOf(count) + " times. ", new BigDecimal(count), null, null));
+                metrics.add(
+                        Metric.forMetric("expect", Integer.class)
+                        .withMessage(String.valueOf(count) + " times. ")
+                        .withValue(count)
+                        .build()
+
+                );
             }
             if (opt.hasOption("regex")) {
                 String regex = opt.getOptionValue("regex");
@@ -374,9 +392,21 @@ public class CheckHttp extends PluginBase {
                 p = Pattern.compile(regex, flags);
                 boolean found = p.matcher(response).find();
                 if (opt.hasOption("invert-regex")) {
-                    metrics.add(new Metric("invert-regex", String.valueOf(found), new BigDecimal(Utils.getIntValue(found)), null, null));
+                    //metrics.add(new Metric("invert-regex", String.valueOf(found), new BigDecimal(Utils.getIntValue(found)), null, null));
+                    metrics.add(
+                            Metric.forMetric("invert-regex", Integer.class)
+                            .withMessage(String.valueOf(found))
+                            .withValue(Utils.getIntValue(found))
+                            .build()
+                    );
                 } else {
-                    metrics.add(new Metric("regex", String.valueOf(found), new BigDecimal(Utils.getIntValue(found)), null, null));
+                    //metrics.add(new Metric("regex", String.valueOf(found), new BigDecimal(Utils.getIntValue(found)), null, null));
+                    metrics.add(
+                            Metric.forMetric("regex", Integer.class)
+                            .withMessage(String.valueOf(found))
+                            .withValue(Utils.getIntValue(found))
+                            .build()
+                    );
                 }
             }
         }
@@ -497,7 +527,12 @@ public class CheckHttp extends PluginBase {
         Date today = new Date();
         for (Date date : expiryDates) {
             int diffInDays = (int) ((date.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-            metrics.add(new Metric("certificate", "", new BigDecimal(diffInDays), null, null));
+            //metrics.add(new Metric("certificate", "", new BigDecimal(diffInDays), null, null));
+            metrics.add(
+                    Metric.forMetric("certificate", Integer.class)
+                    .withValue(diffInDays)
+                    .build()
+            );
         }
     }
 

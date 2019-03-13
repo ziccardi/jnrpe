@@ -21,7 +21,6 @@ import it.jnrpe.Status;
 import it.jnrpe.plugin.utils.Shell;
 import it.jnrpe.plugin.utils.WindowsShell;
 import it.jnrpe.plugins.Metric;
-import it.jnrpe.plugins.MetricBuilder;
 import it.jnrpe.plugins.PluginBase;
 import it.jnrpe.plugins.annotations.Option;
 import it.jnrpe.plugins.annotations.Plugin;
@@ -30,7 +29,6 @@ import it.jnrpe.utils.BadThresholdException;
 import it.jnrpe.utils.ThresholdUtil;
 import it.jnrpe.utils.TimeUnit;
 
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,7 +37,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
-import org.apache.commons.io.IOUtils;
 
 /**
  * Checks system processes and does check against threshold metrics.
@@ -194,7 +191,7 @@ public class CheckProcs extends PluginBase {
     private ReturnValue analyzeProcMetrics(List<Map<String, String>> output, ICommandLine cl, String critical, String warning, String message)
             throws Exception {
         int size = output.size();
-        Metric sizeMetric = MetricBuilder.forMetric("size").withMinValue(0).withValue(size).build();
+        Metric sizeMetric = Metric.forMetric("size", Integer.class).withMinValue(0).withValue(size).build();
         if (critical != null) {
             if (ThresholdUtil.isValueInRange(critical, sizeMetric)) {
                 return new ReturnValue(Status.CRITICAL, "PROCS CRITICAL: " + message + " " + size + " processes.");
@@ -237,7 +234,7 @@ public class CheckProcs extends PluginBase {
         for (Map<String, String> values : output) {
             int procValue = Integer.parseInt(values.get(metric.toLowerCase()));
             
-            Metric metricObj = MetricBuilder.forMetric(metric).withValue(procValue).build();
+            Metric metricObj = Metric.forMetric(metric, Integer.class).withValue(procValue).build();
             
             if (ThresholdUtil.isValueInRange(value, metricObj)) {
                 list.add(values);

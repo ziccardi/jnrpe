@@ -7,13 +7,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.core.classloader.annotations.PrepareOnlyThisForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.mockito.Matchers;
 /**
  * Created by ziccardi on 07/12/2016.
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest( { CheckDisk.class } )
+@PrepareOnlyThisForTest( { CheckDisk.class } )
 public class CheckDiskTest {
 
     @Test
@@ -59,7 +60,6 @@ public class CheckDiskTest {
     }
 
     @Test
-    @Ignore("checkDiskNewThresholdsPctOK - Disabled due to a bug in powermock")
     public void checkDiskNewThresholdsPctOK() throws Exception {
         CheckDisk checkDisk = PowerMockito.spy(new CheckDisk());
         PowerMockito.doReturn(90L).when(checkDisk, "getFreeSpace", Matchers.anyString());
@@ -73,7 +73,6 @@ public class CheckDiskTest {
     }
 
     @Test
-    @Ignore("checkDiskNewThresholdsPctWarning - Disabled due to a bug in powermock")
     public void checkDiskNewThresholdsPctWarning() throws Exception {
         CheckDisk checkDisk = PowerMockito.spy(new CheckDisk());
         PowerMockito.doReturn(13L).when(checkDisk, "getFreeSpace", Matchers.anyString());

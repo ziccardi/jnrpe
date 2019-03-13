@@ -141,7 +141,7 @@ public class LegacyThreshold implements IThreshold {
      * @see it.jnrpe.utils.thresholds.IThreshold#isAboutMetric(Metric)
      */
     public final boolean isAboutMetric(final Metric metric) {
-        return metricName.equalsIgnoreCase(metric.getMetricName());
+        return metricName.equalsIgnoreCase(metric.getName());
     }
 
     /**

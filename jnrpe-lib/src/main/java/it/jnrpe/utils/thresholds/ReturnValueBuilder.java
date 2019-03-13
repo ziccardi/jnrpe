@@ -110,13 +110,13 @@ public final class ReturnValueBuilder {
     
      * @return this */
     public ReturnValueBuilder withValue(final Metric pluginMetric) {
-        if (thresholds.isMetricRequired(pluginMetric.getMetricName())) {
+        if (thresholds.isMetricRequired(pluginMetric.getName())) {
             Status newStatus = thresholds.evaluate(pluginMetric);
             if (newStatus.getSeverity() > status.getSeverity()) {
                 status = newStatus;
             }
 
-            IThreshold thr = thresholds.getThreshold(pluginMetric.getMetricName());
+            IThreshold thr = thresholds.getThreshold(pluginMetric.getName());
 
             formatResultMessage(pluginMetric);
 
@@ -186,7 +186,7 @@ public final class ReturnValueBuilder {
             retVal.withStatus(forcedStatus);
         }
 
-        StringBuilder msg = new StringBuilder(pluginName).append(" : ").append(retVal.getStatus());
+        StringBuilder msg = new StringBuilder(pluginName).append(' ').append(retVal.getStatus());
         if (!StringUtils.isEmpty(retValMessage)) {
             msg.append(" - ").append(retValMessage);
         }

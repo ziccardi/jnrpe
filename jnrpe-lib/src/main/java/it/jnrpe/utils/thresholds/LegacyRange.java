@@ -246,8 +246,8 @@ public class LegacyRange {
      */
     public final boolean isValueInside(final Metric metric) {
         
-        BigDecimal value = metric.getMetricValue(prefix);
-        
+        Comparable value = metric.getValue();
+
         boolean bRes = true;
         // Sets the minimum value of the range
         if (minVal != null) {

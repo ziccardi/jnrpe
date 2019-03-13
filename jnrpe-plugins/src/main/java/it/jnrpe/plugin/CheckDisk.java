@@ -46,6 +46,10 @@ public class CheckDisk extends PluginBase {
      */
     private static final long MB = KB << 10;
 
+    public CheckDisk() {
+        super("DISK");
+    }
+
     /**
      * Compute the percent values.
      *
@@ -55,7 +59,7 @@ public class CheckDisk extends PluginBase {
      *            The total value
      * @return The percent of val/total
      */
-    private int percent(final long val, final long total) {
+    private double percent(final long val, final long total) {
         if (total == 0) {
             return 100;
         }
@@ -67,7 +71,7 @@ public class CheckDisk extends PluginBase {
         double dVal = (double) val;
         double dTotal = (double) total;
 
-        return (int) (dVal / dTotal * 100);
+        return dVal / dTotal * 100;
     }
 
     @Override
@@ -75,7 +79,7 @@ public class CheckDisk extends PluginBase {
         if (cl.hasOption("th")) {
             super.configureThresholdEvaluatorBuilder(thrb, cl);
         } else {
-            thrb.withLegacyThreshold("freepct", null, cl.getOptionValue("warning"), cl.getOptionValue("critical"));
+            thrb.withLegacyThreshold(cl.getOptionValue("path"), null, cl.getOptionValue("warning"), cl.getOptionValue("critical"));
         }
     }
 
@@ -90,43 +94,57 @@ public class CheckDisk extends PluginBase {
     }
 
     @Override
-    public final Collection<Metric> gatherMetrics(final ICommandLine cl) throws MetricGatheringException {
+    public final Collection<Metric> gatherMetrics(final ICommandLine cl) {
         String sPath = cl.getOptionValue("path");
 
         long lBytes = getFreeSpace(sPath);
         long lTotalSpace = getTotalSpace(sPath);
 
-        String sFreeSpace = format(lBytes);
-        String sUsedSpace = format(lTotalSpace - lBytes);
+        ReadableSize freeSpace = format(lBytes);
+        ReadableSize readableUsedSpace = format(lTotalSpace - lBytes);
+        ReadableSize readableTotalSpace = format(lTotalSpace);
+        double freePercent = percent(lBytes, lTotalSpace);
 
-        int iFreePercent = lBytes == 0 ? 0 : percent(lBytes, lTotalSpace);
+        List<Metric> res = new ArrayList<>();
 
-        String sFreePercent = String.valueOf(iFreePercent) + "%";
-        String sUsedPercent = lTotalSpace != lBytes ? String.valueOf(percent(lTotalSpace - lBytes, lTotalSpace)) : 100 + "%";
+        String msg = String.format("free space: %s %.0f %s (%.2f%%)", sPath, Math.floor(freeSpace.size), freeSpace.UOM, freePercent);
+        res.add(Metric
+                .forMetric(sPath, Long.class)
+                .withMessage(msg)
+                .withValue(lBytes)
+                .withOutputMetric((long) readableUsedSpace.size, readableUsedSpace.UOM)
+                .withMinValue(0L)
+                .withMaxValue((long)readableTotalSpace.size)
+                .build());
 
-        List<Metric> res = new ArrayList<Metric>();
-
-        String msg = "Used: " + sUsedSpace + "(" + sUsedPercent + ") Free: " + sFreeSpace + "(" + sFreePercent + ")";
-
-        res.add(new Metric("freepct", msg, new BigDecimal(iFreePercent), new BigDecimal(0), new BigDecimal(100)));
-        res.add(new Metric("freespace", msg, new BigDecimal(iFreePercent), new BigDecimal(0), new BigDecimal(lTotalSpace)));
-
+        res.add(Metric
+                .forMetric("freepct", Integer.class)
+                .withMessage(msg)
+                .withValue((int) percent(lBytes, lTotalSpace))
+                .withMinValue(0)
+                .withMaxValue(100)
+                .build());
         return res;
     }
 
-    /**
-     * Format the size returning it as MB or KB.
-     *
-     * @param bytes
-     *            The size to be formatted
-     * @return The formatted size
-     */
-    private String format(final long bytes) {
-        if (bytes > MB) {
-            return String.valueOf(bytes / MB) + " MB";
+    private static class ReadableSize {
+        private double size;
+        private String UOM;
+
+        private ReadableSize(double size, String uom) {
+            this.size = size;
+            this.UOM = uom;
         }
-        return String.valueOf(bytes / KB) + " KB";
     }
+
+    public static ReadableSize format(long size) {
+        if(size <= 0) return new ReadableSize(0, "B");
+        final String[] units = new String[] { "B", "kB", "MB", "GB", "TB" };
+        int digitGroups = (int) (Math.log10(size)/Math.log10(1024));
+
+        return new ReadableSize(size/Math.pow(1024, digitGroups), units[digitGroups]);
+    }
+
 
     @Override
     protected String getPluginName() {

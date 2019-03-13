@@ -292,7 +292,7 @@ class Threshold implements IThreshold {
      * @see it.jnrpe.utils.thresholds.IThreshold#isAboutMetric(String)
      */
     public final boolean isAboutMetric(final Metric metric) {
-        return metric.getMetricName().equalsIgnoreCase(metricName);
+        return metric.getName().equalsIgnoreCase(metricName);
     }
 
     /**

@@ -15,9 +15,8 @@
  *******************************************************************************/
 package it.jnrpe.plugins;
 
-import it.jnrpe.utils.thresholds.Prefixes;
-
 import java.math.BigDecimal;
+import java.text.MessageFormat;
 
 /**
  * This class represent a metric gathered from a plugin.
@@ -26,134 +25,122 @@ import java.math.BigDecimal;
  * @version $Revision: 1.0 $
  */
 public class Metric {
-    
-    private Prefixes prefix = Prefixes.RAW;
-    
-    /**
-     * The name of the metric.
-     */
-    private final String metricName;
+    private String name;
+    private BigDecimal value;
+    private String warningThreshold;
+    private String criticalThreshold;
+    private BigDecimal min;
+    private BigDecimal max;
 
-    /**
-     * The message associated with this metric. This is the message that will be
-     * returned to Nagios if the user requested for this metric.
-     */
-    private final String metricMessage;
+    private String message;
 
-    /**
-     * The value of this metric.
-     */
-    private final MetricValue metricValue;
+    private String UOM = "";
 
-    /**
-     * The maximum value for this metric.
-     */
-    private final MetricValue minValue;
+    private BigDecimal outputMetric;
 
-    /**
-     * The minimum value for this metric.
-     */
-    private final MetricValue maxValue;
-
-    /**
-     * Builds and initializes a metric object.
-     * 
-     * @param name
-     *            The name of the metric
-     * @param message
-     *            The message associated with this metric. For example: disk
-     *            usage 50%.
-     * @param value
-     *            The value of this metric (can't be null)
-     * @param min
-     *            The minimum value for this metric (can be null)
-     * @param max
-     *            The maximum value for this metric (can be null)
-     */
-    public Metric(final String name, final String message, final BigDecimal value, final BigDecimal min, final BigDecimal max) {
-        metricName = name;
-        metricValue = convert(value);
-        minValue = convert(min);
-        maxValue = convert(max);
-        metricMessage = message;
+    private Metric() {
     }
 
-    Metric(final String name, final String message, final BigDecimal value, final BigDecimal min, final BigDecimal max, final Prefixes prefix) {
-        metricName = name;
-        metricValue = convert(value);
-        minValue = convert(min);
-        maxValue = convert(max);
-        metricMessage = message;
-        this.prefix = prefix;
+    public String getName() {
+        return name;
     }
-    
-    private static MetricValue convert(Number val) {
-        if (val == null) {
-            return null;
+
+    public BigDecimal getMin() {
+        return min;
+    }
+
+    public BigDecimal getMax() {
+        return max;
+    }
+
+    public String getCriticalThreshold() {
+        return criticalThreshold;
+    }
+
+    public String getWarningThreshold() {
+        return warningThreshold;
+    }
+
+    public BigDecimal getOutputMetric() {
+        return this.outputMetric != null ? this.outputMetric : this.value;
+    }
+
+    public String getUOM() {
+        return UOM;
+    }
+
+    public BigDecimal getValue() {
+        return value;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public static class MetricBuilder<K extends Comparable> {
+        private Metric metric = new Metric();
+
+        private MetricBuilder(String metricName) {
+            this.metric.name = metricName;
         }
-        
-        if (val instanceof BigDecimal) {
-            return MetricValue.valueOf((BigDecimal) val);
+
+        public MetricBuilder<K> withValue(K value) {
+            if (value == null) {
+                throw new IllegalArgumentException("Metric value can't be null");
+            }
+            this.metric.value = new BigDecimal(value.toString());
+            return this;
         }
-        
-        return new MetricValue(val.toString());
-    }
-    
-    /**
-     * @return The name of this metric. 
-     */
-    public final String getMetricName() {
-        return metricName;
+
+        public MetricBuilder<K> withOutputMetric(K value, String UOM) {
+            this.metric.outputMetric = new BigDecimal(value.toString());
+            this.metric.UOM = UOM;
+            return this;
+        }
+
+        public MetricBuilder<K> withOutputMetric(K value) {
+            return this.withOutputMetric(value, null);
+        }
+
+        public MetricBuilder<K> withMessage(String message) {
+            this.metric.message = message;
+            return this;
+        }
+
+        public MetricBuilder<K> withMessage(String format, Object...params) {
+            this.metric.message = MessageFormat.format(format, params);
+            return this;
+        }
+
+        public MetricBuilder<K> withWarningThrehold(String threhold) {
+            this.metric.warningThreshold = threhold;
+            return this;
+        }
+
+        public MetricBuilder<K> withCriticalThrehold(String threhold) {
+            this.metric.criticalThreshold = threhold;
+            return this;
+        }
+
+        public MetricBuilder<K> withMinValue(K min) {
+            this.metric.min = new BigDecimal(min.toString());
+            return this;
+        }
+
+        public MetricBuilder<K> withMaxValue(K max) {
+            this.metric.max = new BigDecimal(max.toString());;
+            return this;
+        }
+
+        public Metric build() {
+            return this.metric;
+        }
     }
 
-    
-    /**
-     * @return The value of this metric. 
-     */
-    public final MetricValue getMetricValue() {
-        return metricValue;
-    }
-
-    public final MetricValue getMetricValue(Prefixes outputPrefix) {
-        return convert(prefix.convert(metricValue, outputPrefix));
-    }
-    
-    /**
-     * @return The minimum value for this metric. 
-     */
-    public final MetricValue getMinValue() {
-        return minValue;
-    }
-    
-    public final MetricValue getMinValue(Prefixes outputPrefix) {
-        return convert(prefix.convert(minValue, outputPrefix));
-    }
-
-    /**
-    
-     * @return The maximum value for this metric. */
-    public final MetricValue getMaxValue() {
-        return maxValue;
-    }
-    
-    public final MetricValue getMaxValue(Prefixes outputPrefix) {
-        return convert(prefix.convert(maxValue, outputPrefix));
-    }
-
-    /**
-     * @return The message associated with this metric. 
-     */
-    public final String getMessage() {
-        return metricMessage;
-    }
-
-    /**
-     * Method toString.
-     * @return String
-     */
-    @Override
-    public String toString() {
-        return "Metric [metricName=" + metricName + ", metricMessage=" + metricMessage + ", metricValue=" + metricValue + ", minValue=" + minValue
-                + ", maxValue=" + maxValue + "]";
+    public static<K extends Comparable> MetricBuilder<K> forMetric(String name, Class<K>type) {
+        if (name == null) {
+            throw new IllegalArgumentException("Metric name can't be null");
+        }
+        return new MetricBuilder<>(name);
     }
 }

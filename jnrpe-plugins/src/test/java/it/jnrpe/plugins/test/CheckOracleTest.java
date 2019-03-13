@@ -38,7 +38,13 @@ public class CheckOracleTest {
 
         // Returned metric
         List<Metric> metricList = new ArrayList<Metric>();
-        metricList.add(new Metric("conn", "Connection time : 10s", new BigDecimal(10), new BigDecimal(0), null));
+        metricList.add(
+                Metric.forMetric("conn", Integer.class)
+                .withMessage("Connection time : 10s")
+                .withValue(10)
+                .withMinValue(0)
+                .build()
+        );
 
         //PowerMockito.when(checkOracle, "getConnection").;
         PowerMockito.doReturn(null).when(checkOracle, "getConnection", any(ICommandLine.class));
@@ -78,6 +84,14 @@ public class CheckOracleTest {
         Mockito.when(rs.getBigDecimal(1)).thenReturn(new BigDecimal(100));
         Mockito.when(rs.getBigDecimal(2)).thenReturn(new BigDecimal(500));
         Mockito.when(rs.getBigDecimal(3)).thenReturn(new BigDecimal(80));
+
+        Mockito.when(rs.getLong(1)).thenReturn(100L);
+        Mockito.when(rs.getLong(2)).thenReturn(500L);
+        Mockito.when(rs.getLong(3)).thenReturn(80L);
+
+        Mockito.when(rs.getInt(1)).thenReturn(100);
+        Mockito.when(rs.getInt(2)).thenReturn(500);
+        Mockito.when(rs.getInt(3)).thenReturn(80);
 
         // Mock test methods
         PowerMockito.doReturn(new ArrayList<Metric>()).when(checkOracle, "checkAlive", any(), any());
@@ -154,7 +168,14 @@ public class CheckOracleTest {
 
         // Returned metric
         List<Metric> metricList = new ArrayList<Metric>();
-        metricList.add(new Metric("conn", "Connection time : 15s", new BigDecimal(15), new BigDecimal(0), null));
+        metricList.add(
+                Metric.forMetric("conn", Integer.class)
+                        .withMessage("Connection time : 15s")
+                        .withValue(15)
+                        .withMinValue(0)
+                        .build()
+
+        );
 
         PowerMockito.doReturn(null).when(checkOracle, "getConnection", any(ICommandLine.class));
         PowerMockito.doReturn(metricList).when(checkOracle, "checkAlive", Matchers.any(), Matchers.any());
@@ -176,7 +197,14 @@ public class CheckOracleTest {
 
         // Returned metric
         List<Metric> metricList = new ArrayList<Metric>();
-        metricList.add(new Metric("conn", "Connection time : 15s", new BigDecimal(15), new BigDecimal(0), null));
+        metricList.add(
+                Metric.forMetric("conn", Integer.class)
+                        .withMessage("Connection time : 15s")
+                        .withValue(15)
+                        .withMinValue(0)
+                        .build()
+
+        );
 
         PowerMockito.doReturn(null).when(checkOracle, "getConnection", any(ICommandLine.class));
         PowerMockito.doReturn(metricList).when(checkOracle, "checkAlive", Matchers.any(), Matchers.any());
@@ -197,7 +225,14 @@ public class CheckOracleTest {
 
         // Returned metric
         List<Metric> metricList = new ArrayList<Metric>();
-        metricList.add(new Metric("conn", "Connection time : 15s", new BigDecimal(15), new BigDecimal(0), null));
+        metricList.add(
+                Metric.forMetric("conn", Integer.class)
+                        .withMessage("Connection time : 15s")
+                        .withValue(15)
+                        .withMinValue(0)
+                        .build()
+
+        );
 
         PowerMockito.doThrow(new SQLException("Connection failed")).when(checkOracle, "getConnection", any(ICommandLine.class));
         PowerMockito.doReturn(metricList).when(checkOracle, "checkAlive", Matchers.any(), Matchers.any());

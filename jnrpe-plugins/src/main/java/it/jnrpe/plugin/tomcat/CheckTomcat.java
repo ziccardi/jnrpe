@@ -20,7 +20,6 @@ import it.jnrpe.JNRPELogger;
 import it.jnrpe.ReturnValue;
 import it.jnrpe.Status;
 import it.jnrpe.plugins.Metric;
-import it.jnrpe.plugins.MetricBuilder;
 import it.jnrpe.plugins.MetricGatheringException;
 import it.jnrpe.plugins.PluginBase;
 import it.jnrpe.plugins.annotations.Option;
@@ -141,44 +140,44 @@ public class CheckTomcat extends PluginBase {
         
         BigDecimal percent = toPercent(jvmMemory.getFreeMemory(), jvmMemory.getTotalMemory());
         
-        res.add(MetricBuilder.forMetric("memory")
+        res.add(Metric.forMetric("memory", Long.class)
                 .withMessage("Memory : {0,number,#.##}mb", freeMemory.doubleValue())
-                .withValue(jvmMemory.getFreeMemory(), "#.##")
-                .withMinValue(0, "#.##")
-                .withMaxValue(jvmMemory.getTotalMemory(), "#.##").build());
+                .withValue(jvmMemory.getFreeMemory())
+                .withMinValue(0L)
+                .withMaxValue(jvmMemory.getTotalMemory()).build());
         
         LOG.debug(getContext(), "Created metric : memory");
         
-        res.add(MetricBuilder.forMetric("memory%")
+        res.add(Metric.forMetric("memory%", Integer.class)
                 .withMessage("Used Memory : {0,number,#.##}%", percent.doubleValue())
-                .withValue(percent, "#.##")
-                .withMinValue(0, "#")
-                .withMaxValue(100, "#").build());
+                .withValue(percent.intValue())
+                .withMinValue(0)
+                .withMaxValue(100).build());
 
         LOG.debug(getContext(), "Created metric : memory%");
         
         for (MemoryPoolData mpd : dataProvider.getMemoryPoolData()) {
-            res.add(MetricBuilder
-                    .forMetric(mpd.getPoolName() + "-memoryPool")
+            res.add(Metric
+                    .forMetric(mpd.getPoolName() + "-memoryPool", Long.class)
                     .withMessage("Memory Pool - usage init: {0}, usage committed: {1}, usage max: {2}, usage used: {3}", 
                             mpd.getUsageInit(),
                             mpd.getUsageCommitted(), 
                             mpd.getUsageMax(), 
                             mpd.getUsageUsed())
-                     .withValue(mpd.getUsageUsed(), "#.##")
-                     .withMinValue(0, "#.##")
-                    .withMaxValue(mpd.getUsageMax(), "#.##").build());
+                     .withValue(mpd.getUsageUsed())
+                     .withMinValue(0L)
+                    .withMaxValue(mpd.getUsageMax()).build());
             
             LOG.debug(getContext(), "Created metric : " + mpd.getPoolName() + "-memoryPool");
             
             BigDecimal memoryPoolPercent = toPercent(mpd.getUsageUsed(), mpd.getUsageMax());
             
-            res.add(MetricBuilder
-                    .forMetric(mpd.getPoolName() + "-memoryPool%")
+            res.add(Metric
+                    .forMetric(mpd.getPoolName() + "-memoryPool%", Integer.class)
                     .withMessage("Memory Pool - usage {0,number,#.##}%", memoryPoolPercent)
-                    .withValue(memoryPoolPercent, "#.##")
-                    .withMinValue(0, "#")
-                    .withMaxValue(mpd.getUsageMax(), "#").build());
+                    .withValue(memoryPoolPercent.intValue())
+                    .withMinValue(0)
+                    .withMaxValue((int)mpd.getUsageMax()).build());
             LOG.debug(getContext(), "Created metric : " + mpd.getPoolName() + "-memoryPool%");;
         }
 
@@ -202,21 +201,21 @@ public class CheckTomcat extends PluginBase {
             final String metricName = td.getConnectorName().replace("\"", "") + "-threadInfo";
             final String percentMetricName = td.getConnectorName().replace("\"", "") + "-threadInfo%";
 
-            res.add(MetricBuilder
-                    .forMetric(metricName)
+            res.add(Metric
+                    .forMetric(metricName, Long.class)
                     .withMessage("{0} - thread count: {1}, current thread busy: {2}, max thread: {3}", metricName, td.getCurrentThreadCount(),
                             td.getCurrentThreadBusy(), td.getMaxThreadCount())
-                    .withValue(td.getCurrentThreadBusy()).withMinValue(0)
+                    .withValue(td.getCurrentThreadBusy()).withMinValue(0L)
                     .withMaxValue(td.getMaxThreadCount()).build());
             
             final BigDecimal threadUsagePercent = toPercent(td.getCurrentThreadBusy(), td.getMaxThreadCount());
             
-            res.add(MetricBuilder
-                    .forMetric(percentMetricName)
+            res.add(Metric
+                    .forMetric(percentMetricName, Long.class)
                     .withMessage("{0} - thread usage: {1,number,#.##}%", metricName, threadUsagePercent)
-                    .withValue(threadUsagePercent, "#.##")
-                    .withMinValue(0, "#")
-                    .withMaxValue(td.getMaxThreadCount(), "#")
+                    .withValue(threadUsagePercent.longValue())
+                    .withMinValue(0L)
+                    .withMaxValue(td.getMaxThreadCount())
                     .build());
             
             LOG.debug(getContext(), "Created metric : " + metricName);
@@ -361,22 +360,22 @@ public class CheckTomcat extends PluginBase {
 
                 for (Metric metric : metrics) {
                     
-                    if (cl.hasOption("memory") && !isMemory(metric.getMetricName())) {
+                    if (cl.hasOption("memory") && !isMemory(metric.getName())) {
                         continue;
                     }
                     
-                    if (cl.hasOption("thread") && !isThread(metric.getMetricName())) {
+                    if (cl.hasOption("thread") && !isThread(metric.getName())) {
                         continue;
                     }
                     
-                    if (cl.hasOption("percent") && !isPercent(metric.getMetricName())) {
+                    if (cl.hasOption("percent") && !isPercent(metric.getName())) {
                         continue;
                     }
                     
                     ret = updateRet(ret, ReturnValueBuilder.forPlugin(
                             getPluginName(),
                             new ThresholdsEvaluatorBuilder()
-                                .withLegacyThreshold(metric.getMetricName(), null, warningThreshold, criticalThreshold, getPrefix(cl))
+                                .withLegacyThreshold(metric.getName(), null, warningThreshold, criticalThreshold, getPrefix(cl))
                                 .create())
                             .withValue(metric)
                             .create());

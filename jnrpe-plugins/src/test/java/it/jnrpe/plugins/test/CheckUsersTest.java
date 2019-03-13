@@ -45,7 +45,12 @@ public class CheckUsersTest {
     private CheckUsers getMock(int numberOfUsers) throws Exception {
         CheckUsers cu = PowerMockito.spy(new CheckUsers());
         List<Metric> metrics = new ArrayList<Metric>();
-        metrics.add(new Metric("users", "", new BigDecimal(numberOfUsers), null, null));
+        //metrics.add(new Metric("users", "", new BigDecimal(numberOfUsers), null, null));
+        metrics.add(
+                Metric.forMetric("users", Integer.class)
+                .withValue(numberOfUsers)
+                .build()
+        );
 
         PowerMockito.doReturn(metrics).when(cu, "gatherMetrics", Matchers.any());
 

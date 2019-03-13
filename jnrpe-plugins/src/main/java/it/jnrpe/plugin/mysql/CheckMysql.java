@@ -95,7 +95,13 @@ public class CheckMysql extends PluginBase {
         if (cl.hasOption("check-slave")) {
             metrics.add(checkSlave(cl, mysql, conn));
         } else {
-            metrics.add(new Metric("time", "Connection took " + elapsed + " secs. ", new BigDecimal(elapsed), new BigDecimal(0), null));
+            //metrics.add(new Metric("time", "Connection took " + elapsed + " secs. ", new BigDecimal(elapsed), new BigDecimal(0), null));
+            metrics.add(
+                    Metric.forMetric("time", Long.class)
+                    .withValue(elapsed)
+                    .withMinValue(0L)
+                    .build()
+            );
         }
         mysql.closeConnection(conn);
         return metrics;
@@ -134,7 +140,11 @@ public class CheckMysql extends PluginBase {
             }
             String slaveResult = "Slave IO: " + slaveIoRunning + " Slave SQL: " + slaveSqlRunning + " Seconds Behind Master: " + secondsBehindMaster;
 
-            metric = new Metric("secondsBehindMaster", slaveResult, new BigDecimal(secondsBehindMaster), null, null);
+            //metric = new Metric("secondsBehindMaster", slaveResult, new BigDecimal(secondsBehindMaster), null, null);
+            metric = Metric.forMetric("secondsBehindMaster", Integer.class)
+                    .withMessage(slaveResult)
+                    .withValue(secondsBehindMaster)
+                    .build();
         } catch (SQLException e) {
             String message = e.getMessage();
             LOG.warn(getContext(), "Error executing the CheckMysql plugin: " + message, e);

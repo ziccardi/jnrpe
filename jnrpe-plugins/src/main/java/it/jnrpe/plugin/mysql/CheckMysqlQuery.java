@@ -84,12 +84,18 @@ public class CheckMysqlQuery extends PluginBase {
             st = conn.createStatement();
             st.execute(query);
             set = st.getResultSet();
-            BigDecimal value = null;
+            Long value = null;
             if (set.first()) {
-                value = set.getBigDecimal(1);
+                value = set.getLong(1);
             }
 
-            metrics.add(new Metric("rows", "CHECK_MYSQL_QUERY - Returned value is " + (value != null ? value.longValue() : null), value, null, null));
+            //metrics.add(new Metric("rows", "CHECK_MYSQL_QUERY - Returned value is " + (value != null ? value.longValue() : null), value, null, null));
+            metrics.add(
+                    Metric.forMetric("row", Long.class)
+                    .withMessage("CHECK_MYSQL_QUERY - Returned value is " + (value != null ? value.longValue() : null))
+                    .withMinValue(value)
+                    .build()
+            );
 
         } catch (SQLException e) {
             

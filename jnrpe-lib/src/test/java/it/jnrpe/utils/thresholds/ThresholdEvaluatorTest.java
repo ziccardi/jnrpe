@@ -17,7 +17,6 @@ package it.jnrpe.utils.thresholds;
 
 import it.jnrpe.Status;
 import it.jnrpe.plugins.Metric;
-import it.jnrpe.plugins.MetricBuilder;
 import it.jnrpe.utils.BadThresholdException;
 import org.junit.Assert;
 import org.junit.Test;
@@ -56,11 +55,11 @@ public class ThresholdEvaluatorTest {
     }
 
     private Metric buildMetric(BigDecimal value, String metricName) {
-        return MetricBuilder.forMetric(metricName).withValue(value).build();
+        return Metric.forMetric(metricName, BigDecimal.class).withValue(value).build();
     }
     
     private Metric buildMetric(BigDecimal value, String metricName, Prefixes prefix) {
-        return MetricBuilder.forMetric(metricName).withValue(value).withPrefix(prefix).build();
+        return Metric.forMetric(metricName, BigDecimal.class).withValue(value).build();
     }
 
     /**
@@ -153,7 +152,7 @@ public class ThresholdEvaluatorTest {
      * 
      * @throws BadThresholdException
      */
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testNullMetricValue() throws BadThresholdException {
         ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder().withThreshold("metric="+METRIC_NAME+",ok=50..100,warn=100..200,crit=200..300").create();
         ths.evaluate(buildMetric((BigDecimal)null));
@@ -164,7 +163,7 @@ public class ThresholdEvaluatorTest {
      * 
      * @throws BadThresholdException
      */
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testNullMetricName() throws BadThresholdException {
         ThresholdsEvaluator ths = new ThresholdsEvaluatorBuilder().withThreshold("metric="+METRIC_NAME+",ok=50..100,warn=100..200,crit=200..300").create();
         ths.evaluate(buildMetric(new BigDecimal("210"), null));
