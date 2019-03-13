@@ -75,13 +75,12 @@ public class JNRPEServerHandler extends ChannelInboundHandlerAdapter {
             ReturnValue ret = commandInvoker.invoke(req.getCommand(), req.getArguments());
 
             JNRPEResponse res = new JNRPEResponse();
-            res.setPacketVersion(PacketVersion.VERSION_2);
-
-            res.setResultCode(ret.getStatus().intValue());
-            res.setMessage(ret.getMessage());
+            res.setResult(ret.getStatus().intValue(), ret.getMessage());
 
             ChannelFuture channelFuture = ctx.writeAndFlush(res);
             channelFuture.addListener(ChannelFutureListener.CLOSE);
+        } catch ( RuntimeException re ) {
+            re.printStackTrace();
         } finally {
             ReferenceCountUtil.release(msg);
         }

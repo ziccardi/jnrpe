@@ -170,6 +170,47 @@ public class JNRPEClient {
         return TRUSTALL_MGR;
     }
 
+    private Socket openSocket() throws Exception {
+        SocketFactory socketFactory;
+
+        Socket s = null;
+        if (!useSSL) {
+            socketFactory = SocketFactory.getDefault();
+        } else {
+            SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
+
+            sslContext.init(null, new TrustManager[] { getTrustManager() }, new SecureRandom());
+
+            socketFactory = sslContext.getSocketFactory();
+        }
+
+        s = socketFactory.createSocket();
+        if (weakCipherSuitesEnabled) {
+            SSLSocket ssl  = (SSLSocket) s;
+            ssl.setEnabledCipherSuites(ssl.getSupportedCipherSuites());
+        }
+
+        s.setSoTimeout((int) TimeUnit.SECOND.convert(communicationTimeout));
+        s.connect(new InetSocketAddress(serverIPorURL, serverPort));
+
+        return s;
+    }
+
+    private ReturnValue sendRequest(JNRPERequest request) throws JNRPEClientException {
+        try(Socket s = openSocket()) {
+            s.getOutputStream().write(request.toByteArray());
+
+            InputStream in = s.getInputStream();
+            JNRPEResponse res = new JNRPEResponse(in);
+
+            return new ReturnValue(Status.fromIntValue(res.getResultCode()), res.getMessage());
+        } catch (RuntimeException re) {
+            throw re;
+        } catch (Exception e) {
+            throw new JNRPEClientException(e);
+        }
+    }
+
     /**
      * Inovoke a command installed in JNRPE.
      * 
@@ -183,49 +224,11 @@ public class JNRPEClient {
      *             Thrown on any communication error.
      */
     public final ReturnValue sendCommand(final String sCommandName, final String... arguments) throws JNRPEClientException {
-        SocketFactory socketFactory;
+        return sendRequest(new JNRPERequest(sCommandName, arguments));
+    }
 
-        Socket s = null;
-        try {
-            if (!useSSL) {
-                socketFactory = SocketFactory.getDefault();
-            } else {
-                SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
-
-                sslContext.init(null, new TrustManager[] { getTrustManager() }, new SecureRandom());
-
-                socketFactory = sslContext.getSocketFactory();
-            }
-
-            s = socketFactory.createSocket();
-            if (weakCipherSuitesEnabled) {
-                SSLSocket ssl  = (SSLSocket) s;
-                ssl.setEnabledCipherSuites(ssl.getSupportedCipherSuites());    
-            }
-
-            s.setSoTimeout((int) TimeUnit.SECOND.convert(communicationTimeout));
-            s.connect(new InetSocketAddress(serverIPorURL, serverPort));
-            JNRPERequest req = new JNRPERequest(sCommandName, arguments);
-
-            s.getOutputStream().write(req.toByteArray());
-
-            InputStream in = s.getInputStream();
-            JNRPEResponse res = new JNRPEResponse(in);
-
-            return new ReturnValue(Status.fromIntValue(res.getResultCode()), res.getMessage());
-        } catch (RuntimeException re) {
-            throw re;
-        } catch (Exception e) {
-            throw new JNRPEClientException(e);
-        } finally {
-            if (s != null) {
-                try {
-                    s.close();
-                } catch (IOException e) {
-                    // Ignore
-                }
-            }
-        }
+    public final ReturnValue sendQuery() throws JNRPEClientException {
+        return sendRequest(new JNRPERequest("_NRPE_CHECK"));
     }
 
     /**
