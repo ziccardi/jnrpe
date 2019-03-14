@@ -10,14 +10,11 @@ public class CheckDiskIT {
 
     private final static String RAMDISK = "/Volumes/ramdisk";
 
-    // FIXME: prepare the test checking the real free space
-
     @Test
-    public void checkDiskNoParams() throws Exception {
+    public void checkDiskParams() throws Exception {
         JNRPEClient client = new JNRPEClient("127.0.0.1", 5666, true);
         client.enableWeakCipherSuites();
         ReturnValue ret = client.sendCommand("check_disk_params", RAMDISK);
-        //Assert.assertEquals("DISK OK - free space: / 58289 MB (12.45% inode=100%);| /=409730MB;;;0;476902", ret.getMessage());
 
         CheckDisk checkDisk = new CheckDisk();
         PluginTester.given(checkDisk)

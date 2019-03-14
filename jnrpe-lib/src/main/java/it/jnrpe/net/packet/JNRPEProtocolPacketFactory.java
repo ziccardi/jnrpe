@@ -24,7 +24,7 @@ import java.io.InputStream;
 
 public class JNRPEProtocolPacketFactory {
 
-    public static int PROTOCOL_VERSION = 3;
+    private static final int PROTOCOL_VERSION = 3;
 
     private static IJNRPEProtocolPacket produce(DataStreamAdapter in) throws IOException {
         int version = in.readUnisgnedInt16();
