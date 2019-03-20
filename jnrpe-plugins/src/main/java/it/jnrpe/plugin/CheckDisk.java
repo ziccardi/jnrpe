@@ -24,6 +24,8 @@ import it.jnrpe.utils.thresholds.ThresholdsEvaluatorBuilder;
 
 import java.io.File;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -105,9 +107,12 @@ public class CheckDisk extends PluginBase {
         ReadableSize readableTotalSpace = format(lTotalSpace);
         double freePercent = percent(lBytes, lTotalSpace);
 
+        DecimalFormat percentDecimalFormat = new DecimalFormat("#.##");
+        percentDecimalFormat.setRoundingMode(RoundingMode.FLOOR);
+
         List<Metric> res = new ArrayList<>();
 
-        String msg = String.format("free space: %s %.0f %s (%.2f%%)", sPath, Math.floor(freeSpace.size), freeSpace.UOM, freePercent);
+        String msg = String.format("free space: %s %.0f %s (%s%%)", sPath, Math.floor(freeSpace.size), freeSpace.UOM, percentDecimalFormat.format(freePercent));
         res.add(Metric
                 .forMetric(sPath, Long.class)
                 .withMessage(msg)
