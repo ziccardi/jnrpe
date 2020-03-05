@@ -1,0 +1,5 @@
+rootProject.name = 'jnrpe'
+include 'plugin-service'
+include 'engine-module'
+include 'plugins-module'
+
