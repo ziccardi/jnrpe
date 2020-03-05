@@ -1,0 +1,4 @@
+dependencies {
+    implementation project(':plugin-service')
+    testRuntimeOnly project(':plugins-module')
+}
