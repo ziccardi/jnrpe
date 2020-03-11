@@ -25,7 +25,7 @@ class V3Encoder implements IResponseEncoder {
             dout.writeInt((int) response.getCrc32()); // Type: Response
             dout.writeShort(response.getResultCode());
             dout.writeShort(response.getAlignment());
-            dout.writeShort(response.getBuffer().length);
+            dout.writeInt(response.getBuffer().length);
             dout.write(response.getBuffer());
             dout.write(response.getPadding());
             dout.flush();

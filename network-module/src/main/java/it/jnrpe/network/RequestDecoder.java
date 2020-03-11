@@ -12,8 +12,8 @@ class RequestDecoder extends ReplayingDecoder<Void> {
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
-        ProtocolPacket packet = DecoderBuilder.forPacket(in.readUnsignedShort(), 1).withByteBuf(in).build();
-        System.out.println("Valid: " + packet.validateCRC());
+        int protocolVersion = in.readUnsignedShort();
+        ProtocolPacket packet = DecoderBuilder.forPacket(protocolVersion, 1).withByteBuf(in).build();
         out.add(packet);
     }
 }

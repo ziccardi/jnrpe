@@ -17,6 +17,6 @@ public class NRPEV3Response extends NRPEV3AbstractPacket {
 
     private static byte[] messageToBuffer(String msg) {
         byte[] msgBytes = msg.getBytes();
-        return Arrays.copyOf(msg.getBytes(), Math.max(1024, msgBytes.length + 1));
+        return Arrays.copyOf(msg.getBytes(), msgBytes.length + 1);
     }
 }
