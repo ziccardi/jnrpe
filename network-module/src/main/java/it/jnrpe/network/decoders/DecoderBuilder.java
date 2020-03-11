@@ -11,7 +11,7 @@ public class DecoderBuilder {
                 return DecoderV4Builder.forPacket(type);
             default:
                 // fixme throw exception
-                return null;
+                throw new IllegalStateException("Returning null - " + version + " - type " + type);
         }
     }
 }

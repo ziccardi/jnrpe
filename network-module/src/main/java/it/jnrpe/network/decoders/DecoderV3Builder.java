@@ -9,16 +9,14 @@ class DecoderV3Builder {
             setAlignment(this.buffer.readUnsignedShort());
 
             long bufLength = this.buffer.readUnsignedInt();
-
             if (bufLength < 0 || bufLength > 65536) {
                 // FIXME: throw an exception
             }
-
             byte[] requestBuffer = new byte[(int) bufLength];
             this.buffer.readBytes(requestBuffer);
             setRequestBuffer(requestBuffer);
 
-            byte[] padding = new byte[3];
+            byte[] padding = new byte[(int)(1020 - bufLength)];
             this.buffer.readBytes(padding);
             setPadding(padding);
         }
