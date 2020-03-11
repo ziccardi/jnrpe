@@ -23,13 +23,11 @@ class ServerHandler extends ChannelInboundHandlerAdapter {
             ProtocolPacket packet = (ProtocolPacket) msg;
 
             ctx.channel().attr(AttributeKey.<Integer>valueOf("version")).set(((ProtocolPacket) msg).getVersion());
+
             ExecutionResult res = commandHandlers.get(0).execute(packet.getCommand());
 
             ChannelFuture channelFuture = ctx.writeAndFlush(res);
             channelFuture.addListener(ChannelFutureListener.CLOSE);
-
-
-            commandHandlers.forEach(handler -> handler.execute(packet.getCommand()));
         } finally {
             ReferenceCountUtil.release(msg);
         }
