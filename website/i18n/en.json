@@ -21,8 +21,80 @@
       "doc5": {
         "title": "Fifth Document"
       },
+      "get-jnrpe": {
+        "title": "Getting JNRPE"
+      },
+      "installation/cli-installer": {
+        "title": "The Command Line installer"
+      },
+      "installation/directory-structure": {
+        "title": "The JNRPE Directory Structure"
+      },
+      "installation/gui-installer": {
+        "title": "The GUI installer"
+      },
       "overview": {
         "title": "Overview"
+      },
+      "plugins/plugin-checkdisk": {
+        "title": "CHECK_DISK"
+      },
+      "plugins/plugin-checkhttp": {
+        "title": "CHECK_HTTP"
+      },
+      "plugins/plugin-checkjmx": {
+        "title": "CHECK_JMX"
+      },
+      "plugins/plugin-checkmysql": {
+        "title": "CHECK_MYSQL"
+      },
+      "plugins/plugin-checkmysqlquery": {
+        "title": "CHECK_MYSQL_QUERY"
+      },
+      "plugins/plugin-checkoracle": {
+        "title": "CHECK_ORACLE"
+      },
+      "plugins/plugin-checkpgsql": {
+        "title": "CHECK_PGSQL"
+      },
+      "plugins/plugin-checkping": {
+        "title": "CHECK_PING"
+      },
+      "plugins/plugin-checkprocs": {
+        "title": "CHECK_PROCS"
+      },
+      "plugins/plugin-checkssh": {
+        "title": "CHECK_SSH"
+      },
+      "plugins/plugin-checktime": {
+        "title": "CHECK_TIME"
+      },
+      "plugins/plugin-checktomcat": {
+        "title": "CHECK_TOMCAT"
+      },
+      "plugins/plugin-checkusers": {
+        "title": "CHECK_USERS"
+      },
+      "plugins/plugin-checkfile": {
+        "title": "CHECK_FILE"
+      },
+      "plugins/plugin-exec": {
+        "title": "EXEC"
+      },
+      "plugins/plugin-test": {
+        "title": "TEST"
+      },
+      "server/configure-jnrpe": {
+        "title": "Configuring JNRPE"
+      },
+      "server/interactive-console": {
+        "title": "Interactive Console"
+      },
+      "server/server-overview": {
+        "title": "Overview"
+      },
+      "server/run-jnrpe": {
+        "title": "Running JNRPE"
       }
     },
     "links": {
@@ -33,8 +105,10 @@
     },
     "categories": {
       "Introduction": "Introduction",
-      "First Category": "First Category",
-      "Second Category": "Second Category"
+      "Installing JNRPE": "Installing JNRPE",
+      "The JNRPE Server": "The JNRPE Server",
+      "Plugins": "Plugins",
+      "First Category": "First Category"
     }
   },
   "pages-strings": {
