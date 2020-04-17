@@ -23,7 +23,7 @@ const users = [
 const siteConfig = {
   title: 'Massimiliano Ziccardi - JNRPE', // Title for your website.
   tagline: 'Java Nagios Remote Plugin Executor',
-  url: 'https://ziccardi.github.io', // Your website URL
+  url: 'https://www.jnrpe.it', // Your website URL
   baseUrl: '/jnrpe/', // Base URL for your project */
   // For github.io type URLs, you would set the url and baseUrl like:
   //   url: 'https://facebook.github.io',
@@ -44,7 +44,7 @@ const siteConfig = {
   // For no header links in the top nav bar -> headerLinks: [],
   headerLinks: [
     { href: 'https://github.com/ziccardi/jnrpe', label: 'GitHUB'},
-    { href: 'https://ziccardi.github.io', label: 'Home'}
+    { href: 'https://www.jnrpe.it', label: 'Home'}
     // {page: 'help', label: 'Help'},
     // {blog: true, label: 'Blog'},
   ],
