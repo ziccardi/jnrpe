@@ -1,9 +1,9 @@
 package it.jnrpe.engine.commands;
 
+import it.jnrpe.command.execution.ExecutionResult;
+import it.jnrpe.command.execution.ICommandExecutor;
+import it.jnrpe.command.execution.Status;
 import it.jnrpe.engine.plugins.PluginRepository;
-import it.jnrpe.network.execution.ExecutionResult;
-import it.jnrpe.network.execution.ICommandExecutor;
-import it.jnrpe.network.execution.Status;
 
 public class CommandExecutor implements ICommandExecutor {
     @Override

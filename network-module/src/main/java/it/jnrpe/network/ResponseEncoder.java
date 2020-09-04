@@ -4,8 +4,8 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 import io.netty.util.AttributeKey;
+import it.jnrpe.command.execution.ExecutionResult;
 import it.jnrpe.network.encoders.EncoderFactory;
-import it.jnrpe.network.execution.ExecutionResult;
 
 public class ResponseEncoder extends MessageToByteEncoder<ExecutionResult> {
     @Override
