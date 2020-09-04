@@ -4,6 +4,7 @@ plugins {
 
 group 'it.jnrpe'
 version '3.0.0-SNAPSHOT'
+apply plugin: 'distribution'
 
 subprojects {
     apply plugin: 'java'

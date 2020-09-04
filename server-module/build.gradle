@@ -1,3 +1,7 @@
+plugins {
+    id 'application'
+}
+
 dependencies {
     implementation project(':engine-module')
     implementation project(':network-module')
