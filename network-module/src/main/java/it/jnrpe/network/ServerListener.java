@@ -7,11 +7,19 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import it.jnrpe.network.execution.ICommandExecutor;
+import it.jnrpe.command.execution.ICommandExecutor;
+
+import java.util.ServiceLoader;
 
 public class ServerListener {
 
     private final ServerHandler serverHandler = new ServerHandler();
+
+    public ServerListener() {
+        // Loading command executors
+        ServiceLoader<ICommandExecutor> serviceLoader = ServiceLoader.load(ICommandExecutor.class);
+        serviceLoader.forEach(this.serverHandler::addCommandHandler);
+    }
 
     public ServerListener listen(int port) {
         EventLoopGroup bossGroup = new NioEventLoopGroup();
@@ -29,11 +37,6 @@ public class ServerListener {
 
         serverBootstrap.bind(port);
         System.out.println("Started");
-        return this;
-    }
-
-    public ServerListener withCommandHandler(ICommandExecutor commandHandler) {
-        this.serverHandler.addCommandHandler(commandHandler);
         return this;
     }
 

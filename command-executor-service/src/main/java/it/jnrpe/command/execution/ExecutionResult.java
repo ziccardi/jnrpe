@@ -1,4 +1,4 @@
-package it.jnrpe.network.execution;
+package it.jnrpe.command.execution;
 
 public class ExecutionResult {
     private final String message;

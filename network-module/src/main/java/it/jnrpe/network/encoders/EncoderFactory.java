@@ -1,6 +1,6 @@
 package it.jnrpe.network.encoders;
 
-import it.jnrpe.network.execution.ExecutionResult;
+import it.jnrpe.command.execution.ExecutionResult;
 
 public class EncoderFactory {
     private EncoderFactory() {

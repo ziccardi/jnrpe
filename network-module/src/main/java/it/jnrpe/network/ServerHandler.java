@@ -3,8 +3,8 @@ package it.jnrpe.network;
 import io.netty.channel.*;
 import io.netty.util.AttributeKey;
 import io.netty.util.ReferenceCountUtil;
-import it.jnrpe.network.execution.ExecutionResult;
-import it.jnrpe.network.execution.ICommandExecutor;
+import it.jnrpe.command.execution.ExecutionResult;
+import it.jnrpe.command.execution.ICommandExecutor;
 import it.jnrpe.network.protocol.ProtocolPacket;
 
 import java.util.ArrayList;

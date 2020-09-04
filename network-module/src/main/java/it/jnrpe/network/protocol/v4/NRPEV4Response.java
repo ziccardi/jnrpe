@@ -1,6 +1,6 @@
 package it.jnrpe.network.protocol.v4;
 
-import it.jnrpe.network.execution.ExecutionResult;
+import it.jnrpe.command.execution.ExecutionResult;
 
 import java.util.Arrays;
 
