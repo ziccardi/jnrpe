@@ -1,6 +1,5 @@
 plugins {
     id 'java'
-    id 'org.javamodularity.moduleplugin' version '1.6.0' apply false
 }
 
 group 'it.jnrpe'
@@ -8,7 +7,6 @@ version '3.0.0-SNAPSHOT'
 
 subprojects {
     apply plugin: 'java'
-    apply plugin: "org.javamodularity.moduleplugin"
 
     version "1.0-SNAPSHOT"
 
@@ -17,6 +15,12 @@ subprojects {
 
     repositories {
         mavenCentral()
+    }
+
+    plugins.withType(JavaPlugin).configureEach {
+        java {
+            modularity.inferModulePath = true
+        }
     }
 
     test {

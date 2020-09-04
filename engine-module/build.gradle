@@ -1,5 +1,5 @@
 dependencies {
     implementation project(':plugin-service')
     testRuntimeOnly project(':plugins-module')
-    compile project(':network-module')
+    implementation project(':network-module')
 }
