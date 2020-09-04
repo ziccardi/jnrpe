@@ -4,4 +4,4 @@ include 'engine-module'
 include 'plugins-module'
 include 'network-module'
 include 'server-module'
-
+include 'command-executor-service'

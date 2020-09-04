@@ -1,6 +1,6 @@
 package it.jnrpe.network.encoders;
 
-import it.jnrpe.network.execution.ExecutionResult;
+import it.jnrpe.command.execution.ExecutionResult;
 import it.jnrpe.network.protocol.ProtocolPacket;
 import it.jnrpe.network.protocol.v4.NRPEV4Response;
 

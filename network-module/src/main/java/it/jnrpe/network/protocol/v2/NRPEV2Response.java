@@ -1,6 +1,7 @@
 package it.jnrpe.network.protocol.v2;
 
-import it.jnrpe.network.execution.ExecutionResult;
+import it.jnrpe.command.execution.ExecutionResult;
+
 import java.util.Arrays;
 
 public class NRPEV2Response extends NRPEV2AbstractPacket {

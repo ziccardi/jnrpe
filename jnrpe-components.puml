@@ -1,0 +1,28 @@
+@startuml
+
+package "Some Group" {
+HTTP - [First Component]
+[Another Component]
+}
+
+package "Other Groups" {
+FTP - [Second Component]
+
+[First Component] --> FTP
+}
+
+package "jnrpe.engine.module" {
+    package "it.jnrpe.engine" {
+        [CommandExecutor]
+        [CommandRegistry]
+    }
+}
+
+package "jnrpe.network.module" {
+    package "it.jnrpe.network.execution" {
+        ICommandExecutor - [a]
+        [CommandRegistry]
+    }
+}
+
+@enduml
