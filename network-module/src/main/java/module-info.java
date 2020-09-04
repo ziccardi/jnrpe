@@ -1,10 +1,10 @@
 import it.jnrpe.command.execution.ICommandExecutor;
 
 module jnrpe.network.module {
-    exports it.jnrpe.network;
+  exports it.jnrpe.network;
 
-    requires io.netty.all;
-    requires command.executor.service;
+  requires io.netty.all;
+  requires command.executor.service;
 
-    uses ICommandExecutor;
+  uses ICommandExecutor;
 }
