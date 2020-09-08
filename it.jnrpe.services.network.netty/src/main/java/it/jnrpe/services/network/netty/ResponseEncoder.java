@@ -13,20 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.engine.commands;
+package it.jnrpe.services.network.netty;
 
-import it.jnrpe.command.execution.ExecutionResult;
-import it.jnrpe.command.execution.ICommandExecutor;
-import it.jnrpe.command.execution.Status;
-import it.jnrpe.engine.plugins.PluginRepository;
-import java.util.Arrays;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.MessageToByteEncoder;
+import io.netty.util.AttributeKey;
+import it.jnrpe.engine.services.network.ExecutionResult;
+import it.jnrpe.services.network.netty.encoders.EncoderFactory;
 
-public class CommandExecutor implements ICommandExecutor {
+public class ResponseEncoder extends MessageToByteEncoder<ExecutionResult> {
   @Override
-  public ExecutionResult execute(String cmd, String... params) {
-    System.out.println("Received command: " + cmd);
-    System.out.println("Received params: " + Arrays.toString(params));
-    System.out.println("Plugins: " + new PluginRepository().getAllPlugins());
-    return new ExecutionResult("Command executed", Status.OK);
+  protected void encode(ChannelHandlerContext ctx, ExecutionResult result, ByteBuf out) {
+    int version = ctx.channel().attr(AttributeKey.<Integer>valueOf("version")).get();
+    out.writeBytes(EncoderFactory.produceEncoder(version, result).encode());
   }
 }
