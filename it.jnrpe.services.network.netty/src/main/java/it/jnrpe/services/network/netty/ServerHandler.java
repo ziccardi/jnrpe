@@ -13,21 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.network;
+package it.jnrpe.services.network.netty;
 
 import io.netty.channel.*;
 import io.netty.util.AttributeKey;
 import io.netty.util.ReferenceCountUtil;
-import it.jnrpe.command.execution.ExecutionResult;
-import it.jnrpe.command.execution.ICommandExecutor;
-import it.jnrpe.network.protocol.ProtocolPacket;
-import java.util.ArrayList;
+import it.jnrpe.engine.services.network.ExecutionResult;
+import it.jnrpe.engine.services.network.Status;
+import it.jnrpe.services.network.netty.protocol.ProtocolPacket;
 import java.util.Arrays;
-import java.util.List;
 
 @ChannelHandler.Sharable
 class ServerHandler extends ChannelInboundHandlerAdapter {
-  private List<ICommandExecutor> commandHandlers = new ArrayList<>();
+  // private List<ICommandExecutor> commandHandlers = new ArrayList<>();
 
   ServerHandler() {}
 
@@ -47,16 +45,16 @@ class ServerHandler extends ChannelInboundHandlerAdapter {
           commandParts.length > 1
               ? Arrays.copyOfRange(commandParts, 1, commandParts.length)
               : new String[] {};
-      ExecutionResult res = commandHandlers.get(0).execute(commandParts[0], params);
+
+      // TODO: execute the command
+      System.out.println("TODO: Should execute the command");
+      // ExecutionResult res = commandHandlers.get(0).execute(commandParts[0], params);
+      ExecutionResult res = new ExecutionResult("Not implemented", Status.CRITICAL);
 
       ChannelFuture channelFuture = ctx.writeAndFlush(res);
       channelFuture.addListener(ChannelFutureListener.CLOSE);
     } finally {
       ReferenceCountUtil.release(msg);
     }
-  }
-
-  public void addCommandHandler(final ICommandExecutor commandHandler) {
-    this.commandHandlers.add(commandHandler);
   }
 }

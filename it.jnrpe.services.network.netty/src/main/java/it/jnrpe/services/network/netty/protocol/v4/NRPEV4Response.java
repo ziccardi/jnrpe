@@ -13,20 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.engine.commands;
+package it.jnrpe.services.network.netty.protocol.v4;
 
-import it.jnrpe.command.execution.ExecutionResult;
-import it.jnrpe.command.execution.ICommandExecutor;
-import it.jnrpe.command.execution.Status;
-import it.jnrpe.engine.plugins.PluginRepository;
+import it.jnrpe.engine.services.network.ExecutionResult;
 import java.util.Arrays;
 
-public class CommandExecutor implements ICommandExecutor {
-  @Override
-  public ExecutionResult execute(String cmd, String... params) {
-    System.out.println("Received command: " + cmd);
-    System.out.println("Received params: " + Arrays.toString(params));
-    System.out.println("Plugins: " + new PluginRepository().getAllPlugins());
-    return new ExecutionResult("Command executed", Status.OK);
+public class NRPEV4Response extends NRPEV4AbstractPacket {
+  public NRPEV4Response(ExecutionResult result) {
+    super(
+        2, 0, result.getStatus().ordinal(), 0, messageToBuffer(result.getMessage()), new byte[] {});
+    updateCRC();
+  }
+
+  private static byte[] messageToBuffer(String msg) {
+    byte[] msgBytes = msg.getBytes();
+    return Arrays.copyOf(msg.getBytes(), msgBytes.length + 1);
   }
 }
