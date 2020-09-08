@@ -13,20 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.engine.commands;
+package it.jnrpe.services.network.netty;
 
-import it.jnrpe.command.execution.ExecutionResult;
-import it.jnrpe.command.execution.ICommandExecutor;
-import it.jnrpe.command.execution.Status;
-import it.jnrpe.engine.plugins.PluginRepository;
-import java.util.Arrays;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.ReplayingDecoder;
+import it.jnrpe.services.network.netty.decoders.DecoderBuilder;
+import it.jnrpe.services.network.netty.protocol.ProtocolPacket;
+import java.util.List;
 
-public class CommandExecutor implements ICommandExecutor {
+class RequestDecoder extends ReplayingDecoder<Void> {
+
   @Override
-  public ExecutionResult execute(String cmd, String... params) {
-    System.out.println("Received command: " + cmd);
-    System.out.println("Received params: " + Arrays.toString(params));
-    System.out.println("Plugins: " + new PluginRepository().getAllPlugins());
-    return new ExecutionResult("Command executed", Status.OK);
+  protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+    int protocolVersion = in.readUnsignedShort();
+    ProtocolPacket packet = DecoderBuilder.forPacket(protocolVersion, 1).withByteBuf(in).build();
+    out.add(packet);
   }
 }

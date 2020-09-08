@@ -1,0 +1,4 @@
+dependencies {
+    implementation group: 'io.netty', name: 'netty-all', version: '4.1.46.Final'
+    implementation project(':it.jnrpe.engine')
+}

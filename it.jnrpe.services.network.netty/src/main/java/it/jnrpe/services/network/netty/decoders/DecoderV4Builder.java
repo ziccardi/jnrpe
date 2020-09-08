@@ -13,20 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.engine.commands;
+package it.jnrpe.services.network.netty.decoders;
 
-import it.jnrpe.command.execution.ExecutionResult;
-import it.jnrpe.command.execution.ICommandExecutor;
-import it.jnrpe.command.execution.Status;
-import it.jnrpe.engine.plugins.PluginRepository;
-import java.util.Arrays;
+import it.jnrpe.services.network.netty.protocol.ProtocolPacket;
+import it.jnrpe.services.network.netty.protocol.v4.NRPEV4Request;
 
-public class CommandExecutor implements ICommandExecutor {
-  @Override
-  public ExecutionResult execute(String cmd, String... params) {
-    System.out.println("Received command: " + cmd);
-    System.out.println("Received params: " + Arrays.toString(params));
-    System.out.println("Plugins: " + new PluginRepository().getAllPlugins());
-    return new ExecutionResult("Command executed", Status.OK);
+class DecoderV4Builder extends DecoderV3Builder {
+  private static class RequestV4Builder extends RequestV3Builder {
+    @Override
+    protected ProtocolPacket buildPacket() {
+      return new NRPEV4Request(getCrc32(), getAlignment(), getRequestBuffer(), getPadding());
+    }
+  }
+
+  public static IPacketBuilder forPacket(int type) {
+    switch (type) {
+      case 1:
+        return new RequestV4Builder();
+      default: // FIXME: throw an exception
+        return null;
+    }
   }
 }

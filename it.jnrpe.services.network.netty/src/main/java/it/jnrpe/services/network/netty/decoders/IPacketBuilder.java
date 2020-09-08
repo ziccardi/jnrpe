@@ -13,20 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.engine.commands;
+package it.jnrpe.services.network.netty.decoders;
 
-import it.jnrpe.command.execution.ExecutionResult;
-import it.jnrpe.command.execution.ICommandExecutor;
-import it.jnrpe.command.execution.Status;
-import it.jnrpe.engine.plugins.PluginRepository;
-import java.util.Arrays;
+import io.netty.buffer.ByteBuf;
+import it.jnrpe.services.network.netty.protocol.ProtocolPacket;
 
-public class CommandExecutor implements ICommandExecutor {
-  @Override
-  public ExecutionResult execute(String cmd, String... params) {
-    System.out.println("Received command: " + cmd);
-    System.out.println("Received params: " + Arrays.toString(params));
-    System.out.println("Plugins: " + new PluginRepository().getAllPlugins());
-    return new ExecutionResult("Command executed", Status.OK);
-  }
+public interface IPacketBuilder {
+  IPacketBuilder withByteBuf(final ByteBuf buffer);
+
+  ProtocolPacket build();
 }

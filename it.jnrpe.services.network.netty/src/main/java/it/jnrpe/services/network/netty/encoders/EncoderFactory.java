@@ -13,20 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.engine.commands;
+package it.jnrpe.services.network.netty.encoders;
 
-import it.jnrpe.command.execution.ExecutionResult;
-import it.jnrpe.command.execution.ICommandExecutor;
-import it.jnrpe.command.execution.Status;
-import it.jnrpe.engine.plugins.PluginRepository;
-import java.util.Arrays;
+import it.jnrpe.engine.services.network.ExecutionResult;
 
-public class CommandExecutor implements ICommandExecutor {
-  @Override
-  public ExecutionResult execute(String cmd, String... params) {
-    System.out.println("Received command: " + cmd);
-    System.out.println("Received params: " + Arrays.toString(params));
-    System.out.println("Plugins: " + new PluginRepository().getAllPlugins());
-    return new ExecutionResult("Command executed", Status.OK);
+public class EncoderFactory {
+  private EncoderFactory() {}
+
+  public static IResponseEncoder produceEncoder(int version, ExecutionResult res) {
+    switch (version) {
+      case 2:
+        return new V2Encoder(res);
+      case 3:
+        return new V3Encoder(res);
+      case 4:
+        return new V4Encoder(res);
+      case 5:
+        // FIXME: throw exception
+        return null;
+    }
+    return new V2Encoder(res);
   }
 }
