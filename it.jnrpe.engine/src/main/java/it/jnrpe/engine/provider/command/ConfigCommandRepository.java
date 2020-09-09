@@ -13,48 +13,47 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.engine.commands;
+package it.jnrpe.engine.provider.command;
 
 import it.jnrpe.engine.services.commands.ICommandDefinition;
 import it.jnrpe.engine.services.commands.ICommandRepository;
+import it.jnrpe.engine.services.config.IConfigProvider;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class CommandRepository implements ICommandRepository {
+public class ConfigCommandRepository implements ICommandRepository {
 
-  private static CommandRepository INSTANCE;
+  private final Map<String, ICommandDefinition> commandDefinitions = new HashMap<>();
 
-  private final Map<String, ICommandDefinition> commands = new HashMap<>();
-
-  private CommandRepository() {
-    ICommandRepository.getInstances()
+  public ConfigCommandRepository() {
+    IConfigProvider.getInstances()
         .forEach(
-            commandRepository -> {
-              System.out.println(commandRepository);
-              commandRepository
-                  .getAllCommands()
-                  .forEach(command -> commands.put(command.getName(), command));
+            configProvider -> {
+              configProvider
+                  .getConfig()
+                  .ifPresent(
+                      config -> {
+                        config
+                            .getCommands()
+                            .getDefinitions()
+                            .forEach(
+                                commandDefinition -> {
+                                  this.commandDefinitions.put(
+                                      commandDefinition.getName(), commandDefinition);
+                                });
+                      });
             });
-    System.out.println("Command Repository ready" + commands);
   }
 
   @Override
   public Collection<ICommandDefinition> getAllCommands() {
-    return commands.values();
+    return commandDefinitions.values();
   }
 
   @Override
   public Optional<ICommandDefinition> getCommand(String commandName) {
-    return Optional.ofNullable(commands.get(commandName));
-  }
-
-  public static synchronized ICommandRepository getInstance() {
-    if (INSTANCE == null) {
-      INSTANCE = new CommandRepository();
-    }
-
-    return INSTANCE;
+    return Optional.ofNullable(commandDefinitions.get(commandName));
   }
 }

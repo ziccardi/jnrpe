@@ -15,6 +15,7 @@
  *******************************************************************************/
 package it.jnrpe.engine.services.commands;
 
+@FunctionalInterface
 public interface ICommandInstance {
   ExecutionResult execute();
 }

@@ -1,6 +1,8 @@
-import it.jnrpe.engine.commands.embedded.EmbeddedCommandsRepository;
+import it.jnrpe.engine.provider.command.ConfigCommandRepository;
+import it.jnrpe.engine.provider.command.EmbeddedCommandsRepository;
 import it.jnrpe.engine.services.commands.ICommandRepository;
 import it.jnrpe.engine.services.config.IConfigProvider;
+import it.jnrpe.engine.services.plugins.IPluginRepository;
 
 module it.jnrpe.engine {
   exports it.jnrpe.engine.services.commands;
@@ -11,7 +13,9 @@ module it.jnrpe.engine {
 
   uses IConfigProvider;
   uses ICommandRepository;
+  uses IPluginRepository;
 
   provides ICommandRepository with
-      EmbeddedCommandsRepository;
+      EmbeddedCommandsRepository,
+      ConfigCommandRepository;
 }

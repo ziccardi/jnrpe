@@ -15,7 +15,15 @@
  *******************************************************************************/
 package it.jnrpe.engine.services.config;
 
-public class CommandDefinition {
+import it.jnrpe.engine.plugins.PluginRepository;
+import it.jnrpe.engine.services.commands.ExecutionResult;
+import it.jnrpe.engine.services.commands.ICommandDefinition;
+import it.jnrpe.engine.services.commands.ICommandInstance;
+import it.jnrpe.engine.services.network.Status;
+import it.jnrpe.engine.services.plugins.IPlugin;
+import java.util.Optional;
+
+public class CommandDefinition implements ICommandDefinition {
   private String name;
   private String plugin;
   private String args;
@@ -42,5 +50,21 @@ public class CommandDefinition {
 
   public void setArgs(String args) {
     this.args = args;
+  }
+
+  @Override
+  public ICommandInstance instantiate(String... params) {
+    Optional<IPlugin> pluginInstance = PluginRepository.getInstance().getPlugin(this.plugin);
+    if (pluginInstance.isPresent()) {
+      // TODO: perform the real execution...
+      return () ->
+          new ExecutionResult(String.format("[%s -> %s](%s)", name, plugin, args), Status.OK);
+    } else {
+      return () ->
+          new ExecutionResult(
+              String.format(
+                  "Plugin [%s] required by command [%s] has not been found", name, plugin),
+              Status.OK);
+    }
   }
 }

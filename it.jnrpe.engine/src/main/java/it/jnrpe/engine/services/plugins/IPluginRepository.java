@@ -15,8 +15,17 @@
  *******************************************************************************/
 package it.jnrpe.engine.services.plugins;
 
-import java.util.Collection;
+import java.util.*;
 
 public interface IPluginRepository {
+  static Collection<IPluginRepository> getInstances() {
+    ServiceLoader<IPluginRepository> services = ServiceLoader.load(IPluginRepository.class);
+    List<IPluginRepository> list = new ArrayList<>();
+    services.iterator().forEachRemaining(list::add);
+    return list;
+  }
+
+  Optional<IPlugin> getPlugin(final String pluginName);
+
   Collection<IPlugin> getAllPlugins();
 }

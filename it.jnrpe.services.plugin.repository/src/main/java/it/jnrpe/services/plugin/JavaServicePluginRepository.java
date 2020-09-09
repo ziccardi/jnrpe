@@ -18,10 +18,7 @@ package it.jnrpe.services.plugin;
 import it.jnrpe.engine.services.plugins.IPlugin;
 import it.jnrpe.engine.services.plugins.IPluginRepository;
 import java.io.File;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.ServiceLoader;
+import java.util.*;
 
 public class JavaServicePluginRepository implements IPluginRepository {
   private final File pluginsFolder;
@@ -52,5 +49,10 @@ public class JavaServicePluginRepository implements IPluginRepository {
 
   public Collection<IPlugin> getAllPlugins() {
     return pluginsMap.values();
+  }
+
+  @Override
+  public Optional<IPlugin> getPlugin(String pluginName) {
+    return Optional.ofNullable(pluginsMap.get(pluginName));
   }
 }
