@@ -13,21 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.services.command.repository;
+package it.jnrpe.engine.commands.embedded;
 
+import it.jnrpe.engine.services.commands.ExecutionResult;
 import it.jnrpe.engine.services.commands.ICommandDefinition;
-import it.jnrpe.engine.services.commands.ICommandRepository;
-import java.util.Collection;
-import java.util.Optional;
+import it.jnrpe.engine.services.commands.ICommandInstance;
+import it.jnrpe.engine.services.network.Status;
+import it.jnrpe.engine.services.plugins.IPluginRepository;
 
-public class IniFileCommandRepository implements ICommandRepository {
-  @Override
-  public Optional<ICommandDefinition> getCommand(String commandName) {
-    return null;
+public class NRPECheckCommand implements ICommandDefinition {
+  public static String NAME = "_NRPE_CHECK";
+
+  private static class NRPECheckCommandInstance implements ICommandInstance {
+    @Override
+    public ExecutionResult execute() {
+      return new ExecutionResult("JNRPE v3.0.0", Status.OK);
+    }
   }
 
   @Override
-  public Collection<ICommandDefinition> getAllCommands() {
-    return null;
+  public String getName() {
+    return NAME;
+  }
+
+  @Override
+  public ICommandInstance instantiate(IPluginRepository pluginRepository, String... params) {
+    return new NRPECheckCommandInstance();
   }
 }

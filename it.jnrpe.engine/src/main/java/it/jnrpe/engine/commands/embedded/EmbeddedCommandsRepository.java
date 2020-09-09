@@ -13,21 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.services.command.repository;
+package it.jnrpe.engine.commands.embedded;
 
 import it.jnrpe.engine.services.commands.ICommandDefinition;
 import it.jnrpe.engine.services.commands.ICommandRepository;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
-public class IniFileCommandRepository implements ICommandRepository {
+public class EmbeddedCommandsRepository implements ICommandRepository {
+
+  private final Map<String, ICommandDefinition> commands = new HashMap<>();
+
+  public EmbeddedCommandsRepository() {
+    commands.put(NRPECheckCommand.NAME, new NRPECheckCommand());
+  }
+
   @Override
   public Optional<ICommandDefinition> getCommand(String commandName) {
-    return null;
+    return Optional.ofNullable(commands.get(commandName));
   }
 
   @Override
   public Collection<ICommandDefinition> getAllCommands() {
-    return null;
+    return commands.values();
   }
 }
