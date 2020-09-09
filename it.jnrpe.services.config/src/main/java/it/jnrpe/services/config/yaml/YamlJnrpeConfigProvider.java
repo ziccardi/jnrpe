@@ -13,15 +13,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.services.config.xml;
+package it.jnrpe.services.config.yaml;
 
 import it.jnrpe.engine.services.config.IConfigProvider;
+import it.jnrpe.engine.services.config.IConfigSource;
 import it.jnrpe.engine.services.config.JNRPEConfig;
+import java.io.IOException;
 import java.util.Optional;
+import java.util.ServiceLoader;
+import org.yaml.snakeyaml.Yaml;
 
-public class XmlJnrpeConfigProvider implements IConfigProvider {
-  @Override
+public class YamlJnrpeConfigProvider implements IConfigProvider {
+
+  private static Optional<JNRPEConfig> config = Optional.empty();
+
   public Optional<JNRPEConfig> getConfig() {
+    if (config.isEmpty()) {
+      try {
+        config = parseConfig();
+      } catch (Exception e) {
+        // TODO: log
+      }
+    }
+
+    return config;
+  }
+
+  public Optional<JNRPEConfig> parseConfig() throws IOException {
+    // Retrieve the config source
+    ServiceLoader<IConfigSource> configSourceServiceLoader =
+        ServiceLoader.load(IConfigSource.class);
+    Optional<IConfigSource> optionalConfigSource = configSourceServiceLoader.findFirst();
+
+    if (optionalConfigSource.isPresent()) {
+      Yaml yaml = new Yaml();
+      return Optional.of(
+          yaml.loadAs(optionalConfigSource.get().getConfigStream(), JNRPEConfig.class));
+    }
+
     return Optional.empty();
   }
 }

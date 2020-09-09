@@ -22,12 +22,18 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import it.jnrpe.engine.services.config.Binding;
 import it.jnrpe.engine.services.network.INetworkListener;
 
 public class JnrpeNettyListenerService implements INetworkListener {
   private final ServerHandler serverHandler = new ServerHandler();
 
-  public INetworkListener listen(int port) {
+  @Override
+  public String getName() {
+    return "Netty Listener Service";
+  }
+
+  public void bind(Binding binding) {
     EventLoopGroup bossGroup = new NioEventLoopGroup();
     EventLoopGroup workerGroup = new NioEventLoopGroup();
     final ServerBootstrap serverBootstrap = new ServerBootstrap();
@@ -44,8 +50,12 @@ public class JnrpeNettyListenerService implements INetworkListener {
         .option(ChannelOption.SO_BACKLOG, 50)
         .childOption(ChannelOption.SO_KEEPALIVE, Boolean.TRUE);
 
-    serverBootstrap.bind(port);
-    System.out.println("Started");
-    return this;
+    serverBootstrap.bind(binding.getPort());
+    System.out.println("Started listening on port " + binding.getPort());
+  }
+
+  @Override
+  public boolean supportBinding(Binding binding) {
+    return !binding.isSsl();
   }
 }

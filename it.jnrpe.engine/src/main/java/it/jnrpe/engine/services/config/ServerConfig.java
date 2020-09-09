@@ -16,17 +16,22 @@
 package it.jnrpe.engine.services.config;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
-import java.util.ServiceLoader;
 
-public interface IConfigProvider {
-  static List<IConfigProvider> getInstances() {
-    ServiceLoader<IConfigProvider> services = ServiceLoader.load(IConfigProvider.class);
-    List<IConfigProvider> list = new ArrayList<>();
-    services.iterator().forEachRemaining(list::add);
-    return list;
+public class ServerConfig {
+  private List<Binding> bindings = new ArrayList<>();
+
+  public List<Binding> getBindings() {
+    return Collections.unmodifiableList(bindings);
   }
 
-  Optional<JNRPEConfig> getConfig();
+  public void setBindings(List<Binding> bindings) {
+    this.bindings = new ArrayList<>(bindings);
+  }
+
+  @Override
+  public String toString() {
+    return "ServerConfig{" + "bindings=" + bindings + '}';
+  }
 }

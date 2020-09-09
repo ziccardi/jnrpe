@@ -18,7 +18,7 @@ package it.jnrpe.services.network.netty;
 import io.netty.channel.*;
 import io.netty.util.AttributeKey;
 import io.netty.util.ReferenceCountUtil;
-import it.jnrpe.engine.services.network.ExecutionResult;
+import it.jnrpe.engine.services.commands.ExecutionResult;
 import it.jnrpe.engine.services.network.Status;
 import it.jnrpe.services.network.netty.protocol.ProtocolPacket;
 import java.util.Arrays;
@@ -40,7 +40,7 @@ class ServerHandler extends ChannelInboundHandlerAdapter {
 
       // A command received by check_nrpe is composed like this:
       // command!param1!param2!...!paramN
-      String[] commandParts = packet.getCommand().split("\\!");
+      String[] commandParts = packet.getCommand().split("!");
       String[] params =
           commandParts.length > 1
               ? Arrays.copyOfRange(commandParts, 1, commandParts.length)

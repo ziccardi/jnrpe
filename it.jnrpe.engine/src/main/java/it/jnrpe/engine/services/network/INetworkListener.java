@@ -15,6 +15,12 @@
  *******************************************************************************/
 package it.jnrpe.engine.services.network;
 
+import it.jnrpe.engine.services.config.Binding;
+
 public interface INetworkListener {
-  INetworkListener listen(int port);
+  String getName();
+
+  void bind(Binding binding);
+
+  boolean supportBinding(Binding binding);
 }

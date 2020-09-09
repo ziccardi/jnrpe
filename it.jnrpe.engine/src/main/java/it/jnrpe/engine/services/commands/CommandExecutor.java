@@ -13,20 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.engine.services.config;
+package it.jnrpe.engine.services.commands;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.ServiceLoader;
+import it.jnrpe.engine.services.plugins.IPluginRepository;
 
-public interface IConfigProvider {
-  static List<IConfigProvider> getInstances() {
-    ServiceLoader<IConfigProvider> services = ServiceLoader.load(IConfigProvider.class);
-    List<IConfigProvider> list = new ArrayList<>();
-    services.iterator().forEachRemaining(list::add);
-    return list;
+public class CommandExecutor {
+  private ICommandRepository commandRepository = null;
+  private IPluginRepository pluginRepository = null;
+
+  ExecutionResult execute(String commandName, String... params) {
+    return commandRepository
+        .getCommand(commandName)
+        .instantiate(pluginRepository, params)
+        .execute();
   }
-
-  Optional<JNRPEConfig> getConfig();
 }

@@ -15,7 +15,7 @@
  *******************************************************************************/
 package it.jnrpe.services.network.netty.protocol.v4;
 
-import it.jnrpe.engine.services.network.ExecutionResult;
+import it.jnrpe.engine.services.commands.ExecutionResult;
 import java.util.Arrays;
 
 public class NRPEV4Response extends NRPEV4AbstractPacket {

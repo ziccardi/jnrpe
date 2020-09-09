@@ -15,6 +15,18 @@
  *******************************************************************************/
 package it.jnrpe.services.command.repository;
 
+import it.jnrpe.engine.services.commands.ICommandDefinition;
 import it.jnrpe.engine.services.commands.ICommandRepository;
+import java.util.List;
 
-public class IniFileCommandRepository implements ICommandRepository {}
+public class IniFileCommandRepository implements ICommandRepository {
+  @Override
+  public ICommandDefinition getCommand(String commandName) {
+    return null;
+  }
+
+  @Override
+  public List<ICommandDefinition> getAllCommands() {
+    return null;
+  }
+}

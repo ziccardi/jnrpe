@@ -15,7 +15,7 @@
  *******************************************************************************/
 package it.jnrpe.services.network.netty.protocol.v3;
 
-import it.jnrpe.engine.services.network.ExecutionResult;
+import it.jnrpe.engine.services.commands.ExecutionResult;
 import java.util.Arrays;
 
 public class NRPEV3Response extends NRPEV3AbstractPacket {
