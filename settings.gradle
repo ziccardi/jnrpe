@@ -5,5 +5,4 @@ include 'it.jnrpe.services.plugin.repository'
 include 'it.jnrpe.services.config'
 include 'it.jnrpe.services.network.netty'
 include 'it.jnrpe.server'
-
-
+include 'it.jnrpe.services.plugins'
