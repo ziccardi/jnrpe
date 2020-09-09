@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.engine.commands.embedded;
+package it.jnrpe.engine.provider.command;
 
 import it.jnrpe.engine.services.commands.ExecutionResult;
 import it.jnrpe.engine.services.commands.ICommandDefinition;
 import it.jnrpe.engine.services.commands.ICommandInstance;
 import it.jnrpe.engine.services.network.Status;
-import it.jnrpe.engine.services.plugins.IPluginRepository;
 
 public class NRPECheckCommand implements ICommandDefinition {
   public static String NAME = "_NRPE_CHECK";
@@ -37,7 +36,7 @@ public class NRPECheckCommand implements ICommandDefinition {
   }
 
   @Override
-  public ICommandInstance instantiate(IPluginRepository pluginRepository, String... params) {
+  public ICommandInstance instantiate(String... params) {
     return new NRPECheckCommandInstance();
   }
 }

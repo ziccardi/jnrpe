@@ -17,18 +17,17 @@ package it.jnrpe.engine.services.commands;
 
 import it.jnrpe.engine.commands.CommandRepository;
 import it.jnrpe.engine.services.network.Status;
-import it.jnrpe.engine.services.plugins.IPluginRepository;
 import java.util.Optional;
 
 public class CommandExecutor {
   private static final ICommandRepository commandRepository = CommandRepository.getInstance();
-  private IPluginRepository pluginRepository = null;
 
   public ExecutionResult execute(String commandName, String... params) {
     final Optional<ICommandDefinition> command = commandRepository.getCommand(commandName);
 
     if (command.isPresent()) {
-      return command.get().instantiate(pluginRepository, params).execute();
+      System.out.println(command.get());
+      return command.get().instantiate(params).execute();
     }
 
     return new ExecutionResult("Unknown command [" + commandName + ']', Status.UNKNOWN);
