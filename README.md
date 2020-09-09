@@ -1,3 +1,5 @@
+> :warning: **This branch is maintenance only** I'm doing a full rewrite of JNRPE using Java 9 modules that can be found in the [VERSION_300](https://github.com/ziccardi/jnrpe/tree/VERSION_300) branch
+
 # JNRPE - Java Nagios Remote Plugin Executor
 
 JNRPE is a java porting of the [Nagios NRPE addon](https://github.com/NagiosEnterprises/nrpe).
