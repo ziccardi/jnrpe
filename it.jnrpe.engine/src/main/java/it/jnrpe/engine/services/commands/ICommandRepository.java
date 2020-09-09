@@ -15,10 +15,17 @@
  *******************************************************************************/
 package it.jnrpe.engine.services.commands;
 
-import java.util.List;
+import java.util.*;
 
 public interface ICommandRepository {
-  ICommandDefinition getCommand(String commandName);
+  static List<ICommandRepository> getInstances() {
+    ServiceLoader<ICommandRepository> services = ServiceLoader.load(ICommandRepository.class);
+    List<ICommandRepository> list = new ArrayList<>();
+    services.iterator().forEachRemaining(list::add);
+    return list;
+  }
 
-  List<ICommandDefinition> getAllCommands();
+  Optional<ICommandDefinition> getCommand(String commandName);
+
+  Collection<ICommandDefinition> getAllCommands();
 }
