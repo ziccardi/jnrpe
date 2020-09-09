@@ -13,21 +13,46 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.services.command.repository;
+package it.jnrpe.engine.commands;
 
 import it.jnrpe.engine.services.commands.ICommandDefinition;
 import it.jnrpe.engine.services.commands.ICommandRepository;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
-public class IniFileCommandRepository implements ICommandRepository {
-  @Override
-  public Optional<ICommandDefinition> getCommand(String commandName) {
-    return null;
+public class CommandRepository implements ICommandRepository {
+
+  private static CommandRepository INSTANCE;
+
+  private Map<String, ICommandDefinition> commands = new HashMap<>();
+
+  private CommandRepository() {
+    ICommandRepository.getInstances()
+        .forEach(
+            commandRepository -> {
+              commandRepository
+                  .getAllCommands()
+                  .forEach(command -> commands.put(command.getName(), command));
+            });
   }
 
   @Override
   public Collection<ICommandDefinition> getAllCommands() {
-    return null;
+    return commands.values();
+  }
+
+  @Override
+  public Optional<ICommandDefinition> getCommand(String commandName) {
+    return Optional.ofNullable(commands.get(commandName));
+  }
+
+  public static synchronized ICommandRepository getInstance() {
+    if (INSTANCE == null) {
+      INSTANCE = new CommandRepository();
+    }
+
+    return INSTANCE;
   }
 }

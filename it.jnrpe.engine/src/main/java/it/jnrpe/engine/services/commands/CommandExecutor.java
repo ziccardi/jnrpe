@@ -15,16 +15,22 @@
  *******************************************************************************/
 package it.jnrpe.engine.services.commands;
 
+import it.jnrpe.engine.commands.CommandRepository;
+import it.jnrpe.engine.services.network.Status;
 import it.jnrpe.engine.services.plugins.IPluginRepository;
+import java.util.Optional;
 
 public class CommandExecutor {
-  private ICommandRepository commandRepository = null;
+  private static final ICommandRepository commandRepository = CommandRepository.getInstance();
   private IPluginRepository pluginRepository = null;
 
-  ExecutionResult execute(String commandName, String... params) {
-    return commandRepository
-        .getCommand(commandName)
-        .instantiate(pluginRepository, params)
-        .execute();
+  public ExecutionResult execute(String commandName, String... params) {
+    final Optional<ICommandDefinition> command = commandRepository.getCommand(commandName);
+
+    if (command.isPresent()) {
+      return command.get().instantiate(pluginRepository, params).execute();
+    }
+
+    return new ExecutionResult("Unknown command [" + commandName + ']', Status.UNKNOWN);
   }
 }

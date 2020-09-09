@@ -18,14 +18,14 @@ package it.jnrpe.services.network.netty;
 import io.netty.channel.*;
 import io.netty.util.AttributeKey;
 import io.netty.util.ReferenceCountUtil;
+import it.jnrpe.engine.services.commands.CommandExecutor;
 import it.jnrpe.engine.services.commands.ExecutionResult;
-import it.jnrpe.engine.services.network.Status;
 import it.jnrpe.services.network.netty.protocol.ProtocolPacket;
 import java.util.Arrays;
 
 @ChannelHandler.Sharable
 class ServerHandler extends ChannelInboundHandlerAdapter {
-  // private List<ICommandExecutor> commandHandlers = new ArrayList<>();
+  private CommandExecutor commandExecutor = new CommandExecutor();
 
   ServerHandler() {}
 
@@ -46,10 +46,7 @@ class ServerHandler extends ChannelInboundHandlerAdapter {
               ? Arrays.copyOfRange(commandParts, 1, commandParts.length)
               : new String[] {};
 
-      // TODO: execute the command
-      System.out.println("TODO: Should execute the command");
-      // ExecutionResult res = commandHandlers.get(0).execute(commandParts[0], params);
-      ExecutionResult res = new ExecutionResult("Not implemented", Status.CRITICAL);
+      ExecutionResult res = this.commandExecutor.execute(commandParts[0], params);
 
       ChannelFuture channelFuture = ctx.writeAndFlush(res);
       channelFuture.addListener(ChannelFutureListener.CLOSE);

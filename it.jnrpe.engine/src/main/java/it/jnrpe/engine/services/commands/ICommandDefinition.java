@@ -18,5 +18,7 @@ package it.jnrpe.engine.services.commands;
 import it.jnrpe.engine.services.plugins.IPluginRepository;
 
 public interface ICommandDefinition {
+  String getName();
+
   ICommandInstance instantiate(IPluginRepository pluginRepository, String... params);
 }
