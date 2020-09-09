@@ -15,18 +15,28 @@
  *******************************************************************************/
 package it.jnrpe.engine.services.config;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.ServiceLoader;
+public class JNRPEConfig {
+  private ServerConfig server;
+  private CommandsConfig commands;
 
-public interface IConfigProvider {
-  static List<IConfigProvider> getInstances() {
-    ServiceLoader<IConfigProvider> services = ServiceLoader.load(IConfigProvider.class);
-    List<IConfigProvider> list = new ArrayList<>();
-    services.iterator().forEachRemaining(list::add);
-    return list;
+  public ServerConfig getServer() {
+    return server;
   }
 
-  Optional<JNRPEConfig> getConfig();
+  public void setServer(ServerConfig server) {
+    this.server = server;
+  }
+
+  @Override
+  public String toString() {
+    return "JNRPEConfig{" + "server=" + server + '}';
+  }
+
+  public CommandsConfig getCommands() {
+    return commands;
+  }
+
+  public void setCommands(CommandsConfig commands) {
+    this.commands = commands;
+  }
 }

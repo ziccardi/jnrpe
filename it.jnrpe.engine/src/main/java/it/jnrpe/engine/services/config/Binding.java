@@ -15,18 +15,37 @@
  *******************************************************************************/
 package it.jnrpe.engine.services.config;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.ServiceLoader;
+public class Binding {
+  private String ip;
+  private int port;
+  private boolean ssl;
 
-public interface IConfigProvider {
-  static List<IConfigProvider> getInstances() {
-    ServiceLoader<IConfigProvider> services = ServiceLoader.load(IConfigProvider.class);
-    List<IConfigProvider> list = new ArrayList<>();
-    services.iterator().forEachRemaining(list::add);
-    return list;
+  public int getPort() {
+    return port;
   }
 
-  Optional<JNRPEConfig> getConfig();
+  public void setPort(int port) {
+    this.port = port;
+  }
+
+  public String getIp() {
+    return ip;
+  }
+
+  public void setIp(String ipAddress) {
+    this.ip = ipAddress;
+  }
+
+  public boolean isSsl() {
+    return ssl;
+  }
+
+  public void setSsl(boolean ssl) {
+    this.ssl = ssl;
+  }
+
+  @Override
+  public String toString() {
+    return "Binding{" + "ip='" + ip + '\'' + ", port=" + port + ", ssl=" + ssl + '}';
+  }
 }

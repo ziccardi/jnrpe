@@ -15,4 +15,10 @@
  *******************************************************************************/
 package it.jnrpe.engine.services.commands;
 
-public interface ICommandRepository {}
+import java.util.List;
+
+public interface ICommandRepository {
+  ICommandDefinition getCommand(String commandName);
+
+  List<ICommandDefinition> getAllCommands();
+}

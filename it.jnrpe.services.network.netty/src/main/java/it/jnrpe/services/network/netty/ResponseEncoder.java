@@ -19,7 +19,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 import io.netty.util.AttributeKey;
-import it.jnrpe.engine.services.network.ExecutionResult;
+import it.jnrpe.engine.services.commands.ExecutionResult;
 import it.jnrpe.services.network.netty.encoders.EncoderFactory;
 
 public class ResponseEncoder extends MessageToByteEncoder<ExecutionResult> {
