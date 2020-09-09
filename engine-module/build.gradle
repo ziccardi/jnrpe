@@ -1,6 +1,0 @@
-dependencies {
-    implementation project(':plugin-service')
-    testRuntimeOnly project(':plugins-module')
-    implementation project(':network-module')
-    implementation project(':command-executor-service')
-}

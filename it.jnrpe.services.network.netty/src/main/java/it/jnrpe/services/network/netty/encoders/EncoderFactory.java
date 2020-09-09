@@ -15,7 +15,7 @@
  *******************************************************************************/
 package it.jnrpe.services.network.netty.encoders;
 
-import it.jnrpe.engine.services.network.ExecutionResult;
+import it.jnrpe.engine.services.commands.ExecutionResult;
 
 public class EncoderFactory {
   private EncoderFactory() {}

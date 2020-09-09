@@ -15,18 +15,32 @@
  *******************************************************************************/
 package it.jnrpe.engine.services.config;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.ServiceLoader;
+public class CommandDefinition {
+  private String name;
+  private String plugin;
+  private String args;
 
-public interface IConfigProvider {
-  static List<IConfigProvider> getInstances() {
-    ServiceLoader<IConfigProvider> services = ServiceLoader.load(IConfigProvider.class);
-    List<IConfigProvider> list = new ArrayList<>();
-    services.iterator().forEachRemaining(list::add);
-    return list;
+  public String getName() {
+    return name;
   }
 
-  Optional<JNRPEConfig> getConfig();
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String getPlugin() {
+    return plugin;
+  }
+
+  public void setPlugin(String plugin) {
+    this.plugin = plugin;
+  }
+
+  public String getArgs() {
+    return args;
+  }
+
+  public void setArgs(String args) {
+    this.args = args;
+  }
 }

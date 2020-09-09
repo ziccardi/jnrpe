@@ -1,4 +1,5 @@
 dependencies {
     implementation project(':it.jnrpe.engine')
+    implementation project(':it.jnrpe.services.config')
     implementation project(':it.jnrpe.services.network.netty')
 }

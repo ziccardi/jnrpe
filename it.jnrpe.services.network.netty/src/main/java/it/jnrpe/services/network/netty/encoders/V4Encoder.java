@@ -15,7 +15,7 @@
  *******************************************************************************/
 package it.jnrpe.services.network.netty.encoders;
 
-import it.jnrpe.engine.services.network.ExecutionResult;
+import it.jnrpe.engine.services.commands.ExecutionResult;
 import it.jnrpe.services.network.netty.protocol.ProtocolPacket;
 import it.jnrpe.services.network.netty.protocol.v4.NRPEV4Response;
 import java.io.ByteArrayOutputStream;

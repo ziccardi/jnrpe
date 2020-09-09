@@ -15,18 +15,11 @@
  *******************************************************************************/
 package it.jnrpe.engine.services.config;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.ServiceLoader;
+import java.io.IOException;
+import java.io.InputStream;
 
-public interface IConfigProvider {
-  static List<IConfigProvider> getInstances() {
-    ServiceLoader<IConfigProvider> services = ServiceLoader.load(IConfigProvider.class);
-    List<IConfigProvider> list = new ArrayList<>();
-    services.iterator().forEachRemaining(list::add);
-    return list;
-  }
+public interface IConfigSource {
+  String getConfigType();
 
-  Optional<JNRPEConfig> getConfig();
+  InputStream getConfigStream() throws IOException;
 }
