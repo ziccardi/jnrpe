@@ -19,7 +19,6 @@ import it.jnrpe.engine.events.EventManager;
 import it.jnrpe.engine.services.config.Binding;
 import it.jnrpe.engine.services.config.IConfigProvider;
 import it.jnrpe.engine.services.config.JNRPEConfig;
-import it.jnrpe.engine.services.events.LogEvent;
 import it.jnrpe.engine.services.network.INetworkListener;
 import java.io.File;
 import java.util.Optional;
@@ -34,15 +33,13 @@ public class JNRPEServer {
     if (listener.isPresent()) {
       INetworkListener netListener = listener.get();
       if (netListener.supportBinding(binding)) {
-        EventManager.emit(
-            LogEvent.INFO,
-            String.format(
-                "Binding on port %d using network provider named '%s'",
-                binding.getPort(), netListener.getName()));
+        EventManager.info(
+            "Binding on port %d using network provider named '%s'",
+            binding.getPort(), netListener.getName());
         netListener.bind(binding);
       }
     } else {
-      EventManager.emit(LogEvent.FATAL, "No network services has been found");
+      EventManager.fatal("No network services has been found");
       System.exit(-1);
     }
   }
@@ -68,10 +65,8 @@ public class JNRPEServer {
     config.ifPresentOrElse(
         cfg -> cfg.getServer().getBindings().forEach(JNRPEServer::bind),
         () ->
-            EventManager.emit(
-                LogEvent.FATAL,
-                String.format(
-                    "No config provider has been able to parse the provided config file (%s)",
-                    confFile.getAbsolutePath())));
+            EventManager.fatal(
+                "No config provider has been able to parse the provided config file (%s)",
+                confFile.getAbsolutePath()));
   }
 }

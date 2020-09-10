@@ -17,10 +17,11 @@ package it.jnrpe.engine.events;
 
 import it.jnrpe.engine.services.events.IEventManager;
 import it.jnrpe.engine.services.events.IEventType;
+import it.jnrpe.engine.services.events.LogEvent;
 import java.util.Collection;
 
 public class EventManager {
-  private static Collection<IEventManager> eventManagers = IEventManager.getInstances();
+  private static final Collection<IEventManager> eventManagers = IEventManager.getInstances();
 
   public static void emit(IEventType type, String message) {
     eventManagers.forEach(eventManager -> eventManager.onEvent(type, message));
@@ -28,5 +29,33 @@ public class EventManager {
 
   public static void emit(IEventType type, String message, Throwable exc) {
     eventManagers.forEach(eventManager -> eventManager.onEvent(type, message, exc));
+  }
+
+  private static void emitLog(IEventType type, String message, Object... msgparams) {
+    emit(type, msgparams.length > 0 ? String.format(message, msgparams) : message);
+  }
+
+  public static void trace(String message, Object... msgparams) {
+    emitLog(LogEvent.TRACE, message, msgparams);
+  }
+
+  public static void debug(String message, Object... msgparams) {
+    emitLog(LogEvent.DEBUG, message, msgparams);
+  }
+
+  public static void info(String message, Object... msgparams) {
+    emitLog(LogEvent.INFO, message, msgparams);
+  }
+
+  public static void warn(String message, Object... msgparams) {
+    emitLog(LogEvent.WARN, message, msgparams);
+  }
+
+  public static void error(String message, Object... msgparams) {
+    emitLog(LogEvent.ERROR, message, msgparams);
+  }
+
+  public static void fatal(String message, Object... msgparams) {
+    emitLog(LogEvent.FATAL, message, msgparams);
   }
 }

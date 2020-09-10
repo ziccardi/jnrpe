@@ -16,7 +16,6 @@
 package it.jnrpe.engine.plugins;
 
 import it.jnrpe.engine.events.EventManager;
-import it.jnrpe.engine.services.events.LogEvent;
 import it.jnrpe.engine.services.plugins.IPlugin;
 import it.jnrpe.engine.services.plugins.IPluginRepository;
 import java.util.*;
@@ -35,9 +34,7 @@ public class PluginRepository implements IPluginRepository {
                   .forEach(plugin -> plugins.put(plugin.getName(), plugin));
             });
 
-    EventManager.emit(
-        LogEvent.INFO,
-        String.format("Plugin repository ready. %d plugin(s) loaded", plugins.size()));
+    EventManager.info("Plugin repository ready. %d plugin(s) loaded", plugins.size());
 
     //    this.plugins
     //        .values()
