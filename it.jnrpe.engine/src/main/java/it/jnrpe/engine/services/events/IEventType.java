@@ -15,20 +15,8 @@
  *******************************************************************************/
 package it.jnrpe.engine.services.events;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.ServiceLoader;
+public interface IEventType {
+  int ordinal();
 
-public interface IEventManager {
-  static Collection<IEventManager> getInstances() {
-    ServiceLoader<IEventManager> services = ServiceLoader.load(IEventManager.class);
-    List<IEventManager> list = new ArrayList<>();
-    services.iterator().forEachRemaining(list::add);
-    return list;
-  }
-
-  void onEvent(IEventType type, String message);
-
-  void onEvent(IEventType type, String message, Throwable exc);
+  String type();
 }

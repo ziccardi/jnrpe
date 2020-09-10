@@ -15,20 +15,29 @@
  *******************************************************************************/
 package it.jnrpe.engine.services.events;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.ServiceLoader;
+public class LogEvent implements IEventType {
+  private final int ordinal;
+  private final String type;
 
-public interface IEventManager {
-  static Collection<IEventManager> getInstances() {
-    ServiceLoader<IEventManager> services = ServiceLoader.load(IEventManager.class);
-    List<IEventManager> list = new ArrayList<>();
-    services.iterator().forEachRemaining(list::add);
-    return list;
+  public static LogEvent TRACE = new LogEvent(0, "TRACE");
+  public static LogEvent DEBUG = new LogEvent(1, "DEBUG");
+  public static LogEvent INFO = new LogEvent(2, "INFO");
+  public static LogEvent WARN = new LogEvent(3, "WARN");
+  public static LogEvent ERROR = new LogEvent(4, "ERROR");
+  public static LogEvent FATAL = new LogEvent(4, "FATAL");
+
+  private LogEvent(int ordinal, String type) {
+    this.ordinal = ordinal;
+    this.type = type;
   }
 
-  void onEvent(IEventType type, String message);
+  @Override
+  public int ordinal() {
+    return this.ordinal;
+  }
 
-  void onEvent(IEventType type, String message, Throwable exc);
+  @Override
+  public String type() {
+    return this.type;
+  }
 }
