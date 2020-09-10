@@ -15,6 +15,7 @@
  *******************************************************************************/
 package it.jnrpe.engine.commands;
 
+import it.jnrpe.engine.events.EventManager;
 import it.jnrpe.engine.services.commands.ICommandDefinition;
 import it.jnrpe.engine.services.commands.ICommandRepository;
 import java.util.Collection;
@@ -32,12 +33,12 @@ public class CommandRepository implements ICommandRepository {
     ICommandRepository.getInstances()
         .forEach(
             commandRepository -> {
-              System.out.println(commandRepository);
               commandRepository
                   .getAllCommands()
                   .forEach(command -> commands.put(command.getName(), command));
             });
-    System.out.println("Command Repository ready" + commands);
+
+    EventManager.info("Command Repository ready. %d command(s) loaded", this.commands.size());
   }
 
   @Override

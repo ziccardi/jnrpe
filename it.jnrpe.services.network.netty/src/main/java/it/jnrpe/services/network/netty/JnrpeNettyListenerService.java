@@ -22,6 +22,7 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import it.jnrpe.engine.events.EventManager;
 import it.jnrpe.engine.services.config.Binding;
 import it.jnrpe.engine.services.network.INetworkListener;
 
@@ -51,7 +52,7 @@ public class JnrpeNettyListenerService implements INetworkListener {
         .childOption(ChannelOption.SO_KEEPALIVE, Boolean.TRUE);
 
     serverBootstrap.bind(binding.getPort());
-    System.out.println("Started listening on port " + binding.getPort());
+    EventManager.debug("[%s] Started listening on port %d", this.getName(), binding.getPort());
   }
 
   @Override
