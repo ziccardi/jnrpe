@@ -1,5 +1,4 @@
 plugins {
-    id 'java'
     id "com.diffplug.spotless" version "5.3.0"
 }
 
@@ -34,7 +33,6 @@ spotless {
                 ' *******************************************************************************/' // or licenseHeaderFile
     }
 }
-
 
 group 'it.jnrpe'
 version '3.0.0-SNAPSHOT'
@@ -72,3 +70,5 @@ subprojects {
         testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
     }
 }
+
+
