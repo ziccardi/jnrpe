@@ -8,6 +8,7 @@ dependencies {
     implementation project(':it.jnrpe.services.network.netty')
     implementation project(':it.jnrpe.services.plugin.repository')
     implementation project(':it.jnrpe.services.plugins')
+    runtime project(':it.jnrpe.services.events')
 }
 
 application {
