@@ -15,7 +15,8 @@
  *******************************************************************************/
 package it.jnrpe.engine.plugins;
 
-import it.jnrpe.engine.services.plugins.CommandLine;
+import it.jnrpe.engine.events.EventManager;
+import it.jnrpe.engine.services.events.LogEvent;
 import it.jnrpe.engine.services.plugins.IPlugin;
 import it.jnrpe.engine.services.plugins.IPluginRepository;
 import java.util.*;
@@ -34,17 +35,19 @@ public class PluginRepository implements IPluginRepository {
                   .forEach(plugin -> plugins.put(plugin.getName(), plugin));
             });
 
-    System.out.println("Plugin Repository ready: " + plugins);
+    EventManager.emit(
+        LogEvent.INFO,
+        String.format("Plugin repository ready. %d plugin(s) loaded", plugins.size()));
 
-    this.plugins
-        .values()
-        .forEach(
-            plugin -> {
-              System.out.println(plugin.getName());
-              new CommandLine(plugin).printVersionHelp(System.out);
-              new CommandLine(plugin).usage(System.out);
-              System.out.println("**********************************");
-            });
+    //    this.plugins
+    //        .values()
+    //        .forEach(
+    //            plugin -> {
+    //              System.out.println(plugin.getName());
+    //              new CommandLine(plugin).printVersionHelp(System.out);
+    //              new CommandLine(plugin).usage(System.out);
+    //              System.out.println("**********************************");
+    //            });
   }
 
   @Override

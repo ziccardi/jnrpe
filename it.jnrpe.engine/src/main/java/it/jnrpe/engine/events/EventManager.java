@@ -13,22 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.engine.services.events;
+package it.jnrpe.engine.events;
 
-import java.util.ArrayList;
+import it.jnrpe.engine.services.events.IEventManager;
+import it.jnrpe.engine.services.events.IEventType;
 import java.util.Collection;
-import java.util.List;
-import java.util.ServiceLoader;
 
-public interface IEventManager {
-  static Collection<IEventManager> getInstances() {
-    ServiceLoader<IEventManager> services = ServiceLoader.load(IEventManager.class);
-    List<IEventManager> list = new ArrayList<>();
-    services.iterator().forEachRemaining(list::add);
-    return list;
+public class EventManager {
+  private static Collection<IEventManager> eventManagers = IEventManager.getInstances();
+
+  public static void emit(IEventType type, String message) {
+    eventManagers.forEach(eventManager -> eventManager.onEvent(type, message));
   }
 
-  void onEvent(IEventType type, String message);
-
-  void onEvent(IEventType type, String message, Throwable exc);
+  public static void emit(IEventType type, String message, Throwable exc) {
+    eventManagers.forEach(eventManager -> eventManager.onEvent(type, message, exc));
+  }
 }

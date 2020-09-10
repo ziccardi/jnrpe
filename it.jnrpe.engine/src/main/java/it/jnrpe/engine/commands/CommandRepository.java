@@ -15,8 +15,10 @@
  *******************************************************************************/
 package it.jnrpe.engine.commands;
 
+import it.jnrpe.engine.events.EventManager;
 import it.jnrpe.engine.services.commands.ICommandDefinition;
 import it.jnrpe.engine.services.commands.ICommandRepository;
+import it.jnrpe.engine.services.events.LogEvent;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,12 +34,14 @@ public class CommandRepository implements ICommandRepository {
     ICommandRepository.getInstances()
         .forEach(
             commandRepository -> {
-              System.out.println(commandRepository);
               commandRepository
                   .getAllCommands()
                   .forEach(command -> commands.put(command.getName(), command));
             });
-    System.out.println("Command Repository ready" + commands);
+
+    EventManager.emit(
+        LogEvent.INFO,
+        String.format("Command Repository ready. %d command(s) loaded", this.commands.size()));
   }
 
   @Override

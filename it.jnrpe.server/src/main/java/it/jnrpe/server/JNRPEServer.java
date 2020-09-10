@@ -15,9 +15,11 @@
  *******************************************************************************/
 package it.jnrpe.server;
 
+import it.jnrpe.engine.events.EventManager;
 import it.jnrpe.engine.services.config.Binding;
 import it.jnrpe.engine.services.config.IConfigProvider;
 import it.jnrpe.engine.services.config.JNRPEConfig;
+import it.jnrpe.engine.services.events.LogEvent;
 import it.jnrpe.engine.services.network.INetworkListener;
 import java.io.File;
 import java.util.Optional;
@@ -32,29 +34,24 @@ public class JNRPEServer {
     if (listener.isPresent()) {
       INetworkListener netListener = listener.get();
       if (netListener.supportBinding(binding)) {
-        System.out.println(
-            "Binding on port "
-                + binding.getPort()
-                + " using network provider named "
-                + netListener.getName());
+        EventManager.emit(
+            LogEvent.INFO,
+            String.format(
+                "Binding on port %d using network provider named '%s'",
+                binding.getPort(), netListener.getName()));
         netListener.bind(binding);
-      } else {
-        System.out.println(
-            "Network provider named "
-                + netListener.getName()
-                + " does not support this binding: "
-                + binding);
       }
     } else {
-      System.out.println("No network service found");
+      EventManager.emit(LogEvent.FATAL, "No network services has been found");
       System.exit(-1);
     }
   }
 
   public static void main(String[] args) {
     // Parsing the configuration
-    ConfigSource.setConfigFile(new File("/Users/ziccardi/Desktop/conf.yaml"));
     File confFile = new File("/Users/ziccardi/Desktop/conf.yaml");
+    ConfigSource.setConfigFile(confFile);
+
     ServiceLoader<IConfigProvider> configProviderServiceLoader =
         ServiceLoader.load(IConfigProvider.class);
 
@@ -68,11 +65,13 @@ public class JNRPEServer {
       }
     }
 
-    if (config.isPresent()) {
-      config.get().getServer().getBindings().forEach(JNRPEServer::bind);
-    } else {
-      // error
-      System.out.println("No config loaded");
-    }
+    config.ifPresentOrElse(
+        cfg -> cfg.getServer().getBindings().forEach(JNRPEServer::bind),
+        () ->
+            EventManager.emit(
+                LogEvent.FATAL,
+                String.format(
+                    "No config provider has been able to parse the provided config file (%s)",
+                    confFile.getAbsolutePath())));
   }
 }

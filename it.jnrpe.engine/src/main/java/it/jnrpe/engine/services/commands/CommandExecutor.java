@@ -16,6 +16,8 @@
 package it.jnrpe.engine.services.commands;
 
 import it.jnrpe.engine.commands.CommandRepository;
+import it.jnrpe.engine.events.EventManager;
+import it.jnrpe.engine.services.events.LogEvent;
 import it.jnrpe.engine.services.network.Status;
 import java.util.Optional;
 
@@ -26,10 +28,11 @@ public class CommandExecutor {
     final Optional<ICommandDefinition> command = commandRepository.getCommand(commandName);
 
     if (command.isPresent()) {
-      System.out.println(command.get());
       return command.get().instantiate(params).execute();
     }
 
-    return new ExecutionResult("Unknown command [" + commandName + ']', Status.UNKNOWN);
+    final String message = String.format("Unknown command [%s]", commandName);
+    EventManager.emit(LogEvent.WARN, message);
+    return new ExecutionResult(message, Status.UNKNOWN);
   }
 }
