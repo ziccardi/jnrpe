@@ -4,9 +4,10 @@ import it.jnrpe.engine.services.network.INetworkListener;
 import it.jnrpe.server.ConfigSource;
 
 module it.jnrpe.server {
+  opens it.jnrpe.server to
+      it.jnrpe.engine;
+
   requires it.jnrpe.engine;
-  requires it.jnrpe.services.network.netty;
-  requires it.jnrpe.services.config;
 
   provides IConfigSource with
       ConfigSource;
