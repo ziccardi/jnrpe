@@ -4,15 +4,15 @@ plugins {
 
 dependencies {
     implementation project(':it.jnrpe.engine')
-    implementation project(':it.jnrpe.services.config')
-    implementation project(':it.jnrpe.services.network.netty')
-    implementation project(':it.jnrpe.services.plugin.repository')
-    implementation project(':it.jnrpe.services.plugins')
+    runtime project(':it.jnrpe.services.config')
+    runtime project(':it.jnrpe.services.network.netty')
+    runtime project(':it.jnrpe.services.plugin.repository')
+    runtime project(':it.jnrpe.services.plugins')
     runtime project(':it.jnrpe.services.events')
 }
 
 application {
     mainModule = 'it.jnrpe.server'
-    mainClass = 'it.jnrpe.server.JNRPEServer'
+    mainClass = 'it.jnrpe.server.Main'
     applicationName = 'jnrpe'
 }
