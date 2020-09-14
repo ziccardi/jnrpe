@@ -5,36 +5,99 @@
     "previous": "Previous",
     "tagline": "Java Nagios Remote Plugin Executor",
     "docs": {
-      "doc1": {
-        "title": "Latin-ish",
-        "sidebar_label": "Example Page"
-      },
-      "doc2": {
-        "title": "document number 2"
-      },
-      "doc3": {
-        "title": "This is document number 3"
-      },
-      "doc4": {
-        "title": "Other Document"
-      },
-      "doc5": {
-        "title": "Fifth Document"
+      "get-jnrpe": {
+        "title": "Getting JNRPE"
       },
       "overview": {
         "title": "Overview"
+      },
+      "version-2.0.3/version-2.0.3-get-jnrpe": {
+        "title": "Getting JNRPE"
+      },
+      "version-2.0.3/installation/version-2.0.3-cli-installer": {
+        "title": "The Command Line installer"
+      },
+      "version-2.0.3/installation/version-2.0.3-directory-structure": {
+        "title": "The JNRPE Directory Structure"
+      },
+      "version-2.0.3/installation/version-2.0.3-gui-installer": {
+        "title": "The GUI installer"
+      },
+      "version-2.0.3/version-2.0.3-overview": {
+        "title": "Overview"
+      },
+      "version-2.0.3/plugins/version-2.0.3-plugin-checkdisk": {
+        "title": "CHECK_DISK"
+      },
+      "version-2.0.3/plugins/version-2.0.3-plugin-checkhttp": {
+        "title": "CHECK_HTTP"
+      },
+      "version-2.0.3/plugins/version-2.0.3-plugin-checkjmx": {
+        "title": "CHECK_JMX"
+      },
+      "version-2.0.3/plugins/version-2.0.3-plugin-checkmysql": {
+        "title": "CHECK_MYSQL"
+      },
+      "version-2.0.3/plugins/version-2.0.3-plugin-checkmysqlquery": {
+        "title": "CHECK_MYSQL_QUERY"
+      },
+      "version-2.0.3/plugins/version-2.0.3-plugin-checkoracle": {
+        "title": "CHECK_ORACLE"
+      },
+      "version-2.0.3/plugins/version-2.0.3-plugin-checkpgsql": {
+        "title": "CHECK_PGSQL"
+      },
+      "version-2.0.3/plugins/version-2.0.3-plugin-checkping": {
+        "title": "CHECK_PING"
+      },
+      "version-2.0.3/plugins/version-2.0.3-plugin-checkprocs": {
+        "title": "CHECK_PROCS"
+      },
+      "version-2.0.3/plugins/version-2.0.3-plugin-checkssh": {
+        "title": "CHECK_SSH"
+      },
+      "version-2.0.3/plugins/version-2.0.3-plugin-checktime": {
+        "title": "CHECK_TIME"
+      },
+      "version-2.0.3/plugins/version-2.0.3-plugin-checktomcat": {
+        "title": "CHECK_TOMCAT"
+      },
+      "version-2.0.3/plugins/version-2.0.3-plugin-checkusers": {
+        "title": "CHECK_USERS"
+      },
+      "version-2.0.3/plugins/version-2.0.3-plugin-checkfile": {
+        "title": "CHECK_FILE"
+      },
+      "version-2.0.3/plugins/version-2.0.3-plugin-exec": {
+        "title": "EXEC"
+      },
+      "version-2.0.3/plugins/version-2.0.3-plugin-test": {
+        "title": "TEST"
+      },
+      "version-2.0.3/server/version-2.0.3-configure-jnrpe": {
+        "title": "Configuring JNRPE"
+      },
+      "version-2.0.3/server/version-2.0.3-interactive-console": {
+        "title": "Interactive Console"
+      },
+      "version-2.0.3/server/version-2.0.3-server-overview": {
+        "title": "Overview"
+      },
+      "version-2.0.3/server/version-2.0.3-run-jnrpe": {
+        "title": "Running JNRPE"
       }
     },
     "links": {
-      "Docs": "Docs",
-      "API": "API",
-      "Help": "Help",
+      "GitHUB": "GitHUB",
+      "Home": "Home",
       "Blog": "Blog"
     },
     "categories": {
       "Introduction": "Introduction",
-      "First Category": "First Category",
-      "Second Category": "Second Category"
+      "Installing JNRPE": "Installing JNRPE",
+      "The JNRPE Server": "The JNRPE Server",
+      "Plugins": "Plugins",
+      "First Category": "First Category"
     }
   },
   "pages-strings": {

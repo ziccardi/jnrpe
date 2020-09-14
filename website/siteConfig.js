@@ -21,17 +21,17 @@ const users = [
 ];
 
 const siteConfig = {
-  title: 'JNRPE', // Title for your website.
+  title: 'Massimiliano Ziccardi - JNRPE', // Title for your website.
   tagline: 'Java Nagios Remote Plugin Executor',
-  url: 'https://your-docusaurus-test-site.com', // Your website URL
-  baseUrl: '/', // Base URL for your project */
+  url: 'https://www.jnrpe.it', // Your website URL
+  baseUrl: '/jnrpe/', // Base URL for your project */
   // For github.io type URLs, you would set the url and baseUrl like:
   //   url: 'https://facebook.github.io',
   //   baseUrl: '/test-site/',
 
   // Used for publishing and more
   projectName: 'jnrpe',
-  organizationName: '',
+  organizationName: 'ziccardi',
   // For top-level user or org sites, the organization is still the same.
   // e.g., for the https://JoelMarcey.github.io site, it would be set like...
   //   organizationName: 'JoelMarcey'
@@ -43,9 +43,9 @@ const siteConfig = {
 
   // For no header links in the top nav bar -> headerLinks: [],
   headerLinks: [
-    {doc: 'overview', label: 'Docs'},
-    {doc: 'doc4', label: 'API'},
-    {page: 'help', label: 'Help'},
+    { href: 'https://github.com/ziccardi/jnrpe', label: 'GitHUB'},
+    { href: 'https://www.jnrpe.it', label: 'Home'},
+    // {page: 'help', label: 'Help'},
     {blog: true, label: 'Blog'},
   ],
 
@@ -53,14 +53,14 @@ const siteConfig = {
   users,
 
   /* path to images for header/footer */
-  headerIcon: 'img/favicon.ico',
-  footerIcon: 'img/favicon.ico',
+  headerIcon: '',
+  footerIcon: '',
   favicon: 'img/favicon.ico',
 
   /* Colors for website */
   colors: {
-    primaryColor: '#4d2780',
-    secondaryColor: '#351b59',
+    primaryColor: '#1981BE',
+    secondaryColor: '#81BED7',
   },
 
   /* Custom fonts for website */
@@ -78,11 +78,11 @@ const siteConfig = {
 
 
   // This copyright info is used in /core/Footer.js and blog RSS/Atom feeds.
-  copyright: `Copyright © ${new Date().getFullYear()} Your Name or Your Company Name`,
+  copyright: `Copyright © ${new Date().getFullYear()} Massimiliano Ziccardi`,
 
   highlight: {
     // Highlight.js theme to use for syntax highlighting in code blocks.
-    theme: 'default',
+    theme: 'dark',
   },
 
   // Add custom scripts here that would be placed in <script> tags.
@@ -97,9 +97,14 @@ const siteConfig = {
   ogImage: 'img/undraw_online.svg',
   twitterImage: 'img/undraw_tweetstorm.svg',
 
+  markdownPlugins: [
+    // Highlight admonitions (callouts such as tips, warnings, note, important, etc)
+    require('remarkable-admonitions')({ icon: 'svg-inline' })
+  ],
+
   // For sites with a sizable amount of content, set collapsible to true.
   // Expand/collapse the links and subcategories under categories.
-  // docsSideNavCollapsible: true,
+  docsSideNavCollapsible: true,
 
   // Show documentation's last contributor's name.
   // enableUpdateBy: true,
@@ -109,7 +114,8 @@ const siteConfig = {
 
   // You may provide arbitrary config keys to be used as needed by your
   // template. For example, if you need your repo's URL...
-  //   repoUrl: 'https://github.com/facebook/test-site',
+  repoUrl: 'https://github.com/ziccardi/jnrpe',
+  mailingList: 'https://groups.google.com/forum/#!forum/js-jnrpe',
 };
 
 module.exports = siteConfig;

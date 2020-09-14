@@ -1,28 +1,51 @@
 @startuml
 
-package "Some Group" {
-HTTP - [First Component]
-[Another Component]
-}
+frame it.jnrpe.engine {
+    package services.events {
+        () IEventManager
+        () IEventType
+        IEventManager ..> IEventType : use
+        [LogEvent] -> IEventType
+    }
 
-package "Other Groups" {
-FTP - [Second Component]
+    package services.config {
+        () IConfigProvider
+        () IConfigSource
+        IConfigProvider ..> IConfigSource : uses
+    }
 
-[First Component] --> FTP
-}
+    package services.network {
+        () INetworkListener
+    }
 
-package "jnrpe.engine.module" {
-    package "it.jnrpe.engine" {
-        [CommandExecutor]
-        [CommandRegistry]
+    package services.plugins {
+        () IPlugin
+        () IPluginRepository
+        IPluginRepository ..> IPlugin : uses
     }
 }
 
-package "jnrpe.network.module" {
-    package "it.jnrpe.network.execution" {
-        ICommandExecutor - [a]
-        [CommandRegistry]
-    }
+frame it.jnrpe.services.events {
+    [ConsoleEventManager] --> IEventManager
+}
+
+frame it.jnrpe.services.config {
+    [IniJnrpeConfigProvider] ---> IConfigProvider
+    [XmlJnrpeConfigProvider] ---> IConfigProvider
+    [YamlJnrpeConfigProvider] ---> IConfigProvider
+}
+
+frame it.jnrpe.services.network.netty {
+    [JnrpeNettyListenerService] --> INetworkListener
+}
+
+frame it.jnrpe.services.plugin {
+    [JavaServicePluginRepository] --> IPluginRepository
+}
+
+frame it.jnrpe.services.plugins {
+    [CheckDiskPlugin] -> IPlugin
+    [CheckMemoryPlugin] -> IPlugin
 }
 
 @enduml
