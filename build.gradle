@@ -6,8 +6,6 @@ plugins {
 reckon {
     scopeFromProp()
     snapshotFromProp()
-    // alternative to stageFromProp
-    // snapshotFromProp()
 }
 
 spotless {
