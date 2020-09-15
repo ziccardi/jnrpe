@@ -1,3 +1,12 @@
+# [3.1.0](https://github.com/ziccardi/jnrpe/compare/3.0.0...3.1.0) (2020-09-15)
+
+
+### Features
+
+* 🎸 added command `start` to the commandline ([12cd24f](https://github.com/ziccardi/jnrpe/commit/12cd24fafd3c3302a68c6ca0175195f79af30b8e))
+
+
+
 # [3.0.0](https://github.com/ziccardi/jnrpe/compare/2.1.0-SNAPSHOT...3.0.0) (2020-09-15)
 
 
