@@ -12,7 +12,7 @@ original_id: overview
 
 ## How it works
 
-![JNRPE ](./assets/overview.png)
+![JNRPE](assets/overview-203.png)
 
 1. [**Nagios**](https://www.nagios.org/) will invoke a check defined as a check_nrpe command.
 2. **check_nrpe** will invoke the command on the JNRPE server
