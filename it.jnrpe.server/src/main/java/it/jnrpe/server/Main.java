@@ -25,12 +25,22 @@ import it.jnrpe.server.commands.StartCommand;
     name = "jnrpe",
     subcommands = {StartCommand.class})
 public class Main {
+  @CommandLine.Option(
+      names = {"-c", "--conf"},
+      defaultValue = "/etc/jnrpe/jnrpe.yml",
+      paramLabel = "PATH",
+      required = true,
+      description = "Path to the JNRPE server config file (defaults to '/etc/jnrpe/jnrpe.yml')")
+  private String confFile;
+
+  public String getConfigFilePath() {
+    return this.confFile;
+  }
+
   public static void main(String[] args) {
     CommandLine cli = new CommandLine(new Main());
 
     try {
-      //      CommandLine.ParseResult res = cli.parseArgs(args);
-      //      server.start();
       cli.execute(args);
     } catch (Exception e) {
       // TODO replace with a 'fatal'

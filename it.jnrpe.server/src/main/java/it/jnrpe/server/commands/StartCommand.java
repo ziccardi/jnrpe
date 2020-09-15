@@ -22,6 +22,7 @@ import it.jnrpe.engine.services.config.JNRPEConfig;
 import it.jnrpe.engine.services.network.INetworkListener;
 import it.jnrpe.engine.services.plugins.CommandLine;
 import it.jnrpe.server.ConfigSource;
+import it.jnrpe.server.Main;
 import java.io.File;
 import java.util.Optional;
 import java.util.ServiceLoader;
@@ -30,13 +31,7 @@ import java.util.concurrent.Callable;
 @CommandLine.Command(name = "start")
 public class StartCommand implements Callable<Void> {
 
-  @CommandLine.Option(
-      names = {"-c", "--conf"},
-      defaultValue = "/etc/jnrpe/jnrpe.yml",
-      paramLabel = "PATH",
-      required = true,
-      description = "Path to the JNRPE server config file (defaults to '/etc/jnrpe/jnrpe.yml')")
-  private String confFile;
+  @CommandLine.ParentCommand private Main jnrpe;
 
   private void bind(Binding binding) {
     // retrieve the network service
@@ -59,7 +54,7 @@ public class StartCommand implements Callable<Void> {
   @Override
   public Void call() {
     // Parsing the configuration
-    File confFile = new File(this.confFile);
+    File confFile = new File(jnrpe.getConfigFilePath());
     if (!confFile.canRead()) {
       EventManager.fatal("Unable to read the configuration file at %s", confFile.getAbsolutePath());
       return null;
