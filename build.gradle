@@ -1,5 +1,13 @@
 plugins {
     id "com.diffplug.spotless" version "5.3.0"
+    id 'org.ajoberstar.reckon' version '0.12.0'
+}
+
+reckon {
+    scopeFromProp()
+    snapshotFromProp()
+    // alternative to stageFromProp
+    // snapshotFromProp()
 }
 
 spotless {
@@ -35,7 +43,6 @@ spotless {
 }
 
 group 'it.jnrpe'
-version '3.0.0-SNAPSHOT'
 apply plugin: 'distribution'
 
 subprojects {
