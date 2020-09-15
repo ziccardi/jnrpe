@@ -1,11 +1,6 @@
 plugins {
     id "com.diffplug.spotless" version "5.3.0"
-    id 'org.ajoberstar.reckon' version '0.12.0'
-}
-
-reckon {
-    scopeFromProp()
-    snapshotFromProp()
+    id 'com.palantir.git-version' version '0.12.3'
 }
 
 spotless {
@@ -13,8 +8,6 @@ spotless {
         target '**/src/*/java/**/*.java'
         importOrder() // standard import order
         //importOrder('java', 'javax', 'com.acme', '') // or importOrderFile
-        // You probably want an empty string at the end - all of the
-        // imports you didn't specify explicitly will go there.
 
         removeUnusedImports()
 
@@ -42,11 +35,10 @@ spotless {
 
 group 'it.jnrpe'
 apply plugin: 'distribution'
+version gitVersion()
 
 subprojects {
     apply plugin: 'java'
-
-    version "1.0-SNAPSHOT"
 
     sourceCompatibility = 11
     targetCompatibility = 11
@@ -73,6 +65,17 @@ subprojects {
         testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
         testImplementation 'org.junit.jupiter:junit-jupiter-params:5.3.1'
         testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+    }
+
+    tasks.compileJava {
+        options.javaModuleVersion = provider { gitVersion() }
+    }
+
+    jar {
+        manifest {
+            attributes 'Implementation-Version': archiveVersion
+            attributes 'Implementation-Title': 'JNRPE'
+        }
     }
 }
 

@@ -23,8 +23,20 @@ import it.jnrpe.server.commands.StartCommand;
 
 @Command(
     name = "jnrpe",
+    mixinStandardHelpOptions = true,
+    versionProvider = Main.VersionProvider.class,
     subcommands = {StartCommand.class})
 public class Main {
+
+  public static class VersionProvider implements CommandLine.IVersionProvider {
+    @Override
+    public String[] getVersion() throws Exception {
+      return new String[] {
+        String.format("JNRPE v%s", Main.class.getModule().getDescriptor().rawVersion().get())
+      };
+    }
+  }
+
   @CommandLine.Option(
       names = {"-c", "--conf"},
       defaultValue = "/etc/jnrpe/jnrpe.yml",
