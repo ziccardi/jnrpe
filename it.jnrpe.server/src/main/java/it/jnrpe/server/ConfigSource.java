@@ -24,7 +24,7 @@ import java.io.InputStream;
 public class ConfigSource implements IConfigSource {
   private static File configFile;
 
-  static void setConfigFile(File confFile) {
+  public static void setConfigFile(File confFile) {
     ConfigSource.configFile = confFile;
   }
 

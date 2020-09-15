@@ -13,22 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.server;
+package it.jnrpe.server.commands;
 
 import it.jnrpe.engine.events.EventManager;
 import it.jnrpe.engine.services.config.Binding;
 import it.jnrpe.engine.services.config.IConfigProvider;
 import it.jnrpe.engine.services.config.JNRPEConfig;
 import it.jnrpe.engine.services.network.INetworkListener;
-import it.jnrpe.engine.services.plugins.CommandLine.Command;
-import it.jnrpe.engine.services.plugins.CommandLine.Option;
+import it.jnrpe.engine.services.plugins.CommandLine;
+import it.jnrpe.server.ConfigSource;
 import java.io.File;
 import java.util.Optional;
 import java.util.ServiceLoader;
+import java.util.concurrent.Callable;
 
-@Command(name = "jnrpe")
-public class JNRPEServer {
-  @Option(
+@CommandLine.Command(name = "start")
+public class StartCommand implements Callable<Void> {
+
+  @CommandLine.Option(
       names = {"-c", "--conf"},
       defaultValue = "/etc/jnrpe/jnrpe.yml",
       paramLabel = "PATH",
@@ -54,14 +56,13 @@ public class JNRPEServer {
     }
   }
 
-  public void start() throws Exception {
+  @Override
+  public Void call() {
     // Parsing the configuration
     File confFile = new File(this.confFile);
     if (!confFile.canRead()) {
       EventManager.fatal("Unable to read the configuration file at %s", confFile.getAbsolutePath());
-      // System.exit(-1);
-      throw new Exception(
-          String.format("Unable to read the configuration file at %s", confFile.getAbsolutePath()));
+      return null;
     }
 
     ConfigSource.setConfigFile(confFile);
@@ -85,5 +86,6 @@ public class JNRPEServer {
             EventManager.fatal(
                 "No config provider has been able to parse the provided config file (%s)",
                 confFile.getAbsolutePath()));
+    return null;
   }
 }
