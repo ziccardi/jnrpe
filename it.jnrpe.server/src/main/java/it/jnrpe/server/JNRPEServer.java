@@ -59,8 +59,9 @@ public class JNRPEServer {
     File confFile = new File(this.confFile);
     if (!confFile.canRead()) {
       EventManager.fatal("Unable to read the configuration file at %s", confFile.getAbsolutePath());
-      //System.exit(-1);
-      throw new Exception(String.format("Unable to read the configuration file at %s", confFile.getAbsolutePath()));
+      // System.exit(-1);
+      throw new Exception(
+          String.format("Unable to read the configuration file at %s", confFile.getAbsolutePath()));
     }
 
     ConfigSource.setConfigFile(confFile);

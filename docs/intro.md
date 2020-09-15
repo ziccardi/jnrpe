@@ -10,12 +10,14 @@ title: Overview
 * Execute the Java/Javascript plugins directly inside JNRPE: no new JVMs will be instantiated to execute java plugins.
 
 ## How it works
-
-![JNRPE ](./assets/overview.png)
-
-1. [**Nagios**](https://www.nagios.org/) will invoke a check defined as a check_nrpe command.
+![JNRPE Overview](assets/overview.png)
+1. [**Nagios**](https://www.nagios.org/) will invoke a check defined as a _check_nrpe_ command.
 2. **check_nrpe** will invoke the command on the JNRPE server
-3. The **JNRPE server** will invoke the plugin associated with the requested command
-4. The plugin will perform the check. If the plugin is the **NATIVE** check plugin (former **EXEC**), the external executable will be invoked and its output will be returned. This plugin is useful if you need to use a mix of java/javascript and executable plugins since you don’t have to install both JNRPE and NRPE.
-5. **JNRPE** receives the plugin output and returns it to **check_nrpe**
-6. **check_nrpe** returns the check result to **Nagios**
+3. The **Socket Listener** (that implements the NRPE protocol) will parse and validate the received packet. If the packet is valid,
+it will ask the **executor** to execute the received command.
+4. The **executor** will ask the **Command Registry** to retrieve the command definition for the requested command
+5. After receiving the command, the **executor** will ask the command definition to create a **COMMAND INSTANCE** passing 
+to the command definition all the received parameters. A **COMMAND INSTANCE** will contain teh requested plugin and all the parameters (replacing the $ARGx$ macros if needed). 
+6. When a **COMMAND INSTANCE** is received, the **executor** will execute the command instance and return the result to the **Socket Listener**.
+7. The Socket Listener will then create a NRPE packet with the received result and will return that to **check_nrpe**.
+8. **check_nrpe** returns the check result to **Nagios**
