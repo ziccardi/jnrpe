@@ -1,0 +1,43 @@
+{
+  "version-2.0.3-docs": {
+    "Introduction": [
+      "version-2.0.3-overview",
+      "version-2.0.3-get-jnrpe"
+    ],
+    "Installing JNRPE": [
+      "version-2.0.3-installation/gui-installer",
+      "version-2.0.3-installation/cli-installer",
+      "version-2.0.3-installation/directory-structure"
+    ],
+    "The JNRPE Server": [
+      "version-2.0.3-server/server-overview",
+      "version-2.0.3-server/run-jnrpe",
+      "version-2.0.3-server/configure-jnrpe",
+      "version-2.0.3-server/interactive-console"
+    ],
+    "Plugins": [
+      "version-2.0.3-plugins/plugin-exec",
+      "version-2.0.3-plugins/plugin-checkfile",
+      "version-2.0.3-plugins/plugin-checkdisk",
+      "version-2.0.3-plugins/plugin-checkoracle",
+      "version-2.0.3-plugins/plugin-checkprocs",
+      "version-2.0.3-plugins/plugin-checkjmx",
+      "version-2.0.3-plugins/plugin-checkusers",
+      "version-2.0.3-plugins/plugin-checkmysql",
+      "version-2.0.3-plugins/plugin-checkmysqlquery",
+      "version-2.0.3-plugins/plugin-checkpgsql",
+      "version-2.0.3-plugins/plugin-checktime",
+      "version-2.0.3-plugins/plugin-checktomcat",
+      "version-2.0.3-plugins/plugin-checkhttp",
+      "version-2.0.3-plugins/plugin-checkssh",
+      "version-2.0.3-plugins/plugin-checkping",
+      "version-2.0.3-plugins/plugin-test"
+    ]
+  },
+  "version-2.0.3-docs-other": {
+    "First Category": [
+      "version-2.0.3-doc4",
+      "version-2.0.3-doc5"
+    ]
+  }
+}

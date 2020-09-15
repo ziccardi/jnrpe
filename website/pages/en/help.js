@@ -21,33 +21,43 @@ function Help(props) {
 
   const supportLinks = [
     {
-      content: `Learn more using the [documentation on this site.](${docUrl(
-        'doc1.html',
-      )})`,
-      title: 'Browse Docs',
+      content: `Learn more about JNRPE using the [official documentation](${docUrl(
+          'overview',
+      )}).`,
+      title: 'Browse the docs',
     },
     {
-      content: 'Ask questions about the documentation and project',
+      content: 'You can follow and contact us on [Twitter](https://twitter.com/jnrpe1).',
+      title: 'Twitter',
+    },
+    {
+      content: 'At our [GitHub repo](https://github.com/ziccardi/jnrpe) Browse and submit ' +
+          '[issues](https://github.com/ziccardi/jnrpe/issues) ' +
+          'or [pull requests](https://github.com/ziccardi/jnrpe/pulls) for bugs you find or ' +
+          'any new features you may want implemented.',
+      title: 'GitHub'
+    },
+    {
+      content: 'If you’ve got ideas for the JNRPE project or want to share what you\'re working on or struggling with, ' +
+          'the <a href="https://groups.google.com/forum/#!forum/js-jnrpe">JNRPE Google Group</a> is a good place to ' +
+          'start. The Mailing List is used for both team-wide and community communication.',
       title: 'Join the community',
-    },
-    {
-      content: "Find out what's new with this project",
-      title: 'Stay up to date',
     },
   ];
 
+
   return (
-    <div className="docMainWrapper wrapper">
-      <Container className="mainContainer documentContainer postContainer">
-        <div className="post">
-          <header className="postHeader">
-            <h1>Need help?</h1>
-          </header>
-          <p>This project is maintained by a dedicated group of people.</p>
-          <GridBlock contents={supportLinks} layout="threeColumn" />
-        </div>
-      </Container>
-    </div>
+      <div className="docMainWrapper wrapper">
+        <Container className="mainContainer documentContainer postContainer">
+          <div className="post">
+            <header className="postHeader">
+              <h1>Need help?</h1>
+            </header>
+            <p>This project is maintained by a dedicated group of people.</p>
+            <GridBlock contents={supportLinks} layout="fourColumn" />
+          </div>
+        </Container>
+      </div>
   );
 }
 
