@@ -1,3 +1,12 @@
+## [3.1.1](https://github.com/ziccardi/jnrpe/compare/3.1.0...3.1.1) (2020-09-15)
+
+
+### Bug Fixes
+
+* 🐛 made the conf parameter global to all commands ([#75](https://github.com/ziccardi/jnrpe/issues/75)) ([dfef38f](https://github.com/ziccardi/jnrpe/commit/dfef38fb94d95d67b0399da2673dbe18b6629e5a))
+
+
+
 # [3.1.0](https://github.com/ziccardi/jnrpe/compare/3.0.0...3.1.0) (2020-09-15)
 
 
