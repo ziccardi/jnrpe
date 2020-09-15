@@ -5,9 +5,6 @@
     "previous": "Previous",
     "tagline": "Java Nagios Remote Plugin Executor",
     "docs": {
-      "get-jnrpe": {
-        "title": "Getting JNRPE"
-      },
       "overview": {
         "title": "Overview"
       },
