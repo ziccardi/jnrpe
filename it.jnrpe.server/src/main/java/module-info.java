@@ -4,7 +4,7 @@ import it.jnrpe.engine.services.network.INetworkListener;
 import it.jnrpe.server.ConfigSource;
 
 module it.jnrpe.server {
-  opens it.jnrpe.server to
+  opens it.jnrpe.server.commands to
       it.jnrpe.engine;
 
   requires it.jnrpe.engine;

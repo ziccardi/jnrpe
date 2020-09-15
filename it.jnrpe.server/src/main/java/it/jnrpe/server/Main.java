@@ -18,16 +18,20 @@ package it.jnrpe.server;
 import it.jnrpe.engine.events.EventManager;
 import it.jnrpe.engine.services.events.LogEvent;
 import it.jnrpe.engine.services.plugins.CommandLine;
+import it.jnrpe.engine.services.plugins.CommandLine.Command;
+import it.jnrpe.server.commands.StartCommand;
 
+@Command(
+    name = "jnrpe",
+    subcommands = {StartCommand.class})
 public class Main {
   public static void main(String[] args) {
-    final var server = new JNRPEServer();
-
-    CommandLine cli = new CommandLine(server);
+    CommandLine cli = new CommandLine(new Main());
 
     try {
-      cli.parseArgs(args);
-      server.start();
+      //      CommandLine.ParseResult res = cli.parseArgs(args);
+      //      server.start();
+      cli.execute(args);
     } catch (Exception e) {
       // TODO replace with a 'fatal'
       EventManager.emit(LogEvent.FATAL, "Unable to start JNRPE", e);

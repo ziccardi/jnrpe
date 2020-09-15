@@ -4,11 +4,11 @@ plugins {
 
 dependencies {
     implementation project(':it.jnrpe.engine')
-    runtime project(':it.jnrpe.services.config')
-    runtime project(':it.jnrpe.services.network.netty')
-    runtime project(':it.jnrpe.services.plugin.repository')
-    runtime project(':it.jnrpe.services.plugins')
-    runtime project(':it.jnrpe.services.events')
+    runtimeOnly project(':it.jnrpe.services.config')
+    runtimeOnly project(':it.jnrpe.services.network.netty')
+    runtimeOnly project(':it.jnrpe.services.plugin.repository')
+    runtimeOnly project(':it.jnrpe.services.plugins')
+    runtimeOnly project(':it.jnrpe.services.events')
 }
 
 application {
