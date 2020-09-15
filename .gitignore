@@ -1,7 +1,0 @@
-*.class
-*.iml
-.*
-.*/
-target/
-test-output/
-bin/
