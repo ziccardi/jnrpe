@@ -20,12 +20,13 @@ import it.jnrpe.engine.services.events.LogEvent;
 import it.jnrpe.engine.services.plugins.CommandLine;
 import it.jnrpe.engine.services.plugins.CommandLine.Command;
 import it.jnrpe.server.commands.StartCommand;
+import it.jnrpe.server.commands.plugins.PluginsCommand;
 
 @Command(
     name = "jnrpe",
     mixinStandardHelpOptions = true,
     versionProvider = Main.VersionProvider.class,
-    subcommands = {StartCommand.class})
+    subcommands = {StartCommand.class, PluginsCommand.class})
 public class Main {
 
   public static class VersionProvider implements CommandLine.IVersionProvider {
