@@ -12,6 +12,7 @@ module it.jnrpe.engine {
   exports it.jnrpe.engine.services.network;
   exports it.jnrpe.engine.services.plugins;
   exports it.jnrpe.engine.events;
+  exports it.jnrpe.engine.plugins;
 
   uses IConfigProvider;
   uses ICommandRepository;

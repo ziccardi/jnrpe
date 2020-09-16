@@ -28,10 +28,7 @@ import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.concurrent.Callable;
 
-@CommandLine.Command(
-        name = "start",
-        description = "Starts the JNRPE server"
-)
+@CommandLine.Command(name = "start", description = "Starts the JNRPE server")
 public class StartCommand implements Callable<Void> {
 
   @CommandLine.ParentCommand private Main jnrpe;
