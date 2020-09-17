@@ -13,12 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.server.commands.plugins;
+package it.jnrpe.services.plugins;
 
+import it.jnrpe.engine.services.commands.ExecutionResult;
+import it.jnrpe.engine.services.network.Status;
 import it.jnrpe.engine.services.plugins.CommandLine;
+import it.jnrpe.engine.services.plugins.IPlugin;
 
-@CommandLine.Command(
-    name = "plugins",
-    aliases = {"plugin"},
-    subcommands = {ListCommand.class, HelpCommand.class, ExecCommand.class})
-public class PluginsCommand {}
+@CommandLine.Command(name = "CHECK_TEST")
+public class CheckTestPlugin implements IPlugin {
+  private static final String NAME = "CHECK_TEST";
+
+  @CommandLine.Option(names = {"-m", "--message"}, required = true)
+  private String message;
+
+  @Override
+  public String getName() {
+    return NAME;
+  }
+
+  @Override
+  public ExecutionResult execute() {
+    return new ExecutionResult(this.message, Status.OK);
+  }
+}

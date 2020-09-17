@@ -15,6 +15,8 @@
  *******************************************************************************/
 package it.jnrpe.services.plugins;
 
+import it.jnrpe.engine.services.commands.ExecutionResult;
+import it.jnrpe.engine.services.network.Status;
 import it.jnrpe.engine.services.plugins.CommandLine.Command;
 import it.jnrpe.engine.services.plugins.CommandLine.Option;
 import it.jnrpe.engine.services.plugins.IPlugin;
@@ -42,5 +44,11 @@ public class CheckDiskPlugin implements IPlugin {
   @Override
   public String getName() {
     return "CHECK_DISK";
+  }
+
+  @Override
+  public ExecutionResult execute() {
+    // TODO: implement
+    return new ExecutionResult("CHECK_DISK Invoiked", Status.OK);
   }
 }

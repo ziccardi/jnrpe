@@ -55,10 +55,12 @@ public class CommandDefinition implements ICommandDefinition {
   @Override
   public ICommandInstance instantiate(String... params) {
     Optional<IPlugin> pluginInstance = PluginRepository.getInstance().getPlugin(this.plugin);
+
     if (pluginInstance.isPresent()) {
-      // TODO: perform the real execution...
-      return () ->
-          new ExecutionResult(String.format("[%s -> %s](%s)", name, plugin, args), Status.OK);
+      return () -> pluginInstance.get().execute();
+      //      return () ->
+      //          new ExecutionResult(String.format("[%s -> %s](%s)", name, plugin, args),
+      // Status.OK);
     } else {
       return () ->
           new ExecutionResult(
