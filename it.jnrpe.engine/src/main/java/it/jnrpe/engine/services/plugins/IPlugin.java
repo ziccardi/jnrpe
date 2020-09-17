@@ -15,6 +15,10 @@
  *******************************************************************************/
 package it.jnrpe.engine.services.plugins;
 
+import it.jnrpe.engine.services.commands.ExecutionResult;
+
 public interface IPlugin {
   String getName();
+
+  ExecutionResult execute();
 }
