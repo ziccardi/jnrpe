@@ -17,7 +17,7 @@ jobs:
         with:
           java-version: 11
       - name: Build with Gradle
-        run: ./gradlew build publish
+        run: ./gradlew build
       - name: Publish to Central Repository
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
