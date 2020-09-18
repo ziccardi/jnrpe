@@ -1,6 +1,14 @@
 plugins {
     id "com.diffplug.spotless" version "5.3.0"
-    id 'com.palantir.git-version' version '0.12.3'
+    id 'pl.allegro.tech.build.axion-release' version '1.11.0'
+    id 'maven-publish'
+    id 'signing'
+}
+
+scmVersion {
+    tag {
+        prefix = ''
+    }
 }
 
 spotless {
@@ -35,10 +43,13 @@ spotless {
 
 group 'it.jnrpe'
 apply plugin: 'distribution'
-version gitVersion()
+//version gitVersion()
+project.version=scmVersion.version
 
 subprojects {
     apply plugin: 'java'
+    apply plugin: 'maven-publish'
+    apply plugin: 'signing'
 
     sourceCompatibility = 11
     targetCompatibility = 11
@@ -67,8 +78,21 @@ subprojects {
         testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
     }
 
+    tasks.javadoc {
+        failOnError = false
+    }
+
+    tasks.withType(Javadoc).all {
+        failOnError = false
+    }
+
     tasks.compileJava {
-        options.javaModuleVersion = provider { gitVersion() }
+        options.javaModuleVersion = provider { scmVersion.version }
+    }
+
+    java {
+        withJavadocJar()
+        withSourcesJar()
     }
 
     jar {
@@ -77,6 +101,48 @@ subprojects {
             attributes 'Implementation-Title': 'JNRPE'
         }
     }
-}
 
+//    publishing {
+//        publications {
+//            mavenJava(MavenPublication) {
+//                groupId = 'it.jnrpe'
+//                artifactId = project.name
+//                from components.java
+//                url = ''
+//            }
+//        }
+//    }
+
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                groupId = 'it.jnrpe'
+                artifactId = project.name
+                version = scmVersion.version
+
+                from components.java
+            }
+        }
+        repositories {
+            maven {
+                // change URLs to point to your repos, e.g. http://my.org/repo
+                def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+                def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots"
+                url = scmVersion.version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+                credentials {
+                    username = System.getenv("MAVEN_USERNAME")
+                    password = System.getenv("MAVEN_PASSWORD")
+                }
+            }
+        }
+    }
+
+    signing {
+        required = false
+        def signingKey = findProperty("signingKey")
+        def signingPassword = findProperty("signingPassword")
+        useInMemoryPgpKeys(signingKey, signingPassword)
+        sign configurations.archives
+    }
+}
 
