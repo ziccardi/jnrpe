@@ -13,29 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.services.plugins;
+package it.jnrpe.engine.plugins.threshold;
 
-import it.jnrpe.engine.services.commands.ExecutionResult;
-import it.jnrpe.engine.services.network.Status;
-import it.jnrpe.engine.services.plugins.CommandLine;
-import it.jnrpe.engine.services.plugins.IPlugin;
+import java.math.BigDecimal;
 
-@CommandLine.Command(name = "CHECK_TEST")
-public class CheckTestPlugin implements IPlugin {
-  private static final String NAME = "CHECK_TEST";
-
-  @CommandLine.Option(
-      names = {"-m", "--message"},
-      required = true)
-  private String message;
-
-  @Override
-  public String getName() {
-    return NAME;
-  }
-
-  @Override
-  public ExecutionResult execute() {
-    return new ExecutionResult(this.message, Status.OK);
-  }
+public interface IThreshold {
+  public boolean fallsInside(BigDecimal value);
 }
