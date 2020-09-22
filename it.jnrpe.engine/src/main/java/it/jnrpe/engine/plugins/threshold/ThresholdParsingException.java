@@ -13,29 +13,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.services.plugins;
+package it.jnrpe.engine.plugins.threshold;
 
-import it.jnrpe.engine.services.commands.ExecutionResult;
-import it.jnrpe.engine.services.network.Status;
-import it.jnrpe.engine.services.plugins.CommandLine;
-import it.jnrpe.engine.services.plugins.IPlugin;
+public class ThresholdParsingException extends Exception {
+  private int index;
+  private String thresholdString;
+  private String expectedToken;
 
-@CommandLine.Command(name = "CHECK_TEST")
-public class CheckTestPlugin implements IPlugin {
-  private static final String NAME = "CHECK_TEST";
-
-  @CommandLine.Option(
-      names = {"-m", "--message"},
-      required = true)
-  private String message;
-
-  @Override
-  public String getName() {
-    return NAME;
+  ThresholdParsingException() {
+    super();
   }
 
-  @Override
-  public ExecutionResult execute() {
-    return new ExecutionResult(this.message, Status.OK);
+  ThresholdParsingException(Throwable cause) {
+    super(cause);
+  }
+
+  public int getIndex() {
+    return index;
+  }
+
+  void setIndex(int index) {
+    this.index = index;
+  }
+
+  public String getThresholdString() {
+    return thresholdString;
+  }
+
+  void setThresholdString(String thresholdString) {
+    this.thresholdString = thresholdString;
+  }
+
+  public String getExpectedToken() {
+    return expectedToken;
+  }
+
+  void setExpectedToken(String expectedToken) {
+    this.expectedToken = expectedToken;
   }
 }

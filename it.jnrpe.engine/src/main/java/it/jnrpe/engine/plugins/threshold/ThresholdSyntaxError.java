@@ -13,29 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.services.plugins;
+package it.jnrpe.engine.plugins.threshold;
 
-import it.jnrpe.engine.services.commands.ExecutionResult;
-import it.jnrpe.engine.services.network.Status;
-import it.jnrpe.engine.services.plugins.CommandLine;
-import it.jnrpe.engine.services.plugins.IPlugin;
+public class ThresholdSyntaxError extends ThresholdParsingException {
 
-@CommandLine.Command(name = "CHECK_TEST")
-public class CheckTestPlugin implements IPlugin {
-  private static final String NAME = "CHECK_TEST";
+  private char offendingToken;
 
-  @CommandLine.Option(
-      names = {"-m", "--message"},
-      required = true)
-  private String message;
+  public ThresholdSyntaxError(char offendingToken) {
+    super();
+    this.offendingToken = offendingToken;
+  }
 
-  @Override
-  public String getName() {
-    return NAME;
+  public char getOffendingToken() {
+    return offendingToken;
   }
 
   @Override
-  public ExecutionResult execute() {
-    return new ExecutionResult(this.message, Status.OK);
+  public String getMessage() {
+    return String.format(
+        "[%d][%s] - Syntax error. Expecting one of '%s' but got '%s'",
+        this.getIndex(), this.getThresholdString(), getExpectedToken(), offendingToken);
   }
 }

@@ -13,29 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.services.plugins;
+package it.jnrpe.engine.plugins.threshold.statemachine;
 
-import it.jnrpe.engine.services.commands.ExecutionResult;
-import it.jnrpe.engine.services.network.Status;
-import it.jnrpe.engine.services.plugins.CommandLine;
-import it.jnrpe.engine.services.plugins.IPlugin;
+import it.jnrpe.engine.plugins.threshold.ThresholdSyntaxError;
+import java.util.Optional;
 
-@CommandLine.Command(name = "CHECK_TEST")
-public class CheckTestPlugin implements IPlugin {
-  private static final String NAME = "CHECK_TEST";
-
-  @CommandLine.Option(
-      names = {"-m", "--message"},
-      required = true)
-  private String message;
-
+class StartState extends AbstractState {
   @Override
-  public String getName() {
-    return NAME;
+  public boolean isValidToken(char c) {
+    for (IParsingState state : this.getTransitions()) {
+      if (state.isValidToken(c)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public IParsingState _parse(char c) throws ThresholdSyntaxError {
+    for (IParsingState state : this.getTransitions()) {
+      if (state.isValidToken(c)) {
+        return state.parse(c);
+      }
+    }
+
+    throw new ThresholdSyntaxError(c);
   }
 
   @Override
-  public ExecutionResult execute() {
-    return new ExecutionResult(this.message, Status.OK);
+  public Optional<String> _expects() {
+    return Optional.empty();
   }
 }
