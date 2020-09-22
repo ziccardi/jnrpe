@@ -13,29 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.services.plugins;
+package it.jnrpe.engine.plugins.threshold.statemachine;
 
-import it.jnrpe.engine.services.commands.ExecutionResult;
-import it.jnrpe.engine.services.network.Status;
-import it.jnrpe.engine.services.plugins.CommandLine;
-import it.jnrpe.engine.services.plugins.IPlugin;
+import it.jnrpe.engine.plugins.threshold.IThreshold;
+import java.math.BigDecimal;
 
-@CommandLine.Command(name = "CHECK_TEST")
-public class CheckTestPlugin implements IPlugin {
-  private static final String NAME = "CHECK_TEST";
+class ThresholdImpl implements IThreshold {
+  private boolean negate;
+  private ThresholdEdge min = new ThresholdEdge(new BigDecimal(0));
+  private ThresholdEdge max;
 
-  @CommandLine.Option(
-      names = {"-m", "--message"},
-      required = true)
-  private String message;
+  void setMin(ThresholdEdge min) {
+    this.min = min;
+  }
 
-  @Override
-  public String getName() {
-    return NAME;
+  void setMax(ThresholdEdge max) {
+    this.max = max;
+  }
+
+  void negate() {
+    this.negate = true;
+  }
+
+  public boolean fallsInside(BigDecimal value) {
+    var res = min.lessThanOrEqual(value) && max.greaterThanOrEqual(value);
+    return negate != res;
   }
 
   @Override
-  public ExecutionResult execute() {
-    return new ExecutionResult(this.message, Status.OK);
+  public String toString() {
+    return "ThresholdImpl{" + "negate=" + negate + ", min=" + min + ", max=" + max + '}';
   }
 }

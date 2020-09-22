@@ -13,29 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.services.plugins;
+package it.jnrpe.engine.plugins.threshold.statemachine;
 
-import it.jnrpe.engine.services.commands.ExecutionResult;
-import it.jnrpe.engine.services.network.Status;
-import it.jnrpe.engine.services.plugins.CommandLine;
-import it.jnrpe.engine.services.plugins.IPlugin;
-
-@CommandLine.Command(name = "CHECK_TEST")
-public class CheckTestPlugin implements IPlugin {
-  private static final String NAME = "CHECK_TEST";
-
-  @CommandLine.Option(
-      names = {"-m", "--message"},
-      required = true)
-  private String message;
-
-  @Override
-  public String getName() {
-    return NAME;
+class NegateState extends AbstractUnaryState {
+  public NegateState() {
+    super('@');
   }
 
   @Override
-  public ExecutionResult execute() {
-    return new ExecutionResult(this.message, Status.OK);
+  public void apply(ThresholdBuilder builder) {
+    builder.negate();
   }
 }
