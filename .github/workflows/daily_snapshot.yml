@@ -19,7 +19,7 @@ jobs:
           echo "::set-output name=release::$(git rev-list `git describe --abbrev=0`..HEAD --count)"
   build:
     needs: check_release
-    if: !needs.check_release.outputs.status
+    if: needs.check_release.outputs.status == false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
