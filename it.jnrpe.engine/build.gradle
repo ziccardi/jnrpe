@@ -5,8 +5,3 @@ plugins {
 spotbugsMain {
     excludeFilter = file("$project.projectDir/spotBugsExclude.xml")
 }
-
-dependencies {
-    implementation project(':it.jnrpe.engine')
-    implementation 'org.yaml:snakeyaml:1.26'
-}

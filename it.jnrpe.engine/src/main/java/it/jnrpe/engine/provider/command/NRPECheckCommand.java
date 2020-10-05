@@ -21,7 +21,7 @@ import it.jnrpe.engine.services.commands.ICommandInstance;
 import it.jnrpe.engine.services.network.Status;
 
 public class NRPECheckCommand implements ICommandDefinition {
-  public static String NAME = "_NRPE_CHECK";
+  public static final String NAME = "_NRPE_CHECK";
 
   private static class NRPECheckCommandInstance implements ICommandInstance {
     @Override

@@ -73,10 +73,10 @@ public class ThresholdParser {
     } catch (ThresholdParsingException tse) {
       System.err.println(tse.getThresholdString());
       for (int i = 1; i < tse.getIndex(); i++) {
-        System.err.print(" ");
+        System.err.print(' ');
       }
-      System.err.println("^");
-      System.err.printf("Unexpected token. Expecting one of '%s'\n", tse.getExpectedToken());
+      System.err.println('^');
+      System.err.printf("Unexpected token. Expecting one of '%s'%n", tse.getExpectedToken());
       tse.printStackTrace();
     }
   }

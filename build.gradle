@@ -3,6 +3,7 @@ plugins {
     id 'pl.allegro.tech.build.axion-release' version '1.11.0'
     id 'maven-publish'
     id 'signing'
+    id "com.github.spotbugs" version "4.5.0"
 }
 
 scmVersion {
@@ -50,6 +51,7 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'maven-publish'
     apply plugin: 'signing'
+    apply plugin: 'com.github.spotbugs'
 
     sourceCompatibility = 11
     targetCompatibility = 11
@@ -76,18 +78,25 @@ subprojects {
         testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
         testImplementation 'org.junit.jupiter:junit-jupiter-params:5.3.1'
         testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+        spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.7.1'
     }
 
-    tasks.javadoc {
-        failOnError = false
-    }
+    tasks {
+        javadoc {
+            failOnError = false
+        }
 
-    tasks.withType(Javadoc).all {
-        failOnError = false
-    }
+        compileJava {
+            options.javaModuleVersion = provider { scmVersion.version }
+        }
 
-    tasks.compileJava {
-        options.javaModuleVersion = provider { scmVersion.version }
+        spotbugsMain {
+            reports {
+                html {
+                    enabled = true
+                }
+            }
+        }
     }
 
     java {
@@ -101,17 +110,6 @@ subprojects {
             attributes 'Implementation-Title': 'JNRPE'
         }
     }
-
-//    publishing {
-//        publications {
-//            mavenJava(MavenPublication) {
-//                groupId = 'it.jnrpe'
-//                artifactId = project.name
-//                from components.java
-//                url = ''
-//            }
-//        }
-//    }
 
     publishing {
         publications {
