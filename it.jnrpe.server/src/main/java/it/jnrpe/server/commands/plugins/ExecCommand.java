@@ -52,7 +52,7 @@ public class ExecCommand implements Runnable {
         default:
           label = String.format("[%s - UNKNOWN]", pluginName);
       }
-      System.out.printf("%s - %s\n", label, res.getMessage());
+      System.out.printf("%s - %s%n", label, res.getMessage());
     } catch (Exception e) {
       System.out.println("Error executing plugin: " + e.getMessage());
       cl.usage(System.out);
@@ -65,6 +65,6 @@ public class ExecCommand implements Runnable {
         .getPlugin(pluginName)
         .ifPresentOrElse(
             this::execute,
-            () -> System.out.printf("No plugin named [%s] has been found\n", pluginName));
+            () -> System.out.printf("No plugin named [%s] has been found%n", pluginName));
   }
 }

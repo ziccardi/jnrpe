@@ -35,7 +35,7 @@ public class HelpCommand implements Runnable {
     plugin.ifPresentOrElse(
         this::printPluginHelp,
         () -> {
-          System.out.printf("No plugins named '%s' have been found\n", pluginName);
+          System.out.printf("No plugins named '%s' have been found%n", pluginName);
         });
   }
 }

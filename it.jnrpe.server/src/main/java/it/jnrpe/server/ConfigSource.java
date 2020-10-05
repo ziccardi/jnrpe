@@ -17,9 +17,9 @@ package it.jnrpe.server;
 
 import it.jnrpe.engine.services.config.IConfigSource;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 
 public class ConfigSource implements IConfigSource {
   private static File configFile;
@@ -30,7 +30,7 @@ public class ConfigSource implements IConfigSource {
 
   @Override
   public InputStream getConfigStream() throws IOException {
-    return new FileInputStream(configFile);
+    return Files.newInputStream(configFile.toPath());
   }
 
   @Override
