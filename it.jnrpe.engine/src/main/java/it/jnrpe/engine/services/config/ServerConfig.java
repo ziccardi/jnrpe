@@ -16,6 +16,7 @@
 package it.jnrpe.engine.services.config;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class ServerConfig {
     return Collections.unmodifiableList(bindings);
   }
 
-  public void setBindings(List<Binding> bindings) {
+  public void setBindings(Collection<Binding> bindings) {
     this.bindings = new ArrayList<>(bindings);
   }
 

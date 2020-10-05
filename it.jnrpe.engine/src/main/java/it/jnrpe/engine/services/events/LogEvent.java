@@ -19,12 +19,12 @@ public class LogEvent implements IEventType {
   private final int ordinal;
   private final String type;
 
-  public static LogEvent TRACE = new LogEvent(0, "TRACE");
-  public static LogEvent DEBUG = new LogEvent(1, "DEBUG");
-  public static LogEvent INFO = new LogEvent(2, "INFO");
-  public static LogEvent WARN = new LogEvent(3, "WARN");
-  public static LogEvent ERROR = new LogEvent(4, "ERROR");
-  public static LogEvent FATAL = new LogEvent(4, "FATAL");
+  public static final LogEvent TRACE = new LogEvent(0, "TRACE");
+  public static final LogEvent DEBUG = new LogEvent(1, "DEBUG");
+  public static final LogEvent INFO = new LogEvent(2, "INFO");
+  public static final LogEvent WARN = new LogEvent(3, "WARN");
+  public static final LogEvent ERROR = new LogEvent(4, "ERROR");
+  public static final LogEvent FATAL = new LogEvent(4, "FATAL");
 
   private LogEvent(int ordinal, String type) {
     this.ordinal = ordinal;

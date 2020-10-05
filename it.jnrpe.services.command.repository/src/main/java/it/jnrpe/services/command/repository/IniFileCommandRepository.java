@@ -23,7 +23,7 @@ import java.util.Optional;
 public class IniFileCommandRepository implements ICommandRepository {
   @Override
   public Optional<ICommandDefinition> getCommand(String commandName) {
-    return null;
+    return Optional.empty();
   }
 
   @Override

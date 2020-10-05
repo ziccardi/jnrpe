@@ -15,6 +15,8 @@
  *******************************************************************************/
 package it.jnrpe.services.network.netty.protocol;
 
+import java.util.Arrays;
+
 public abstract class ProtocolPacket {
   private final int version;
   private final int packetType; // must be 1 for requests
@@ -37,8 +39,8 @@ public abstract class ProtocolPacket {
     this.crc32 = crc32;
     this.resultCode = resultCode;
     this.alignment = alignment;
-    this.buffer = buffer;
-    this.padding = padding;
+    this.buffer = Arrays.copyOf(buffer, buffer.length);
+    this.padding = Arrays.copyOf(padding, padding.length);
   }
 
   public int getVersion() {
@@ -58,7 +60,7 @@ public abstract class ProtocolPacket {
   }
 
   public byte[] getPadding() {
-    return this.padding;
+    return Arrays.copyOf(this.padding, this.padding.length);
   }
 
   public int getAlignment() {
@@ -66,7 +68,7 @@ public abstract class ProtocolPacket {
   }
 
   public byte[] getBuffer() {
-    return buffer;
+    return Arrays.copyOf(buffer, buffer.length);
   }
 
   public String getCommand() {
