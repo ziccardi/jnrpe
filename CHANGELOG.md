@@ -1,3 +1,19 @@
+# [3.2.0](https://github.com/ziccardi/jnrpe/compare/3.1.1...3.2.0) (2020-12-22)
+
+
+### Bug Fixes
+
+* 🐛 added description for the start command ([7d70356](https://github.com/ziccardi/jnrpe/commit/7d703562da6d52fd19a77bea5370ec3c236859a9))
+
+
+### Features
+
+* **cli:** added commands to list plugins and get plugin help ([6e2097c](https://github.com/ziccardi/jnrpe/commit/6e2097ce56abcbb1fb0fbed0668462089fe5b015)), closes [#56](https://github.com/ziccardi/jnrpe/issues/56)
+* **plugins:** implemented plugin execution ([a067981](https://github.com/ziccardi/jnrpe/commit/a067981a50f014c6141b58705336bd19be561414))
+* **threshold:** implemented threshold syntax parsing and validation ([2932f80](https://github.com/ziccardi/jnrpe/commit/2932f808c00132e48ccf31fe7edfa5924fca94ce)), closes [#87](https://github.com/ziccardi/jnrpe/issues/87)
+
+
+
 ## [3.1.1](https://github.com/ziccardi/jnrpe/compare/3.1.0...3.1.1) (2020-09-15)
 
 
@@ -44,10 +60,6 @@
 
 
 # [2.1.0-SNAPSHOT](https://github.com/ziccardi/jnrpe/compare/2.0.5...2.1.0-SNAPSHOT) (2020-09-09)
-
-
-
-## 2.0.5 (2015-02-09)
 
 
 
