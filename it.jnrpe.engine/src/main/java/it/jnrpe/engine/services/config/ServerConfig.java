@@ -19,9 +19,18 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ServerConfig {
-  private List<Binding> bindings = new ArrayList<>();
+  private List<Binding> bindings;
+
+  public ServerConfig() {
+    bindings = new ArrayList<>();
+  }
+
+  ServerConfig(ServerConfig sc) {
+    this.bindings = sc.bindings.stream().map(Binding::clone).collect(Collectors.toList());
+  }
 
   public List<Binding> getBindings() {
     return Collections.unmodifiableList(bindings);

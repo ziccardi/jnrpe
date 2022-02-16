@@ -32,5 +32,5 @@ public interface IParsingState {
 
   String getValue();
 
-  default void apply(ThresholdBuilder builder) {};
+  default void apply(ThresholdBuilder builder) {}
 }

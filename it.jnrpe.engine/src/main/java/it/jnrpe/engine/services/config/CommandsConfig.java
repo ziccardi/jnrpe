@@ -16,16 +16,29 @@
 package it.jnrpe.engine.services.config;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class CommandsConfig {
+public class CommandsConfig implements Cloneable {
   private List<CommandDefinition> definitions = new ArrayList<>();
 
   public List<CommandDefinition> getDefinitions() {
-    return definitions;
+    return Collections.unmodifiableList(definitions);
   }
 
   public void setDefinitions(List<CommandDefinition> definitions) {
-    this.definitions = definitions;
+    this.definitions = new ArrayList<>(definitions);
+  }
+
+  @Override
+  public CommandsConfig clone() {
+    try {
+      CommandsConfig cc = (CommandsConfig) super.clone();
+      cc.definitions = definitions.stream().map(o -> o.clone()).collect(Collectors.toList());
+      return cc;
+    } catch (CloneNotSupportedException e) {
+      throw new IllegalStateException("Never happens");
+    }
   }
 }

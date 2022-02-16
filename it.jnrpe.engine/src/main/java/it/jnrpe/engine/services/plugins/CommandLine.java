@@ -16359,7 +16359,8 @@ public class CommandLine {
           return Collections.emptySet();
         }
         Set<String> keys = new LinkedHashSet<String>();
-        for (Enumeration<String> k = rb.getKeys(); k.hasMoreElements(); keys.add(k.nextElement())) ;
+        for (Enumeration<String> k = rb.getKeys(); k.hasMoreElements(); keys.add(k.nextElement()))
+          ;
         return keys;
       }
 

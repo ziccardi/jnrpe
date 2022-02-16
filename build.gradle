@@ -1,9 +1,7 @@
 plugins {
-    id "com.diffplug.spotless" version "5.3.0"
-    id 'pl.allegro.tech.build.axion-release' version '1.11.0'
-    id 'maven-publish'
-    id 'signing'
-    id "com.github.spotbugs" version "4.5.0"
+    id "com.github.spotbugs" version "5.0.5"
+    id "com.diffplug.spotless" version "6.3.0"
+    id 'pl.allegro.tech.build.axion-release' version '1.13.6'
 }
 
 scmVersion {
@@ -12,46 +10,16 @@ scmVersion {
     }
 }
 
-spotless {
-    java {
-        target '**/src/*/java/**/*.java'
-        importOrder() // standard import order
-        //importOrder('java', 'javax', 'com.acme', '') // or importOrderFile
-
-        removeUnusedImports()
-
-        googleJavaFormat() // has its own section below
-        //prettier()         // has its own section below
-//        clangFormat()      // has its own section below
-//
-        licenseHeader '/*******************************************************************************\n' +
-                ' * Copyright (C) $YEAR, Massimiliano Ziccardi\n' +
-                ' *\n' +
-                ' * Licensed under the Apache License, Version 2.0 (the "License");\n' +
-                ' * you may not use this file except in compliance with the License.\n' +
-                ' * You may obtain a copy of the License at\n' +
-                ' *\n' +
-                ' *     http://www.apache.org/licenses/LICENSE-2.0\n' +
-                ' *\n' +
-                ' * Unless required by applicable law or agreed to in writing, software\n' +
-                ' * distributed under the License is distributed on an "AS IS" BASIS,\n' +
-                ' * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n' +
-                ' * See the License for the specific language governing permissions and\n' +
-                ' * limitations under the License.\n' +
-                ' *******************************************************************************/' // or licenseHeaderFile
-    }
-}
-
 group 'it.jnrpe'
 apply plugin: 'distribution'
-//version gitVersion()
 project.version=scmVersion.version
 
 subprojects {
     apply plugin: 'java'
+    apply plugin: 'com.github.spotbugs'
+    apply plugin: 'com.diffplug.spotless'
     apply plugin: 'maven-publish'
     apply plugin: 'signing'
-    apply plugin: 'com.github.spotbugs'
 
     sourceCompatibility = 11
     targetCompatibility = 11
@@ -60,26 +28,60 @@ subprojects {
         mavenCentral()
     }
 
-    plugins.withType(JavaPlugin).configureEach {
-        java {
-            modularity.inferModulePath = true
-        }
-    }
-
-    test {
-        useJUnitPlatform()
-
-        testLogging {
-            events 'PASSED', 'FAILED', 'SKIPPED'
-        }
-    }
-
     dependencies {
-        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
-        testImplementation 'org.junit.jupiter:junit-jupiter-params:5.3.1'
-        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
-        spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.7.1'
+        testImplementation(platform('org.junit:junit-bom:5.8.2'))
+        testImplementation('org.junit.jupiter:junit-jupiter')
     }
+
+    java {
+        modularity.inferModulePath = true
+        withJavadocJar()
+        withSourcesJar()
+    }
+
+    jar {
+        manifest {
+            attributes 'Implementation-Version': archiveVersion
+            attributes 'Implementation-Title': 'JNRPE'
+        }
+    }
+
+    // SPOTLESS CONFIG
+    ///////////////////////////////////////////////////////////////////////////
+    spotless {
+        java {
+            importOrder()
+            removeUnusedImports()
+            googleJavaFormat()
+
+            licenseHeader '/*******************************************************************************\n' +
+                    ' * Copyright (C) $YEAR, Massimiliano Ziccardi\n' +
+                    ' *\n' +
+                    ' * Licensed under the Apache License, Version 2.0 (the "License");\n' +
+                    ' * you may not use this file except in compliance with the License.\n' +
+                    ' * You may obtain a copy of the License at\n' +
+                    ' *\n' +
+                    ' *     http://www.apache.org/licenses/LICENSE-2.0\n' +
+                    ' *\n' +
+                    ' * Unless required by applicable law or agreed to in writing, software\n' +
+                    ' * distributed under the License is distributed on an "AS IS" BASIS,\n' +
+                    ' * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n' +
+                    ' * See the License for the specific language governing permissions and\n' +
+                    ' * limitations under the License.\n' +
+                    ' *******************************************************************************/'
+        }
+    }
+    // END SPOTLESS CONFIG
+    ///////////////////////////////////////////////////////////////////////////
+
+    // SPOTBUGS CONFIG
+    ///////////////////////////////////////////////////////////////////////////
+    spotbugs {
+        excludeFilter = file("$project.projectDir/spotBugsExclude.xml")
+        showProgress = false
+    }
+    // END SPOTBUGS CONFIG
+    ///////////////////////////////////////////////////////////////////////////
 
     tasks {
         javadoc {
@@ -99,15 +101,10 @@ subprojects {
         }
     }
 
-    java {
-        withJavadocJar()
-        withSourcesJar()
-    }
-
-    jar {
-        manifest {
-            attributes 'Implementation-Version': archiveVersion
-            attributes 'Implementation-Title': 'JNRPE'
+    test {
+        useJUnitPlatform()
+        testLogging {
+            events "passed", "skipped", "failed"
         }
     }
 
@@ -143,4 +140,3 @@ subprojects {
         sign configurations.archives
     }
 }
-

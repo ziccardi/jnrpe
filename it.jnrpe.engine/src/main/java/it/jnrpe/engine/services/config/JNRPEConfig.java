@@ -15,16 +15,43 @@
  *******************************************************************************/
 package it.jnrpe.engine.services.config;
 
+import java.util.Collection;
+import java.util.List;
+
 public class JNRPEConfig {
   private ServerConfig server;
   private CommandsConfig commands;
 
+  private class ServerConfigReadOnly extends ServerConfig {
+    @Override
+    public List<Binding> getBindings() {
+      return server.getBindings();
+    }
+
+    @Override
+    public void setBindings(Collection<Binding> bindings) {
+      throw new IllegalStateException("Read only ServiceConfig instance");
+    }
+  }
+
+  private class CommandsConfigReadOnly extends CommandsConfig {
+    @Override
+    public List<CommandDefinition> getDefinitions() {
+      return commands.getDefinitions();
+    }
+
+    @Override
+    public void setDefinitions(List<CommandDefinition> definitions) {
+      throw new IllegalStateException("Read only CommandsConfig instance");
+    }
+  }
+
   public ServerConfig getServer() {
-    return server;
+    return new ServerConfigReadOnly();
   }
 
   public void setServer(ServerConfig server) {
-    this.server = server;
+    this.server = new ServerConfig(server);
   }
 
   @Override
@@ -33,10 +60,10 @@ public class JNRPEConfig {
   }
 
   public CommandsConfig getCommands() {
-    return commands;
+    return new CommandsConfigReadOnly();
   }
 
   public void setCommands(CommandsConfig commands) {
-    this.commands = commands;
+    this.commands = commands.clone();
   }
 }

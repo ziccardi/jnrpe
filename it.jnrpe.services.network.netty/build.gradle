@@ -1,11 +1,3 @@
-plugins {
-    id "com.github.spotbugs"
-}
-
-spotbugsMain {
-    excludeFilter = file("$project.projectDir/spotBugsExclude.xml")
-}
-
 dependencies {
     implementation group: 'io.netty', name: 'netty-all', version: '4.1.46.Final'
     implementation project(':it.jnrpe.engine')
