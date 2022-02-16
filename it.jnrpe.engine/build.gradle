@@ -1,7 +1,0 @@
-plugins {
-    id "com.github.spotbugs"
-}
-
-spotbugsMain {
-    excludeFilter = file("$project.projectDir/spotBugsExclude.xml")
-}

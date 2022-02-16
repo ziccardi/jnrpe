@@ -15,7 +15,7 @@
  *******************************************************************************/
 package it.jnrpe.engine.services.config;
 
-public class Binding {
+public class Binding implements Cloneable {
   private String ip;
   private int port;
   private boolean ssl;
@@ -42,6 +42,15 @@ public class Binding {
 
   public void setSsl(boolean ssl) {
     this.ssl = ssl;
+  }
+
+  @Override
+  public Binding clone() {
+    try {
+      return (Binding) super.clone();
+    } catch (CloneNotSupportedException e) {
+      throw new IllegalStateException("Never happens");
+    }
   }
 
   @Override

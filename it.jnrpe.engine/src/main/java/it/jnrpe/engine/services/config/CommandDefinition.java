@@ -23,10 +23,18 @@ import it.jnrpe.engine.services.network.Status;
 import it.jnrpe.engine.services.plugins.IPlugin;
 import java.util.Optional;
 
-public class CommandDefinition implements ICommandDefinition {
+public class CommandDefinition implements ICommandDefinition, Cloneable {
   private String name;
   private String plugin;
   private String args;
+
+  public CommandDefinition() {}
+
+  CommandDefinition(final CommandDefinition cc) {
+    this.name = cc.name;
+    this.plugin = cc.plugin;
+    this.args = cc.args;
+  }
 
   public String getName() {
     return name;
@@ -50,6 +58,15 @@ public class CommandDefinition implements ICommandDefinition {
 
   public void setArgs(String args) {
     this.args = args;
+  }
+
+  @Override
+  public CommandDefinition clone() {
+    try {
+      return (CommandDefinition) super.clone();
+    } catch (CloneNotSupportedException cnse) {
+      throw new IllegalStateException("Never happens");
+    }
   }
 
   @Override

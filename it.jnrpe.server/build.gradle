@@ -1,10 +1,8 @@
 plugins {
     id 'application'
-    id "com.github.spotbugs"
 }
 
 dependencies {
-    implementation 'com.github.spotbugs:spotbugs-annotations:4.0.1'
     implementation project(':it.jnrpe.engine')
     runtimeOnly project(':it.jnrpe.services.config')
     runtimeOnly project(':it.jnrpe.services.network.netty')
@@ -18,9 +16,3 @@ application {
     mainClass = 'it.jnrpe.server.Main'
     applicationName = 'jnrpe'
 }
-
-spotbugsMain {
-    excludeFilter = file("$project.projectDir/spotBugsExclude.xml")
-}
-
-
