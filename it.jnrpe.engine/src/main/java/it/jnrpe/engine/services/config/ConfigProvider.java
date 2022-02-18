@@ -27,6 +27,11 @@ public class ConfigProvider implements IConfigProvider {
   }
 
   @Override
+  public String getProviderName() {
+    return instance != null ? instance.getProviderName() : "NONE";
+  }
+
+  @Override
   public Optional<JNRPEConfig> getConfig() {
     return Optional.of(config);
   }

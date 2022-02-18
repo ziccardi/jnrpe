@@ -15,7 +15,6 @@
  *******************************************************************************/
 package it.jnrpe.engine.services.config;
 
-import java.util.Collection;
 import java.util.List;
 
 public class JNRPEConfig {
@@ -29,7 +28,7 @@ public class JNRPEConfig {
     }
 
     @Override
-    public void setBindings(Collection<Binding> bindings) {
+    public void setBindings(List<Binding> bindings) {
       throw new IllegalStateException("Read only ServiceConfig instance");
     }
   }
@@ -56,7 +55,7 @@ public class JNRPEConfig {
 
   @Override
   public String toString() {
-    return "JNRPEConfig{" + "server=" + server + '}';
+    return "JNRPEConfig{" + "server=" + server + ", commands=" + commands + '}';
   }
 
   public CommandsConfig getCommands() {

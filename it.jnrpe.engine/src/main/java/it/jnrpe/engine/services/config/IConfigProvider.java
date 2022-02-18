@@ -28,5 +28,7 @@ public interface IConfigProvider {
     return list;
   }
 
+  String getProviderName();
+
   Optional<JNRPEConfig> getConfig();
 }

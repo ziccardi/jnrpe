@@ -41,4 +41,9 @@ public class CommandsConfig implements Cloneable {
       throw new IllegalStateException("Never happens");
     }
   }
+
+  @Override
+  public String toString() {
+    return "CommandsConfig{" + "definitions=" + definitions + '}';
+  }
 }
