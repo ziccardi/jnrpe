@@ -21,6 +21,11 @@ import java.util.Optional;
 
 public class IniJnrpeConfigProvider implements IConfigProvider {
   @Override
+  public String getProviderName() {
+    return "INI";
+  }
+
+  @Override
   public Optional<JNRPEConfig> getConfig() {
     return Optional.empty();
   }

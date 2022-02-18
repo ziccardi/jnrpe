@@ -27,12 +27,18 @@ public class YamlJnrpeConfigProvider implements IConfigProvider {
 
   private static Optional<JNRPEConfig> config = Optional.empty();
 
+  @Override
+  public String getProviderName() {
+    return "YAML";
+  }
+
   public Optional<JNRPEConfig> getConfig() {
     if (config.isEmpty()) {
       try {
         config = parseConfig();
       } catch (Exception e) {
         // TODO: log
+        e.printStackTrace();
       }
     }
 

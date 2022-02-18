@@ -21,6 +21,11 @@ import java.util.Optional;
 
 public class XmlJnrpeConfigProvider implements IConfigProvider {
   @Override
+  public String getProviderName() {
+    return "XML";
+  }
+
+  @Override
   public Optional<JNRPEConfig> getConfig() {
     return Optional.empty();
   }

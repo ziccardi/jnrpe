@@ -73,17 +73,33 @@ public class CommandDefinition implements ICommandDefinition, Cloneable {
   public ICommandInstance instantiate(String... params) {
     Optional<IPlugin> pluginInstance = PluginRepository.getInstance().getPlugin(this.plugin);
 
-    if (pluginInstance.isPresent()) {
-      return () -> pluginInstance.get().execute();
-      //      return () ->
-      //          new ExecutionResult(String.format("[%s -> %s](%s)", name, plugin, args),
-      // Status.OK);
-    } else {
-      return () ->
-          new ExecutionResult(
-              String.format(
-                  "Plugin [%s] required by command [%s] has not been found", name, plugin),
-              Status.OK);
-    }
+    //      return () ->
+    //          new ExecutionResult(String.format("[%s -> %s](%s)", name, plugin, args),
+    // Status.OK);
+    return pluginInstance
+        .<ICommandInstance>map(iPlugin -> iPlugin::execute)
+        .orElseGet(
+            () ->
+                () ->
+                    new ExecutionResult(
+                        String.format(
+                            "Plugin [%s] required by command [%s] has not been found",
+                            name, plugin),
+                        Status.OK));
+  }
+
+  @Override
+  public String toString() {
+    return "CommandDefinition{"
+        + "name='"
+        + name
+        + '\''
+        + ", plugin='"
+        + plugin
+        + '\''
+        + ", args='"
+        + args
+        + '\''
+        + '}';
   }
 }
