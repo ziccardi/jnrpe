@@ -17,20 +17,15 @@ package it.jnrpe.services.config.yaml.tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import it.jnrpe.engine.services.config.IConfigProvider;
+import it.jnrpe.engine.services.config.ConfigurationManager;
 import org.junit.jupiter.api.Test;
 
 public class YamlJnrpeConfigProviderTest {
 
   @Test
   public void testValidYamlConfig() throws Exception {
-    var configProvider =
-        IConfigProvider.getInstances().stream()
-            .filter(p -> p.getProviderName().equals("YAML"))
-            .findFirst()
-            .orElseThrow();
-
-    var config = configProvider.getConfig().orElseThrow();
+    var config = ConfigurationManager.getConfig().get();
+    // var config = configProvider.getConfig().orElseThrow();
     var bindings = config.getServer().getBindings();
     assertEquals(2, bindings.size());
     var binding = bindings.get(0);

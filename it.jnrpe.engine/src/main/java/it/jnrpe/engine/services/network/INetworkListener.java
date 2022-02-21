@@ -22,5 +22,7 @@ public interface INetworkListener {
 
   void bind(Binding binding);
 
+  void shutdown();
+
   boolean supportBinding(Binding binding);
 }

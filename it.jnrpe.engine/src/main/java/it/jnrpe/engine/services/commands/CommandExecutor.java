@@ -17,13 +17,21 @@ package it.jnrpe.engine.services.commands;
 
 import it.jnrpe.engine.commands.CommandRepository;
 import it.jnrpe.engine.events.EventManager;
+import it.jnrpe.engine.services.auth.IAuthService;
 import it.jnrpe.engine.services.network.Status;
 import java.util.Optional;
 
 public class CommandExecutor {
   private static final ICommandRepository commandRepository = CommandRepository.getInstance();
 
-  public ExecutionResult execute(String commandName, String... params) {
+  // TODO: implement a way to activate a different auth service
+  private static final IAuthService authService =
+      IAuthService.getInstances().stream().findFirst().orElseThrow();
+
+  public ExecutionResult execute(String token, String commandName, String... params) {
+    if (!authService.authorize(token)) {
+      return new ExecutionResult(String.format("Unauthorised [%s]", commandName), Status.UNKNOWN);
+    }
     final Optional<ICommandDefinition> command = commandRepository.getCommand(commandName);
 
     if (command.isPresent()) {

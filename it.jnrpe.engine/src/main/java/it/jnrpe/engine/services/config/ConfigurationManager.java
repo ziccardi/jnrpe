@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2020, Massimiliano Ziccardi
+ * Copyright (C) 2022, Massimiliano Ziccardi
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,19 +15,25 @@
  *******************************************************************************/
 package it.jnrpe.engine.services.config;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.ServiceLoader;
-import java.util.stream.Collectors;
 
-public interface IConfigProvider {
-  static List<IConfigProvider> getInstances() {
-    return ServiceLoader.load(IConfigProvider.class).stream()
-        .map(ServiceLoader.Provider::get)
-        .collect(Collectors.toList());
+public class ConfigurationManager {
+  private ConfigurationManager() {}
+
+  private static JNRPEConfig CONFIG;
+
+  public static synchronized Optional<JNRPEConfig> getConfig() {
+    if (CONFIG != null) {
+      return Optional.of(CONFIG);
+    }
+
+    IConfigProvider.getInstances().stream()
+        .map(IConfigProvider::getConfig)
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .findFirst()
+        .ifPresent(c -> CONFIG = c);
+    return CONFIG == null ? Optional.empty() : Optional.of(CONFIG);
   }
-
-  String getProviderName();
-
-  Optional<JNRPEConfig> getConfig();
+  ;
 }

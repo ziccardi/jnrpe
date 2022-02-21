@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.engine.plugins.threshold;
+package it.jnrpe.engine.plugins.threshold.tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import it.jnrpe.engine.plugins.threshold.ThresholdEvaluator;
+import it.jnrpe.engine.plugins.threshold.ThresholdParser;
 import java.math.BigDecimal;
 import java.util.concurrent.atomic.AtomicReference;
 import org.junit.jupiter.api.Test;

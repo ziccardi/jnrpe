@@ -28,6 +28,8 @@ import it.jnrpe.engine.services.network.INetworkListener;
 
 public class JnrpeNettyListenerService implements INetworkListener {
   private final ServerHandler serverHandler = new ServerHandler();
+  private final EventLoopGroup bossGroup = new NioEventLoopGroup();
+  private final EventLoopGroup workerGroup = new NioEventLoopGroup();
 
   @Override
   public String getName() {
@@ -35,8 +37,7 @@ public class JnrpeNettyListenerService implements INetworkListener {
   }
 
   public void bind(Binding binding) {
-    EventLoopGroup bossGroup = new NioEventLoopGroup();
-    EventLoopGroup workerGroup = new NioEventLoopGroup();
+
     final ServerBootstrap serverBootstrap = new ServerBootstrap();
     serverBootstrap
         .group(bossGroup, workerGroup)
@@ -45,7 +46,12 @@ public class JnrpeNettyListenerService implements INetworkListener {
             new ChannelInitializer<>() {
               @Override
               protected void initChannel(Channel ch) throws Exception {
-                ch.pipeline().addLast(new RequestDecoder(), new ResponseEncoder(), serverHandler);
+                ch.pipeline()
+                    .addLast(
+                        new AuthorizationHandler(),
+                        new RequestDecoder(),
+                        new ResponseEncoder(),
+                        serverHandler);
               }
             })
         .option(ChannelOption.SO_BACKLOG, 50)
@@ -58,5 +64,10 @@ public class JnrpeNettyListenerService implements INetworkListener {
   @Override
   public boolean supportBinding(Binding binding) {
     return !binding.isSsl();
+  }
+
+  public void shutdown() {
+    workerGroup.shutdownGracefully().syncUninterruptibly();
+    bossGroup.shutdownGracefully().syncUninterruptibly();
   }
 }

@@ -1,0 +1,5 @@
+dependencies {
+    implementation project(':it.jnrpe.engine')
+    testImplementation project(':it.jnrpe.services.config')
+    testImplementation project(':it.jnrpe.services.network.netty')
+}
