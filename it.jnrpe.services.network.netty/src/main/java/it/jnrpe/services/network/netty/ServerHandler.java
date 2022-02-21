@@ -25,7 +25,7 @@ import java.util.Arrays;
 
 @ChannelHandler.Sharable
 class ServerHandler extends ChannelInboundHandlerAdapter {
-  private CommandExecutor commandExecutor = new CommandExecutor();
+  private final CommandExecutor commandExecutor = new CommandExecutor();
 
   ServerHandler() {}
 
@@ -46,7 +46,8 @@ class ServerHandler extends ChannelInboundHandlerAdapter {
               ? Arrays.copyOfRange(commandParts, 1, commandParts.length)
               : new String[] {};
 
-      ExecutionResult res = this.commandExecutor.execute(commandParts[0], params);
+      String token = ctx.channel().attr(AttributeKey.<String>valueOf("TOKEN")).get();
+      ExecutionResult res = this.commandExecutor.execute(token, commandParts[0], params);
 
       ChannelFuture channelFuture = ctx.writeAndFlush(res);
       channelFuture.addListener(ChannelFutureListener.CLOSE);

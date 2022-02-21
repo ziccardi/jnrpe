@@ -23,7 +23,7 @@ public class BindingsConfigValidator implements IConfigSectionValidator {
 
   private static class BindingConfigValidator extends AbstractSectionValidator {
     protected BindingConfigValidator() {
-      super(new String[] {"ip", "port", "ssl"}, new String[] {"ip", "port"});
+      super(new String[] {"ip", "port", "ssl", "allow"}, new String[] {"ip", "port"});
     }
   }
 

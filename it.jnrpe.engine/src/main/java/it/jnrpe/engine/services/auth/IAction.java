@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2020, Massimiliano Ziccardi
+ * Copyright (C) 2022, Massimiliano Ziccardi
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,21 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.engine.services.config;
+package it.jnrpe.engine.services.auth;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.ServiceLoader;
-import java.util.stream.Collectors;
-
-public interface IConfigProvider {
-  static List<IConfigProvider> getInstances() {
-    return ServiceLoader.load(IConfigProvider.class).stream()
-        .map(ServiceLoader.Provider::get)
-        .collect(Collectors.toList());
-  }
-
-  String getProviderName();
-
-  Optional<JNRPEConfig> getConfig();
+public interface IAction {
+  String getActionId();
 }

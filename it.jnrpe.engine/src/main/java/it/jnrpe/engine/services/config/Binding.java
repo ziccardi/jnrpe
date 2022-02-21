@@ -15,10 +15,15 @@
  *******************************************************************************/
 package it.jnrpe.engine.services.config;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class Binding implements Cloneable {
   private String ip;
   private int port;
   private boolean ssl;
+  private List<String> allow = new ArrayList<>();
 
   public int getPort() {
     return port;
@@ -44,6 +49,14 @@ public class Binding implements Cloneable {
     this.ssl = ssl;
   }
 
+  public List<String> getAllow() {
+    return Collections.unmodifiableList(allow);
+  }
+
+  public void setAllow(List<String> allow) {
+    this.allow = new ArrayList<>(allow);
+  }
+
   @Override
   public Binding clone() {
     try {
@@ -55,6 +68,16 @@ public class Binding implements Cloneable {
 
   @Override
   public String toString() {
-    return "Binding{" + "ip='" + ip + '\'' + ", port=" + port + ", ssl=" + ssl + '}';
+    return "Binding{"
+        + "ip='"
+        + ip
+        + '\''
+        + ", port="
+        + port
+        + ", ssl="
+        + ssl
+        + ", allow="
+        + allow
+        + '}';
   }
 }
