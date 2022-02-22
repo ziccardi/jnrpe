@@ -8,6 +8,7 @@ open module it.jnrpe.integration.test {
   requires it.jnrpe.services.config;
   requires it.jnrpe.services.network.netty;
   requires org.junit.jupiter.api;
+  requires testcontainers;
 
   provides IConfigSource with
       YamlConfigSource;
