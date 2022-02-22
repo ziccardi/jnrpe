@@ -2,4 +2,6 @@ dependencies {
     implementation project(':it.jnrpe.engine')
     testImplementation project(':it.jnrpe.services.config')
     testImplementation project(':it.jnrpe.services.network.netty')
+    testImplementation "org.testcontainers:testcontainers:1.16.3"
+    testImplementation "org.testcontainers:junit-jupiter:1.16.3"
 }

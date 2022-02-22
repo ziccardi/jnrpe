@@ -26,6 +26,7 @@ import java.util.ServiceLoader;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.testcontainers.Testcontainers;
 
 public class TCPNetworkListenerTest {
   private static final JNRPEConfig config = ConfigurationManager.getConfig().orElseThrow();
@@ -55,6 +56,7 @@ public class TCPNetworkListenerTest {
   @BeforeAll
   static void startJNRPE() {
     config.getServer().getBindings().forEach(TCPNetworkListenerTest::bind);
+      Testcontainers a;
   }
 
   @AfterAll
