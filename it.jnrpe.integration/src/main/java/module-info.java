@@ -1,12 +1,14 @@
+import it.jnrpe.engine.services.auth.tests.YamlConfigSource;
 import it.jnrpe.engine.services.config.IConfigProvider;
 import it.jnrpe.engine.services.config.IConfigSource;
-import it.jnrpe.services.config.yaml.tests.YamlConfigSource;
 
-open module it.jnrpe.services.config.test {
+open module it.jnrpe.integration.test {
+  uses it.jnrpe.engine.services.network.INetworkListener;
+
   requires it.jnrpe.engine;
-  requires org.junit.jupiter.api;
   requires it.jnrpe.services.config;
-  requires org.yaml.snakeyaml;
+  requires it.jnrpe.services.network.netty;
+  requires testcontainers;
 
   provides IConfigSource with
       YamlConfigSource;
