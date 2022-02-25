@@ -23,15 +23,9 @@ module it.jnrpe.engine {
   uses IEventManager;
   uses it.jnrpe.engine.services.auth.IAuthService;
 
-  exports it.jnrpe.engine.plugins.threshold to
-      it.jnrpe.engine.test;
-
   provides ICommandRepository with
       EmbeddedCommandsRepository,
       ConfigCommandRepository;
   provides IAuthService with
       SimpleAuthProvider;
-
-  opens it.jnrpe.engine.services.auth to
-      it.jnrpe.integration.test;
 }

@@ -35,16 +35,6 @@ public class PluginRepository implements IPluginRepository {
             });
 
     EventManager.info("Plugin repository ready. %d plugin(s) loaded", plugins.size());
-
-    //    this.plugins
-    //        .values()
-    //        .forEach(
-    //            plugin -> {
-    //              System.out.println(plugin.getName());
-    //              new CommandLine(plugin).printVersionHelp(System.out);
-    //              new CommandLine(plugin).usage(System.out);
-    //              System.out.println("**********************************");
-    //            });
   }
 
   @Override

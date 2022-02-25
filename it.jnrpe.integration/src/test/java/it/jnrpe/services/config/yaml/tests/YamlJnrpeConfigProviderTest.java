@@ -35,7 +35,7 @@ public class YamlJnrpeConfigProviderTest {
     binding = bindings.get(1);
     assertEquals("127.0.0.1", binding.getIp());
     assertEquals(5668, binding.getPort());
-    assertTrue(binding.isSsl());
+    assertFalse(binding.isSsl());
 
     var commandsConfig = config.getCommands();
     assertNotNull(commandsConfig);
