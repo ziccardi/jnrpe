@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.services.config.yaml.validator.tests;
+package it.jnrpe.services.config.yaml.validator;
 
 import it.jnrpe.services.config.yaml.ConfigValidator;
-import it.jnrpe.services.config.yaml.validator.InvalidConfigurationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.yaml.snakeyaml.Yaml;

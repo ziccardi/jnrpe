@@ -14,10 +14,4 @@ module it.jnrpe.services.config {
       YamlJnrpeConfigProvider;
 
   uses IConfigSource;
-
-  exports it.jnrpe.services.config.yaml to
-      org.yaml.snakeyaml,
-      it.jnrpe.services.config.test;
-  exports it.jnrpe.services.config.yaml.validator to
-      it.jnrpe.services.config.test;
 }
