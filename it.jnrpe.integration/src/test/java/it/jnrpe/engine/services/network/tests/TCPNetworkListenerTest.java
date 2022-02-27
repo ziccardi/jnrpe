@@ -38,7 +38,7 @@ public class TCPNetworkListenerTest {
 
   private static final String HOST_ADDRESS = "host.testcontainers.internal";
 
-  private static GenericContainer container =
+  private static final GenericContainer container =
       new GenericContainer(
           new ImageFromDockerfile("jnrpe", false)
               .withFileFromClasspath("Dockerfile", "Dockerfile"));
@@ -65,7 +65,7 @@ public class TCPNetworkListenerTest {
   }
 
   @BeforeAll
-  static void startJNRPE() throws Exception {
+  static void startJNRPE() {
     config.getServer().getBindings().forEach(TCPNetworkListenerTest::bind);
     Testcontainers.exposeHostPorts(
         config.getServer().getBindings().stream().map(Binding::getPort).mapToInt(p -> p).toArray());
@@ -88,6 +88,15 @@ public class TCPNetworkListenerTest {
   }
 
   @Test
+  public void testCheckNRPEv2SSL() throws Exception {
+    Container.ExecResult checkNrpeResult =
+        container.execInContainer(
+            "/nrpe-4.0.3/src/check_nrpe", "-2", "-H", HOST_ADDRESS, "-p", "5669");
+    Assertions.assertEquals("JNRPE v3.0.0", checkNrpeResult.getStdout().trim());
+    Assertions.assertEquals(0, checkNrpeResult.getExitCode());
+  }
+
+  @Test
   public void testCheckNRPEv3() throws Exception {
     Container.ExecResult lsResult =
         container.execInContainer(
@@ -97,10 +106,27 @@ public class TCPNetworkListenerTest {
   }
 
   @Test
+  public void testCheckNRPEv3SSL() throws Exception {
+    Container.ExecResult lsResult =
+        container.execInContainer(
+            "/nrpe-4.0.3/src/check_nrpe", "-3", "-H", HOST_ADDRESS, "-p", "5669");
+    Assertions.assertEquals("JNRPE v3.0.0", lsResult.getStdout().trim());
+    Assertions.assertEquals(0, lsResult.getExitCode());
+  }
+
+  @Test
   public void testCheckNRPEv4() throws Exception {
     Container.ExecResult lsResult =
         container.execInContainer(
             "/nrpe-4.0.3/src/check_nrpe", "-n", "-H", HOST_ADDRESS, "-p", "5668");
+    Assertions.assertEquals("JNRPE v3.0.0", lsResult.getStdout().trim());
+    Assertions.assertEquals(0, lsResult.getExitCode());
+  }
+
+  @Test
+  public void testCheckNRPEv4SSL() throws Exception {
+    Container.ExecResult lsResult =
+        container.execInContainer("/nrpe-4.0.3/src/check_nrpe", "-H", HOST_ADDRESS, "-p", "5669");
     Assertions.assertEquals("JNRPE v3.0.0", lsResult.getStdout().trim());
     Assertions.assertEquals(0, lsResult.getExitCode());
   }
