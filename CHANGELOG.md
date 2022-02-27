@@ -1,3 +1,12 @@
+# [3.4.0](https://github.com/ziccardi/jnrpe/compare/3.3.0...3.4.0) (2022-02-27)
+
+
+### Features
+
+* **network:** added SSL support to the TCP listener ([8d241b9](https://github.com/ziccardi/jnrpe/commit/8d241b9802aa2e49e486e7b16a628e991b4eb7d9)), closes [#115](https://github.com/ziccardi/jnrpe/issues/115)
+
+
+
 # [3.3.0](https://github.com/ziccardi/jnrpe/compare/3.2.1...3.3.0) (2022-02-27)
 
 
@@ -44,15 +53,6 @@
 ### Bug Fixes
 
 * 🐛 made the conf parameter global to all commands ([#75](https://github.com/ziccardi/jnrpe/issues/75)) ([dfef38f](https://github.com/ziccardi/jnrpe/commit/dfef38fb94d95d67b0399da2673dbe18b6629e5a))
-
-
-
-# [3.1.0](https://github.com/ziccardi/jnrpe/compare/3.0.0...3.1.0) (2020-09-15)
-
-
-### Features
-
-* 🎸 added command `start` to the commandline ([12cd24f](https://github.com/ziccardi/jnrpe/commit/12cd24fafd3c3302a68c6ca0175195f79af30b8e))
 
 
 
