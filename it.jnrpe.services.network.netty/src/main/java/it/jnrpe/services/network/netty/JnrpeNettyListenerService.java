@@ -22,9 +22,21 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.ssl.SslHandler;
 import it.jnrpe.engine.events.EventManager;
 import it.jnrpe.engine.services.config.Binding;
 import it.jnrpe.engine.services.network.INetworkListener;
+import java.math.BigInteger;
+import java.security.*;
+import java.security.cert.Certificate;
+import java.security.cert.X509Certificate;
+import java.util.Date;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLEngine;
+import javax.net.ssl.SSLException;
+import javax.security.auth.x500.X500Principal;
+import org.bouncycastle.x509.X509V1CertificateGenerator;
 
 public class JnrpeNettyListenerService implements INetworkListener {
   private final ServerHandler serverHandler = new ServerHandler();
@@ -36,8 +48,67 @@ public class JnrpeNettyListenerService implements INetworkListener {
     return "Netty Listener Service";
   }
 
-  public void bind(Binding binding) {
+  static X509Certificate generateSelfSignedX509Certificate(KeyPair keyPair) throws Exception {
 
+    // yesterday
+    Date validityBeginDate = new Date(System.currentTimeMillis() - 24 * 60 * 60 * 1000);
+    // in 2 years
+    Date validityEndDate =
+        new Date(System.currentTimeMillis() + 2L * 365L * 24L * 60L * 60L * 1000L);
+
+    // GENERATE THE X509 CERTIFICATE
+    X509V1CertificateGenerator certGen = new X509V1CertificateGenerator();
+    X500Principal dnName = new X500Principal("CN=John Doe");
+
+    certGen.setSerialNumber(BigInteger.valueOf(System.currentTimeMillis()));
+    certGen.setSubjectDN(dnName);
+    certGen.setIssuerDN(dnName); // use the same
+    certGen.setNotBefore(validityBeginDate);
+    certGen.setNotAfter(validityEndDate);
+    certGen.setPublicKey(keyPair.getPublic());
+    certGen.setSignatureAlgorithm("SHA1WithRSA");
+
+    return certGen.generate(keyPair.getPrivate());
+  }
+
+  /**
+   * Creates, configures and returns the SSL engine.
+   *
+   * @return the SSL Engine * @throws KeyStoreException on keystore errorss * @throws
+   *     CertificateException on certificate errors * @throws IOException on I/O errors * @throws
+   *     UnrecoverableKeyException if key is unrecoverable * @throws KeyManagementException key
+   *     management error
+   */
+  private SSLEngine getSSLEngine() throws Exception {
+    SSLContext ctx;
+    KeyManagerFactory kmf;
+
+    try {
+      // Gen key pair
+      KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
+      keyGen.initialize(1024, new SecureRandom());
+      var keyPair = keyGen.generateKeyPair();
+
+      ctx = SSLContext.getInstance("SSLv3");
+
+      kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+
+      final KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
+      ks.load(null, null);
+      ks.setKeyEntry(
+          "sslkey",
+          keyPair.getPrivate(),
+          "12345678".toCharArray(),
+          new Certificate[] {generateSelfSignedX509Certificate(keyPair)});
+      kmf.init(ks, "12345678".toCharArray());
+      ctx.init(kmf.getKeyManagers(), null, new java.security.SecureRandom());
+    } catch (NoSuchAlgorithmException e) {
+      throw new SSLException("Unable to initialize SSLSocketFactory" + e.getMessage(), e);
+    }
+    return ctx.createSSLEngine();
+  }
+
+  private ServerBootstrap getServerBootStrap(final Boolean useSSL) {
     final ServerBootstrap serverBootstrap = new ServerBootstrap();
     serverBootstrap
         .group(bossGroup, workerGroup)
@@ -46,6 +117,13 @@ public class JnrpeNettyListenerService implements INetworkListener {
             new ChannelInitializer<>() {
               @Override
               protected void initChannel(Channel ch) throws Exception {
+                if (useSSL) {
+                  final SSLEngine engine = getSSLEngine();
+                  engine.setEnabledCipherSuites(engine.getSupportedCipherSuites());
+                  engine.setUseClientMode(false);
+                  engine.setNeedClientAuth(false);
+                  ch.pipeline().addLast("ssl", new SslHandler(engine));
+                }
                 ch.pipeline()
                     .addLast(
                         new AuthorizationHandler(),
@@ -56,14 +134,18 @@ public class JnrpeNettyListenerService implements INetworkListener {
             })
         .option(ChannelOption.SO_BACKLOG, 50)
         .childOption(ChannelOption.SO_KEEPALIVE, Boolean.TRUE);
+    return serverBootstrap;
+  }
 
+  public void bind(Binding binding) {
+    var serverBootstrap = getServerBootStrap(binding.isSsl());
     serverBootstrap.bind(binding.getPort());
     EventManager.debug("[%s] Started listening on port %d", this.getName(), binding.getPort());
   }
 
   @Override
   public boolean supportBinding(Binding binding) {
-    return !binding.isSsl();
+    return true;
   }
 
   public void shutdown() {

@@ -23,19 +23,24 @@ import org.junit.jupiter.api.Test;
 public class YamlJnrpeConfigProviderTest {
 
   @Test
-  public void testValidYamlConfig() throws Exception {
-    var config = ConfigurationManager.getConfig().get();
-    // var config = configProvider.getConfig().orElseThrow();
+  public void testValidYamlConfig() {
+    var config = ConfigurationManager.getConfig().orElseThrow();
     var bindings = config.getServer().getBindings();
-    assertEquals(2, bindings.size());
+    assertEquals(3, bindings.size());
     var binding = bindings.get(0);
     assertEquals("127.0.0.1", binding.getIp());
     assertEquals(5667, binding.getPort());
     assertFalse(binding.isSsl());
+
     binding = bindings.get(1);
     assertEquals("127.0.0.1", binding.getIp());
     assertEquals(5668, binding.getPort());
     assertFalse(binding.isSsl());
+
+    binding = bindings.get(2);
+    assertEquals("127.0.0.1", binding.getIp());
+    assertEquals(5669, binding.getPort());
+    assertTrue(binding.isSsl());
 
     var commandsConfig = config.getCommands();
     assertNotNull(commandsConfig);
