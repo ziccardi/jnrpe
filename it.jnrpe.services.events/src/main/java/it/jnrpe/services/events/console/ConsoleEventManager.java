@@ -29,7 +29,6 @@ public class ConsoleEventManager implements IEventManager {
   @Override
   public void onEvent(IEventType type, String message) {
     final Date timestamp = new Date();
-    System.out.println(
-        String.format("%tF %tT [%s] - %s", timestamp, timestamp, type.type(), message));
+    System.out.printf("%tF %tT [%s] - %s%n", timestamp, timestamp, type.type(), message);
   }
 }
