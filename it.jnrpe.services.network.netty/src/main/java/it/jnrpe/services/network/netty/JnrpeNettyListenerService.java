@@ -74,10 +74,7 @@ public class JnrpeNettyListenerService implements INetworkListener {
   /**
    * Creates, configures and returns the SSL engine.
    *
-   * @return the SSL Engine * @throws KeyStoreException on keystore errorss * @throws
-   *     CertificateException on certificate errors * @throws IOException on I/O errors * @throws
-   *     UnrecoverableKeyException if key is unrecoverable * @throws KeyManagementException key
-   *     management error
+   * @return the SSL Engine
    */
   private SSLEngine getSSLEngine() throws Exception {
     SSLContext ctx;
