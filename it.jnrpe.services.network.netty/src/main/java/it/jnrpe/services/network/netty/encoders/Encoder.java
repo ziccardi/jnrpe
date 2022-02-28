@@ -13,20 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.services.network.netty.decoders;
+package it.jnrpe.services.network.netty.encoders;
 
-public class DecoderBuilder {
-  public static IPacketBuilder forPacket(int version, int type) {
+import it.jnrpe.engine.services.commands.ExecutionResult;
+import java.net.ProtocolException;
+import java.util.function.Function;
+
+public class Encoder {
+  private final Function<ExecutionResult, IResponseEncoder> encoderSupplier;
+
+  private Encoder(Function<ExecutionResult, IResponseEncoder> encoderSupplier) {
+    this.encoderSupplier = encoderSupplier;
+  }
+
+  public static Encoder forVersion(int version) throws ProtocolException {
     switch (version) {
       case 2:
-        return DecoderV2Builder.forPacket(type);
+        return new Encoder(V2Encoder::new);
       case 3:
-        return DecoderV3Builder.forPacket(type);
+        return new Encoder(V3Encoder::new);
       case 4:
-        return DecoderV4Builder.forPacket(type);
+        return new Encoder(V4Encoder::new);
       default:
-        // fixme throw exception
-        throw new IllegalStateException("Returning null - " + version + " - type " + type);
+        throw new ProtocolException("Invalid packet version received (" + version + ")");
     }
+  }
+
+  public IResponseEncoder andResult(final ExecutionResult res) {
+    return this.encoderSupplier.apply(res);
   }
 }

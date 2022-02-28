@@ -17,7 +17,7 @@ package it.jnrpe.services.network.netty.protocol;
 
 import java.util.Arrays;
 
-public abstract class ProtocolPacket {
+public abstract class NRPEPacket {
   private final int version;
   private final int packetType; // must be 1 for requests
   private long crc32;
@@ -26,7 +26,7 @@ public abstract class ProtocolPacket {
   private final byte[] buffer;
   private final byte[] padding;
 
-  public ProtocolPacket(
+  public NRPEPacket(
       int version,
       int type,
       long crc32,

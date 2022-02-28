@@ -7,6 +7,6 @@
         <Bug pattern="DE_MIGHT_IGNORE"/>
     </Match>
     <Match>
-        <Bug pattern="DM_DEFAULT_ENCODING"/>
+        <Bug pattern="DM_DEFAULT_ENCODING,DMI_RANDOM_USED_ONLY_ONCE"/>
     </Match>
 </FindBugsFilter>

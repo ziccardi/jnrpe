@@ -16,16 +16,20 @@
 package it.jnrpe.services.network.netty.encoders;
 
 import it.jnrpe.engine.services.commands.ExecutionResult;
-import it.jnrpe.services.network.netty.protocol.ProtocolPacket;
+import it.jnrpe.services.network.netty.protocol.NRPEPacket;
 import it.jnrpe.services.network.netty.protocol.v3.NRPEV3Response;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 
 class V3Encoder implements IResponseEncoder {
-  private final ProtocolPacket response;
+  private final NRPEPacket response;
 
   public V3Encoder(final ExecutionResult result) {
     this.response = new NRPEV3Response(result);
+  }
+
+  protected V3Encoder(final NRPEPacket response) {
+    this.response = response;
   }
 
   @Override
@@ -34,17 +38,16 @@ class V3Encoder implements IResponseEncoder {
     DataOutputStream dout = new DataOutputStream(bout);
 
     try {
-      dout.writeShort(response.getVersion()); // Version 3
+      dout.writeShort(response.getVersion());
       dout.writeShort(response.getPacketType()); // Type: Response
-      dout.writeInt((int) response.getCrc32()); // Type: Response
-      // Old version of check_nrpe had a bug and here `0` should be passed to avoid a bad checksum
+      dout.writeInt((int) response.getCrc32());
       dout.writeShort(response.getResultCode());
       dout.writeShort(response.getAlignment());
       dout.writeInt(response.getBuffer().length);
       dout.write(response.getBuffer());
       dout.write(response.getPadding());
       dout.flush();
-    } catch (Exception e) {
+    } catch (Exception ignored) {
 
     }
     return bout.toByteArray();

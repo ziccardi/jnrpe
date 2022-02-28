@@ -16,13 +16,13 @@
 package it.jnrpe.services.network.netty.encoders;
 
 import it.jnrpe.engine.services.commands.ExecutionResult;
-import it.jnrpe.services.network.netty.protocol.ProtocolPacket;
+import it.jnrpe.services.network.netty.protocol.NRPEPacket;
 import it.jnrpe.services.network.netty.protocol.v2.NRPEV2Response;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 
 class V2Encoder implements IResponseEncoder {
-  private final ProtocolPacket response;
+  private final NRPEPacket response;
 
   public V2Encoder(final ExecutionResult result) {
     this.response = new NRPEV2Response(result);
@@ -41,7 +41,7 @@ class V2Encoder implements IResponseEncoder {
       dout.write(response.getBuffer());
       dout.write(response.getPadding());
       dout.flush();
-    } catch (Exception e) {
+    } catch (Exception ignored) {
 
     }
 

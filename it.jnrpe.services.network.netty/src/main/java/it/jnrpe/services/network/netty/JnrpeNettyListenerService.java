@@ -74,10 +74,7 @@ public class JnrpeNettyListenerService implements INetworkListener {
   /**
    * Creates, configures and returns the SSL engine.
    *
-   * @return the SSL Engine * @throws KeyStoreException on keystore errorss * @throws
-   *     CertificateException on certificate errors * @throws IOException on I/O errors * @throws
-   *     UnrecoverableKeyException if key is unrecoverable * @throws KeyManagementException key
-   *     management error
+   * @return the SSL Engine
    */
   private SSLEngine getSSLEngine() throws Exception {
     SSLContext ctx;
@@ -95,12 +92,19 @@ public class JnrpeNettyListenerService implements INetworkListener {
 
       final KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
       ks.load(null, null);
+      char[] pwd =
+          SecureRandom.getInstanceStrong()
+              .ints('a', 'z')
+              .limit(20)
+              .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+              .toString()
+              .toCharArray();
       ks.setKeyEntry(
           "sslkey",
           keyPair.getPrivate(),
-          "12345678".toCharArray(),
+          pwd,
           new Certificate[] {generateSelfSignedX509Certificate(keyPair)});
-      kmf.init(ks, "12345678".toCharArray());
+      kmf.init(ks, pwd);
       ctx.init(kmf.getKeyManagers(), null, new java.security.SecureRandom());
     } catch (NoSuchAlgorithmException e) {
       throw new SSLException("Unable to initialize SSLSocketFactory" + e.getMessage(), e);

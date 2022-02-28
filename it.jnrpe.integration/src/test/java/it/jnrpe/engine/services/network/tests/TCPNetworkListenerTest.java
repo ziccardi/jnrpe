@@ -28,7 +28,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.Testcontainers;
-import org.testcontainers.containers.Container;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.utility.DockerImageName;
 
@@ -78,7 +77,7 @@ public class TCPNetworkListenerTest {
 
   @Test
   public void testCheckNRPEv2() throws Exception {
-    Container.ExecResult checkNrpeResult =
+    var checkNrpeResult =
         container.execInContainer("check_nrpe", "-2", "-n", "-H", HOST_ADDRESS, "-p", "5668");
     Assertions.assertEquals("JNRPE v3.0.0", checkNrpeResult.getStdout().trim());
     Assertions.assertEquals(0, checkNrpeResult.getExitCode());
@@ -86,7 +85,7 @@ public class TCPNetworkListenerTest {
 
   @Test
   public void testCheckNRPEv2SSL() throws Exception {
-    Container.ExecResult checkNrpeResult =
+    var checkNrpeResult =
         container.execInContainer("check_nrpe", "-2", "-H", HOST_ADDRESS, "-p", "5669");
     Assertions.assertEquals("JNRPE v3.0.0", checkNrpeResult.getStdout().trim());
     Assertions.assertEquals(0, checkNrpeResult.getExitCode());
@@ -94,43 +93,62 @@ public class TCPNetworkListenerTest {
 
   @Test
   public void testCheckNRPEv3() throws Exception {
-    Container.ExecResult lsResult =
+    var checkNrpeResult =
         container.execInContainer("check_nrpe", "-3", "-n", "-H", HOST_ADDRESS, "-p", "5668");
-    Assertions.assertEquals("JNRPE v3.0.0", lsResult.getStdout().trim());
-    Assertions.assertEquals(0, lsResult.getExitCode());
+    Assertions.assertEquals("JNRPE v3.0.0", checkNrpeResult.getStdout().trim());
+    Assertions.assertEquals(0, checkNrpeResult.getExitCode());
   }
 
   @Test
   public void testCheckNRPEv3SSL() throws Exception {
-    Container.ExecResult lsResult =
+    var checkNrpeResult =
         container.execInContainer("check_nrpe", "-3", "-H", HOST_ADDRESS, "-p", "5669");
-    Assertions.assertEquals("JNRPE v3.0.0", lsResult.getStdout().trim());
-    Assertions.assertEquals(0, lsResult.getExitCode());
+    Assertions.assertEquals("JNRPE v3.0.0", checkNrpeResult.getStdout().trim());
+    Assertions.assertEquals(0, checkNrpeResult.getExitCode());
   }
 
   @Test
   public void testCheckNRPEv4() throws Exception {
-    Container.ExecResult lsResult =
+    var checkNrpeResult =
         container.execInContainer("check_nrpe", "-n", "-H", HOST_ADDRESS, "-p", "5668");
-    Assertions.assertEquals("JNRPE v3.0.0", lsResult.getStdout().trim());
-    Assertions.assertEquals(0, lsResult.getExitCode());
+    Assertions.assertEquals("JNRPE v3.0.0", checkNrpeResult.getStdout().trim());
+    Assertions.assertEquals(0, checkNrpeResult.getExitCode());
   }
 
   @Test
   public void testCheckNRPEv4SSL() throws Exception {
-    Container.ExecResult lsResult =
-        container.execInContainer("check_nrpe", "-H", HOST_ADDRESS, "-p", "5669");
-    Assertions.assertEquals("JNRPE v3.0.0", lsResult.getStdout().trim());
-    Assertions.assertEquals(0, lsResult.getExitCode());
+    var checkNrpeResult = container.execInContainer("check_nrpe", "-H", HOST_ADDRESS, "-p", "5669");
+    Assertions.assertEquals("JNRPE v3.0.0", checkNrpeResult.getStdout().trim());
+    Assertions.assertEquals(0, checkNrpeResult.getExitCode());
+  }
+
+  @Test
+  public void testCheckNRPEMultipleRequests() throws Exception {
+    var checkNrpeResult = container.execInContainer("check_nrpe", "-H", HOST_ADDRESS, "-p", "5669");
+    Assertions.assertEquals("JNRPE v3.0.0", checkNrpeResult.getStdout().trim());
+    Assertions.assertEquals(0, checkNrpeResult.getExitCode());
+
+    checkNrpeResult = container.execInContainer("check_nrpe", "-H", HOST_ADDRESS, "-p", "5669");
+    Assertions.assertEquals("JNRPE v3.0.0", checkNrpeResult.getStdout().trim());
+    Assertions.assertEquals(0, checkNrpeResult.getExitCode());
+  }
+
+  @Test
+  public void testInvalidPacket() throws Exception {
+    // We simulate an invalid packet connecting an SSL client with a non SSL server
+    var checkNrpeResult = container.execInContainer("check_nrpe", "-H", HOST_ADDRESS, "-p", "5668");
+    Assertions.assertTrue(
+        checkNrpeResult.getStdout().startsWith("CHECK_NRPE: Error - Could not connect to"));
+    Assertions.assertEquals(2, checkNrpeResult.getExitCode());
   }
 
   @Test
   public void testCheckNRPEConnectionRefused() throws Exception {
-    Container.ExecResult lsResult =
+    var checkNrpeResult =
         container.execInContainer("check_nrpe", "-n", "-H", HOST_ADDRESS, "-p", "5667");
     Assertions.assertEquals(
         "CHECK_NRPE: Receive header underflow - only 0 bytes received (4 expected).",
-        lsResult.getStdout().trim());
-    Assertions.assertEquals(3, lsResult.getExitCode());
+        checkNrpeResult.getStdout().trim());
+    Assertions.assertEquals(3, checkNrpeResult.getExitCode());
   }
 }
