@@ -7,4 +7,8 @@ RUN echo 'ping localhost &' > /bootstrap.sh
 RUN echo 'sleep infinity' >> /bootstrap.sh
 RUN chmod +x /bootstrap.sh
 
+
+FROM alpine:3.14
+COPY --from=0 /nrpe-4.0.3/src/check_nrpe /usr/bin
+COPY --from=0 /bootstrap.sh /bootstrap.sh
 CMD /bootstrap.sh
