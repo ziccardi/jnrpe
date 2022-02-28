@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 import org.testcontainers.Testcontainers;
 import org.testcontainers.containers.Container;
 import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.images.builder.ImageFromDockerfile;
+import org.testcontainers.utility.DockerImageName;
 
 public class TCPNetworkListenerTest {
   private static final JNRPEConfig config = ConfigurationManager.getConfig().orElseThrow();
@@ -39,9 +39,7 @@ public class TCPNetworkListenerTest {
   private static final String HOST_ADDRESS = "host.testcontainers.internal";
 
   private static final GenericContainer container =
-      new GenericContainer(
-          new ImageFromDockerfile("jnrpe", false)
-              .withFileFromClasspath("Dockerfile", "Dockerfile"));
+      new GenericContainer(DockerImageName.parse("ziccardi/jnrpe-test:latest"));
 
   private static void bind(Binding binding) {
     ServiceLoader.load(INetworkListener.class).stream()
@@ -81,8 +79,7 @@ public class TCPNetworkListenerTest {
   @Test
   public void testCheckNRPEv2() throws Exception {
     Container.ExecResult checkNrpeResult =
-        container.execInContainer(
-            "/nrpe-4.0.3/src/check_nrpe", "-2", "-n", "-H", HOST_ADDRESS, "-p", "5668");
+        container.execInContainer("check_nrpe", "-2", "-n", "-H", HOST_ADDRESS, "-p", "5668");
     Assertions.assertEquals("JNRPE v3.0.0", checkNrpeResult.getStdout().trim());
     Assertions.assertEquals(0, checkNrpeResult.getExitCode());
   }
@@ -90,8 +87,7 @@ public class TCPNetworkListenerTest {
   @Test
   public void testCheckNRPEv2SSL() throws Exception {
     Container.ExecResult checkNrpeResult =
-        container.execInContainer(
-            "/nrpe-4.0.3/src/check_nrpe", "-2", "-H", HOST_ADDRESS, "-p", "5669");
+        container.execInContainer("check_nrpe", "-2", "-H", HOST_ADDRESS, "-p", "5669");
     Assertions.assertEquals("JNRPE v3.0.0", checkNrpeResult.getStdout().trim());
     Assertions.assertEquals(0, checkNrpeResult.getExitCode());
   }
@@ -99,8 +95,7 @@ public class TCPNetworkListenerTest {
   @Test
   public void testCheckNRPEv3() throws Exception {
     Container.ExecResult lsResult =
-        container.execInContainer(
-            "/nrpe-4.0.3/src/check_nrpe", "-3", "-n", "-H", HOST_ADDRESS, "-p", "5668");
+        container.execInContainer("check_nrpe", "-3", "-n", "-H", HOST_ADDRESS, "-p", "5668");
     Assertions.assertEquals("JNRPE v3.0.0", lsResult.getStdout().trim());
     Assertions.assertEquals(0, lsResult.getExitCode());
   }
@@ -108,8 +103,7 @@ public class TCPNetworkListenerTest {
   @Test
   public void testCheckNRPEv3SSL() throws Exception {
     Container.ExecResult lsResult =
-        container.execInContainer(
-            "/nrpe-4.0.3/src/check_nrpe", "-3", "-H", HOST_ADDRESS, "-p", "5669");
+        container.execInContainer("check_nrpe", "-3", "-H", HOST_ADDRESS, "-p", "5669");
     Assertions.assertEquals("JNRPE v3.0.0", lsResult.getStdout().trim());
     Assertions.assertEquals(0, lsResult.getExitCode());
   }
@@ -117,8 +111,7 @@ public class TCPNetworkListenerTest {
   @Test
   public void testCheckNRPEv4() throws Exception {
     Container.ExecResult lsResult =
-        container.execInContainer(
-            "/nrpe-4.0.3/src/check_nrpe", "-n", "-H", HOST_ADDRESS, "-p", "5668");
+        container.execInContainer("check_nrpe", "-n", "-H", HOST_ADDRESS, "-p", "5668");
     Assertions.assertEquals("JNRPE v3.0.0", lsResult.getStdout().trim());
     Assertions.assertEquals(0, lsResult.getExitCode());
   }
@@ -126,7 +119,7 @@ public class TCPNetworkListenerTest {
   @Test
   public void testCheckNRPEv4SSL() throws Exception {
     Container.ExecResult lsResult =
-        container.execInContainer("/nrpe-4.0.3/src/check_nrpe", "-H", HOST_ADDRESS, "-p", "5669");
+        container.execInContainer("check_nrpe", "-H", HOST_ADDRESS, "-p", "5669");
     Assertions.assertEquals("JNRPE v3.0.0", lsResult.getStdout().trim());
     Assertions.assertEquals(0, lsResult.getExitCode());
   }
@@ -134,8 +127,7 @@ public class TCPNetworkListenerTest {
   @Test
   public void testCheckNRPEConnectionRefused() throws Exception {
     Container.ExecResult lsResult =
-        container.execInContainer(
-            "/nrpe-4.0.3/src/check_nrpe", "-n", "-H", HOST_ADDRESS, "-p", "5667");
+        container.execInContainer("check_nrpe", "-n", "-H", HOST_ADDRESS, "-p", "5667");
     Assertions.assertEquals(
         "CHECK_NRPE: Receive header underflow - only 0 bytes received (4 expected).",
         lsResult.getStdout().trim());
