@@ -16,10 +16,9 @@
 package it.jnrpe.services.network.netty.decoders;
 
 import io.netty.buffer.ByteBuf;
-import it.jnrpe.services.network.netty.protocol.ProtocolPacket;
+import it.jnrpe.services.network.netty.protocol.NRPEPacket;
+import java.net.ProtocolException;
 
-public interface IPacketBuilder {
-  IPacketBuilder withByteBuf(final ByteBuf buffer);
-
-  ProtocolPacket build();
+public interface IPacketDecoder {
+  NRPEPacket decode(final ByteBuf buffer) throws ProtocolException;
 }

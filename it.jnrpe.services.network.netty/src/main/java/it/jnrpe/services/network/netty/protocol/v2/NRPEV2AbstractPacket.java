@@ -15,13 +15,13 @@
  *******************************************************************************/
 package it.jnrpe.services.network.netty.protocol.v2;
 
-import it.jnrpe.services.network.netty.protocol.ProtocolPacket;
+import it.jnrpe.services.network.netty.protocol.NRPEPacket;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.zip.CRC32;
 
-abstract class NRPEV2AbstractPacket extends ProtocolPacket {
+abstract class NRPEV2AbstractPacket extends NRPEPacket {
 
   public NRPEV2AbstractPacket(int type, long crc32, int resultCode, byte[] buffer, byte[] padding) {
     super(2, type, crc32, resultCode, 0, buffer, padding);

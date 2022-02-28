@@ -20,12 +20,15 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 import io.netty.util.AttributeKey;
 import it.jnrpe.engine.services.commands.ExecutionResult;
-import it.jnrpe.services.network.netty.encoders.EncoderFactory;
+import it.jnrpe.services.network.netty.encoders.Encoder;
 
 public class ResponseEncoder extends MessageToByteEncoder<ExecutionResult> {
   @Override
-  protected void encode(ChannelHandlerContext ctx, ExecutionResult result, ByteBuf out) {
-    int version = ctx.channel().attr(AttributeKey.<Integer>valueOf("version")).get();
-    out.writeBytes(EncoderFactory.produceEncoder(version, result).encode());
+  protected void encode(ChannelHandlerContext ctx, ExecutionResult result, ByteBuf out)
+      throws Exception {
+    out.writeBytes(
+        Encoder.forVersion(ctx.channel().attr(AttributeKey.<Integer>valueOf("version")).get())
+            .andResult(result)
+            .encode());
   }
 }
