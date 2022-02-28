@@ -49,6 +49,6 @@ public class CheckDiskPlugin implements IPlugin {
   @Override
   public ExecutionResult execute() {
     // TODO: implement
-    return new ExecutionResult("CHECK_DISK Invoiked", Status.OK);
+    return new ExecutionResult("CHECK_DISK Invoked", Status.OK);
   }
 }
