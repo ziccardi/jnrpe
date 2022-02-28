@@ -16,36 +16,32 @@
 package it.jnrpe.services.network.netty.decoders;
 
 import io.netty.buffer.ByteBuf;
-import it.jnrpe.services.network.netty.protocol.ProtocolPacket;
+import it.jnrpe.services.network.netty.protocol.NRPEPacket;
+import java.net.ProtocolException;
 
-abstract class AbstractPacketBuilder implements IPacketBuilder {
-  protected ByteBuf buffer;
-
+abstract class AbstractPacketDecoder implements IPacketDecoder {
   private long crc32;
   private int resultCode;
   private byte[] requestBuffer;
   private byte[] padding;
   private int alignment;
 
-  public IPacketBuilder withByteBuf(final ByteBuf buffer) {
-    this.buffer = buffer;
-    return this;
-  }
-
   @Override
-  public final ProtocolPacket build() {
-    int packetType = this.buffer.readUnsignedShort(); // must be 1 for requests
+  public final NRPEPacket decode(final ByteBuf buffer) throws ProtocolException {
+    int packetType = buffer.readUnsignedShort(); // must be 1 for requests
     if (packetType != 1) {
-      // FIXME: throw exception
+      throw new ProtocolException(
+          String.format(
+              "Invalid packet type received. Expected '1' but received '%d'", packetType));
     }
-    this.loadCommonData();
-    this.loadRequestFromBuffer();
+    this.loadCommonData(buffer);
+    this.loadRequestFromBuffer(buffer);
     return this.buildPacket();
   }
 
-  private void loadCommonData() {
-    this.crc32 = this.buffer.readUnsignedInt();
-    this.resultCode = this.buffer.readUnsignedShort(); // empty for requests
+  private void loadCommonData(final ByteBuf buffer) {
+    this.crc32 = buffer.readUnsignedInt();
+    this.resultCode = buffer.readUnsignedShort(); // empty for requests
   }
 
   protected long getCrc32() {
@@ -80,7 +76,7 @@ abstract class AbstractPacketBuilder implements IPacketBuilder {
     this.alignment = alignment;
   }
 
-  protected abstract void loadRequestFromBuffer();
+  protected abstract void loadRequestFromBuffer(final ByteBuf buffer);
 
-  protected abstract ProtocolPacket buildPacket();
+  protected abstract NRPEPacket buildPacket();
 }

@@ -15,13 +15,13 @@
  *******************************************************************************/
 package it.jnrpe.services.network.netty.protocol.v4;
 
-import it.jnrpe.services.network.netty.protocol.ProtocolPacket;
+import it.jnrpe.services.network.netty.protocol.NRPEPacket;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.zip.CRC32;
 
-abstract class NRPEV4AbstractPacket extends ProtocolPacket {
+abstract class NRPEV4AbstractPacket extends NRPEPacket {
   public NRPEV4AbstractPacket(
       int type, long crc32, int resultCode, int alignment, byte[] buffer, byte[] padding) {
     super(4, type, crc32, resultCode, alignment, buffer, padding);

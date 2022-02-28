@@ -18,16 +18,12 @@ package it.jnrpe.services.network.netty;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ReplayingDecoder;
-import it.jnrpe.services.network.netty.decoders.DecoderBuilder;
-import it.jnrpe.services.network.netty.protocol.ProtocolPacket;
+import it.jnrpe.services.network.netty.decoders.Decoder;
 import java.util.List;
 
 class RequestDecoder extends ReplayingDecoder<Void> {
-
   @Override
   protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
-    int protocolVersion = in.readUnsignedShort();
-    ProtocolPacket packet = DecoderBuilder.forPacket(protocolVersion, 1).withByteBuf(in).build();
-    out.add(packet);
+    out.add(Decoder.forVersion(in.readUnsignedShort()).andPacketType(1).decode(in));
   }
 }

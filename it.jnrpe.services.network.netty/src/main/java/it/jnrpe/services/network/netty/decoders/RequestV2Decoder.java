@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2020, Massimiliano Ziccardi
+ * Copyright (C) 2022, Massimiliano Ziccardi
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,23 +15,23 @@
  *******************************************************************************/
 package it.jnrpe.services.network.netty.decoders;
 
-import it.jnrpe.services.network.netty.protocol.ProtocolPacket;
-import it.jnrpe.services.network.netty.protocol.v4.NRPEV4Request;
+import io.netty.buffer.ByteBuf;
+import it.jnrpe.services.network.netty.protocol.NRPEPacket;
+import it.jnrpe.services.network.netty.protocol.v2.NRPEV2Request;
 
-class DecoderV4Builder extends DecoderV3Builder {
-  private static class RequestV4Builder extends RequestV3Builder {
-    @Override
-    protected ProtocolPacket buildPacket() {
-      return new NRPEV4Request(getCrc32(), getAlignment(), getRequestBuffer(), getPadding());
-    }
+class RequestV2Decoder extends AbstractPacketDecoder {
+  protected void loadRequestFromBuffer(final ByteBuf buffer) {
+    byte[] reqBuffer = new byte[1024];
+    buffer.readBytes(reqBuffer);
+    this.setRequestBuffer(reqBuffer);
+
+    byte[] padding = new byte[2];
+    buffer.readBytes(padding);
+    this.setPadding(padding);
   }
 
-  public static IPacketBuilder forPacket(int type) {
-    switch (type) {
-      case 1:
-        return new RequestV4Builder();
-      default: // FIXME: throw an exception
-        return null;
-    }
+  @Override
+  protected NRPEPacket buildPacket() {
+    return new NRPEV2Request(getCrc32(), getResultCode(), getRequestBuffer(), getPadding());
   }
 }

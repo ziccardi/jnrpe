@@ -18,9 +18,10 @@ package it.jnrpe.services.network.netty;
 import io.netty.channel.*;
 import io.netty.util.AttributeKey;
 import io.netty.util.ReferenceCountUtil;
+import it.jnrpe.engine.events.EventManager;
 import it.jnrpe.engine.services.commands.CommandExecutor;
 import it.jnrpe.engine.services.commands.ExecutionResult;
-import it.jnrpe.services.network.netty.protocol.ProtocolPacket;
+import it.jnrpe.services.network.netty.protocol.NRPEPacket;
 import java.util.Arrays;
 
 @ChannelHandler.Sharable
@@ -30,13 +31,19 @@ class ServerHandler extends ChannelInboundHandlerAdapter {
   ServerHandler() {}
 
   @Override
-  public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+  public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+    EventManager.error("Protocol error", cause);
+    ctx.close();
+  }
+
+  @Override
+  public void channelRead(ChannelHandlerContext ctx, Object msg) {
     try {
-      ProtocolPacket packet = (ProtocolPacket) msg;
+      NRPEPacket packet = (NRPEPacket) msg;
 
       ctx.channel()
           .attr(AttributeKey.<Integer>valueOf("version"))
-          .set(((ProtocolPacket) msg).getVersion());
+          .set(((NRPEPacket) msg).getVersion());
 
       // A command received by check_nrpe is composed like this:
       // command!param1!param2!...!paramN

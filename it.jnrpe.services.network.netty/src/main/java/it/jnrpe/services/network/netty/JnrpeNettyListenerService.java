@@ -86,7 +86,7 @@ public class JnrpeNettyListenerService implements INetworkListener {
     try {
       // Gen key pair
       KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
-      keyGen.initialize(1024, new SecureRandom());
+      keyGen.initialize(1024, SecureRandom.getInstanceStrong());
       var keyPair = keyGen.generateKeyPair();
 
       ctx = SSLContext.getInstance("SSLv3");
@@ -95,12 +95,19 @@ public class JnrpeNettyListenerService implements INetworkListener {
 
       final KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
       ks.load(null, null);
+      char[] pwd =
+          SecureRandom.getInstanceStrong()
+              .ints('a', 'z')
+              .limit(20)
+              .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+              .toString()
+              .toCharArray();
       ks.setKeyEntry(
           "sslkey",
           keyPair.getPrivate(),
-          "12345678".toCharArray(),
+          pwd,
           new Certificate[] {generateSelfSignedX509Certificate(keyPair)});
-      kmf.init(ks, "12345678".toCharArray());
+      kmf.init(ks, pwd);
       ctx.init(kmf.getKeyManagers(), null, new java.security.SecureRandom());
     } catch (NoSuchAlgorithmException e) {
       throw new SSLException("Unable to initialize SSLSocketFactory" + e.getMessage(), e);

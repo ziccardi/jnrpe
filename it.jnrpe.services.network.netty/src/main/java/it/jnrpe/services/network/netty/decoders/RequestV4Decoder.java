@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2020, Massimiliano Ziccardi
+ * Copyright (C) 2022, Massimiliano Ziccardi
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,25 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.services.network.netty.encoders;
+package it.jnrpe.services.network.netty.decoders;
 
-import it.jnrpe.engine.services.commands.ExecutionResult;
+import it.jnrpe.services.network.netty.protocol.NRPEPacket;
+import it.jnrpe.services.network.netty.protocol.v4.NRPEV4Request;
 
-public class EncoderFactory {
-  private EncoderFactory() {}
-
-  public static IResponseEncoder produceEncoder(int version, ExecutionResult res) {
-    switch (version) {
-      case 2:
-        return new V2Encoder(res);
-      case 3:
-        return new V3Encoder(res);
-      case 4:
-        return new V4Encoder(res);
-      case 5:
-        // FIXME: throw exception
-        return null;
-    }
-    return new V2Encoder(res);
+class RequestV4Decoder extends RequestV3Decoder {
+  @Override
+  protected NRPEPacket buildPacket() {
+    return new NRPEV4Request(getCrc32(), getAlignment(), getRequestBuffer(), getPadding());
   }
 }
