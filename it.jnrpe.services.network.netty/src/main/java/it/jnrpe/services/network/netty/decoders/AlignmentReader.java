@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2020, Massimiliano Ziccardi
+ * Copyright (C) 2023, Massimiliano Ziccardi
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.services.network.netty.protocol.v4;
+package it.jnrpe.services.network.netty.decoders;
 
-public class NRPEV4Request extends NRPEV4AbstractPacket {
-  public NRPEV4Request(long crc32, int alignment, byte[] buffer, byte[] padding) {
-    super(1, crc32, 0, alignment, buffer, padding);
+import io.netty.buffer.ByteBuf;
+import it.jnrpe.services.network.netty.protocol.NRPEPacket;
+
+public class AlignmentReader implements IPacketFieldReader {
+  public void read(final ByteBuf buffer, final NRPEPacket packet) {
+    if (packet.getVersion() >= 3) {
+      var alignment = buffer.readUnsignedShort();
+      packet.setAlignment(alignment);
+      return;
+    }
+
+    packet.setAlignment(0);
   }
 }

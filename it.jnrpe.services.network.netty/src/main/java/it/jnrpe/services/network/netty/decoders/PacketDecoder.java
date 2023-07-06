@@ -15,35 +15,28 @@
  *******************************************************************************/
 package it.jnrpe.services.network.netty.decoders;
 
+import io.netty.buffer.ByteBuf;
+import it.jnrpe.services.network.netty.protocol.NRPEPacket;
 import java.net.ProtocolException;
+import java.util.Arrays;
+import java.util.List;
 
-public class Decoder {
+public class PacketDecoder implements IPacketDecoder {
+  private final List<IPacketFieldReader> readers =
+      Arrays.asList(
+          new VersionReader(),
+          new PacketTypeReader(),
+          new CRC32Reader(),
+          new ResultCodeReader(),
+          new AlignmentReader(),
+          new BufferLengthReader(),
+          new BufferReader(),
+          new PaddingReader());
 
-  private final IPacketDecoder decoder;
-
-  private Decoder(final IPacketDecoder decoder) {
-    this.decoder = decoder;
-  }
-
-  public static Decoder forVersion(int version) throws ProtocolException {
-    switch (version) {
-      case 2:
-        return new Decoder(new RequestV2Decoder());
-      case 3:
-        return new Decoder(new RequestV3Decoder());
-      case 4:
-        return new Decoder(new RequestV4Decoder());
-      default:
-        throw new ProtocolException("Invalid packet version received (" + version + ")");
-    }
-  }
-
-  public IPacketDecoder andPacketType(int packetType) throws ProtocolException {
-    if (packetType != 1) {
-      throw new ProtocolException(
-          String.format(
-              "Invalid packet type received. Expected '1', but received '%d'", packetType));
-    }
-    return decoder;
+  @Override
+  public final NRPEPacket decode(final ByteBuf buffer) throws ProtocolException {
+    NRPEPacket res = new NRPEPacket();
+    readers.forEach((reader) -> reader.read(buffer, res));
+    return res;
   }
 }

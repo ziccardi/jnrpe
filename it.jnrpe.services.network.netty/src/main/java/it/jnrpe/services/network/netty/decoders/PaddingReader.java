@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2022, Massimiliano Ziccardi
+ * Copyright (C) 2023, Massimiliano Ziccardi
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,23 @@
  *******************************************************************************/
 package it.jnrpe.services.network.netty.decoders;
 
+import io.netty.buffer.ByteBuf;
 import it.jnrpe.services.network.netty.protocol.NRPEPacket;
-import it.jnrpe.services.network.netty.protocol.v4.NRPEV4Request;
 
-class RequestV4Decoder extends RequestV3Decoder {
-  @Override
-  protected NRPEPacket buildPacket() {
-    return new NRPEV4Request(getCrc32(), getAlignment(), getRequestBuffer(), getPadding());
+public class PaddingReader implements IPacketFieldReader {
+  public void read(final ByteBuf buffer, final NRPEPacket packet) {
+    int paddingLength;
+    if (packet.getVersion() >= 3) {
+      paddingLength = 1020 - (int) packet.getBufferLength();
+      if (paddingLength < 0) {
+        paddingLength = 0;
+      }
+    } else {
+      paddingLength = 2;
+    }
+
+    var padding = new byte[paddingLength];
+    buffer.readBytes(padding);
+    packet.setPadding(padding);
   }
 }

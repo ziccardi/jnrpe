@@ -1,3 +1,12 @@
+plugins {
+    id 'java'
+}
+
+java {
+    modularity.inferModulePath = true
+
+}
+
 dependencies {
     implementation project(':it.jnrpe.engine')
     implementation project(':it.jnrpe.services.config')
@@ -6,3 +15,4 @@ dependencies {
     implementation "org.testcontainers:junit-jupiter:1.16.3"
     implementation 'org.slf4j:slf4j-simple:1.7.36'
 }
+

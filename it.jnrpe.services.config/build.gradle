@@ -1,4 +1,8 @@
+plugins {
+    id 'java'
+}
+
 dependencies {
     implementation project(':it.jnrpe.engine')
-    implementation 'org.yaml:snakeyaml:1.26'
+    implementation 'org.yaml:snakeyaml:2.0'
 }
