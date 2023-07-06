@@ -1,8 +1,9 @@
 plugins {
-    id "com.github.spotbugs" version "5.0.6"
-    id "com.diffplug.spotless" version "6.3.0"
+    id 'java'
+    id "com.github.spotbugs" version "5.0.14"
+    id "com.diffplug.spotless" version "6.10.0"
     id 'pl.allegro.tech.build.axion-release' version '1.13.6'
-    id 'org.javamodularity.moduleplugin' version '1.8.10' apply false
+    id 'org.javamodularity.moduleplugin' version '1.8.12' apply false
 }
 
 scmVersion {
@@ -17,28 +18,27 @@ project.version=scmVersion.version
 
 subprojects {
     apply plugin: 'java'
-    apply plugin: 'org.javamodularity.moduleplugin'
+    apply plugin: "org.javamodularity.moduleplugin"
     apply plugin: 'com.github.spotbugs'
     apply plugin: 'com.diffplug.spotless'
-    apply plugin: 'maven-publish'
-    apply plugin: 'signing'
 
-    sourceCompatibility = 11
-    targetCompatibility = 11
+    apply from: "$rootProject.projectDir/gradle/spotless.gradle"
+    apply from: "$rootProject.projectDir/gradle/spotbugs.gradle"
+    apply from: "$rootProject.projectDir/gradle/publishing.gradle"
 
     repositories {
         mavenCentral()
     }
 
     dependencies {
-        testImplementation(platform('org.junit:junit-bom:5.8.2'))
+        testImplementation(platform('org.junit:junit-bom:5.9.3'))
         testImplementation('org.junit.jupiter:junit-jupiter')
         testImplementation(project(':it.jnrpe.integration'))
         testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     }
 
     java {
-        modularity.inferModulePath = false
+        modularity.inferModulePath = true
         withJavadocJar()
         withSourcesJar()
     }
@@ -50,42 +50,13 @@ subprojects {
         }
     }
 
-    // SPOTLESS CONFIG
-    ///////////////////////////////////////////////////////////////////////////
-    spotless {
-        java {
-            importOrder()
-            removeUnusedImports()
-            googleJavaFormat()
-
-            licenseHeader '/*******************************************************************************\n' +
-                    ' * Copyright (C) $YEAR, Massimiliano Ziccardi\n' +
-                    ' *\n' +
-                    ' * Licensed under the Apache License, Version 2.0 (the "License");\n' +
-                    ' * you may not use this file except in compliance with the License.\n' +
-                    ' * You may obtain a copy of the License at\n' +
-                    ' *\n' +
-                    ' *     http://www.apache.org/licenses/LICENSE-2.0\n' +
-                    ' *\n' +
-                    ' * Unless required by applicable law or agreed to in writing, software\n' +
-                    ' * distributed under the License is distributed on an "AS IS" BASIS,\n' +
-                    ' * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n' +
-                    ' * See the License for the specific language governing permissions and\n' +
-                    ' * limitations under the License.\n' +
-                    ' *******************************************************************************/'
+    test {
+        useJUnitPlatform()
+        testLogging {
+            showStandardStreams = true
+            events "passed", "skipped", "failed"
         }
     }
-    // END SPOTLESS CONFIG
-    ///////////////////////////////////////////////////////////////////////////
-
-    // SPOTBUGS CONFIG
-    ///////////////////////////////////////////////////////////////////////////
-    spotbugs {
-        excludeFilter = file("$project.projectDir/spotBugsExclude.xml")
-        showProgress = false
-    }
-    // END SPOTBUGS CONFIG
-    ///////////////////////////////////////////////////////////////////////////
 
     tasks {
         javadoc {
@@ -95,53 +66,5 @@ subprojects {
         compileJava {
             options.javaModuleVersion = provider { scmVersion.version }
         }
-
-        spotbugsMain {
-            reports {
-                html {
-                    enabled = true
-                }
-            }
-        }
-    }
-
-    test {
-        useJUnitPlatform()
-        testLogging {
-            showStandardStreams = true
-            events "passed", "skipped", "failed"
-        }
-    }
-
-    publishing {
-        publications {
-            maven(MavenPublication) {
-                groupId = 'it.jnrpe'
-                artifactId = project.name
-                version = scmVersion.version
-
-                from components.java
-            }
-        }
-        repositories {
-            maven {
-                // change URLs to point to your repos, e.g. http://my.org/repo
-                def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-                def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots"
-                url = scmVersion.version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-                credentials {
-                    username = System.getenv("MAVEN_USERNAME")
-                    password = System.getenv("MAVEN_PASSWORD")
-                }
-            }
-        }
-    }
-
-    signing {
-        required = false
-        def signingKey = findProperty("signingKey")
-        def signingPassword = findProperty("signingPassword")
-        useInMemoryPgpKeys(signingKey, signingPassword)
-        sign configurations.archives
     }
 }

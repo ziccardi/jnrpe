@@ -15,16 +15,24 @@
  *******************************************************************************/
 package it.jnrpe.services.network.netty.protocol;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.zip.CRC32;
 
-public abstract class NRPEPacket {
-  private final int version;
-  private final int packetType; // must be 1 for requests
+public class NRPEPacket {
+  private int version;
+  private int packetType; // must be 1 for requests
   private long crc32;
-  private final int resultCode;
-  private final int alignment;
-  private final byte[] buffer;
-  private final byte[] padding;
+  private int resultCode;
+  private int alignment;
+
+  private long bufferLength = 0;
+  private byte[] buffer;
+  private byte[] padding;
+
+  public NRPEPacket() {}
 
   public NRPEPacket(
       int version,
@@ -40,6 +48,7 @@ public abstract class NRPEPacket {
     this.resultCode = resultCode;
     this.alignment = alignment;
     this.buffer = Arrays.copyOf(buffer, buffer.length);
+    this.bufferLength = buffer.length;
     this.padding = Arrays.copyOf(padding, padding.length);
   }
 
@@ -98,7 +107,33 @@ public abstract class NRPEPacket {
         + '}';
   }
 
-  protected abstract long crc32();
+  protected final long crc32() {
+    ByteArrayOutputStream bout = new ByteArrayOutputStream();
+    DataOutputStream dout = new DataOutputStream(bout);
+
+    try {
+      dout.writeShort(this.getVersion());
+      dout.writeShort(this.getPacketType());
+      dout.writeInt(0); // NO CRC
+      dout.writeShort(this.getResultCode());
+      if (this.getVersion() > 2) {
+        dout.writeShort(this.getAlignment());
+        dout.writeInt(this.getBuffer().length);
+      }
+      dout.write(this.getBuffer());
+      dout.write(this.getPadding());
+      dout.close();
+
+      byte[] bytes = bout.toByteArray();
+      CRC32 crcAlg = new CRC32();
+      crcAlg.update(bytes);
+
+      return crcAlg.getValue();
+    } catch (IOException e) {
+      // Never happens...
+      throw new IllegalStateException(e.getMessage(), e);
+    }
+  }
 
   public final boolean validateCRC() {
     return this.crc32 == crc32();
@@ -106,5 +141,41 @@ public abstract class NRPEPacket {
 
   public void updateCRC() {
     this.crc32 = this.crc32();
+  }
+
+  public void setCrc32(long crc32) {
+    this.crc32 = crc32;
+  }
+
+  public long getBufferLength() {
+    return bufferLength;
+  }
+
+  public void setBufferLength(long bufferLength) {
+    this.bufferLength = bufferLength;
+  }
+
+  public void setVersion(int version) {
+    this.version = version;
+  }
+
+  public void setPacketType(int packetType) {
+    this.packetType = packetType;
+  }
+
+  public void setResultCode(int resultCode) {
+    this.resultCode = resultCode;
+  }
+
+  public void setAlignment(int alignment) {
+    this.alignment = alignment;
+  }
+
+  public void setBuffer(byte[] buffer) {
+    this.buffer = Arrays.copyOf(buffer, buffer.length);
+  }
+
+  public void setPadding(byte[] padding) {
+    this.padding = Arrays.copyOf(padding, padding.length);
   }
 }

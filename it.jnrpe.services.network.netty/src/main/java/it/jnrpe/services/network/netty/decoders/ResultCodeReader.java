@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2020, Massimiliano Ziccardi
+ * Copyright (C) 2023, Massimiliano Ziccardi
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.services.network.netty.protocol.v2;
+package it.jnrpe.services.network.netty.decoders;
 
-public class NRPEV2Request extends NRPEV2AbstractPacket {
-  public NRPEV2Request(long crc32, int resultCode, byte[] buffer, byte[] padding) {
-    super(1, crc32, resultCode, buffer, padding);
+import io.netty.buffer.ByteBuf;
+import it.jnrpe.services.network.netty.protocol.NRPEPacket;
+
+public class ResultCodeReader implements IPacketFieldReader {
+  public void read(final ByteBuf buffer, final NRPEPacket packet) {
+    int resultCode = buffer.readUnsignedShort();
+    packet.setResultCode(resultCode);
   }
 }

@@ -1,0 +1,18 @@
+// SPOTBUGS CONFIG
+///////////////////////////////////////////////////////////////////////////
+spotbugs {
+    excludeFilter = file("$project.projectDir/spotBugsExclude.xml")
+    showProgress = false
+}
+// END SPOTBUGS CONFIG
+///////////////////////////////////////////////////////////////////////////
+
+tasks {
+    spotbugsMain {
+        reports {
+            html {
+                enabled = true
+            }
+        }
+    }
+}
