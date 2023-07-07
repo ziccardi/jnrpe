@@ -30,4 +30,6 @@ public interface IConfigProvider {
   String getProviderName();
 
   Optional<JNRPEConfig> getConfig();
+
+  String generateSampleConfig();
 }

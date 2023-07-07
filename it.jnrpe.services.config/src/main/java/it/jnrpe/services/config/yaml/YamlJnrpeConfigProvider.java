@@ -77,4 +77,28 @@ public class YamlJnrpeConfigProvider implements IConfigProvider {
     EventManager.warn("No config services have been provided");
     return Optional.empty();
   }
+
+  @Override
+  public String generateSampleConfig() {
+    return """
+            server:
+              # Configure the IP and the PORT where JNRPE will listen.
+              # Use 0.0.0.0 as address to bind all addresses on the same port
+              bindings:
+                -
+                  ip: "127.0.0.1"
+                  port: 5667
+                  ssl: false
+                -
+                  ip: "127.0.0.1"
+                  port: 5668
+                  ssl: false
+            commands:
+              definitions:
+                -
+                  name: CMD_TEST
+                  plugin: CHECK_TEST
+                  args: "-m 'Test Message'"
+            """;
+  }
 }

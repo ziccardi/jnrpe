@@ -29,4 +29,9 @@ public class IniJnrpeConfigProvider implements IConfigProvider {
   public Optional<JNRPEConfig> getConfig() {
     return Optional.empty();
   }
+
+  @Override
+  public String generateSampleConfig() {
+    return "";
+  }
 }
