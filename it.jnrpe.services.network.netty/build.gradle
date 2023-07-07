@@ -3,7 +3,9 @@ plugins {
 }
 
 dependencies {
-    implementation group: 'io.netty', name: 'netty-all', version: '4.1.46.Final'
+    //implementation group: 'io.netty', name: 'netty-all', version: '4.1.94.Final'
+
     implementation project(':it.jnrpe.engine')
-    implementation 'org.bouncycastle:bcprov-jdk14:1.70'
+    implementation 'org.bouncycastle:bcprov-jdk14:1.75'
+    implementation 'io.netty:netty-handler:4.1.94.Final'
 }

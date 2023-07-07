@@ -3,8 +3,11 @@ import it.jnrpe.services.network.netty.JnrpeNettyListenerService;
 
 module it.jnrpe.services.network.netty {
   requires it.jnrpe.engine;
-  requires io.netty.all;
   requires org.bouncycastle.provider;
+  requires io.netty.handler;
+  requires io.netty.buffer;
+  requires io.netty.transport;
+  requires io.netty.codec;
 
   provides INetworkListener with
       JnrpeNettyListenerService;
