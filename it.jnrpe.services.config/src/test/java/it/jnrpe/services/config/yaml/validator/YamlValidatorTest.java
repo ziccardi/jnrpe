@@ -15,137 +15,182 @@
  *******************************************************************************/
 package it.jnrpe.services.config.yaml.validator;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import it.jnrpe.services.config.yaml.ConfigValidator;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.yaml.snakeyaml.Yaml;
 
 public class YamlValidatorTest {
 
   @Test
-  public void testInvalidSingleRootKey() throws Exception {
+  public void testInvalidSingleRootKey() {
     String yamlText =
-        "--- \n"
-            + "server: \n"
-            + "  bindings: \n"
-            + "    - \n"
-            + "      ip: \"127.0.0.1\"\n"
-            + "      port: 5667\n"
-            + "      ssl: false\n"
-            + "    - \n"
-            + "      ip: \"127.0.0.1\"\n"
-            + "      port: 5668\n"
-            + "      ssl: false\n"
-            + "invalid: \n"
-            + "  definitions: \n"
-            + "    - \n"
-            + "      args: \"-a 1 -b 2 -c 3\"\n"
-            + "      name: CMD_TEST\n"
-            + "      plugin: PLUGIN_TEST";
+        """
+            ---
+            server:
+              bindings:
+                -
+                  ip: "127.0.0.1"
+                  port: 5667
+                  ssl: false
+                -
+                  ip: "127.0.0.1"
+                  port: 5668
+                  ssl: false
+              invalid:
+                definitions:
+                  -
+                    args: "-a 1 -b 2 -c 3"
+                    name: CMD_TEST
+                    plugin: PLUGIN_TEST
+            """;
     Yaml yaml = new Yaml();
-    try {
-      new ConfigValidator().validate(yaml.load(yamlText));
-    } catch (InvalidConfigurationException ice) {
-      Assertions.assertEquals("[/] Unknown section(s) found: [invalid]", ice.getMessage());
-    }
+    Exception exception =
+        assertThrows(
+            InvalidConfigurationException.class,
+            () -> {
+              new ConfigValidator().validate(yaml.load(yamlText));
+            });
+    assertEquals("[/server] Unknown section(s) found: [invalid]", exception.getMessage());
   }
 
   @Test
-  public void testInvalidMultipleRootKey() throws Exception {
+  public void testInvalidMultipleRootKey() {
     String yamlText =
-        "--- \n"
-            + "server: \n"
-            + "  bindings: \n"
-            + "    - \n"
-            + "      ip: \"127.0.0.1\"\n"
-            + "      port: 5667\n"
-            + "      ssl: false\n"
-            + "    - \n"
-            + "      ip: \"127.0.0.1\"\n"
-            + "      port: 5668\n"
-            + "      ssl: false\n"
-            + "invalid: \n"
-            + "  definitions: \n"
-            + "    - \n"
-            + "      args: \"-a 1 -b 2 -c 3\"\n"
-            + "      name: CMD_TEST\n"
-            + "      plugin: PLUGIN_TEST\n"
-            + "invalid2: \n"
-            + "  definitions: \n"
-            + "    - \n"
-            + "      args: \"-a 1 -b 2 -c 3\"\n"
-            + "      name: CMD_TEST\n"
-            + "      plugin: PLUGIN_TEST";
+        """
+            ---
+            server:
+              bindings:
+                -
+                  ip: "127.0.0.1"
+                  port: 5667
+                  ssl: false
+                -
+                  ip: "127.0.0.1"
+                  port: 5668
+                  ssl: false
+            invalid:
+              definitions:
+                -
+                  args: "-a 1 -b 2 -c 3"
+                  name: CMD_TEST
+                  plugin: PLUGIN_TEST
+            invalid2:
+              definitions:
+                -
+                  args: "-a 1 -b 2 -c 3"
+                  name: CMD_TEST
+                  plugin: PLUGIN_TEST
+            """;
     Yaml yaml = new Yaml();
-    try {
-      new ConfigValidator().validate(yaml.load(yamlText));
-    } catch (InvalidConfigurationException ice) {
-      Assertions.assertEquals(
-          "[/] Unknown section(s) found: [invalid, invalid2]", ice.getMessage());
-    }
+    Exception exception =
+        assertThrows(
+            InvalidConfigurationException.class,
+            () -> {
+              new ConfigValidator().validate(yaml.load(yamlText));
+            });
+    assertEquals("[/] Unknown section(s) found: [invalid, invalid2]", exception.getMessage());
   }
 
   @Test
-  public void testMandatoryRootKeyMissing() throws Exception {
+  public void testMandatoryRootKeyMissing() {
     String yamlText =
-        "--- \n"
-            + "commands: \n"
-            + "  definitions: \n"
-            + "    - \n"
-            + "      args: \"-a 1 -b 2 -c 3\"\n"
-            + "      name: CMD_TEST\n"
-            + "      plugin: PLUGIN_TEST";
+        """
+            ---
+            commands:
+              definitions:
+                -
+                  args: "-a 1 -b 2 -c 3"
+                  name: CMD_TEST
+                  plugin: PLUGIN_TEST
+            """;
+
     Yaml yaml = new Yaml();
-    try {
-      new ConfigValidator().validate(yaml.load(yamlText));
-    } catch (InvalidConfigurationException ice) {
-      Assertions.assertEquals("[/] Missing mandatory key(s): [server]", ice.getMessage());
-    }
+    Exception exception =
+        assertThrows(
+            InvalidConfigurationException.class,
+            () -> {
+              new ConfigValidator().validate(yaml.load(yamlText));
+            });
+    assertEquals("[/] Missing mandatory key(s): [server]", exception.getMessage());
   }
 
   @Test
-  public void testMissingNestedMandatoryKey() throws Exception {
+  public void testMissingNestedMandatoryKey() {
     String yamlText =
-        "--- \n"
-            + "server: \n"
-            + "  bindings: \n"
-            + "    - \n"
-            + "      port: 5667\n"
-            + "      ssl: false\n"
-            + "    - \n"
-            + "      ip: \"127.0.0.1\"\n"
-            + "      port: 5668\n"
-            + "      ssl: false\n";
+        """
+            server:
+              bindings:
+                -
+                  port: 5667
+                  ssl: false
+                -
+                  ip: "127.0.0.1"
+                  port: 5668
+                  ssl: false
+            """;
     Yaml yaml = new Yaml();
-    try {
-      new ConfigValidator().validate(yaml.load(yamlText));
-    } catch (InvalidConfigurationException ice) {
-      Assertions.assertEquals(
-          "[/server/bindings] [0] Missing mandatory key(s): [ip]", ice.getMessage());
-    }
+    Exception exception =
+        assertThrows(
+            InvalidConfigurationException.class,
+            () -> {
+              new ConfigValidator().validate(yaml.load(yamlText));
+            });
+    assertEquals("[/server/bindings] [0] Missing mandatory key(s): [ip]", exception.getMessage());
   }
 
   @Test
-  public void testInvalidNestedKey() throws Exception {
+  public void testInvalidNestedKey() {
     String yamlText =
-        "--- \n"
-            + "server: \n"
-            + "  bindings: \n"
-            + "    - \n"
-            + "      ip: \"127.0.0.1\"\n"
-            + "      port: 5667\n"
-            + "      ssl: false\n"
-            + "    - \n"
-            + "      ip: \"127.0.0.1\"\n"
-            + "      port: 5668\n"
-            + "      bad: 123\n"
-            + "      ssl: false\n";
+        """
+            server:
+              bindings:
+                -
+                  ip: "127.0.0.1"
+                  port: 5667
+                  ssl: false
+                -
+                  ip: "127.0.0.1"
+                  port: 5668
+                  bad: 123
+                  ssl: false
+            """;
     Yaml yaml = new Yaml();
-    try {
-      new ConfigValidator().validate(yaml.load(yamlText));
-    } catch (InvalidConfigurationException ice) {
-      Assertions.assertEquals(
-          "[/server/bindings] [1] Unknown section(s) found: [bad]", ice.getMessage());
-    }
+    Exception exception =
+        assertThrows(
+            InvalidConfigurationException.class,
+            () -> {
+              new ConfigValidator().validate(yaml.load(yamlText));
+            });
+    assertEquals("[/server/bindings] [1] Unknown section(s) found: [bad]", exception.getMessage());
+  }
+
+  @Test
+  public void testValidConfiguration() {
+    String yamlText =
+        """
+            server:
+              bindings:
+                -
+                  ip: "127.0.0.1"
+                  port: 5667
+                  ssl: false
+                -
+                  ip: "127.0.0.1"
+                  port: 5668
+                  ssl: false
+            commands:
+              definitions:
+                -
+                  name: CMD_TEST
+                  args: "-m 'Test Message'"
+                  plugin: PLUGIN_TEST
+            """;
+    Yaml yaml = new Yaml();
+    assertDoesNotThrow(
+        () -> {
+          new ConfigValidator().validate(yaml.load(yamlText));
+        });
   }
 }
