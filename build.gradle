@@ -2,7 +2,7 @@ plugins {
     id 'java'
     id "com.github.spotbugs" version "5.0.14"
     id "com.diffplug.spotless" version "6.10.0"
-    id 'pl.allegro.tech.build.axion-release' version '1.13.6'
+    id 'pl.allegro.tech.build.axion-release' version '1.15.3'
     id 'org.javamodularity.moduleplugin' version '1.8.12' apply false
 }
 
