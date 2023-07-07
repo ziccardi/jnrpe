@@ -1,3 +1,19 @@
+# [3.5.0](https://github.com/ziccardi/jnrpe/compare/3.4.0...3.5.0) (2023-07-07)
+
+
+### Bug Fixes
+
+* fix the listening address for the Netty Network Provider ([7675f60](https://github.com/ziccardi/jnrpe/commit/7675f60eaca82d2e658b8d316242c1b144946e97))
+* fixes a bug in checking the listening address. Now 0.0.0.0 is correctly evaluated ([0457e49](https://github.com/ziccardi/jnrpe/commit/0457e49f9f4b89c1473da5ac0ac7eae4a972f76b))
+
+
+### Features
+
+* adds ability to generate a sample skeleton configuration ([b396547](https://github.com/ziccardi/jnrpe/commit/b3965478f9df2a058db37859e7f94fd6eda9bd76))
+* adds ability to run the configured commands ([71fb6fa](https://github.com/ziccardi/jnrpe/commit/71fb6fa137371fbeff83af65e4cd0f22029f04da)), closes [#57](https://github.com/ziccardi/jnrpe/issues/57)
+
+
+
 # [3.4.0](https://github.com/ziccardi/jnrpe/compare/3.3.0...3.4.0) (2022-02-27)
 
 
@@ -44,15 +60,6 @@
 * **cli:** added commands to list plugins and get plugin help ([6e2097c](https://github.com/ziccardi/jnrpe/commit/6e2097ce56abcbb1fb0fbed0668462089fe5b015)), closes [#56](https://github.com/ziccardi/jnrpe/issues/56)
 * **plugins:** implemented plugin execution ([a067981](https://github.com/ziccardi/jnrpe/commit/a067981a50f014c6141b58705336bd19be561414))
 * **threshold:** implemented threshold syntax parsing and validation ([2932f80](https://github.com/ziccardi/jnrpe/commit/2932f808c00132e48ccf31fe7edfa5924fca94ce)), closes [#87](https://github.com/ziccardi/jnrpe/issues/87)
-
-
-
-## [3.1.1](https://github.com/ziccardi/jnrpe/compare/3.1.0...3.1.1) (2020-09-15)
-
-
-### Bug Fixes
-
-* 🐛 made the conf parameter global to all commands ([#75](https://github.com/ziccardi/jnrpe/issues/75)) ([dfef38f](https://github.com/ziccardi/jnrpe/commit/dfef38fb94d95d67b0399da2673dbe18b6629e5a))
 
 
 
