@@ -143,8 +143,10 @@ public class JnrpeNettyListenerService implements INetworkListener {
 
   public void bind(Binding binding) {
     var serverBootstrap = getServerBootStrap(binding.isSsl());
-    serverBootstrap.bind(binding.getPort());
-    EventManager.debug("[%s] Started listening on port %d", this.getName(), binding.getPort());
+    serverBootstrap.bind(binding.getIp(), binding.getPort());
+    EventManager.debug(
+        "[%s] Started listening on %s:%d %s",
+        this.getName(), binding.getIp(), binding.getPort(), binding.isSsl() ? "[SSL]" : "");
   }
 
   @Override
