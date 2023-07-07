@@ -15,13 +15,15 @@
  *******************************************************************************/
 package it.jnrpe.engine.services.config;
 
+import it.jnrpe.engine.events.EventManager;
 import it.jnrpe.engine.plugins.PluginRepository;
 import it.jnrpe.engine.services.commands.ExecutionResult;
 import it.jnrpe.engine.services.commands.ICommandDefinition;
 import it.jnrpe.engine.services.commands.ICommandInstance;
 import it.jnrpe.engine.services.network.Status;
-import it.jnrpe.engine.services.plugins.IPlugin;
-import java.util.Optional;
+import it.jnrpe.engine.services.plugins.CommandLine;
+import org.apache.commons.text.StringTokenizer;
+import org.apache.commons.text.matcher.StringMatcherFactory;
 
 public class CommandDefinition implements ICommandDefinition, Cloneable {
   private String name;
@@ -71,21 +73,49 @@ public class CommandDefinition implements ICommandDefinition, Cloneable {
 
   @Override
   public ICommandInstance instantiate(String... params) {
-    Optional<IPlugin> pluginInstance = PluginRepository.getInstance().getPlugin(this.plugin);
+    return PluginRepository.getInstance()
+        .getPlugin(this.plugin)
+        .<ICommandInstance>map(
+            p ->
+                () -> {
+                  CommandLine cl = new CommandLine(p);
+                  try {
+                    cl.parseArgs(
+                        new StringTokenizer(
+                                getArgs(),
+                                StringMatcherFactory.INSTANCE.spaceMatcher(),
+                                StringMatcherFactory.INSTANCE.quoteMatcher())
+                            .getTokenArray());
 
-    //      return () ->
-    //          new ExecutionResult(String.format("[%s -> %s](%s)", name, plugin, args),
-    // Status.OK);
-    return pluginInstance
-        .<ICommandInstance>map(iPlugin -> iPlugin::execute)
+                    ExecutionResult res = p.execute();
+                    final String label =
+                        switch (res.getStatus()) {
+                          case OK -> String.format("[%s - OK]", this.name);
+                          case WARNING -> String.format("[%s - WARNING]", this.name);
+                          case CRITICAL -> String.format("[%s - CRITICAL]", this.name);
+                          default -> String.format("[%s - UNKNOWN]", this.name);
+                        };
+                    return new ExecutionResult(
+                        String.format("%s - %s", label, res.getMessage()), res.getStatus());
+                  } catch (Exception e) {
+                    EventManager.error(
+                        "Error executing command: [%s]: %s", this.name, e.getMessage());
+
+                    return new ExecutionResult(
+                        String.format("[%s - UNKNOWN] - Error executing command", this.name),
+                        Status.UNKNOWN);
+                  }
+                })
         .orElseGet(
-            () ->
-                () ->
-                    new ExecutionResult(
-                        String.format(
-                            "Plugin [%s] required by command [%s] has not been found",
-                            name, plugin),
-                        Status.OK));
+            () -> {
+              EventManager.error(
+                  "Error executing command '%s': requested plugin '%s' has not been found",
+                  this.name, this.plugin);
+              return () ->
+                  new ExecutionResult(
+                      String.format("[%s - UNKNOWN] - Error executing command", this.name),
+                      Status.OK);
+            });
   }
 
   @Override
