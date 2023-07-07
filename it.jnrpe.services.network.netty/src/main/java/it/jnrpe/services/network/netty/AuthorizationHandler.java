@@ -72,6 +72,11 @@ public class AuthorizationHandler extends AbstractRemoteAddressFilter<InetSocket
     InetSocketAddress sa = (InetSocketAddress) userChannel.localAddress();
     String binding = sa.getHostString() + ":" + sa.getPort();
     var token = auth.getAuthToken(Map.of("BINDING", binding, "SRC_IP", remoteAddress.toString()));
+    if (token.isEmpty()) {
+      token =
+          auth.getAuthToken(
+              Map.of("BINDING", "0.0.0.0:" + sa.getPort(), "SRC_IP", remoteAddress.toString()));
+    }
 
     if (token.isPresent()) {
       userChannel.attr(AttributeKey.valueOf("TOKEN")).set(token.get());
