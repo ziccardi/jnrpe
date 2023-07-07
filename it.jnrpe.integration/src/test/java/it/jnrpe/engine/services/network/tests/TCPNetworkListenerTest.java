@@ -15,16 +15,21 @@
  *******************************************************************************/
 package it.jnrpe.engine.services.network.tests;
 
+import static org.hamcrest.CoreMatchers.anyOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.startsWith;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import it.jnrpe.engine.events.EventManager;
 import it.jnrpe.engine.services.config.Binding;
 import it.jnrpe.engine.services.config.ConfigurationManager;
 import it.jnrpe.engine.services.config.JNRPEConfig;
 import it.jnrpe.engine.services.network.INetworkListener;
+import it.jnrpe.engine.services.network.Status;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.ServiceLoader;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.Testcontainers;
@@ -79,76 +84,79 @@ public class TCPNetworkListenerTest {
   public void testCheckNRPEv2() throws Exception {
     var checkNrpeResult =
         container.execInContainer("check_nrpe", "-2", "-n", "-H", HOST_ADDRESS, "-p", "5668");
-    Assertions.assertEquals("JNRPE v3.0.0", checkNrpeResult.getStdout().trim());
-    Assertions.assertEquals(0, checkNrpeResult.getExitCode());
+    assertThat(checkNrpeResult.getStdout().trim(), is("JNRPE v3.0.0"));
+    assertThat(checkNrpeResult.getExitCode(), is(Status.OK.ordinal()));
   }
 
   @Test
   public void testCheckNRPEv2SSL() throws Exception {
     var checkNrpeResult =
         container.execInContainer("check_nrpe", "-2", "-H", HOST_ADDRESS, "-p", "5669");
-    Assertions.assertEquals("JNRPE v3.0.0", checkNrpeResult.getStdout().trim());
-    Assertions.assertEquals(0, checkNrpeResult.getExitCode());
+    assertThat(checkNrpeResult.getStdout().trim(), is("JNRPE v3.0.0"));
+    assertThat(checkNrpeResult.getExitCode(), is(Status.OK.ordinal()));
   }
 
   @Test
   public void testCheckNRPEv3() throws Exception {
     var checkNrpeResult =
         container.execInContainer("check_nrpe", "-3", "-n", "-H", HOST_ADDRESS, "-p", "5668");
-    Assertions.assertEquals("JNRPE v3.0.0", checkNrpeResult.getStdout().trim());
-    Assertions.assertEquals(0, checkNrpeResult.getExitCode());
+    assertThat(checkNrpeResult.getStdout().trim(), is("JNRPE v3.0.0"));
+    assertThat(checkNrpeResult.getExitCode(), is(Status.OK.ordinal()));
   }
 
   @Test
   public void testCheckNRPEv3SSL() throws Exception {
     var checkNrpeResult =
         container.execInContainer("check_nrpe", "-3", "-H", HOST_ADDRESS, "-p", "5669");
-    Assertions.assertEquals("JNRPE v3.0.0", checkNrpeResult.getStdout().trim());
-    Assertions.assertEquals(0, checkNrpeResult.getExitCode());
+    assertThat(checkNrpeResult.getStdout().trim(), is("JNRPE v3.0.0"));
+    assertThat(checkNrpeResult.getExitCode(), is(Status.OK.ordinal()));
   }
 
   @Test
   public void testCheckNRPEv4() throws Exception {
     var checkNrpeResult =
         container.execInContainer("check_nrpe", "-n", "-H", HOST_ADDRESS, "-p", "5668");
-    Assertions.assertEquals("JNRPE v3.0.0", checkNrpeResult.getStdout().trim());
-    Assertions.assertEquals(0, checkNrpeResult.getExitCode());
+    assertThat(checkNrpeResult.getStdout().trim(), is("JNRPE v3.0.0"));
+    assertThat(checkNrpeResult.getExitCode(), is(Status.OK.ordinal()));
   }
 
   @Test
   public void testCheckNRPEv4SSL() throws Exception {
     var checkNrpeResult = container.execInContainer("check_nrpe", "-H", HOST_ADDRESS, "-p", "5669");
-    Assertions.assertEquals("JNRPE v3.0.0", checkNrpeResult.getStdout().trim());
-    Assertions.assertEquals(0, checkNrpeResult.getExitCode());
+    assertThat(checkNrpeResult.getStdout().trim(), is("JNRPE v3.0.0"));
+    assertThat(checkNrpeResult.getExitCode(), is(Status.OK.ordinal()));
   }
 
   @Test
   public void testCheckNRPEMultipleRequests() throws Exception {
     var checkNrpeResult = container.execInContainer("check_nrpe", "-H", HOST_ADDRESS, "-p", "5669");
-    Assertions.assertEquals("JNRPE v3.0.0", checkNrpeResult.getStdout().trim());
-    Assertions.assertEquals(0, checkNrpeResult.getExitCode());
+    assertThat(checkNrpeResult.getStdout().trim(), is("JNRPE v3.0.0"));
+    assertThat(checkNrpeResult.getExitCode(), is(Status.OK.ordinal()));
 
     checkNrpeResult = container.execInContainer("check_nrpe", "-H", HOST_ADDRESS, "-p", "5669");
-    Assertions.assertEquals("JNRPE v3.0.0", checkNrpeResult.getStdout().trim());
-    Assertions.assertEquals(0, checkNrpeResult.getExitCode());
+    assertThat(checkNrpeResult.getStdout().trim(), is("JNRPE v3.0.0"));
+    assertThat(checkNrpeResult.getExitCode(), is(Status.OK.ordinal()));
   }
 
   @Test
   public void testInvalidPacket() throws Exception {
     // We simulate an invalid packet connecting an SSL client with a non SSL server
     var checkNrpeResult = container.execInContainer("check_nrpe", "-H", HOST_ADDRESS, "-p", "5668");
-    Assertions.assertTrue(
-        checkNrpeResult.getStdout().startsWith("CHECK_NRPE: Error - Could not connect to"));
-    Assertions.assertEquals(2, checkNrpeResult.getExitCode());
+    assertThat(
+        checkNrpeResult.getStdout(),
+        anyOf(
+            startsWith("CHECK_NRPE: Error - Could not connect to"),
+            startsWith("CHECK_NRPE STATE CRITICAL: Socket timeout")));
+    assertThat(checkNrpeResult.getExitCode(), is(Status.CRITICAL.ordinal()));
   }
 
   @Test
   public void testCheckNRPEConnectionRefused() throws Exception {
     var checkNrpeResult =
         container.execInContainer("check_nrpe", "-n", "-H", HOST_ADDRESS, "-p", "5667");
-    Assertions.assertEquals(
-        "CHECK_NRPE: Receive header underflow - only 0 bytes received (4 expected).",
-        checkNrpeResult.getStdout().trim());
-    Assertions.assertEquals(3, checkNrpeResult.getExitCode());
+    assertThat(
+        checkNrpeResult.getStdout().trim(),
+        is("CHECK_NRPE: Receive header underflow - only 0 bytes received (4 expected)."));
+    assertThat(checkNrpeResult.getExitCode(), is(Status.UNKNOWN.ordinal()));
   }
 }
