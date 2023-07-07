@@ -39,6 +39,7 @@ public class CommandExecutor {
     }
 
     EventManager.warn("Unknown command [%s]", commandName);
-    return new ExecutionResult(String.format("Unknown command [%s]", commandName), Status.UNKNOWN);
+    return new ExecutionResult(
+        String.format("[%s - UNKNOWN] - Error executing command", commandName), Status.UNKNOWN);
   }
 }

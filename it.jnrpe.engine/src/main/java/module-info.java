@@ -8,6 +8,8 @@ import it.jnrpe.engine.services.events.IEventManager;
 import it.jnrpe.engine.services.plugins.IPluginRepository;
 
 module it.jnrpe.engine {
+  requires org.apache.commons.text;
+
   exports it.jnrpe.engine.services.commands;
   exports it.jnrpe.engine.services.config;
   exports it.jnrpe.engine.services.events;
