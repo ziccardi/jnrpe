@@ -36,6 +36,11 @@ public class ConfigProvider implements IConfigProvider {
     return Optional.of(config);
   }
 
+  @Override
+  public String generateSampleConfig() {
+    return instance != null ? instance.generateSampleConfig() : "";
+  }
+
   public static ConfigProvider getInstance() {
     if (instance == null) {
       for (var confProvider : IConfigProvider.getInstances()) {

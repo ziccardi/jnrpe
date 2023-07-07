@@ -19,6 +19,7 @@ import it.jnrpe.engine.events.EventManager;
 import it.jnrpe.engine.services.events.LogEvent;
 import it.jnrpe.engine.services.plugins.CommandLine;
 import it.jnrpe.engine.services.plugins.CommandLine.Command;
+import it.jnrpe.server.commands.InitCommand;
 import it.jnrpe.server.commands.StartCommand;
 import it.jnrpe.server.commands.plugins.PluginsCommand;
 
@@ -26,7 +27,7 @@ import it.jnrpe.server.commands.plugins.PluginsCommand;
     name = "jnrpe",
     mixinStandardHelpOptions = true,
     versionProvider = Main.VersionProvider.class,
-    subcommands = {StartCommand.class, PluginsCommand.class})
+    subcommands = {StartCommand.class, PluginsCommand.class, InitCommand.class})
 public class Main {
 
   public static class VersionProvider implements CommandLine.IVersionProvider {
