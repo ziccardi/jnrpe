@@ -38,20 +38,13 @@ public class ExecCommand implements Runnable {
       cl.parseArgs(pluginParameters.toArray(new String[pluginParameters.size()]));
 
       ExecutionResult res = plugin.execute();
-      final String label;
-      switch (res.getStatus()) {
-        case OK:
-          label = String.format("[%s - OK]", pluginName);
-          break;
-        case WARNING:
-          label = String.format("[%s - WARNING]", pluginName);
-          break;
-        case CRITICAL:
-          label = String.format("[%s - CRITICAL]", pluginName);
-          break;
-        default:
-          label = String.format("[%s - UNKNOWN]", pluginName);
-      }
+      final String label =
+          switch (res.getStatus()) {
+            case OK -> String.format("[%s - OK]", pluginName);
+            case WARNING -> String.format("[%s - WARNING]", pluginName);
+            case CRITICAL -> String.format("[%s - CRITICAL]", pluginName);
+            default -> String.format("[%s - UNKNOWN]", pluginName);
+          };
       System.out.printf("%s - %s%n", label, res.getMessage());
     } catch (Exception e) {
       System.out.println("Error executing plugin: " + e.getMessage());
