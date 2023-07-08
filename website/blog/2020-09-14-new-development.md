@@ -20,19 +20,19 @@ interface to NRPE. JNRPE v3 supports many listeners at once.
 ![JNRPE ](assets/jnrpe_components.png)
 
 ## The extension points
-All of the core extension points are into the it.jnrpe.engine module (it will be renamed to _it.jnrpe.core_):
+All the core extension points are into the `it.jnrpe.engine module`:
 * **INetworkListener**: implementing this service will add a new listener to JNRPE. We can have more than one 
 _INetworkListener_ implementations and JNRPE will discover the list of available implementations at runtime.
-* **IConfigProvider**: This service must be implemented to parse a defined configuration format. By default JNRPE provides:
+* **IConfigProvider**: This service must be implemented to parse a defined configuration format. By default, JNRPE provides:
     * INI configuration parser
     * XML Configuration parser
     * yaml configuration parser
 * **IConfigSource**: by default JNRPE provides a filesystem configuration source. Other sources can be added to load, for
 example, from a datasource or a REST service.
-* **IEventManager**: JNRPE automatically dispatches all the events to all the available event managers. By default JNRPE
+* **IEventManager**: JNRPE automatically dispatches all the events to all the available event managers. By default, JNRPE
 provides a CONSOLE and a SLF4J event manager
 * **IPluginRespository**: by default JNRPE provides a `JavaServicePluginRepository` that loads all the plugins from the
 filesystem. Other implementation can be added to load the plugins in other ways.
 * **IPlugin**: each class implementing this service will be a plugin available to JNRPE.
 
-Code is still in early stage, but can be downloaded from https://github.com/ziccardi/jnrpe/tree/VERSION_300
+Code is still in early stage, but can be downloaded from the [github repo](https://github.com/ziccardi/jnrpe/releases/tag/3.0.0)
