@@ -1,16 +1,30 @@
-name: Bump version
+name: Website Publishing
 on:
   push:
     branches:
       - master
+  workflow_dispatch:
+
 jobs:
-  deploy:
+  publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-      - uses: redkubes/docusaurus-deploy-action@v1
+      - name: Check out repo
+        uses: actions/checkout@v2
+      - name: Set up Node
+        uses: actions/setup-node@v2
         with:
-          source-folder: website
-          git-user: ziccardi
-          git-password: ${{ secrets.GITHUB_TOKEN }}
-          deployment-branch: gh-pages
+          node-version: "12"
+      - name: Build Docusaurus website
+        run: |
+          cd website
+          npm install 
+          npm run build
+      - name: Deploy to GitHub Pages
+        if: success()
+        uses: crazy-max/ghaction-github-pages@v2
+        with:
+          target_branch: gh-pages
+          build_dir: website/build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
