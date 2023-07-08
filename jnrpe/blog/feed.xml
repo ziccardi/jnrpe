@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+    <channel>
+        <title>Massimiliano Ziccardi - JNRPE Blog</title>
+        <link>https://www.jnrpe.it/jnrpe/blog</link>
+        <description>The best place to stay up-to-date with the latest Massimiliano Ziccardi - JNRPE news and events.</description>
+        <lastBuildDate>Fri, 07 Jul 2023 06:00:00 GMT</lastBuildDate>
+        <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+        <generator>https://github.com/jpmonette/feed</generator>
+        <image>
+            <title>Massimiliano Ziccardi - JNRPE Blog</title>
+            <url>https://www.jnrpe.it/jnrpe/</url>
+            <link>https://www.jnrpe.it/jnrpe/blog</link>
+        </image>
+        <copyright>Copyright © 2023 Massimiliano Ziccardi</copyright>
+        <item>
+            <title><![CDATA[New Version 3.5.0]]></title>
+            <link>https://www.jnrpe.it/jnrpe/blog/2023/07/07.html</link>
+            <guid>https://www.jnrpe.it/jnrpe/blog/2023/07/07.html</guid>
+            <pubDate>Fri, 07 Jul 2023 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>A number of features and improvements has been implemented in the past months. Notable updates are:</p> <ul> <li>Support for NRPE protocol version 2, 3 and 4</li> <li>Support for SSL protocol (compatible with <code>check_nrpe</code>)</li> <li>Support for multiple binding address</li> <li>Support for p...</li></ul>]]></description>
+        </item>
+        <item>
+            <title><![CDATA[New Version 3.0.0]]></title>
+            <link>https://www.jnrpe.it/jnrpe/blog/2020/09/14/new-development.html</link>
+            <guid>https://www.jnrpe.it/jnrpe/blog/2020/09/14/new-development.html</guid>
+            <pubDate>Mon, 14 Sep 2020 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>Development of the new 3.0.0 version of JNRPE has started.
+Most important changes are:</p>
+<ul>
+<li><strong>support for Java 9 Modules:</strong> with this new architecture, each component of JNRPE will be a module, making it very
+easy to extend JNRPE functionalities by replacing existing modules or adding new ones.</li>
+<li><strong>support for different listeners:</strong> thanks to the modularity of the new source code, it will be very easy to add
+other listeners to the standard NRPE socket listener. For example, a REST listener could be added to provide a REST
+interface to NRPE. JNRPE v3 supports many listeners at once.</li>
+<li><strong>JNRPE plugins as modules:</strong> JNRPE plugins will be developed as Java 9 modules</li>
+<li><strong>support for NRPE protocol v3 and v4</strong></li>
+</ul>
+]]></description>
+        </item>
+    </channel>
+</rss>

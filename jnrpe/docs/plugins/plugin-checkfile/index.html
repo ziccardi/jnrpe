@@ -1,0 +1,107 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>CHECK_FILE · Massimiliano Ziccardi - JNRPE</title><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="generator" content="Docusaurus"/><meta name="description" content="This plugin is able to perform simple checks against files :"/><meta name="docsearch:version" content="2.0.3"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="CHECK_FILE · Massimiliano Ziccardi - JNRPE"/><meta property="og:type" content="website"/><meta property="og:url" content="https://www.jnrpe.it/jnrpe/"/><meta property="og:description" content="This plugin is able to perform simple checks against files :"/><meta property="og:image" content="https://www.jnrpe.it/jnrpe/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://www.jnrpe.it/jnrpe/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/jnrpe/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dark.min.css"/><link rel="alternate" type="application/atom+xml" href="https://www.jnrpe.it/jnrpe/blog/atom.xml" title="Massimiliano Ziccardi - JNRPE Blog ATOM Feed"/><link rel="alternate" type="application/rss+xml" href="https://www.jnrpe.it/jnrpe/blog/feed.xml" title="Massimiliano Ziccardi - JNRPE Blog RSS Feed"/><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli&amp;display=swap"/><link rel="stylesheet" href="/css/code-block-buttons.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/jnrpe/js/scrollSpy.js"></script><link rel="stylesheet" href="/jnrpe/css/main.css"/><script src="/jnrpe/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/jnrpe/"><h2 class="headerTitle">Massimiliano Ziccardi - JNRPE</h2></a><a href="/jnrpe/versions"><h3>2.0.3</h3></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="https://github.com/ziccardi/jnrpe" target="_self">GitHUB</a></li><li class=""><a href="https://www.jnrpe.it" target="_self">Home</a></li><li class=""><a href="/jnrpe/blog/" target="_self">Blog</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Plugins</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle collapsible">Introduction<span class="arrow"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="#565656" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg></span></h3><ul class="hide"><li class="navListItem"><a class="navItem" href="/jnrpe/docs/overview">Overview</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/get-jnrpe">Getting JNRPE</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle collapsible">Installing JNRPE<span class="arrow"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="#565656" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg></span></h3><ul class="hide"><li class="navListItem"><a class="navItem" href="/jnrpe/docs/installation/gui-installer">The GUI installer</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/installation/cli-installer">The Command Line installer</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/installation/directory-structure">The JNRPE Directory Structure</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle collapsible">The JNRPE Server<span class="arrow"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="#565656" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg></span></h3><ul class="hide"><li class="navListItem"><a class="navItem" href="/jnrpe/docs/server/server-overview">Overview</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/server/run-jnrpe">Running JNRPE</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/server/configure-jnrpe">Configuring JNRPE</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/server/interactive-console">Interactive Console</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle collapsible">Plugins<span class="arrow"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="#565656" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg></span></h3><ul class="hide"><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-exec">EXEC</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkfile">CHECK_FILE</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkdisk">CHECK_DISK</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkoracle">CHECK_ORACLE</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkprocs">CHECK_PROCS</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkjmx">CHECK_JMX</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkusers">CHECK_USERS</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkmysql">CHECK_MYSQL</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkmysqlquery">CHECK_MYSQL_QUERY</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkpgsql">CHECK_PGSQL</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checktime">CHECK_TIME</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checktomcat">CHECK_TOMCAT</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkhttp">CHECK_HTTP</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkssh">CHECK_SSH</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkping">CHECK_PING</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-test">TEST</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 id="__docusaurus" class="postHeaderTitle">CHECK_FILE</h1></header><article><div><span><p>This plugin is able to perform simple checks against files :</p>
+<ul>
+<li>Checks that a file exists (-f parameter )</li>
+<li>Checks that a file do not exists (-F parameter )</li>
+<li>Checks if file age falls inside a range</li>
+<li>Checks if file size falls inside a range</li>
+<li>Checks that a file contains a string</li>
+<li>Checks that a file do not contain a string</li>
+</ul>
+<p>Supported parameters are :</p>
+<ul>
+<li><p>--file/-f [FILENAME] Tells the plugin to return a critical status if the file FILENAME do not exists.
+Can't be used together with <strong>--FILE</strong></p></li>
+<li><p>--FILE/-F [FILENAME] Tells the plugin to return a critical status if the file FILENAME exists
+Can't be used together with <strong>--file</strong></p></li>
+<li><p>--critical/-c [AGE-RANGE] Tells the plugin to return a critical status if the file age (in seconds) falls inside the AGE-RANGE range.</p>
+<p><strong>Requires</strong>:  --file/f <br>
+<strong>Can't be used together with</strong>: --sizecritical</p>
+<p>Example:
+Example ranges :</p>
+<pre><code class="hljs"><span class="hljs-number">300</span>: - Critical status <span class="hljs-keyword">if</span> file <span class="hljs-keyword">is</span> older than <span class="hljs-number">300</span> seconds
+:<span class="hljs-number">300</span> - Critical status <span class="hljs-keyword">if</span> the file <span class="hljs-keyword">is</span> younger that <span class="hljs-number">301</span> seconds.
+<span class="hljs-number">50</span>:<span class="hljs-number">200</span> - Critical status <span class="hljs-keyword">if</span> file age <span class="hljs-keyword">is</span> between <span class="hljs-number">50</span> <span class="hljs-keyword">and</span> <span class="hljs-number">200</span> seconds.
+</code></pre></li>
+<li><p>--warning/w [AGE-RANGE] : same as <strong>--critical/-c</strong>, but returns a <strong>WARNING</strong> status.</p>
+<p><strong>Requires</strong>:  --file/f <br>
+<strong>Can't be used together with</strong>: --sizewarning</p></li>
+<li><p>--sizecritical/-C [SIZE-RANGE] : Tells the plugin to return a critical status if the file size falls inside the SIZE-RANGE range.</p>
+<p><strong>Requires</strong>:  --file/f <br>
+<strong>Can't be used together with</strong>: --critical/-c</p></li>
+<li><p>--sizewarning/-W [SIZE-RANGE] : same as <strong>sizecritical/-C</strong>, but returns a <strong>WARNING</strong> status.</p>
+<p><strong>Requires</strong>:  --file/f <br>
+<strong>Can't be used together with</strong>: --warning/-w</p></li>
+<li><p>--contains/-O [STRING,WARNINGRANGE,CRITICALRANGE] : Checks how many time <strong>STRING</strong> is found inside the file, then returns
+<strong>WARNING</strong>, <strong>OK</strong> or <strong>ERROR</strong>, according to the <strong>WARNINGRANGE</strong> and <strong>CRITICALRANGE</strong>.</p>
+<p><strong>Requires</strong>:  --file/f</p></li>
+<li><p>--notcontains/-N [STRING] : Tells the plugin to return a critical status if the file contains the string [STRING].</p>
+<p><strong>Requires</strong>:  --file/f</p></li>
+</ul>
+<h2><a class="anchor" aria-hidden="true" id="example-usage"></a><a href="#example-usage" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Example Usage</h2>
+<p>In the following example, we will monitor the age of a generic file.</p>
+<h3><a class="anchor" aria-hidden="true" id="configuration"></a><a href="#configuration" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Configuration</h3>
+<div class="tabs"><div class="nav-tabs"><div id="tab-group-57-tab-58" class="nav-link active" data-group="group_57" data-tab="tab-group-57-content-58">INI</div><div id="tab-group-57-tab-59" class="nav-link" data-group="group_57" data-tab="tab-group-57-content-59">XML</div></div><div class="tab-content"><div id="tab-group-57-content-58" class="tab-pane active" data-group="group_57" tabindex="-1"><div><span><pre><code class="hljs css language-bash">check_file : CHECK_FILE --file <span class="hljs-variable">$ARG1</span>$ --warning <span class="hljs-variable">$ARG2</span>$ --critical <span class="hljs-variable">$ARG3</span>$<br /></code></pre>
+</span></div></div><div id="tab-group-57-content-59" class="tab-pane" data-group="group_57" tabindex="-1"><div><span><pre><code class="hljs css language-bash">&lt;<span class="hljs-built_in">command</span> name=<span class="hljs-string">"check_file"</span> plugin_name=<span class="hljs-string">"CHECK_FILE"</span>&gt;<br />   &lt;arg name=<span class="hljs-string">"file"</span>  value=<span class="hljs-string">"<span class="hljs-variable">$ARG1</span>$"</span> /&gt;<br />   &lt;arg name=<span class="hljs-string">"warning"</span>  value=<span class="hljs-string">"<span class="hljs-variable">$ARG2</span>$"</span> /&gt;<br />   &lt;arg name=<span class="hljs-string">"critical"</span>  value=<span class="hljs-string">"<span class="hljs-variable">$ARG3</span>$"</span> /&gt;<br />&lt;/<span class="hljs-built_in">command</span>&gt;<br /></code></pre>
+</span></div></div></div></div>
+<p>Any of the parameters (<em>$ARG?$</em> macros) could be hardcoded inside the <strong>JNRPE</strong> configuration.</p>
+<h3><a class="anchor" aria-hidden="true" id="invocation"></a><a href="#invocation" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Invocation</h3>
+<p>The following invocation example will raise a warning if the file age is between 500 and 1000 seconds and a critical if the file is older than 1000 seconds</p>
+<pre><code class="hljs css language-bash">check_nrpe -n -H my.jnrpe.server -c check_file -a /path/to/my/file 500:1000 1000:
+</code></pre>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/jnrpe/docs/plugins/plugin-exec"><span class="arrow-prev">← </span><span>Previous</span></a><a class="docs-next button" href="/jnrpe/docs/plugins/plugin-checkdisk"><span>Next</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#example-usage">Example Usage</a><ul class="toc-headings"><li><a href="#configuration">Configuration</a></li><li><a href="#invocation">Invocation</a></li></ul></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/jnrpe/" class="nav-home"></a><div><h5>Docs</h5><a href="/jnrpe/docs/overview.html">Getting Started</a></div><div><h5>Community</h5><a href="/jnrpe/help">Help</a><a href="https://groups.google.com/forum/#!forum/js-jnrpe">JNRPE mailing list</a><a href="https://stackoverflow.com/questions/tagged/jnrpe" target="_blank" rel="noreferrer noopener">Stack Overflow</a></div><div><h5>Social</h5><a class="github-button" href="https://github.com/ziccardi/jnrpe" data-count-href="https://github.com/ziccardi/jnrpe/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">JNRPE</a></div></section><section class="copyright">Copyright © 2023 Massimiliano Ziccardi</section></footer></div></body></html>

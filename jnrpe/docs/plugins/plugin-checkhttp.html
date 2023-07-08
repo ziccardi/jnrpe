@@ -1,0 +1,108 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>CHECK_HTTP · Massimiliano Ziccardi - JNRPE</title><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="generator" content="Docusaurus"/><meta name="description" content="This plugin tests the HTTP service on the specified host. It can test normal (http) and secure (https) servers, follow "/><meta name="docsearch:version" content="2.0.3"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="CHECK_HTTP · Massimiliano Ziccardi - JNRPE"/><meta property="og:type" content="website"/><meta property="og:url" content="https://www.jnrpe.it/jnrpe/"/><meta property="og:description" content="This plugin tests the HTTP service on the specified host. It can test normal (http) and secure (https) servers, follow "/><meta property="og:image" content="https://www.jnrpe.it/jnrpe/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://www.jnrpe.it/jnrpe/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/jnrpe/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dark.min.css"/><link rel="alternate" type="application/atom+xml" href="https://www.jnrpe.it/jnrpe/blog/atom.xml" title="Massimiliano Ziccardi - JNRPE Blog ATOM Feed"/><link rel="alternate" type="application/rss+xml" href="https://www.jnrpe.it/jnrpe/blog/feed.xml" title="Massimiliano Ziccardi - JNRPE Blog RSS Feed"/><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli&amp;display=swap"/><link rel="stylesheet" href="/css/code-block-buttons.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/jnrpe/js/scrollSpy.js"></script><link rel="stylesheet" href="/jnrpe/css/main.css"/><script src="/jnrpe/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/jnrpe/"><h2 class="headerTitle">Massimiliano Ziccardi - JNRPE</h2></a><a href="/jnrpe/versions"><h3>2.0.3</h3></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="https://github.com/ziccardi/jnrpe" target="_self">GitHUB</a></li><li class=""><a href="https://www.jnrpe.it" target="_self">Home</a></li><li class=""><a href="/jnrpe/blog/" target="_self">Blog</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Plugins</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle collapsible">Introduction<span class="arrow"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="#565656" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg></span></h3><ul class="hide"><li class="navListItem"><a class="navItem" href="/jnrpe/docs/overview">Overview</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/get-jnrpe">Getting JNRPE</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle collapsible">Installing JNRPE<span class="arrow"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="#565656" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg></span></h3><ul class="hide"><li class="navListItem"><a class="navItem" href="/jnrpe/docs/installation/gui-installer">The GUI installer</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/installation/cli-installer">The Command Line installer</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/installation/directory-structure">The JNRPE Directory Structure</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle collapsible">The JNRPE Server<span class="arrow"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="#565656" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg></span></h3><ul class="hide"><li class="navListItem"><a class="navItem" href="/jnrpe/docs/server/server-overview">Overview</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/server/run-jnrpe">Running JNRPE</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/server/configure-jnrpe">Configuring JNRPE</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/server/interactive-console">Interactive Console</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle collapsible">Plugins<span class="arrow"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="#565656" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg></span></h3><ul class="hide"><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-exec">EXEC</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkfile">CHECK_FILE</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkdisk">CHECK_DISK</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkoracle">CHECK_ORACLE</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkprocs">CHECK_PROCS</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkjmx">CHECK_JMX</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkusers">CHECK_USERS</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkmysql">CHECK_MYSQL</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkmysqlquery">CHECK_MYSQL_QUERY</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkpgsql">CHECK_PGSQL</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checktime">CHECK_TIME</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checktomcat">CHECK_TOMCAT</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkhttp">CHECK_HTTP</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkssh">CHECK_SSH</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkping">CHECK_PING</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-test">TEST</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 id="__docusaurus" class="postHeaderTitle">CHECK_HTTP</h1></header><article><div><span><p>This plugin tests the HTTP service on the specified host. It can test normal (http) and secure (https) servers, follow
+redirects, search for strings and regular expressions, check connection times, and report on certificate expiration times.</p>
+<p>Supported parameters are:</p>
+<ul>
+<li><strong>---hostname/-H &lt;HOSTNAME&gt;</strong>: Host name or IP Address</li>
+<li><strong>---port/-p &lt;INTEGER&gt;</strong>: Port number; default is <code>80</code></li>
+<li><strong>---url/-u &lt;STRING&gt;</strong>: URL path to get or post, default is <code>/</code></li>
+<li><strong>---post/-p &lt;STRING&gt;</strong>: URL encoded POST data.</li>
+<li><strong>---warning/-w &lt;WARNING&gt;</strong>: Response threshold time to result in warning status (seconds).</li>
+<li><strong>---critical/-c &lt;CRITICAL&gt;</strong>: Response threshold time to result in warning status (seconds).</li>
+<li><strong>---timeout/-t &lt;INTEGER&gt;</strong>: Seconds before connection times out (default: <code>10</code>).</li>
+<li><strong>---header/-k &lt;HEADER&gt;</strong>: Any other tags to be sent in http header. Use multiple times for additional headers.</li>
+<li><strong>---useragent/-u &lt;AGENT&gt;</strong>: User agent http header value.</li>
+<li><strong>---authorization/-a &lt;AUTH&gt;</strong>: Username:password on sites using basic authentication.</li>
+<li><strong>---proxy-authorization/-b &lt;AUTH&gt;</strong>: Username:password on proxies using basic authentication.</li>
+<li><strong>---ssl/-S &lt;PORT&gt;</strong>: Connect via SSL. Defaults to <code>443</code> if not provided.</li>
+<li><strong>---method/-j &lt;METHOD&gt;</strong>: HTTP method (<code>GET</code>, <code>POST</code>, <code>HEAD</code>, etc)</li>
+<li><strong>---expect/-e &lt;STRING&gt;</strong>: Comma-delimited list of strings, at least one of them is expected in the first (status)
+line of the server response (default: <code>HTTP/1</code>.).</li>
+<li><strong>---string/-s &lt;STRING&gt;</strong>: String to expect in the content</li>
+<li><strong>--no-body/-N</strong> : Don't wait for document body: stop reading after headers.</li>
+<li><strong>---content-type/-T &lt;STRING&gt;</strong>: Specify Content-Type header media type when <code>POST</code>ing.</li>
+<li><strong>--linespan/-l</strong> : Allow regex to span newlines (must precede <code>-r</code> or <code>-R</code>).</li>
+<li><strong>---regex/-r &lt;STRING&gt;</strong>: Search page for regex string.</li>
+<li><strong>---eregi/-R &lt;STRING&gt;</strong>: Search page for case-insensitive regex string.</li>
+<li><strong>--invert-regex/-I</strong>: Return <code>CRITICAL</code> if regex found, <code>OK</code> if not.</li>
+<li><strong>---onredirect/-f &lt;STRING&gt;</strong>: How to handle redirected pages. Options: ok|warning|critical</li>
+<li><strong>---certificate/-C &lt;CERTIFICATE&gt;</strong>: Threshold value for the days a certificate has to be valid. Port defaults to 443
+(when this option is used the URL response is not checked.).</li>
+</ul>
+<h2><a class="anchor" aria-hidden="true" id="usage-examples"></a><a href="#usage-examples" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Usage Examples</h2>
+<h3><a class="anchor" aria-hidden="true" id="checking-web-server-status"></a><a href="#checking-web-server-status" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Checking web server status</h3>
+<p>The example checks if the web server is running on port 80.</p>
+<h4><a class="anchor" aria-hidden="true" id="configuration"></a><a href="#configuration" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Configuration</h4>
+<div class="tabs"><div class="nav-tabs"><div id="tab-group-7-tab-8" class="nav-link active" data-group="group_7" data-tab="tab-group-7-content-8">INI</div><div id="tab-group-7-tab-9" class="nav-link" data-group="group_7" data-tab="tab-group-7-content-9">XML</div></div><div class="tab-content"><div id="tab-group-7-content-8" class="tab-pane active" data-group="group_7" tabindex="-1"><div><span><pre><code class="hljs css language-text">CHECK_HTTP : CHECK_HTTP --hostname $ARG1$ --warning $ARG3$ --critical $ARG4$<br /></code></pre>
+</span></div></div><div id="tab-group-7-content-9" class="tab-pane" data-group="group_7" tabindex="-1"><div><span><pre><code class="hljs css language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">command</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"CHECK_HTTP"</span> <span class="hljs-attr">plugin_name</span>=<span class="hljs-string">"CHECK_HTTP"</span>&gt;</span><br />  <span class="hljs-tag">&lt;<span class="hljs-name">arg</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"hostname"</span>  <span class="hljs-attr">value</span>=<span class="hljs-string">"$ARG1$"</span> /&gt;</span><br />  <span class="hljs-tag">&lt;<span class="hljs-name">arg</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"port"</span>  <span class="hljs-attr">value</span>=<span class="hljs-string">"$ARG2$"</span> /&gt;</span><br />  <span class="hljs-tag">&lt;<span class="hljs-name">arg</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"warning"</span>  <span class="hljs-attr">value</span>=<span class="hljs-string">"$ARG3$"</span> /&gt;</span><br />  <span class="hljs-tag">&lt;<span class="hljs-name">arg</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"critical"</span>  <span class="hljs-attr">value</span>=<span class="hljs-string">"$ARG4$"</span> /&gt;</span><br /><span class="hljs-tag">&lt;/<span class="hljs-name">command</span>&gt;</span><br /></code></pre>
+</span></div></div></div></div>
+<h4><a class="anchor" aria-hidden="true" id="invocation"></a><a href="#invocation" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Invocation</h4>
+<p>The following call will throw a critical if the response time is 20 or more seconds and a warning if the response is 10 or more seconds.</p>
+<pre><code class="hljs css language-bash">$ check_nrpe -n -H 127.0.0.1 -c CHECK_HTTP -a mydomain.com 80 20: 10: 
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="checking-ssl-certificate-status"></a><a href="#checking-ssl-certificate-status" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Checking ssl certificate status</h3>
+<p>In the following example we will check the expiry date for a ssl certificate..</p>
+<p><strong>Configuration</strong></p>
+<div class="tabs"><div class="nav-tabs"><div id="tab-group-10-tab-11" class="nav-link active" data-group="group_10" data-tab="tab-group-10-content-11">INI</div><div id="tab-group-10-tab-12" class="nav-link" data-group="group_10" data-tab="tab-group-10-content-12">XML</div></div><div class="tab-content"><div id="tab-group-10-content-11" class="tab-pane active" data-group="group_10" tabindex="-1"><div><span><pre><code class="hljs css language-text">CHECK_HTTP : CHECK_HTTP --hostname $ARG1$ --certificate $ARG2$<br /></code></pre>
+</span></div></div><div id="tab-group-10-content-12" class="tab-pane" data-group="group_10" tabindex="-1"><div><span><pre><code class="hljs css language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">command</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"CHECK_HTTP"</span> <span class="hljs-attr">plugin_name</span>=<span class="hljs-string">"CHECK_HTTP"</span>&gt;</span><br />  <span class="hljs-tag">&lt;<span class="hljs-name">arg</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"hostname"</span>  <span class="hljs-attr">value</span>=<span class="hljs-string">"$ARG1$"</span> /&gt;</span><br />  <span class="hljs-tag">&lt;<span class="hljs-name">arg</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"certificate"</span>  <span class="hljs-attr">value</span>=<span class="hljs-string">"$ARG3$"</span> /&gt;</span><br /><span class="hljs-tag">&lt;/<span class="hljs-name">command</span>&gt;</span><br /></code></pre>
+</span></div></div></div></div>
+<p><strong>Invocation</strong></p>
+<p>The following will throw a critical if the ssl certificate expiry date falls within the specified range of 30 days or more</p>
+<pre><code class="hljs css language-bash">$ check_nrpe -n -H 127.0.0.1 -c CHECK_HTTP -a mydomain.com 80 30:
+</code></pre>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/jnrpe/docs/plugins/plugin-checktomcat"><span class="arrow-prev">← </span><span>Previous</span></a><a class="docs-next button" href="/jnrpe/docs/plugins/plugin-checkssh"><span>Next</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#usage-examples">Usage Examples</a><ul class="toc-headings"><li><a href="#checking-web-server-status">Checking web server status</a></li><li><a href="#checking-ssl-certificate-status">Checking ssl certificate status</a></li></ul></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/jnrpe/" class="nav-home"></a><div><h5>Docs</h5><a href="/jnrpe/docs/overview.html">Getting Started</a></div><div><h5>Community</h5><a href="/jnrpe/help">Help</a><a href="https://groups.google.com/forum/#!forum/js-jnrpe">JNRPE mailing list</a><a href="https://stackoverflow.com/questions/tagged/jnrpe" target="_blank" rel="noreferrer noopener">Stack Overflow</a></div><div><h5>Social</h5><a class="github-button" href="https://github.com/ziccardi/jnrpe" data-count-href="https://github.com/ziccardi/jnrpe/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">JNRPE</a></div></section><section class="copyright">Copyright © 2023 Massimiliano Ziccardi</section></footer></div></body></html>

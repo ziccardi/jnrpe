@@ -1,0 +1,142 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Configuring JNRPE · Massimiliano Ziccardi - JNRPE</title><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="generator" content="Docusaurus"/><meta name="description" content="The first operation to perform as soon as JNRPE has been installed, is a proper configuration. "/><meta name="docsearch:version" content="2.0.3"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Configuring JNRPE · Massimiliano Ziccardi - JNRPE"/><meta property="og:type" content="website"/><meta property="og:url" content="https://www.jnrpe.it/jnrpe/"/><meta property="og:description" content="The first operation to perform as soon as JNRPE has been installed, is a proper configuration. "/><meta property="og:image" content="https://www.jnrpe.it/jnrpe/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://www.jnrpe.it/jnrpe/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/jnrpe/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dark.min.css"/><link rel="alternate" type="application/atom+xml" href="https://www.jnrpe.it/jnrpe/blog/atom.xml" title="Massimiliano Ziccardi - JNRPE Blog ATOM Feed"/><link rel="alternate" type="application/rss+xml" href="https://www.jnrpe.it/jnrpe/blog/feed.xml" title="Massimiliano Ziccardi - JNRPE Blog RSS Feed"/><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli&amp;display=swap"/><link rel="stylesheet" href="/css/code-block-buttons.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/jnrpe/js/scrollSpy.js"></script><link rel="stylesheet" href="/jnrpe/css/main.css"/><script src="/jnrpe/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/jnrpe/"><h2 class="headerTitle">Massimiliano Ziccardi - JNRPE</h2></a><a href="/jnrpe/versions"><h3>2.0.3</h3></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="https://github.com/ziccardi/jnrpe" target="_self">GitHUB</a></li><li class=""><a href="https://www.jnrpe.it" target="_self">Home</a></li><li class=""><a href="/jnrpe/blog/" target="_self">Blog</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>The JNRPE Server</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle collapsible">Introduction<span class="arrow"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="#565656" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg></span></h3><ul class="hide"><li class="navListItem"><a class="navItem" href="/jnrpe/docs/overview">Overview</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/get-jnrpe">Getting JNRPE</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle collapsible">Installing JNRPE<span class="arrow"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="#565656" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg></span></h3><ul class="hide"><li class="navListItem"><a class="navItem" href="/jnrpe/docs/installation/gui-installer">The GUI installer</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/installation/cli-installer">The Command Line installer</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/installation/directory-structure">The JNRPE Directory Structure</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle collapsible">The JNRPE Server<span class="arrow"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="#565656" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg></span></h3><ul class="hide"><li class="navListItem"><a class="navItem" href="/jnrpe/docs/server/server-overview">Overview</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/server/run-jnrpe">Running JNRPE</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/jnrpe/docs/server/configure-jnrpe">Configuring JNRPE</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/server/interactive-console">Interactive Console</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle collapsible">Plugins<span class="arrow"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="#565656" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg></span></h3><ul class="hide"><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-exec">EXEC</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkfile">CHECK_FILE</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkdisk">CHECK_DISK</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkoracle">CHECK_ORACLE</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkprocs">CHECK_PROCS</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkjmx">CHECK_JMX</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkusers">CHECK_USERS</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkmysql">CHECK_MYSQL</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkmysqlquery">CHECK_MYSQL_QUERY</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkpgsql">CHECK_PGSQL</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checktime">CHECK_TIME</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checktomcat">CHECK_TOMCAT</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkhttp">CHECK_HTTP</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkssh">CHECK_SSH</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkping">CHECK_PING</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-test">TEST</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 id="__docusaurus" class="postHeaderTitle">Configuring JNRPE</h1></header><article><div><span><p>The first operation to perform as soon as JNRPE has been installed, is a proper configuration.
+As of JNRPE 2.0, 2 different configuration format are supported: <strong>ini</strong> (must have <em>ini</em> extension) and <strong>XML</strong>
+(must have <em>xml</em> extension).</p>
+<div class="tabs"><div class="nav-tabs"><div id="tab-group-66-tab-67" class="nav-link active" data-group="group_66" data-tab="tab-group-66-content-67">INI File</div><div id="tab-group-66-tab-68" class="nav-link" data-group="group_66" data-tab="tab-group-66-content-68">XML File</div></div><div class="tab-content"><div id="tab-group-66-content-67" class="tab-pane active" data-group="group_66" tabindex="-1"><div><span><p>The INI configuration file is splitted into two main sections:</p>
+<ul>
+<li><strong>server configuration</strong> : contains the service configuration (binding address/port, accepted client ip, plugin
+installation directory, etc). This section is identified by the label [server]</li>
+<li><strong>command configuration</strong> : contains the configuration of each command the server can execute.
+A command definition is very simple : just associates a command name and a list of arguments to a plugin name,
+so that you can refer to the plugin with the command name. Moreover, the command definition, configures the
+parameters to pass to the plugin. Many commands with different names can refer to the same plugin.
+This section is identified by the label [commands]</li>
+</ul>
+<p>To better understand what that means, let's analyze the configuration file below:</p>
+<pre><code class="hljs">[server]<br />accept-params : true<br />bind-address : 127.0.0.1:5666<br />plugin-path : /usr/local/jnrpe/plugins<br />allow-address : 127.0.0.1<br />backlog-size : 256<br />read-timeout : 5<br />write-timeout : 60<br /><br />[commands]<br />check_disk_C : CHECK_DISK --path C: --warning $ARG1$ --critical $ARG2$<br />check_disk_E : CHECK_DISK --path E: --warning $ARG1$ --critical $ARG2$<br /></code></pre>
+<ul>
+<li>[server] - this means we are starting the server section</li>
+<li>accept-params : true - means we want JNRPE to expand the $ARG?$ macros. If you set this to false,
+then arguments passed by check_nrpe (-a flag) will be ignored.</li>
+<li>bind-address : 127.0.0.1:5666 - means we want JNRPE to listen on the 127.0.0.1 IP at port 5666.
+You can repeat this setting to instruct JNRPE to listen to many addresses/ports. If you want the
+comunication between check_nrpe and JNRPE to be encrypted (check_nrpe default), write the address
+as ‘SSL/IPADDRESS:PORT’:</li>
+<li>bind-address : SSL/127.0.0.1:5666</li>
+<li>plugin-path : /usr/local/jnrpe/plugins - means that in ‘/usr/local/jnrpe/plugins’ JNRPE will
+find all the installed plugins.</li>
+<li>allow-address : 127.0.0.1 - means that JNRPE must accept request coming from 127.0.0.1. You can
+repeat this line to accept requests from many addresses.</li>
+<li>backlog-size : 256 - means that the maximum number of concurrent connection must be limited to 256.</li>
+<li>read-timeout : 5 - means that the connection will be closed if the client do not writes any data in 5 seconds.</li>
+<li>write-timeout : 60 - means that the connection will be closed if the server do not writes any data for
+more than 60 seconds.</li>
+<li>[commands] - means that the command section is starting Follows the command definition. The format is very simple:
+<pre><code class="hljs"><span class="hljs-selector-attr">[COMMAND_NAME]</span> : <span class="hljs-selector-attr">[PLUGIN_NAME]</span> <span class="hljs-selector-attr">[COMMAND_LINE]</span><br /></code></pre>
+Where:
+<ul>
+<li>[COMMAND_NAME] is the name you want to associate to this command definition</li>
+<li>[PLUGIN_NAME] is the plugin that must is execute the command</li>
+<li>COMMAND_LINE is the command line to be passed to the plugin. Any $ARG?$ macro will be replaced with the
+arguments received by check_nrpe (-a flag) if accept-params is true.</li>
+</ul></li>
+</ul>
+</span></div></div><div id="tab-group-66-content-68" class="tab-pane" data-group="group_66" tabindex="-1"><div><span><p>The XML configuration file iss composed of two main sections:</p>
+<ul>
+<li><strong>server section</strong> : contains the service configuration (binding address/port, accepted client ip, plugin
+installation directory, etc)</li>
+<li><strong>commands section</strong> : contains the configuration of each command the server can execute. A command definition
+is very simple : just associates a command name and a list of arguments to a plugin name, so that you can refer
+to the plugin with the command name. Moreover, the command definition, configures the parameters to pass to the
+plugin. Many commands with different names can refer to the same plugin.</li>
+</ul>
+<p>Let's explain with an example:</p>
+<pre><code class="hljs css language-xml"><span class="hljs-meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span><br /><span class="hljs-tag">&lt;<span class="hljs-name">config</span>&gt;</span><br />   <span class="hljs-tag">&lt;<span class="hljs-name">server</span> <span class="hljs-attr">accept-params</span>=<span class="hljs-string">"true"</span> <span class="hljs-attr">backlog-size</span>=<span class="hljs-string">"256"</span> <span class="hljs-attr">readTimeout</span>=<span class="hljs-string">"5"</span> <span class="hljs-attr">writeTimeout</span>=<span class="hljs-string">"60"</span>&gt;</span><br />      <span class="hljs-tag">&lt;<span class="hljs-name">bind</span> <span class="hljs-attr">address</span>=<span class="hljs-string">"127.0.0.1:5666"</span> <span class="hljs-attr">SSL</span>=<span class="hljs-string">"false"</span>/&gt;</span><br />      <span class="hljs-tag">&lt;<span class="hljs-name">allow</span> <span class="hljs-attr">ip</span>=<span class="hljs-string">"127.0.0.1"</span>/&gt;</span><br />      <span class="hljs-tag">&lt;<span class="hljs-name">plugin</span> <span class="hljs-attr">path</span>=<span class="hljs-string">"/usr/local/jnrpe/plugins"</span>/&gt;</span><br />   <span class="hljs-tag">&lt;/<span class="hljs-name">server</span>&gt;</span><br />   <span class="hljs-tag">&lt;<span class="hljs-name">commands</span>&gt;</span><br />      <span class="hljs-tag">&lt;<span class="hljs-name">command</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"check_disk_C"</span> <span class="hljs-attr">plugin_name</span>=<span class="hljs-string">"CHECK_DISK"</span>&gt;</span><br />         <span class="hljs-tag">&lt;<span class="hljs-name">arg</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"path"</span>  <span class="hljs-attr">value</span>=<span class="hljs-string">"C:"</span> /&gt;</span><br />         <span class="hljs-tag">&lt;<span class="hljs-name">arg</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"warning"</span>  <span class="hljs-attr">value</span>=<span class="hljs-string">"$ARG1$"</span> /&gt;</span><br />         <span class="hljs-tag">&lt;<span class="hljs-name">arg</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"critical"</span>  <span class="hljs-attr">value</span>=<span class="hljs-string">"$ARG2$"</span> /&gt;</span><br />      <span class="hljs-tag">&lt;/<span class="hljs-name">command</span>&gt;</span><br />      <span class="hljs-tag">&lt;<span class="hljs-name">command</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"check_disk_E"</span> <span class="hljs-attr">plugin_name</span>=<span class="hljs-string">"CHECK_DISK"</span>&gt;</span><br />         <span class="hljs-tag">&lt;<span class="hljs-name">arg</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"path"</span>  <span class="hljs-attr">value</span>=<span class="hljs-string">"E:"</span> /&gt;</span><br />         <span class="hljs-tag">&lt;<span class="hljs-name">arg</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"warning"</span>  <span class="hljs-attr">value</span>=<span class="hljs-string">"$ARG1$"</span> /&gt;</span><br />         <span class="hljs-tag">&lt;<span class="hljs-name">arg</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"critical"</span>  <span class="hljs-attr">value</span>=<span class="hljs-string">"$ARG2$"</span> /&gt;</span><br />      <span class="hljs-tag">&lt;/<span class="hljs-name">command</span>&gt;</span><br />   <span class="hljs-tag">&lt;/<span class="hljs-name">commands</span>&gt;</span><br /><span class="hljs-tag">&lt;/<span class="hljs-name">config</span>&gt;</span><br /></code></pre>
+<ul>
+<li>&lt;server&gt; - means we are starting the server section</li>
+<li>accept-params : true - means we want JNRPE to expand the $ARG?$ macros. If you set this to false, then parameters
+passed by check_nrpe will be ignored.</li>
+<li>backlog-size : 256 - means that the maximum number of concurrent connection must be limited to 256.</li>
+<li>read-timeout : 5 - means that the connection will be closed if the client do not writes any data in 5 seconds.</li>
+<li>write-timeout : 60 - means that the connection will be closed if the server do not writes any data for more than
+60 seconds.</li>
+<li>&lt;bind address=“127.0.0.1:5666” SSL=“false”/&gt; - means we want JNRPE to listen on the 127.0.0.1 IP at port 5666.
+You can repeat this setting more than one time to instruct JNRPE to listen to many address. * If you want the
+communication between check_nrpe and JNRPE to be encrypted (check_nrpe default) set SSL to ‘true’.</li>
+<li>&lt;plugin path=“/usr/local/jnrpe/plugins”/&gt; - means that in ‘/usr/local/jnrpe/plugins’ JNRPE will find all the
+installed plugins.</li>
+<li>&lt;allow ip=“127.0.0.1”/&gt; - means that JNRPE must accept request coming from 127.0.0.1. You can repeat this line
+to accept requests from many addresses.</li>
+<li>&lt;commands&gt; - means that the command section is starting Follows the command definition. The format is very simple:
+<pre><code class="hljs css language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">command</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"[COMMAND_NAME]"</span> <span class="hljs-attr">plugin_name</span>=<span class="hljs-string">"[PLUGIN_NAME]"</span>&gt;</span><br />   <span class="hljs-tag">&lt;<span class="hljs-name">arg</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"[ARG_NAME]"</span>  <span class="hljs-attr">value</span>=<span class="hljs-string">"[ARG_VALUE]"</span> /&gt;</span><br />   ...<br /><span class="hljs-tag">&lt;<span class="hljs-name">command</span>/&gt;</span><br /></code></pre>
+Where:
+<ul>
+<li>[COMMAND_NAME] is the name you want to associate to this command definition</li>
+<li>[PLUGIN_NAME] is the plugin that must is execute the command</li>
+<li>[ARG_NAME] is an argument to pass to the plugin. The line must be repeated for every argument you want to pass to the plugin.</li>
+<li>[ARG_VALUE] is the value of the argument. It can be a constant of an $ARG?$ variable. $ARG?$ variables
+will be replaced with the arguments received by check_nrpe if accept-params is true. All the [ARG_NAME]
+and all the [ARG_VALUE] will compose the command line to pass to the plugin.</li>
+</ul></li>
+</ul>
+</span></div></div></div></div>
+<p>The two configured command could be invoked like this:</p>
+<pre><code class="hljs css language-bash">check_nrpe -n -H 127.0.0.1 -c check_disk_E -a <span class="hljs-string">':10!:5'</span>
+check_nrpe -n -H 127.0.0.1 -c check_disk_C -a <span class="hljs-string">':20!:10'</span>
+</code></pre>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/jnrpe/docs/server/run-jnrpe"><span class="arrow-prev">← </span><span>Previous</span></a><a class="docs-next button" href="/jnrpe/docs/server/interactive-console"><span>Next</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/jnrpe/" class="nav-home"></a><div><h5>Docs</h5><a href="/jnrpe/docs/overview.html">Getting Started</a></div><div><h5>Community</h5><a href="/jnrpe/help">Help</a><a href="https://groups.google.com/forum/#!forum/js-jnrpe">JNRPE mailing list</a><a href="https://stackoverflow.com/questions/tagged/jnrpe" target="_blank" rel="noreferrer noopener">Stack Overflow</a></div><div><h5>Social</h5><a class="github-button" href="https://github.com/ziccardi/jnrpe" data-count-href="https://github.com/ziccardi/jnrpe/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">JNRPE</a></div></section><section class="copyright">Copyright © 2023 Massimiliano Ziccardi</section></footer></div></body></html>

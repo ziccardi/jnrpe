@@ -1,0 +1,80 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>CHECK_PGSQL · Massimiliano Ziccardi - JNRPE</title><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="generator" content="Docusaurus"/><meta name="description" content="This plugin tests connections to a PostgreSQL database server"/><meta name="docsearch:version" content="2.0.3"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="CHECK_PGSQL · Massimiliano Ziccardi - JNRPE"/><meta property="og:type" content="website"/><meta property="og:url" content="https://www.jnrpe.it/jnrpe/"/><meta property="og:description" content="This plugin tests connections to a PostgreSQL database server"/><meta property="og:image" content="https://www.jnrpe.it/jnrpe/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://www.jnrpe.it/jnrpe/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/jnrpe/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dark.min.css"/><link rel="alternate" type="application/atom+xml" href="https://www.jnrpe.it/jnrpe/blog/atom.xml" title="Massimiliano Ziccardi - JNRPE Blog ATOM Feed"/><link rel="alternate" type="application/rss+xml" href="https://www.jnrpe.it/jnrpe/blog/feed.xml" title="Massimiliano Ziccardi - JNRPE Blog RSS Feed"/><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli&amp;display=swap"/><link rel="stylesheet" href="/css/code-block-buttons.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/jnrpe/js/scrollSpy.js"></script><link rel="stylesheet" href="/jnrpe/css/main.css"/><script src="/jnrpe/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/jnrpe/"><h2 class="headerTitle">Massimiliano Ziccardi - JNRPE</h2></a><a href="/jnrpe/versions"><h3>2.0.3</h3></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="https://github.com/ziccardi/jnrpe" target="_self">GitHUB</a></li><li class=""><a href="https://www.jnrpe.it" target="_self">Home</a></li><li class=""><a href="/jnrpe/blog/" target="_self">Blog</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Plugins</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle collapsible">Introduction<span class="arrow"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="#565656" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg></span></h3><ul class="hide"><li class="navListItem"><a class="navItem" href="/jnrpe/docs/overview">Overview</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/get-jnrpe">Getting JNRPE</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle collapsible">Installing JNRPE<span class="arrow"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="#565656" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg></span></h3><ul class="hide"><li class="navListItem"><a class="navItem" href="/jnrpe/docs/installation/gui-installer">The GUI installer</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/installation/cli-installer">The Command Line installer</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/installation/directory-structure">The JNRPE Directory Structure</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle collapsible">The JNRPE Server<span class="arrow"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="#565656" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg></span></h3><ul class="hide"><li class="navListItem"><a class="navItem" href="/jnrpe/docs/server/server-overview">Overview</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/server/run-jnrpe">Running JNRPE</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/server/configure-jnrpe">Configuring JNRPE</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/server/interactive-console">Interactive Console</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle collapsible">Plugins<span class="arrow"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="#565656" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path><path d="M0 0h24v24H0z" fill="none"></path></svg></span></h3><ul class="hide"><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-exec">EXEC</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkfile">CHECK_FILE</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkdisk">CHECK_DISK</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkoracle">CHECK_ORACLE</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkprocs">CHECK_PROCS</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkjmx">CHECK_JMX</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkusers">CHECK_USERS</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkmysql">CHECK_MYSQL</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkmysqlquery">CHECK_MYSQL_QUERY</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkpgsql">CHECK_PGSQL</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checktime">CHECK_TIME</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checktomcat">CHECK_TOMCAT</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkhttp">CHECK_HTTP</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkssh">CHECK_SSH</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-checkping">CHECK_PING</a></li><li class="navListItem"><a class="navItem" href="/jnrpe/docs/plugins/plugin-test">TEST</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 id="__docusaurus" class="postHeaderTitle">CHECK_PGSQL</h1></header><article><div><span><p>This plugin tests connections to a PostgreSQL database server</p>
+<p>Supported parameters are:</p>
+<ul>
+<li><strong>--hostname/-H &lt;HOSTNAME&gt;</strong>: Host name, IP Address, or unix socket (must be an absolute path). Default is 'localhost'.</li>
+<li><strong>--port/-P &lt;PORT&gt;</strong>: Port number (default: 5432)</li>
+<li><strong>--database/-d &lt;DATABASE&gt;</strong>: Check database with indicated name</li>
+<li><strong>--logname/-l &lt;LOGNAME&gt;</strong>: Login name of user</li>
+<li><strong>--password/-p &lt;PASSWORD&gt;</strong>: Use the indicated password to authenticate the connection</li>
+<li><strong>--warning/-w &lt;WARNING&gt;</strong>: Response time to result in warning status (seconds). The syntax to be used is the Nagios threshold syntax</li>
+<li><strong>--critical/-c &lt;CRITICAL&gt;</strong>: Response time to result in critical status (seconds). The syntax to be used is the Nagios threshold syntax</li>
+<li><strong>--timeout/-t &lt;TIMEOUT&gt;</strong>: Seconds before connection times out (default: 10)
+You need a the pgsql JDBC Driver jar file in the same directory that this plugin is installed.</li>
+</ul>
+<h2><a class="anchor" aria-hidden="true" id="usage-example"></a><a href="#usage-example" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Usage Example</h2>
+<p>In the following example, we will check the connection to a PostgreSQL database.</p>
+<div class="tabs"><div class="nav-tabs"><div id="tab-group-28-tab-29" class="nav-link active" data-group="group_28" data-tab="tab-group-28-content-29">INI</div><div id="tab-group-28-tab-30" class="nav-link" data-group="group_28" data-tab="tab-group-28-content-30">XML</div></div><div class="tab-content"><div id="tab-group-28-content-29" class="tab-pane active" data-group="group_28" tabindex="-1"><div><span><pre><code class="hljs css language-text">  check_pgsql : CHECK_PGSQL --hostname $ARG1$ --port $ARG2$ --database $ARG3$ --logname $ARG4$ --password $ARG5$ --warning $ARG6$ --critical $ARG7$<br /></code></pre>
+</span></div></div><div id="tab-group-28-content-30" class="tab-pane" data-group="group_28" tabindex="-1"><div><span><pre><code class="hljs css language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">command</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"check_pgsql"</span> <span class="hljs-attr">plugin_name</span>=<span class="hljs-string">"CHECK_PGSQL"</span>&gt;</span><br />  <span class="hljs-tag">&lt;<span class="hljs-name">arg</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"hostname"</span>  <span class="hljs-attr">value</span>=<span class="hljs-string">"$ARG1$"</span> /&gt;</span><br />  <span class="hljs-tag">&lt;<span class="hljs-name">arg</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"port"</span>  <span class="hljs-attr">value</span>=<span class="hljs-string">"$ARG2$"</span> /&gt;</span><br />  <span class="hljs-tag">&lt;<span class="hljs-name">arg</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"database"</span>  <span class="hljs-attr">value</span>=<span class="hljs-string">"$ARG3$"</span> /&gt;</span><br />  <span class="hljs-tag">&lt;<span class="hljs-name">arg</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"logname"</span>  <span class="hljs-attr">value</span>=<span class="hljs-string">"$ARG4$"</span> /&gt;</span><br />  <span class="hljs-tag">&lt;<span class="hljs-name">arg</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"password"</span>  <span class="hljs-attr">value</span>=<span class="hljs-string">"$ARG5$"</span> /&gt;</span><br />  <span class="hljs-tag">&lt;<span class="hljs-name">arg</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"warning"</span>  <span class="hljs-attr">value</span>=<span class="hljs-string">"$ARG6$"</span> /&gt;</span><br />  <span class="hljs-tag">&lt;<span class="hljs-name">arg</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"critical"</span>  <span class="hljs-attr">value</span>=<span class="hljs-string">"$ARG7$"</span> /&gt;</span><br /><span class="hljs-tag">&lt;/<span class="hljs-name">command</span>&gt;</span><br /></code></pre>
+</span></div></div></div></div>
+<p>Any of the parameters (<code>$ARG?$</code> macros) could be hardcoded inside the JNRPE configuration.</p>
+<p><strong>Invocation</strong>
+The following will check the connection to a pgsql database. There will be a warning if the time to connection is 2 seconds or more and a critical if 10 seconds or more:</p>
+<pre><code class="hljs css language-bash">$ check_nrpe -n -H 127.0.0.1 -c check_pgsql -a localhost 5432 database username password 2: 10:
+</code></pre>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/jnrpe/docs/plugins/plugin-checkmysqlquery"><span class="arrow-prev">← </span><span>Previous</span></a><a class="docs-next button" href="/jnrpe/docs/plugins/plugin-checktime"><span>Next</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#usage-example">Usage Example</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/jnrpe/" class="nav-home"></a><div><h5>Docs</h5><a href="/jnrpe/docs/overview.html">Getting Started</a></div><div><h5>Community</h5><a href="/jnrpe/help">Help</a><a href="https://groups.google.com/forum/#!forum/js-jnrpe">JNRPE mailing list</a><a href="https://stackoverflow.com/questions/tagged/jnrpe" target="_blank" rel="noreferrer noopener">Stack Overflow</a></div><div><h5>Social</h5><a class="github-button" href="https://github.com/ziccardi/jnrpe" data-count-href="https://github.com/ziccardi/jnrpe/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">JNRPE</a></div></section><section class="copyright">Copyright © 2023 Massimiliano Ziccardi</section></footer></div></body></html>

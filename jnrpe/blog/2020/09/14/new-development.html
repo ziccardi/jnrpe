@@ -1,0 +1,91 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>New Version 3.0.0 · Massimiliano Ziccardi - JNRPE</title><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="generator" content="Docusaurus"/><meta name="description" content="Development of the new 3.0.0 version of JNRPE has started."/><meta name="docsearch:language" content="en"/><meta property="og:title" content="New Version 3.0.0 · Massimiliano Ziccardi - JNRPE"/><meta property="og:type" content="website"/><meta property="og:url" content="https://www.jnrpe.it/jnrpe/blog/2020/09/14/new-development"/><meta property="og:description" content="Development of the new 3.0.0 version of JNRPE has started."/><meta property="og:image" content="https://www.jnrpe.it/jnrpe/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://www.jnrpe.it/jnrpe/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/jnrpe/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dark.min.css"/><link rel="alternate" type="application/atom+xml" href="https://www.jnrpe.it/jnrpe/blog/atom.xml" title="Massimiliano Ziccardi - JNRPE Blog ATOM Feed"/><link rel="alternate" type="application/rss+xml" href="https://www.jnrpe.it/jnrpe/blog/feed.xml" title="Massimiliano Ziccardi - JNRPE Blog RSS Feed"/><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli&amp;display=swap"/><link rel="stylesheet" href="/css/code-block-buttons.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/jnrpe/js/scrollSpy.js"></script><link rel="stylesheet" href="/jnrpe/css/main.css"/><script src="/jnrpe/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/jnrpe/"><h2 class="headerTitle">Massimiliano Ziccardi - JNRPE</h2></a><a href="/jnrpe/versions"><h3>2.0.3</h3></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="https://github.com/ziccardi/jnrpe" target="_self">GitHUB</a></li><li class=""><a href="https://www.jnrpe.it" target="_self">Home</a></li><li class="siteNavGroupActive"><a href="/jnrpe/blog/" target="_self">Blog</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Recent Posts</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Recent Posts</h3><ul class=""><li class="navListItem"><a class="navItem" href="/jnrpe/blog/2023/07/07">New Version 3.5.0</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/jnrpe/blog/2020/09/14/new-development">New Version 3.0.0</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer postContainer blogContainer"><div class="wrapper"><div class="lonePost"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle"><a href="/jnrpe/blog/2020/09/14/new-development">New Version 3.0.0</a></h1><p class="post-meta">September 14, 2020</p><div class="authorBlock"><p class="post-authorName"><a href="https://twitter.com/jnrpe1" target="_blank" rel="noreferrer noopener">Massimiliano Ziccardi</a></p></div></header><div><span><p>Development of the new 3.0.0 version of JNRPE has started.
+Most important changes are:</p>
+<ul>
+<li><strong>support for Java 9 Modules:</strong> with this new architecture, each component of JNRPE will be a module, making it very
+easy to extend JNRPE functionalities by replacing existing modules or adding new ones.</li>
+<li><strong>support for different listeners:</strong> thanks to the modularity of the new source code, it will be very easy to add
+other listeners to the standard NRPE socket listener. For example, a REST listener could be added to provide a REST
+interface to NRPE. JNRPE v3 supports many listeners at once.</li>
+<li><strong>JNRPE plugins as modules:</strong> JNRPE plugins will be developed as Java 9 modules</li>
+<li><strong>support for NRPE protocol v3 and v4</strong></li>
+</ul>
+<!--truncate-->
+<h1><a class="anchor" aria-hidden="true" id="the-modules"></a><a href="#the-modules" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>The modules</h1>
+<p><img src="/jnrpe/blog/assets/jnrpe_components.png" alt="JNRPE "></p>
+<h2><a class="anchor" aria-hidden="true" id="the-extension-points"></a><a href="#the-extension-points" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>The extension points</h2>
+<p>All the core extension points are into the <code>it.jnrpe.engine module</code>:</p>
+<ul>
+<li><strong>INetworkListener</strong>: implementing this service will add a new listener to JNRPE. We can have more than one
+<em>INetworkListener</em> implementations and JNRPE will discover the list of available implementations at runtime.</li>
+<li><strong>IConfigProvider</strong>: This service must be implemented to parse a defined configuration format. By default, JNRPE provides:
+<ul>
+<li>INI configuration parser</li>
+<li>XML Configuration parser</li>
+<li>yaml configuration parser</li>
+</ul></li>
+<li><strong>IConfigSource</strong>: by default JNRPE provides a filesystem configuration source. Other sources can be added to load, for
+example, from a datasource or a REST service.</li>
+<li><strong>IEventManager</strong>: JNRPE automatically dispatches all the events to all the available event managers. By default, JNRPE
+provides a CONSOLE and a SLF4J event manager</li>
+<li><strong>IPluginRespository</strong>: by default JNRPE provides a <code>JavaServicePluginRepository</code> that loads all the plugins from the
+filesystem. Other implementation can be added to load the plugins in other ways.</li>
+<li><strong>IPlugin</strong>: each class implementing this service will be a plugin available to JNRPE.</li>
+</ul>
+<p>Code is still in early stage, but can be downloaded from the <a href="https://github.com/ziccardi/jnrpe/releases/tag/3.0.0">github repo</a></p>
+</span></div></div><div class="blogSocialSection"></div></div><div class="blog-recent"><a class="button" href="/jnrpe/blog/">Recent Posts</a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#the-extension-points">The extension points</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/jnrpe/" class="nav-home"></a><div><h5>Docs</h5><a href="/jnrpe/docs/overview.html">Getting Started</a></div><div><h5>Community</h5><a href="/jnrpe/help">Help</a><a href="https://groups.google.com/forum/#!forum/js-jnrpe">JNRPE mailing list</a><a href="https://stackoverflow.com/questions/tagged/jnrpe" target="_blank" rel="noreferrer noopener">Stack Overflow</a></div><div><h5>Social</h5><a class="github-button" href="https://github.com/ziccardi/jnrpe" data-count-href="https://github.com/ziccardi/jnrpe/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">JNRPE</a></div></section><section class="copyright">Copyright © 2023 Massimiliano Ziccardi</section></footer></div></body></html>
