@@ -16,7 +16,6 @@
 package it.jnrpe.engine.plugins.threshold;
 
 import it.jnrpe.engine.plugins.threshold.statemachine.*;
-import java.math.BigDecimal;
 import java.util.*;
 
 public class ThresholdParser {
@@ -49,35 +48,6 @@ public class ThresholdParser {
       ise.setIndex(position);
       ise.setThresholdString(thr);
       throw ise;
-    }
-  }
-
-  private static void test(String thr, BigDecimal value, boolean expected) throws Exception {
-    IThreshold threshold = parse(thr);
-    if (threshold.fallsInside(value) == expected) {
-      System.out.println(thr + " PASSED");
-    } else {
-      System.out.println(thr + " FAILED");
-    }
-  }
-
-  public static void main(String[] args) throws Exception {
-    try {
-      test("-10.5:20.9", new BigDecimal(-20), false);
-      test("-10.5:20.9", new BigDecimal(-1), true);
-      test("-10.5:20.9", new BigDecimal(0), true);
-      test("-10.5:20.9", new BigDecimal(5), true);
-      test("-10.5:20.9", new BigDecimal(10), true);
-      test("-10.5:20.9", new BigDecimal("20.9"), true);
-      test("-10.5:20.9", new BigDecimal("20.91"), false);
-    } catch (ThresholdParsingException tse) {
-      System.err.println(tse.getThresholdString());
-      for (int i = 1; i < tse.getIndex(); i++) {
-        System.err.print(' ');
-      }
-      System.err.println('^');
-      System.err.printf("Unexpected token. Expecting one of '%s'%n", tse.getExpectedToken());
-      tse.printStackTrace();
     }
   }
 }
