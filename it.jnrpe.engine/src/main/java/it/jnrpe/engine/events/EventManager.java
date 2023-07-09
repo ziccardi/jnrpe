@@ -42,7 +42,7 @@ public class EventManager {
     void apply(Event evt);
   }
 
-  public static IEventOption withMessage(final String message, final String... messageParams) {
+  public static IEventOption withMessage(final String message, final Object... messageParams) {
     return (event) -> event.setMessage(String.format(message, (Object[]) messageParams));
   }
 
@@ -85,7 +85,17 @@ public class EventManager {
   public static void error(IEventOption... options) {
     Event evt = new Event();
     Arrays.stream(options).forEach(option -> option.apply(evt));
-    emitLog(LogEvent.ERROR, evt.message, evt.exception);
+
+    if (evt.message == null && evt.exception == null) {
+      fatal("Event manager called with null message and null exception");
+      return;
+    }
+
+    if (evt.message == null) {
+      evt.message = evt.exception.getMessage();
+    }
+
+    emit(LogEvent.ERROR, evt.message, evt.exception);
   }
 
   public static void fatal(String message, Object... msgparams) {
