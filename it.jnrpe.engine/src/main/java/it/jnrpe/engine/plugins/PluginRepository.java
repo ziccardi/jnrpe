@@ -20,6 +20,12 @@ import it.jnrpe.engine.services.plugins.IPlugin;
 import it.jnrpe.engine.services.plugins.IPluginRepository;
 import java.util.*;
 
+/**
+ * This class serves as a storage repository for all the plugins that are currently installed in the
+ * JNRPE instance. It keeps track of these plugins in the computer's memory, allowing for efficient
+ * access and retrieval. The purpose of this repository is to provide a centralized location where
+ * the JNRPE instance can easily manage and interact with the installed plugins.
+ */
 public class PluginRepository implements IPluginRepository {
   private static PluginRepository INSTANCE;
 
@@ -37,15 +43,33 @@ public class PluginRepository implements IPluginRepository {
     EventManager.info("Plugin repository ready. %d plugin(s) loaded", plugins.size());
   }
 
+  /**
+   * Returns a collection of all the plugins available.
+   *
+   * @return A collection of all the plugins.
+   */
   @Override
   public Collection<IPlugin> getAllPlugins() {
     return plugins.values();
   }
 
+  /**
+   * Retrieves the plugin with the specified name from the collection of plugins.
+   *
+   * @param pluginName the name of the plugin to retrieve
+   * @return an Optional containing the plugin if found, or an empty Optional if not found
+   */
   public Optional<IPlugin> getPlugin(final String pluginName) {
     return Optional.ofNullable(plugins.get(pluginName));
   }
 
+  /**
+   * Returns the singleton instance of the PluginRepository class. If the instance does not exist,
+   * it creates a new instance and returns it. This method is thread-safe as it is marked as
+   * synchronized, ensuring only one thread can access it at a time.
+   *
+   * @return the singleton instance of the PluginRepository class
+   */
   public static synchronized IPluginRepository getInstance() {
     if (INSTANCE == null) {
       INSTANCE = new PluginRepository();
