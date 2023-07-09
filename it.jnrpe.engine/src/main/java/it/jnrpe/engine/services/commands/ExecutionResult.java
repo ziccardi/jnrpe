@@ -21,6 +21,9 @@ public class ExecutionResult {
   private final String message;
   private final Status status;
 
+  public static final ExecutionResult GENERAL_CHECK_ERROR =
+      new ExecutionResult("Internal check error", Status.UNKNOWN);
+
   public ExecutionResult(final String message, final Status status) {
     this.message = message;
     this.status = status;

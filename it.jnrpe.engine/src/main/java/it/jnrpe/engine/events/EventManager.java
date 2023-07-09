@@ -18,10 +18,37 @@ package it.jnrpe.engine.events;
 import it.jnrpe.engine.services.events.IEventManager;
 import it.jnrpe.engine.services.events.IEventType;
 import it.jnrpe.engine.services.events.LogEvent;
+import java.util.Arrays;
 import java.util.Collection;
 
 public class EventManager {
   private static final Collection<IEventManager> eventManagers = IEventManager.getInstances();
+
+  public static class Event {
+    private String message;
+    private Throwable exception;
+
+    private void setMessage(String message) {
+      this.message = message;
+    }
+
+    private void setException(Throwable exc) {
+      this.exception = exc;
+    }
+  }
+
+  @FunctionalInterface
+  public interface IEventOption {
+    void apply(Event evt);
+  }
+
+  public static IEventOption withMessage(final String message, final String... messageParams) {
+    return (event) -> event.setMessage(String.format(message, (Object[]) messageParams));
+  }
+
+  public static IEventOption withException(final Throwable exc) {
+    return (event) -> event.setException(exc);
+  }
 
   public static void emit(IEventType type, String message) {
     eventManagers.forEach(eventManager -> eventManager.onEvent(type, message));
@@ -53,6 +80,12 @@ public class EventManager {
 
   public static void error(String message, Object... msgparams) {
     emitLog(LogEvent.ERROR, message, msgparams);
+  }
+
+  public static void error(IEventOption... options) {
+    Event evt = new Event();
+    Arrays.stream(options).forEach(option -> option.apply(evt));
+    emitLog(LogEvent.ERROR, evt.message, evt.exception);
   }
 
   public static void fatal(String message, Object... msgparams) {
