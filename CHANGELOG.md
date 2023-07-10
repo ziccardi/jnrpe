@@ -1,3 +1,12 @@
+# [3.7.0](https://github.com/ziccardi/jnrpe/compare/3.6.0...3.7.0) (2023-07-10)
+
+
+### Features
+
+* **cli:** adds command to execute JNRPE commands ([45706e8](https://github.com/ziccardi/jnrpe/commit/45706e8777d18ac8159c02dd5f058ce957ab45ad))
+
+
+
 # [3.6.0](https://github.com/ziccardi/jnrpe/compare/3.5.0...3.6.0) (2023-07-09)
 
 
@@ -44,15 +53,6 @@
 ### Features
 
 * added simple token authentication and IP filtering ([efce8d4](https://github.com/ziccardi/jnrpe/commit/efce8d4f70da739ff01e6a8684e398c91bf4d639))
-
-
-
-## [3.2.1](https://github.com/ziccardi/jnrpe/compare/3.2.0...3.2.1) (2022-02-16)
-
-
-### Bug Fixes
-
-* fixed build script ([4e48310](https://github.com/ziccardi/jnrpe/commit/4e483107b6ea9466071924dfb2fdd93622836631))
 
 
 
