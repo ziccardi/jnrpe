@@ -21,11 +21,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ServerConfig {
-  private List<Binding> bindings;
+  private List<Binding> bindings = new ArrayList<>();
+  ;
 
-  public ServerConfig() {
-    bindings = new ArrayList<>();
-  }
+  public ServerConfig() {}
 
   ServerConfig(ServerConfig sc) {
     this.bindings = sc.bindings.stream().map(Binding::clone).collect(Collectors.toList());
@@ -37,6 +36,10 @@ public class ServerConfig {
 
   public void setBindings(List<Binding> bindings) {
     this.bindings = new ArrayList<>(bindings);
+  }
+
+  void addBinding(Binding b) {
+    this.bindings.add(b);
   }
 
   @Override

@@ -15,13 +15,23 @@
  *******************************************************************************/
 package it.jnrpe.engine.services.config;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class JNRPEConfig {
   private ServerConfig server;
   private CommandsConfig commands;
 
+  public JNRPEConfig() {}
+
+  @SafeVarargs
+  public JNRPEConfig(Consumer<JNRPEConfig>... options) {
+    Arrays.stream(options).forEach(o -> o.accept(this));
+  }
+
   private class ServerConfigReadOnly extends ServerConfig {
+
     @Override
     public List<Binding> getBindings() {
       return server.getBindings();
@@ -64,5 +74,21 @@ public class JNRPEConfig {
 
   public void setCommands(CommandsConfig commands) {
     this.commands = commands.clone();
+  }
+
+  public final JNRPEConfig withBinding(String address, int port, boolean ssl) {
+    if (this.server == null) {
+      this.server = new ServerConfig();
+    }
+    this.server.addBinding(new Binding(address, port, ssl));
+    return this;
+  }
+
+  public final JNRPEConfig withAllowedAddress(String address, int port, String allowedIP) {
+    this.server.getBindings().stream()
+        .filter(b -> b.getIp().equals(address) && b.getPort() == port)
+        .findFirst()
+        .ifPresent(b -> b.addAllowedAddress(allowedIP));
+    return this;
   }
 }

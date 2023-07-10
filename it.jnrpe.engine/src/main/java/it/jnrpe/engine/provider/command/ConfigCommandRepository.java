@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 public class ConfigCommandRepository implements ICommandRepository {
 
@@ -45,6 +46,10 @@ public class ConfigCommandRepository implements ICommandRepository {
                                 });
                       });
             });
+  }
+
+  ConfigCommandRepository(Consumer<Map<String, ICommandDefinition>> commandDefinitionProvider) {
+    commandDefinitionProvider.accept(this.commandDefinitions);
   }
 
   @Override

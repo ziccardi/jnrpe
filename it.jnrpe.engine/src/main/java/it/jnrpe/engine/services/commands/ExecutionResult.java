@@ -36,4 +36,9 @@ public class ExecutionResult {
   public String getMessage() {
     return message;
   }
+
+  public static ExecutionResult errorExecutingCommand(final String commandName) {
+    return new ExecutionResult(
+        String.format("[%s - UNKNOWN] - Error executing command", commandName), Status.UNKNOWN);
+  }
 }
