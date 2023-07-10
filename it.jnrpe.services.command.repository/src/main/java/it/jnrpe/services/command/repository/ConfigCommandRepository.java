@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.engine.provider.command;
+package it.jnrpe.services.command.repository;
 
 import it.jnrpe.engine.services.commands.ICommandDefinition;
 import it.jnrpe.engine.services.commands.ICommandRepository;
@@ -29,23 +29,20 @@ public class ConfigCommandRepository implements ICommandRepository {
   private final Map<String, ICommandDefinition> commandDefinitions = new HashMap<>();
 
   public ConfigCommandRepository() {
-    IConfigProvider.getInstances()
-        .forEach(
-            configProvider -> {
-              configProvider
-                  .getConfig()
-                  .ifPresent(
-                      config -> {
-                        config
-                            .getCommands()
-                            .getDefinitions()
-                            .forEach(
-                                commandDefinition -> {
-                                  this.commandDefinitions.put(
-                                      commandDefinition.getName(), commandDefinition);
-                                });
-                      });
-            });
+    IConfigProvider.getInstances().forEach(this::loadCommandsFromConfigProvider);
+  }
+
+  private void loadCommandsFromConfigProvider(IConfigProvider configProvider) {
+    if (configProvider.getConfig().isPresent()) {
+      var config = configProvider.getConfig().get();
+      config
+          .getCommands()
+          .getDefinitions()
+          .forEach(
+              commandDefinition -> {
+                this.commandDefinitions.put(commandDefinition.getName(), commandDefinition);
+              });
+    }
   }
 
   ConfigCommandRepository(Consumer<Map<String, ICommandDefinition>> commandDefinitionProvider) {

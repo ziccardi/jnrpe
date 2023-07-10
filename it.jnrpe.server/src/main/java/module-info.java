@@ -10,6 +10,8 @@ module it.jnrpe.server {
       it.jnrpe.engine;
   opens it.jnrpe.server.commands.plugins to
       it.jnrpe.engine;
+  opens it.jnrpe.server.commands.commands to
+      it.jnrpe.engine;
 
   requires it.jnrpe.engine;
 

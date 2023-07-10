@@ -1,5 +1,4 @@
 import it.jnrpe.engine.provider.auth.SimpleAuthProvider;
-import it.jnrpe.engine.provider.command.ConfigCommandRepository;
 import it.jnrpe.engine.provider.command.EmbeddedCommandsRepository;
 import it.jnrpe.engine.services.auth.IAuthService;
 import it.jnrpe.engine.services.commands.ICommandRepository;
@@ -18,6 +17,7 @@ module it.jnrpe.engine {
   exports it.jnrpe.engine.services.auth;
   exports it.jnrpe.engine.events;
   exports it.jnrpe.engine.plugins;
+  exports it.jnrpe.engine.commands;
 
   uses IConfigProvider;
   uses ICommandRepository;
@@ -26,8 +26,7 @@ module it.jnrpe.engine {
   uses it.jnrpe.engine.services.auth.IAuthService;
 
   provides ICommandRepository with
-      EmbeddedCommandsRepository,
-      ConfigCommandRepository;
+      EmbeddedCommandsRepository;
   provides IAuthService with
       SimpleAuthProvider;
 }

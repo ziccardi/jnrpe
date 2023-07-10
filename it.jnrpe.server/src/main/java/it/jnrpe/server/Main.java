@@ -21,13 +21,20 @@ import it.jnrpe.engine.services.plugins.CommandLine;
 import it.jnrpe.engine.services.plugins.CommandLine.Command;
 import it.jnrpe.server.commands.InitCommand;
 import it.jnrpe.server.commands.StartCommand;
+import it.jnrpe.server.commands.commands.CommandsCommand;
 import it.jnrpe.server.commands.plugins.PluginsCommand;
+import java.io.File;
 
 @Command(
     name = "jnrpe",
     mixinStandardHelpOptions = true,
     versionProvider = Main.VersionProvider.class,
-    subcommands = {StartCommand.class, PluginsCommand.class, InitCommand.class})
+    subcommands = {
+      StartCommand.class,
+      PluginsCommand.class,
+      CommandsCommand.class,
+      InitCommand.class
+    })
 public class Main {
 
   public static class VersionProvider implements CommandLine.IVersionProvider {
@@ -51,8 +58,22 @@ public class Main {
     return this.confFile;
   }
 
+  private int executionStrategy(CommandLine.ParseResult parseResult) {
+    // Parsing the configuration
+    File confFile = new File(getConfigFilePath());
+    if (!confFile.canRead()) {
+      EventManager.fatal("Unable to read the configuration file at %s", confFile.getAbsolutePath());
+      return -1;
+    }
+
+    ConfigSource.setConfigFile(confFile);
+    return new CommandLine.RunLast().execute(parseResult); // default execution strategy
+  }
+
   public static void main(String[] args) {
-    CommandLine cli = new CommandLine(new Main());
+    var app = new Main();
+
+    CommandLine cli = new CommandLine(app).setExecutionStrategy(app::executionStrategy);
 
     try {
       cli.execute(args);
