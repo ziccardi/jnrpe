@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2020, Massimiliano Ziccardi
+ * Copyright (C) 2023, Massimiliano Ziccardi
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,29 +15,26 @@
  *******************************************************************************/
 package it.jnrpe.engine.provider.command;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import it.jnrpe.engine.services.commands.ExecutionResult;
-import it.jnrpe.engine.services.commands.ICommandDefinition;
 import it.jnrpe.engine.services.commands.ICommandInstance;
 import it.jnrpe.engine.services.network.Status;
+import org.junit.jupiter.api.Test;
 
-public class NRPECheckCommand implements ICommandDefinition {
-  public static final String NAME = "_NRPE_CHECK";
-
-  private static class NRPECheckCommandInstance implements ICommandInstance {
-    @Override
-    public ExecutionResult execute() {
-      // TODO: Version should be dynamic
-      return new ExecutionResult("JNRPE v3.0.0", Status.OK);
-    }
+public class NRPECheckCommandTest {
+  @Test
+  public void testExecute() {
+    ICommandInstance commandInstance = new NRPECheckCommand().instantiate();
+    ExecutionResult result = commandInstance.execute();
+    assertEquals("JNRPE v3.0.0", result.getMessage());
+    assertEquals(Status.OK, result.getStatus());
   }
 
-  @Override
-  public String getName() {
-    return NAME;
-  }
-
-  @Override
-  public ICommandInstance instantiate(String... params) {
-    return new NRPECheckCommandInstance();
+  @Test
+  public void testInstantiate() {
+    NRPECheckCommand command = new NRPECheckCommand();
+    ICommandInstance instance = command.instantiate();
+    assertNotNull(instance);
   }
 }

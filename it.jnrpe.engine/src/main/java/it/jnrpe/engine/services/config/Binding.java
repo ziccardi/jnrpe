@@ -25,6 +25,14 @@ public class Binding implements Cloneable {
   private boolean ssl;
   private List<String> allow = new ArrayList<>();
 
+  public Binding() {}
+
+  public Binding(String ip, int port, boolean ssl) {
+    this.ip = ip;
+    this.port = port;
+    this.ssl = ssl;
+  }
+
   public int getPort() {
     return port;
   }
@@ -55,6 +63,10 @@ public class Binding implements Cloneable {
 
   public void setAllow(List<String> allow) {
     this.allow = new ArrayList<>(allow);
+  }
+
+  public void addAllowedAddress(String ip) {
+    this.allow.add(ip);
   }
 
   @Override

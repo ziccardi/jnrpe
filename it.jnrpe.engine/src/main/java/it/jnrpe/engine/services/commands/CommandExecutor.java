@@ -22,11 +22,20 @@ import it.jnrpe.engine.services.network.Status;
 import java.util.Optional;
 
 public class CommandExecutor {
-  private static final ICommandRepository commandRepository = CommandRepository.getInstance();
+  private final ICommandRepository commandRepository;
 
   // TODO: implement a way to activate a different auth service
-  private static final IAuthService authService =
-      IAuthService.getInstances().stream().findFirst().orElseThrow();
+  private final IAuthService authService;
+
+  public CommandExecutor() {
+    commandRepository = CommandRepository.getInstance();
+    authService = IAuthService.getInstances().stream().findFirst().orElseThrow();
+  }
+
+  CommandExecutor(ICommandRepository commandRepository, IAuthService authService) {
+    this.commandRepository = commandRepository;
+    this.authService = authService;
+  }
 
   public ExecutionResult execute(String token, String commandName, String... params) {
     if (!authService.authorize(token)) {
@@ -39,7 +48,6 @@ public class CommandExecutor {
     }
 
     EventManager.warn("Unknown command [%s]", commandName);
-    return new ExecutionResult(
-        String.format("[%s - UNKNOWN] - Error executing command", commandName), Status.UNKNOWN);
+    return ExecutionResult.errorExecutingCommand(commandName);
   }
 }

@@ -5,4 +5,10 @@
     <Match>
         <Class name="~it.jnrpe.engine.services.plugins.CommandLine.*"/>
     </Match>
+    <Match>
+        <Class name="~.*Test$"/>
+    </Match>
+    <Match>
+        <Package name="~test\..*"/>
+    </Match>
 </FindBugsFilter>

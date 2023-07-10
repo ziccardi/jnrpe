@@ -18,13 +18,22 @@ package it.jnrpe.engine.provider.auth;
 import it.jnrpe.engine.services.auth.IAction;
 import it.jnrpe.engine.services.auth.IAuthService;
 import it.jnrpe.engine.services.config.ConfigurationManager;
+import it.jnrpe.engine.services.config.JNRPEConfig;
 import java.util.*;
 
 public class SimpleAuthProvider implements IAuthService {
   private static final Map<String, Date> OTP = Collections.synchronizedMap(new HashMap<>());
   private static final long MAX_LIFESPAN = 2 * 60 * 1000;
 
+  @FunctionalInterface
+  static interface IAuthConfigurationProvider {
+    public Optional<JNRPEConfig> getConfiguration();
+  }
+
+  private final IAuthConfigurationProvider configurationProvider;
+
   public SimpleAuthProvider() {
+    this.configurationProvider = ConfigurationManager::getConfig;
     Timer timer = new Timer("AUTH-OTP-EXPIRATION-TIMER");
     timer.schedule(
         new TimerTask() {
@@ -37,6 +46,10 @@ public class SimpleAuthProvider implements IAuthService {
         30 * 1000L);
   }
 
+  SimpleAuthProvider(IAuthConfigurationProvider configurationProvider) {
+    this.configurationProvider = configurationProvider;
+  }
+
   @Override
   public String getName() {
     return "SIMPLEAUTH";
@@ -44,15 +57,22 @@ public class SimpleAuthProvider implements IAuthService {
 
   @Override
   public Optional<String> getAuthToken(Map<String, ?> credentials) {
+    if (credentials == null) {
+      return Optional.empty();
+    }
+
     // Required keys:
     // BINDING: BindingIP:PORT
     // SRC_IP: ip of the caller
-    assert credentials.containsKey("BINDING");
-    assert credentials.get("BINDING") instanceof String;
+    if (!credentials.containsKey("BINDING") || !(credentials.get("BINDING") instanceof String)) {
+      // TODO: log this event
+      return Optional.empty();
+    }
     String binding = (String) credentials.get("BINDING");
     String srcIp = (String) credentials.get("SRC_IP");
 
-    if (ConfigurationManager.getConfig()
+    if (configurationProvider
+        .getConfiguration()
         .flatMap(
             c ->
                 c.getServer().getBindings().stream()
