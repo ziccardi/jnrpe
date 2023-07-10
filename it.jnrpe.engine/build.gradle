@@ -13,7 +13,7 @@ jacocoTestReport {
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it, excludes: [
-                    "it/jnrpe/**/CommandLine.class"
+                    "**/it/jnrpe/**/CommandLine*.class"
             ])
         }))
     }

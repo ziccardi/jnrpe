@@ -52,7 +52,7 @@ jobs:
         java-version: 17
 
     - name: Build with Gradle
-      run: ./gradlew build
+      run: ./gradlew build -x test -x spotlessCheck -x spotbugsTest -x spotbugsMain -x javadoc
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
