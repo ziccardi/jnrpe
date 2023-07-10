@@ -6,6 +6,7 @@ dependencies {
     implementation project(':it.jnrpe.engine')
     runtimeOnly project(':it.jnrpe.services.config')
     runtimeOnly project(':it.jnrpe.services.network.netty')
+    runtimeOnly project(':it.jnrpe.services.command.repository')
     runtimeOnly project(':it.jnrpe.services.plugin.repository')
     runtimeOnly project(':it.jnrpe.services.plugins')
     runtimeOnly project(':it.jnrpe.services.events')
