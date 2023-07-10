@@ -31,7 +31,7 @@ jobs:
         with:
           java-version: 17
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew build -x test -x spotlessCheck -x spotbugsTest -x spotbugsMain
       - name: Publish Snapshot to Central Repository
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}

@@ -14,8 +14,12 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 17
+      - name: Check Style
+        run: ./gradlew spotlessCheck
       - name: Build
-        run: ./gradlew build -x test
+        run: ./gradlew build -x test -x spotlessCheck -x spotbugsTest -x spotbugsMain -x javadoc
+      - name: Run Static Analysis
+        run: ./gradlew spotbugsMain spotbugsTest
       - name: Run tests
         run: ./gradlew test
       - name: Coveralls
