@@ -18,63 +18,29 @@ package it.jnrpe.engine.services.config;
 import it.jnrpe.engine.events.EventManager;
 import it.jnrpe.engine.plugins.PluginRepository;
 import it.jnrpe.engine.services.commands.ExecutionResult;
-import it.jnrpe.engine.services.commands.ICommandDefinition;
+import it.jnrpe.engine.services.commands.ICommandInitializer;
 import it.jnrpe.engine.services.commands.ICommandInstance;
 import it.jnrpe.engine.services.network.Status;
 import it.jnrpe.engine.services.plugins.CommandLine;
 import org.apache.commons.text.StringTokenizer;
 import org.apache.commons.text.matcher.StringMatcherFactory;
 
-public class CommandDefinition implements ICommandDefinition, Cloneable {
-  private String name;
-  private String plugin;
-  private String args;
+public class CommandInitializer implements ICommandInitializer {
+  private final ICommandConfig commandConfig;
 
-  public CommandDefinition() {}
-
-  CommandDefinition(final CommandDefinition cc) {
-    this.name = cc.name;
-    this.plugin = cc.plugin;
-    this.args = cc.args;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public String getPlugin() {
-    return plugin;
-  }
-
-  public void setPlugin(String plugin) {
-    this.plugin = plugin;
-  }
-
-  public String getArgs() {
-    return args;
-  }
-
-  public void setArgs(String args) {
-    this.args = args;
+  public CommandInitializer(final ICommandConfig cc) {
+    this.commandConfig = cc;
   }
 
   @Override
-  public CommandDefinition clone() {
-    try {
-      return (CommandDefinition) super.clone();
-    } catch (CloneNotSupportedException cnse) {
-      throw new IllegalStateException("Never happens");
-    }
+  public String getName() {
+    return commandConfig.getName();
   }
 
   @Override
   public ICommandInstance instantiate(String... params) {
     return PluginRepository.getInstance()
-        .getPlugin(this.plugin)
+        .getPlugin(this.commandConfig.getPlugin())
         .<ICommandInstance>map(
             p ->
                 () -> {
@@ -82,7 +48,7 @@ public class CommandDefinition implements ICommandDefinition, Cloneable {
                   try {
                     cl.parseArgs(
                         new StringTokenizer(
-                                getArgs(),
+                                this.commandConfig.getArgs(),
                                 StringMatcherFactory.INSTANCE.spaceMatcher(),
                                 StringMatcherFactory.INSTANCE.quoteMatcher())
                             .getTokenArray());
@@ -90,19 +56,19 @@ public class CommandDefinition implements ICommandDefinition, Cloneable {
                     ExecutionResult res = p.execute();
                     final String label =
                         switch (res.getStatus()) {
-                          case OK -> String.format("[%s - OK]", this.name);
-                          case WARNING -> String.format("[%s - WARNING]", this.name);
-                          case CRITICAL -> String.format("[%s - CRITICAL]", this.name);
-                          default -> String.format("[%s - UNKNOWN]", this.name);
+                          case OK -> String.format("[%s - OK]", this.getName());
+                          case WARNING -> String.format("[%s - WARNING]", this.getName());
+                          case CRITICAL -> String.format("[%s - CRITICAL]", this.getName());
+                          default -> String.format("[%s - UNKNOWN]", this.getName());
                         };
                     return new ExecutionResult(
                         String.format("%s - %s", label, res.getMessage()), res.getStatus());
                   } catch (Exception e) {
                     EventManager.error(
-                        "Error executing command: [%s]: %s", this.name, e.getMessage());
+                        "Error executing command: [%s]: %s", this.getName(), e.getMessage());
 
                     return new ExecutionResult(
-                        String.format("[%s - UNKNOWN] - Error executing command", this.name),
+                        String.format("[%s - UNKNOWN] - Error executing command", this.getName()),
                         Status.UNKNOWN);
                   }
                 })
@@ -110,25 +76,25 @@ public class CommandDefinition implements ICommandDefinition, Cloneable {
             () -> {
               EventManager.error(
                   "Error executing command '%s': requested plugin '%s' has not been found",
-                  this.name, this.plugin);
+                  this.getName(), this.commandConfig.getPlugin());
               return () ->
                   new ExecutionResult(
-                      String.format("[%s - UNKNOWN] - Error executing command", this.name),
+                      String.format("[%s - UNKNOWN] - Error executing command", this.getName()),
                       Status.OK);
             });
   }
 
   @Override
   public String toString() {
-    return "CommandDefinition{"
+    return "CommandInitializer{"
         + "name='"
-        + name
+        + getName()
         + '\''
         + ", plugin='"
-        + plugin
+        + commandConfig.getPlugin()
         + '\''
         + ", args='"
-        + args
+        + commandConfig.getArgs()
         + '\''
         + '}';
   }

@@ -42,7 +42,7 @@ public class CommandExecutorTest {
     String token = "valid_token";
     String commandName = "command1";
     String[] params = {"param1", "param2"};
-    ICommandDefinition commandDefinition = mock(ICommandDefinition.class);
+    ICommandInitializer commandDefinition = mock(ICommandInitializer.class);
     ICommandInstance command = mock(ICommandInstance.class);
     ExecutionResult expectedResult = new ExecutionResult("result", Status.OK);
     when(authService.authorize(token)).thenReturn(true);

@@ -17,7 +17,7 @@ package it.jnrpe.engine.commands;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import it.jnrpe.engine.services.commands.ICommandDefinition;
+import it.jnrpe.engine.services.commands.ICommandInitializer;
 import it.jnrpe.engine.services.commands.ICommandInstance;
 import it.jnrpe.engine.services.commands.ICommandRepository;
 import java.lang.reflect.Field;
@@ -34,11 +34,11 @@ public class CommandRepositoryTest {
     Field commandsField = CommandRepository.class.getDeclaredField("commands");
     commandsField.setAccessible(true);
 
-    commandsField.set(commandRepository, new HashMap<String, ICommandDefinition>());
+    commandsField.set(commandRepository, new HashMap<String, ICommandInitializer>());
   }
 
-  private ICommandDefinition genTestCommandDefinition(String commandName) {
-    return new ICommandDefinition() {
+  private ICommandInitializer genTestCommandDefinition(String commandName) {
+    return new ICommandInitializer() {
       @Override
       public String getName() {
         return commandName;
@@ -52,12 +52,12 @@ public class CommandRepositoryTest {
   }
 
   private void addTestCommand(
-      final ICommandRepository commandRepository, ICommandDefinition commandDefinition)
+      final ICommandRepository commandRepository, ICommandInitializer commandDefinition)
       throws Exception {
     // Access the private commandDefinition list field...
     Field commandsField = CommandRepository.class.getDeclaredField("commands");
     commandsField.setAccessible(true);
-    var commandsMap = (Map<String, ICommandDefinition>) commandsField.get(commandRepository);
+    var commandsMap = (Map<String, ICommandInitializer>) commandsField.get(commandRepository);
 
     // Add the plugins to the repository
     commandsMap.put(commandDefinition.getName(), commandDefinition);
@@ -67,8 +67,8 @@ public class CommandRepositoryTest {
   public void testGetAllCommands() throws Exception {
     assertEquals(0, commandRepository.getAllCommands().size());
     // Add some commands to the repository
-    ICommandDefinition command1 = genTestCommandDefinition("command1");
-    ICommandDefinition command2 = genTestCommandDefinition("command2");
+    ICommandInitializer command1 = genTestCommandDefinition("command1");
+    ICommandInitializer command2 = genTestCommandDefinition("command2");
     addTestCommand(commandRepository, command1);
     addTestCommand(commandRepository, command2);
     assertEquals(2, commandRepository.getAllCommands().size());
@@ -77,7 +77,7 @@ public class CommandRepositoryTest {
   @Test
   public void testGetCommand() throws Exception {
     // Add a command to the repository
-    ICommandDefinition command = genTestCommandDefinition("command");
+    ICommandInitializer command = genTestCommandDefinition("command");
     addTestCommand(commandRepository, command);
     // Test positive case
     assertTrue(commandRepository.getCommand("command").isPresent());

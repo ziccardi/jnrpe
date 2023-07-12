@@ -15,6 +15,7 @@
  *******************************************************************************/
 package it.jnrpe.services.config.yaml.validator;
 
+import it.jnrpe.services.config.InvalidConfigurationException;
 import it.jnrpe.services.config.yaml.IConfigSectionValidator;
 import java.util.List;
 import java.util.Map;

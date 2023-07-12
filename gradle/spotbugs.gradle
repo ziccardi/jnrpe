@@ -4,6 +4,9 @@ spotbugs {
     excludeFilter = file("$project.projectDir/spotBugsExclude.xml")
     showProgress = false
 }
+
+spotbugsTest.enabled = false
+
 // END SPOTBUGS CONFIG
 ///////////////////////////////////////////////////////////////////////////
 

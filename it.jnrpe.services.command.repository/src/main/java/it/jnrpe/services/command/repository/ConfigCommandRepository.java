@@ -15,8 +15,9 @@
  *******************************************************************************/
 package it.jnrpe.services.command.repository;
 
-import it.jnrpe.engine.services.commands.ICommandDefinition;
+import it.jnrpe.engine.services.commands.ICommandInitializer;
 import it.jnrpe.engine.services.commands.ICommandRepository;
+import it.jnrpe.engine.services.config.CommandInitializer;
 import it.jnrpe.engine.services.config.IConfigProvider;
 import java.util.Collection;
 import java.util.HashMap;
@@ -26,7 +27,7 @@ import java.util.function.Consumer;
 
 public class ConfigCommandRepository implements ICommandRepository {
 
-  private final Map<String, ICommandDefinition> commandDefinitions = new HashMap<>();
+  private final Map<String, ICommandInitializer> commandDefinitions = new HashMap<>();
 
   public ConfigCommandRepository() {
     IConfigProvider.getInstances().forEach(this::loadCommandsFromConfigProvider);
@@ -39,23 +40,24 @@ public class ConfigCommandRepository implements ICommandRepository {
           .getCommands()
           .getDefinitions()
           .forEach(
-              commandDefinition -> {
-                this.commandDefinitions.put(commandDefinition.getName(), commandDefinition);
+              commandConfig -> {
+                this.commandDefinitions.put(
+                    commandConfig.getName(), new CommandInitializer(commandConfig));
               });
     }
   }
 
-  ConfigCommandRepository(Consumer<Map<String, ICommandDefinition>> commandDefinitionProvider) {
+  ConfigCommandRepository(Consumer<Map<String, ICommandInitializer>> commandDefinitionProvider) {
     commandDefinitionProvider.accept(this.commandDefinitions);
   }
 
   @Override
-  public Collection<ICommandDefinition> getAllCommands() {
+  public Collection<ICommandInitializer> getAllCommands() {
     return commandDefinitions.values();
   }
 
   @Override
-  public Optional<ICommandDefinition> getCommand(String commandName) {
+  public Optional<ICommandInitializer> getCommand(String commandName) {
     return Optional.ofNullable(commandDefinitions.get(commandName));
   }
 }

@@ -16,21 +16,69 @@
 package it.jnrpe.engine.provider.auth;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import it.jnrpe.engine.services.auth.IAction;
-import it.jnrpe.engine.services.config.JNRPEConfig;
+import it.jnrpe.engine.services.config.IBinding;
+import it.jnrpe.engine.services.config.ICommandsConfig;
+import it.jnrpe.engine.services.config.IJNRPEConfig;
+import it.jnrpe.engine.services.config.IServerConfig;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 import org.junit.jupiter.api.Test;
 
 class SimpleAuthProviderTest {
 
-  private SimpleAuthProvider getAuthProvider() {
-    return getAuthProvider(() -> new JNRPEConfig().withBinding("127.0.0.1", 8080, false));
+  private Consumer<IJNRPEConfig> withBinding(String ip, int port, boolean ssl) {
+    return (jnrpeConf) -> {
+      var currentBindings = jnrpeConf.getServer().getBindings();
+
+      var binding = mock(IBinding.class);
+      when(binding.getPort()).thenReturn(port);
+      when(binding.getIp()).thenReturn(ip);
+      when(binding.isSsl()).thenReturn(ssl);
+
+      currentBindings.add(binding);
+
+      when(jnrpeConf.getServer().getBindings()).thenReturn(currentBindings);
+    };
   }
 
-  private SimpleAuthProvider getAuthProvider(Supplier<JNRPEConfig> configSupplier) {
-    final JNRPEConfig config = configSupplier != null ? configSupplier.get() : new JNRPEConfig();
+  private Consumer<IJNRPEConfig> withAllowedAddress(String ip) {
+    return (jnrpeConf) -> {
+      jnrpeConf
+          .getServer()
+          .getBindings()
+          .forEach(
+              b -> {
+                var currentAllow = b.getAllow();
+                currentAllow.add(ip);
+                when(b.getAllow()).thenReturn(currentAllow);
+              });
+    };
+  }
+
+  @SafeVarargs
+  private IJNRPEConfig getTestConfig(Consumer<IJNRPEConfig>... options) {
+    var configMock = mock(IJNRPEConfig.class);
+    var serverConfigMock = mock(IServerConfig.class);
+    var commandsConfigMock = mock(ICommandsConfig.class);
+    when(configMock.getServer()).thenReturn(serverConfigMock);
+    when(configMock.getCommands()).thenReturn(commandsConfigMock);
+
+    when(serverConfigMock.getBindings()).thenReturn(new ArrayList<>());
+
+    Arrays.stream(options).forEach(o -> o.accept(configMock));
+    return configMock;
+  }
+
+  private SimpleAuthProvider getAuthProvider() {
+    return getAuthProvider(() -> getTestConfig(withBinding("127.0.0.1", 8080, false)));
+  }
+
+  private SimpleAuthProvider getAuthProvider(Supplier<IJNRPEConfig> configSupplier) {
+    final IJNRPEConfig config = configSupplier != null ? configSupplier.get() : getTestConfig();
 
     return new SimpleAuthProvider(() -> Optional.of(config));
   }
@@ -61,9 +109,8 @@ class SimpleAuthProviderTest {
     Optional<String> authToken =
         getAuthProvider(
                 () ->
-                    new JNRPEConfig()
-                        .withBinding("127.0.0.1", 8080, false)
-                        .withAllowedAddress("127.0.0.1", 8080, "127.0.0.1"))
+                    getTestConfig(
+                        withBinding("127.0.0.1", 8080, false), withAllowedAddress("127.0.0.1")))
             .getAuthToken(credentials);
     assertFalse(authToken.isPresent());
   }
@@ -87,16 +134,15 @@ class SimpleAuthProviderTest {
     Map<String, Object> credentials = new HashMap<>();
     credentials.put("BINDING", "127.0.0.1:8080");
     Optional<String> authToken =
-        getAuthProvider(() -> new JNRPEConfig().withBinding("127.0.0.1", 8080, false))
+        getAuthProvider(() -> getTestConfig(withBinding("127.0.0.1", 8080, false)))
             .getAuthToken(credentials);
     assertTrue(authToken.isPresent());
 
     authToken =
         getAuthProvider(
                 () ->
-                    new JNRPEConfig()
-                        .withBinding("127.0.0.1", 8080, false)
-                        .withAllowedAddress("127.0.0.1", 8080, "127.0.0.1"))
+                    getTestConfig(
+                        withBinding("127.0.0.1", 8080, false), withAllowedAddress("127.0.0.1")))
             .getAuthToken(credentials);
 
     assertFalse(authToken.isPresent());

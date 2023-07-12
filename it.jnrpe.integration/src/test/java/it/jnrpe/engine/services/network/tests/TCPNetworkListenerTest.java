@@ -21,9 +21,9 @@ import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import it.jnrpe.engine.events.EventManager;
-import it.jnrpe.engine.services.config.Binding;
 import it.jnrpe.engine.services.config.ConfigurationManager;
-import it.jnrpe.engine.services.config.JNRPEConfig;
+import it.jnrpe.engine.services.config.IBinding;
+import it.jnrpe.engine.services.config.IJNRPEConfig;
 import it.jnrpe.engine.services.network.INetworkListener;
 import it.jnrpe.engine.services.network.Status;
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.utility.DockerImageName;
 
 public class TCPNetworkListenerTest {
-  private static final JNRPEConfig config = ConfigurationManager.getConfig().orElseThrow();
+  private static final IJNRPEConfig config = ConfigurationManager.getConfig().orElseThrow();
   private static final Collection<INetworkListener> listeners = new ArrayList<>();
 
   private static final String HOST_ADDRESS = "host.testcontainers.internal";
@@ -45,7 +45,7 @@ public class TCPNetworkListenerTest {
   private static final GenericContainer container =
       new GenericContainer(DockerImageName.parse("ziccardi/jnrpe-test:latest"));
 
-  private static void bind(Binding binding) {
+  private static void bind(IBinding binding) {
     ServiceLoader.load(INetworkListener.class).stream()
         .map(ServiceLoader.Provider::get)
         .filter(l -> l.supportBinding(binding))
@@ -54,7 +54,7 @@ public class TCPNetworkListenerTest {
             netListener -> {
               if (netListener.supportBinding(binding)) {
                 EventManager.info(
-                    "Binding on port %d using network provider named '%s'",
+                    "BindingConfigProxy on port %d using network provider named '%s'",
                     binding.getPort(), netListener.getName());
                 netListener.bind(binding);
               }
@@ -70,7 +70,10 @@ public class TCPNetworkListenerTest {
   static void startJNRPE() {
     config.getServer().getBindings().forEach(TCPNetworkListenerTest::bind);
     Testcontainers.exposeHostPorts(
-        config.getServer().getBindings().stream().map(Binding::getPort).mapToInt(p -> p).toArray());
+        config.getServer().getBindings().stream()
+            .map(IBinding::getPort)
+            .mapToInt(p -> p)
+            .toArray());
     container.start();
   }
 

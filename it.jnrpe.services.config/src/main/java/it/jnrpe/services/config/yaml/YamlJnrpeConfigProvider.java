@@ -16,25 +16,25 @@
 package it.jnrpe.services.config.yaml;
 
 import it.jnrpe.engine.events.EventManager;
-import it.jnrpe.engine.services.config.IConfigProvider;
-import it.jnrpe.engine.services.config.IConfigSource;
-import it.jnrpe.engine.services.config.JNRPEConfig;
-import it.jnrpe.services.config.yaml.validator.InvalidConfigurationException;
+import it.jnrpe.engine.services.config.*;
+import it.jnrpe.services.config.InvalidConfigurationException;
+import it.jnrpe.services.config.yaml.internal.YAMLJNRPEConfig;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.ServiceLoader;
+import org.yaml.snakeyaml.TypeDescription;
 import org.yaml.snakeyaml.Yaml;
 
 public class YamlJnrpeConfigProvider implements IConfigProvider {
 
-  private static Optional<JNRPEConfig> config = Optional.empty();
+  private static Optional<IJNRPEConfig> config = Optional.empty();
 
   @Override
   public String getProviderName() {
     return "YAML";
   }
 
-  public Optional<JNRPEConfig> getConfig() {
+  public Optional<IJNRPEConfig> getConfig() {
     if (config.isEmpty()) {
       try {
         config = parseConfig();
@@ -46,7 +46,7 @@ public class YamlJnrpeConfigProvider implements IConfigProvider {
     return config;
   }
 
-  public Optional<JNRPEConfig> parseConfig() throws IOException {
+  private Optional<IJNRPEConfig> parseConfig() throws IOException {
     // Retrieve the config source
     ServiceLoader<IConfigSource> configSourceServiceLoader =
         ServiceLoader.load(IConfigSource.class);
@@ -63,6 +63,17 @@ public class YamlJnrpeConfigProvider implements IConfigProvider {
 
     if (optionalConfigSource.isPresent()) {
       Yaml yaml = new Yaml();
+      var yamlConfigDescription = new TypeDescription(YAMLJNRPEConfig.class, YAMLJNRPEConfig.class);
+      yamlConfigDescription.addPropertyParameters("server", YAMLJNRPEConfig.ServerConfig.class);
+
+      var serverConfigDescription =
+          new TypeDescription(IServerConfig.class, YAMLJNRPEConfig.ServerConfig.class);
+      // yamlConfigDescription.addPropertyParameters("bindings", ArrayList.class);
+      serverConfigDescription.putListPropertyType("binding", YAMLJNRPEConfig.Binding.class);
+
+      yaml.addTypeDescription(yamlConfigDescription);
+      yaml.addTypeDescription(serverConfigDescription);
+      yaml.addTypeDescription(new TypeDescription(IBinding.class, YAMLJNRPEConfig.Binding.class));
       try {
         new ConfigValidator().validate(yaml.load(optionalConfigSource.get().getConfigStream()));
       } catch (InvalidConfigurationException ice) {
@@ -71,7 +82,8 @@ public class YamlJnrpeConfigProvider implements IConfigProvider {
       }
 
       return Optional.of(
-          yaml.loadAs(optionalConfigSource.get().getConfigStream(), JNRPEConfig.class));
+          new YamlJNRPEConfigProxy(
+              yaml.loadAs(optionalConfigSource.get().getConfigStream(), YAMLJNRPEConfig.class)));
     }
 
     EventManager.warn("No config services have been provided");

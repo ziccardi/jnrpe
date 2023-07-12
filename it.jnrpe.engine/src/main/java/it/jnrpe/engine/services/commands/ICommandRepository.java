@@ -25,7 +25,7 @@ public interface ICommandRepository {
     return list;
   }
 
-  Optional<ICommandDefinition> getCommand(String commandName);
+  Optional<ICommandInitializer> getCommand(String commandName);
 
-  Collection<ICommandDefinition> getAllCommands();
+  Collection<ICommandInitializer> getAllCommands();
 }

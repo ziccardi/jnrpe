@@ -29,7 +29,7 @@ public interface IConfigProvider {
 
   String getProviderName();
 
-  Optional<JNRPEConfig> getConfig();
+  Optional<IJNRPEConfig> getConfig();
 
   String generateSampleConfig();
 }

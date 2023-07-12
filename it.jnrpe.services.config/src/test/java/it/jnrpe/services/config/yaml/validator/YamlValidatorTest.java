@@ -17,6 +17,7 @@ package it.jnrpe.services.config.yaml.validator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import it.jnrpe.services.config.InvalidConfigurationException;
 import it.jnrpe.services.config.yaml.ConfigValidator;
 import org.junit.jupiter.api.Test;
 import org.yaml.snakeyaml.Yaml;

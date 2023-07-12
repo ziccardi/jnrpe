@@ -20,9 +20,9 @@ import java.util.Optional;
 public class ConfigurationManager {
   private ConfigurationManager() {}
 
-  private static JNRPEConfig CONFIG;
+  private static IJNRPEConfig CONFIG;
 
-  public static synchronized Optional<JNRPEConfig> getConfig() {
+  public static synchronized Optional<IJNRPEConfig> getConfig() {
     if (CONFIG != null) {
       return Optional.of(CONFIG);
     }

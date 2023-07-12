@@ -20,9 +20,9 @@ import java.util.Optional;
 public class ConfigProvider implements IConfigProvider {
   private static ConfigProvider instance;
 
-  private JNRPEConfig config;
+  private IJNRPEConfig config;
 
-  private ConfigProvider(JNRPEConfig config) {
+  private ConfigProvider(IJNRPEConfig config) {
     this.config = config;
   }
 
@@ -32,7 +32,7 @@ public class ConfigProvider implements IConfigProvider {
   }
 
   @Override
-  public Optional<JNRPEConfig> getConfig() {
+  public Optional<IJNRPEConfig> getConfig() {
     return Optional.of(config);
   }
 
@@ -44,7 +44,7 @@ public class ConfigProvider implements IConfigProvider {
   public static ConfigProvider getInstance() {
     if (instance == null) {
       for (var confProvider : IConfigProvider.getInstances()) {
-        Optional<JNRPEConfig> conf = confProvider.getConfig();
+        Optional<IJNRPEConfig> conf = confProvider.getConfig();
         if (conf.isPresent()) {
           instance = new ConfigProvider(conf.get());
           break;

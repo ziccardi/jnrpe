@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2020, Massimiliano Ziccardi
+ * Copyright (C) 2023, Massimiliano Ziccardi
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,37 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.engine.services.config;
+package it.jnrpe.services.config.xml.pojo;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
-public class ServerConfig {
-  private List<Binding> bindings = new ArrayList<>();
-  ;
+public class XMLCommands {
+  private List<XMLCommand> commandList = new ArrayList<>();
 
-  public ServerConfig() {}
+  public static XMLCommands parse(Element commandsElement) {
+    XMLCommands commands = new XMLCommands();
 
-  ServerConfig(ServerConfig sc) {
-    this.bindings = sc.bindings.stream().map(Binding::clone).collect(Collectors.toList());
+    // Unmarshal degli elementi "command" (lista)
+    NodeList commandNodes = commandsElement.getElementsByTagName("command");
+    for (int i = 0; i < commandNodes.getLength(); i++) {
+      Element commandElement = (Element) commandNodes.item(i);
+
+      commands.commandList.add(XMLCommand.parse(commandElement));
+    }
+
+    return commands;
   }
 
-  public List<Binding> getBindings() {
-    return Collections.unmodifiableList(bindings);
-  }
-
-  public void setBindings(List<Binding> bindings) {
-    this.bindings = new ArrayList<>(bindings);
-  }
-
-  void addBinding(Binding b) {
-    this.bindings.add(b);
-  }
-
-  @Override
-  public String toString() {
-    return "ServerConfig{" + "bindings=" + bindings + '}';
+  public List<XMLCommand> getCommandList() {
+    return Collections.unmodifiableList(commandList);
   }
 }

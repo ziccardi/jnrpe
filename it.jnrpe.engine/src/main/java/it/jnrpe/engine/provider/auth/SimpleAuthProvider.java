@@ -18,7 +18,7 @@ package it.jnrpe.engine.provider.auth;
 import it.jnrpe.engine.services.auth.IAction;
 import it.jnrpe.engine.services.auth.IAuthService;
 import it.jnrpe.engine.services.config.ConfigurationManager;
-import it.jnrpe.engine.services.config.JNRPEConfig;
+import it.jnrpe.engine.services.config.IJNRPEConfig;
 import java.util.*;
 
 public class SimpleAuthProvider implements IAuthService {
@@ -27,7 +27,7 @@ public class SimpleAuthProvider implements IAuthService {
 
   @FunctionalInterface
   static interface IAuthConfigurationProvider {
-    public Optional<JNRPEConfig> getConfiguration();
+    public Optional<IJNRPEConfig> getConfiguration();
   }
 
   private final IAuthConfigurationProvider configurationProvider;

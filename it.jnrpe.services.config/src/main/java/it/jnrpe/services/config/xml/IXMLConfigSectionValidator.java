@@ -13,10 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.services.config.yaml.validator;
+package it.jnrpe.services.config.xml;
 
-public class InvalidConfigurationException extends Exception {
-  public InvalidConfigurationException(String msg) {
-    super(msg);
-  }
+import it.jnrpe.services.config.InvalidConfigurationException;
+import org.w3c.dom.Node;
+
+public interface IXMLConfigSectionValidator {
+  void validate(Node xmlNode) throws InvalidConfigurationException;
+
+  void checkConstraints() throws InvalidConfigurationException;
 }
