@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2020, Massimiliano Ziccardi
+ * Copyright (C) 2023, Massimiliano Ziccardi
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.engine.services.commands;
+package it.jnrpe.services.config.xml.validator;
 
-public interface ICommandDefinition {
-  String getName();
-
-  ICommandInstance instantiate(String... params);
+public class XMLAllowConfigValidator extends AbstractXMLSectionValidator {
+  public XMLAllowConfigValidator() {
+    super(new String[] {"ip"}, new String[] {"ip"});
+  }
 }

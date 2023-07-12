@@ -16,7 +16,7 @@
 package it.jnrpe.engine.commands;
 
 import it.jnrpe.engine.events.EventManager;
-import it.jnrpe.engine.services.commands.ICommandDefinition;
+import it.jnrpe.engine.services.commands.ICommandInitializer;
 import it.jnrpe.engine.services.commands.ICommandRepository;
 import java.util.Collection;
 import java.util.HashMap;
@@ -27,7 +27,7 @@ public class CommandRepository implements ICommandRepository {
 
   private static CommandRepository INSTANCE;
 
-  private final Map<String, ICommandDefinition> commands = new HashMap<>();
+  private final Map<String, ICommandInitializer> commands = new HashMap<>();
 
   private CommandRepository() {
     ICommandRepository.getInstances()
@@ -42,12 +42,12 @@ public class CommandRepository implements ICommandRepository {
   }
 
   @Override
-  public Collection<ICommandDefinition> getAllCommands() {
+  public Collection<ICommandInitializer> getAllCommands() {
     return commands.values();
   }
 
   @Override
-  public Optional<ICommandDefinition> getCommand(String commandName) {
+  public Optional<ICommandInitializer> getCommand(String commandName) {
     return Optional.ofNullable(commands.get(commandName));
   }
 

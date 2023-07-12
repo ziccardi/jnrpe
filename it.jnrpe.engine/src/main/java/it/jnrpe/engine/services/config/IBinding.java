@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2020, Massimiliano Ziccardi
+ * Copyright (C) 2023, Massimiliano Ziccardi
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.engine.services.network;
+package it.jnrpe.engine.services.config;
 
-import it.jnrpe.engine.services.config.IBinding;
+import java.util.List;
 
-public interface INetworkListener {
-  String getName();
+public interface IBinding {
+  int getPort();
 
-  void bind(IBinding binding);
+  String getIp();
 
-  void shutdown();
+  boolean isSsl();
 
-  boolean supportBinding(IBinding binding);
+  List<String> getAllow();
 }

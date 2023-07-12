@@ -15,7 +15,7 @@
  *******************************************************************************/
 package it.jnrpe.engine.provider.command;
 
-import it.jnrpe.engine.services.commands.ICommandDefinition;
+import it.jnrpe.engine.services.commands.ICommandInitializer;
 import it.jnrpe.engine.services.commands.ICommandRepository;
 import java.util.Collection;
 import java.util.HashMap;
@@ -24,19 +24,19 @@ import java.util.Optional;
 
 public class EmbeddedCommandsRepository implements ICommandRepository {
 
-  private final Map<String, ICommandDefinition> commands = new HashMap<>();
+  private final Map<String, ICommandInitializer> commands = new HashMap<>();
 
   public EmbeddedCommandsRepository() {
     commands.put(NRPECheckCommand.NAME, new NRPECheckCommand());
   }
 
   @Override
-  public Optional<ICommandDefinition> getCommand(String commandName) {
+  public Optional<ICommandInitializer> getCommand(String commandName) {
     return Optional.ofNullable(commands.get(commandName));
   }
 
   @Override
-  public Collection<ICommandDefinition> getAllCommands() {
+  public Collection<ICommandInitializer> getAllCommands() {
     return commands.values();
   }
 }

@@ -15,11 +15,11 @@
  *******************************************************************************/
 package it.jnrpe.services.config.yaml.validator;
 
+import it.jnrpe.services.config.InvalidConfigurationException;
 import it.jnrpe.services.config.yaml.IConfigSectionValidator;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public abstract class AbstractSectionValidator implements IConfigSectionValidator {
   private final List<String> validSections;
@@ -34,17 +34,12 @@ public abstract class AbstractSectionValidator implements IConfigSectionValidato
   public void validate(Object section) throws InvalidConfigurationException {
     if (section instanceof Map) {
       var data = (Map<String, Object>) section;
-      var invalidKeys =
-          data.keySet().stream()
-              .filter(s -> !validSections.contains(s))
-              .collect(Collectors.toList());
+      var invalidKeys = data.keySet().stream().filter(s -> !validSections.contains(s)).toList();
       if (!invalidKeys.isEmpty()) {
         throw new InvalidConfigurationException("Unknown section(s) found: " + invalidKeys);
       }
       List<String> missingMandatoryKeys =
-          this.mandatorySections.stream()
-              .filter(s -> !data.containsKey(s))
-              .collect(Collectors.toList());
+          this.mandatorySections.stream().filter(s -> !data.containsKey(s)).toList();
       if (!missingMandatoryKeys.isEmpty()) {
         throw new InvalidConfigurationException(
             "Missing mandatory key(s): " + missingMandatoryKeys);

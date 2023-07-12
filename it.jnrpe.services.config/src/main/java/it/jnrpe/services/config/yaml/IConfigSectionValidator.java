@@ -15,7 +15,7 @@
  *******************************************************************************/
 package it.jnrpe.services.config.yaml;
 
-import it.jnrpe.services.config.yaml.validator.InvalidConfigurationException;
+import it.jnrpe.services.config.InvalidConfigurationException;
 
 public interface IConfigSectionValidator {
   void validate(Object section) throws InvalidConfigurationException;

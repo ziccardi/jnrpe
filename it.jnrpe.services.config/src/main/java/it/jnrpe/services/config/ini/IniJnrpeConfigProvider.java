@@ -16,7 +16,7 @@
 package it.jnrpe.services.config.ini;
 
 import it.jnrpe.engine.services.config.IConfigProvider;
-import it.jnrpe.engine.services.config.JNRPEConfig;
+import it.jnrpe.engine.services.config.IJNRPEConfig;
 import java.util.Optional;
 
 public class IniJnrpeConfigProvider implements IConfigProvider {
@@ -26,7 +26,7 @@ public class IniJnrpeConfigProvider implements IConfigProvider {
   }
 
   @Override
-  public Optional<JNRPEConfig> getConfig() {
+  public Optional<IJNRPEConfig> getConfig() {
     return Optional.empty();
   }
 

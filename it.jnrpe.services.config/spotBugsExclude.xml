@@ -7,4 +7,16 @@
         <Method name="getConfig" />
         <Bug pattern="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD"/>
     </Match>
+    <Match>
+        <Class name="it.jnrpe.services.config.yaml.internal.YAMLJNRPEConfig"/>
+        <Bug code="EI,EI2"/>
+    </Match>
+    <Match>
+        <Class name="~it.jnrpe.services.config.yaml.YamlJNRPEConfigProxy\$.*"/>
+        <Bug code="EI2"/>
+    </Match>
+    <Match>
+        <Class name="~.*Test"/>
+        <Bug code="EI2"/>
+    </Match>
 </FindBugsFilter>

@@ -41,7 +41,7 @@ public class CommandExecutor {
     if (!authService.authorize(token)) {
       return new ExecutionResult(String.format("Unauthorised [%s]", commandName), Status.UNKNOWN);
     }
-    final Optional<ICommandDefinition> command = commandRepository.getCommand(commandName);
+    final Optional<ICommandInitializer> command = commandRepository.getCommand(commandName);
 
     if (command.isPresent()) {
       return command.get().instantiate(params).execute();

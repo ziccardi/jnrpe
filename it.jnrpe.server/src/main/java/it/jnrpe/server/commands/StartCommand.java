@@ -16,9 +16,9 @@
 package it.jnrpe.server.commands;
 
 import it.jnrpe.engine.events.EventManager;
-import it.jnrpe.engine.services.config.Binding;
+import it.jnrpe.engine.services.config.IBinding;
 import it.jnrpe.engine.services.config.IConfigProvider;
-import it.jnrpe.engine.services.config.JNRPEConfig;
+import it.jnrpe.engine.services.config.IJNRPEConfig;
 import it.jnrpe.engine.services.network.INetworkListener;
 import it.jnrpe.engine.services.plugins.CommandLine;
 import it.jnrpe.server.ConfigSource;
@@ -33,7 +33,7 @@ public class StartCommand implements Callable<Void> {
 
   @CommandLine.ParentCommand private Main jnrpe;
 
-  private void bind(Binding binding) {
+  private void bind(IBinding binding) {
     ServiceLoader.load(INetworkListener.class).stream()
         .map(ServiceLoader.Provider::get)
         .filter(l -> l.supportBinding(binding))
@@ -42,7 +42,7 @@ public class StartCommand implements Callable<Void> {
             netListener -> {
               if (netListener.supportBinding(binding)) {
                 EventManager.info(
-                    "Binding on port %d using network provider named '%s'",
+                    "BindingConfigProxy on port %d using network provider named '%s'",
                     binding.getPort(), netListener.getName());
                 netListener.bind(binding);
               }
@@ -67,10 +67,10 @@ public class StartCommand implements Callable<Void> {
     ServiceLoader<IConfigProvider> configProviderServiceLoader =
         ServiceLoader.load(IConfigProvider.class);
 
-    Optional<JNRPEConfig> config = Optional.empty();
+    Optional<IJNRPEConfig> config = Optional.empty();
 
     for (IConfigProvider configProvider : configProviderServiceLoader) {
-      Optional<JNRPEConfig> conf = configProvider.getConfig();
+      Optional<IJNRPEConfig> conf = configProvider.getConfig();
       if (conf.isPresent()) {
         config = conf;
         break;

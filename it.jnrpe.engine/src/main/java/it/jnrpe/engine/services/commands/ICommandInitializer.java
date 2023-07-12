@@ -13,16 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.engine.services.network;
+package it.jnrpe.engine.services.commands;
 
-import it.jnrpe.engine.services.config.IBinding;
-
-public interface INetworkListener {
+public interface ICommandInitializer {
   String getName();
 
-  void bind(IBinding binding);
-
-  void shutdown();
-
-  boolean supportBinding(IBinding binding);
+  ICommandInstance instantiate(String... params);
 }

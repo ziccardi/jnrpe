@@ -15,6 +15,7 @@
  *******************************************************************************/
 package it.jnrpe.services.config.yaml;
 
+import it.jnrpe.services.config.InvalidConfigurationException;
 import it.jnrpe.services.config.yaml.validator.*;
 import java.util.HashMap;
 import java.util.Map;

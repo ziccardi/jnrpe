@@ -17,7 +17,7 @@ package it.jnrpe.server.commands.commands;
 
 import it.jnrpe.engine.commands.CommandRepository;
 import it.jnrpe.engine.services.commands.ExecutionResult;
-import it.jnrpe.engine.services.commands.ICommandDefinition;
+import it.jnrpe.engine.services.commands.ICommandInitializer;
 import it.jnrpe.engine.services.plugins.CommandLine;
 import java.util.List;
 
@@ -32,7 +32,7 @@ public class ExecCommand implements Runnable {
   @CommandLine.Parameters(index = "1..*")
   private List<String> commandParameters;
 
-  private void execute(ICommandDefinition command) {
+  private void execute(ICommandInitializer command) {
     try {
       var args =
           commandParameters == null || commandParameters.isEmpty()

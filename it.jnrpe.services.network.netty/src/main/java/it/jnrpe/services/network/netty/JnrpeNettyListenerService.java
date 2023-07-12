@@ -24,7 +24,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.ssl.SslHandler;
 import it.jnrpe.engine.events.EventManager;
-import it.jnrpe.engine.services.config.Binding;
+import it.jnrpe.engine.services.config.IBinding;
 import it.jnrpe.engine.services.network.INetworkListener;
 import java.math.BigInteger;
 import java.security.*;
@@ -141,7 +141,7 @@ public class JnrpeNettyListenerService implements INetworkListener {
     return serverBootstrap;
   }
 
-  public void bind(Binding binding) {
+  public void bind(IBinding binding) {
     var serverBootstrap = getServerBootStrap(binding.isSsl());
     serverBootstrap.bind(binding.getIp(), binding.getPort());
     EventManager.debug(
@@ -150,7 +150,7 @@ public class JnrpeNettyListenerService implements INetworkListener {
   }
 
   @Override
-  public boolean supportBinding(Binding binding) {
+  public boolean supportBinding(IBinding binding) {
     return true;
   }
 

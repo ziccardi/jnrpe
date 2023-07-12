@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2020, Massimiliano Ziccardi
+ * Copyright (C) 2023, Massimiliano Ziccardi
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,21 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package it.jnrpe.services.command.repository;
+package it.jnrpe.services.config.xml.validator;
 
-import it.jnrpe.engine.services.commands.ICommandDefinition;
-import it.jnrpe.engine.services.commands.ICommandRepository;
-import java.util.Collection;
-import java.util.Optional;
-
-public class IniFileCommandRepository implements ICommandRepository {
-  @Override
-  public Optional<ICommandDefinition> getCommand(String commandName) {
-    return Optional.empty();
-  }
-
-  @Override
-  public Collection<ICommandDefinition> getAllCommands() {
-    return null;
+public class XMLArgConfigValidator extends AbstractXMLSectionValidator {
+  public XMLArgConfigValidator() {
+    super(new String[] {"name", "value"}, new String[] {"name"});
   }
 }
