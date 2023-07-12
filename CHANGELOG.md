@@ -1,3 +1,12 @@
+# [3.8.0](https://github.com/ziccardi/jnrpe/compare/3.7.0...3.8.0) (2023-07-12)
+
+
+### Features
+
+* adds a config provider for XML files ([10466b9](https://github.com/ziccardi/jnrpe/commit/10466b929a0f24c76371fb88730f8f8a2b17b1cd)), closes [#67](https://github.com/ziccardi/jnrpe/issues/67)
+
+
+
 # [3.7.0](https://github.com/ziccardi/jnrpe/compare/3.6.0...3.7.0) (2023-07-10)
 
 
@@ -38,21 +47,6 @@
 ### Features
 
 * **network:** added SSL support to the TCP listener ([8d241b9](https://github.com/ziccardi/jnrpe/commit/8d241b9802aa2e49e486e7b16a628e991b4eb7d9)), closes [#115](https://github.com/ziccardi/jnrpe/issues/115)
-
-
-
-# [3.3.0](https://github.com/ziccardi/jnrpe/compare/3.2.1...3.3.0) (2022-02-27)
-
-
-### Bug Fixes
-
-* added gradle.properties to resolve issue with Java 16+ ([102027a](https://github.com/ziccardi/jnrpe/commit/102027a3e6aa5ec5bbf32230ab0717d9bbf2af67))
-* update picocli ([40f3621](https://github.com/ziccardi/jnrpe/commit/40f3621d3b9b2d8b20e21dc19cd2ae1c02ad5490))
-
-
-### Features
-
-* added simple token authentication and IP filtering ([efce8d4](https://github.com/ziccardi/jnrpe/commit/efce8d4f70da739ff01e6a8684e398c91bf4d639))
 
 
 
