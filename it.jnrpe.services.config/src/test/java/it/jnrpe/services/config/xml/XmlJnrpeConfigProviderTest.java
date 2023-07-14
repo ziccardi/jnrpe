@@ -49,6 +49,25 @@ public class XmlJnrpeConfigProviderTest {
       var jnrpeConf = new XMLJNRPEConfigurationProxy(conf);
       assertNotNull(jnrpeConf.getServer());
       assertNotNull(jnrpeConf.getCommands());
+      assertNotNull(jnrpeConf.getServer().getBindings());
+      assertEquals(1, jnrpeConf.getServer().getBindings().size());
+      assertEquals("127.0.0.1", jnrpeConf.getServer().getBindings().get(0).getIp());
+      assertEquals(5666, jnrpeConf.getServer().getBindings().get(0).getPort());
+      assertFalse(jnrpeConf.getServer().getBindings().get(0).isSsl());
+      assertEquals(1, jnrpeConf.getServer().getBindings().get(0).getAllow().size());
+      assertEquals("127.0.0.1", jnrpeConf.getServer().getBindings().get(0).getAllow().get(0));
+      assertNotNull(jnrpeConf.getCommands());
+      assertEquals(2, jnrpeConf.getCommands().getDefinitions().size());
+      assertEquals("check_disk_C", jnrpeConf.getCommands().getDefinitions().get(0).getName());
+      assertEquals("CHECK_DISK", jnrpeConf.getCommands().getDefinitions().get(0).getPlugin());
+      assertEquals(
+          "--path C: --warning $ARG1$ --critical $ARG2$",
+          jnrpeConf.getCommands().getDefinitions().get(0).getArgs());
+      assertEquals("check_disk_E", jnrpeConf.getCommands().getDefinitions().get(1).getName());
+      assertEquals("CHECK_DISK", jnrpeConf.getCommands().getDefinitions().get(1).getPlugin());
+      assertEquals(
+          "--path E: --warning $ARG1$ --critical $ARG2$",
+          jnrpeConf.getCommands().getDefinitions().get(1).getArgs());
     }
   }
 }

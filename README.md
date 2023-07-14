@@ -1,4 +1,6 @@
 [![Coverage Status](https://coveralls.io/repos/github/ziccardi/jnrpe/badge.svg?branch=master)](https://coveralls.io/github/ziccardi/jnrpe?branch=master)
+[![CodeQL](https://github.com/ziccardi/jnrpe/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/ziccardi/jnrpe/actions/workflows/codeql-analysis.yml)
+
 # JNRPE - Java [**Nagios**](https://www.nagios.org/) Remote Plugin Executor
 
 JNRPE allows the execution of both native and Java Nagios plugins without the overhead of a new JVM instance for each

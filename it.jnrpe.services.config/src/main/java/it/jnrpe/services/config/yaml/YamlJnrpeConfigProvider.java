@@ -20,10 +20,11 @@ import it.jnrpe.engine.services.config.*;
 import it.jnrpe.services.config.InvalidConfigurationException;
 import it.jnrpe.services.config.yaml.internal.YAMLJNRPEConfig;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Optional;
 import java.util.ServiceLoader;
-import org.yaml.snakeyaml.TypeDescription;
 import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.error.YAMLException;
 
 public class YamlJnrpeConfigProvider implements IConfigProvider {
 
@@ -34,16 +35,15 @@ public class YamlJnrpeConfigProvider implements IConfigProvider {
     return "YAML";
   }
 
-  public Optional<IJNRPEConfig> getConfig() {
-    if (config.isEmpty()) {
-      try {
-        config = parseConfig();
-      } catch (Exception e) {
-        EventManager.error("Unable to parse YAML configuration: %s", e.getMessage());
-      }
-    }
+  protected YAMLJNRPEConfig parseConf(InputStream in) throws InvalidConfigurationException {
+    try {
+      Yaml yaml = new Yaml();
 
-    return config;
+      return yaml.loadAs(in, YAMLJNRPEConfig.class);
+    } catch (YAMLException ce) {
+      throw new InvalidConfigurationException(
+          "unable to parse the configuration: %s", ce.getMessage());
+    }
   }
 
   private Optional<IJNRPEConfig> parseConfig() throws IOException {
@@ -61,33 +61,34 @@ public class YamlJnrpeConfigProvider implements IConfigProvider {
 
     Optional<IConfigSource> optionalConfigSource = configSourceServiceLoader.findFirst();
 
-    if (optionalConfigSource.isPresent()) {
+    if (optionalConfigSource.isPresent()
+        && optionalConfigSource.get().getConfigType().equalsIgnoreCase("YAML")) {
       Yaml yaml = new Yaml();
-      var yamlConfigDescription = new TypeDescription(YAMLJNRPEConfig.class, YAMLJNRPEConfig.class);
-      yamlConfigDescription.addPropertyParameters("server", YAMLJNRPEConfig.ServerConfig.class);
-
-      var serverConfigDescription =
-          new TypeDescription(IServerConfig.class, YAMLJNRPEConfig.ServerConfig.class);
-      // yamlConfigDescription.addPropertyParameters("bindings", ArrayList.class);
-      serverConfigDescription.putListPropertyType("binding", YAMLJNRPEConfig.Binding.class);
-
-      yaml.addTypeDescription(yamlConfigDescription);
-      yaml.addTypeDescription(serverConfigDescription);
-      yaml.addTypeDescription(new TypeDescription(IBinding.class, YAMLJNRPEConfig.Binding.class));
       try {
         new ConfigValidator().validate(yaml.load(optionalConfigSource.get().getConfigStream()));
+
+        return Optional.of(
+            new YamlJNRPEConfigProxy(parseConf(optionalConfigSource.get().getConfigStream())));
       } catch (InvalidConfigurationException ice) {
         EventManager.error("YAML Config parsing error: %s", ice.getMessage());
         return Optional.empty();
       }
-
-      return Optional.of(
-          new YamlJNRPEConfigProxy(
-              yaml.loadAs(optionalConfigSource.get().getConfigStream(), YAMLJNRPEConfig.class)));
     }
 
     EventManager.warn("No config services have been provided");
     return Optional.empty();
+  }
+
+  public Optional<IJNRPEConfig> getConfig() {
+    if (config.isEmpty()) {
+      try {
+        config = parseConfig();
+      } catch (Exception e) {
+        EventManager.error("Unable to parse YAML configuration: %s", e.getMessage());
+      }
+    }
+
+    return config;
   }
 
   @Override
