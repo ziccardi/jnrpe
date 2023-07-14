@@ -78,7 +78,7 @@ public class SimpleAuthProvider implements IAuthService {
                 c.getServer().bindings().stream()
                     .filter(b -> (b.ip() + ":" + b.port()).equals(binding))
                     .findFirst()
-                    .map(b -> b.allow().isEmpty() || b.allow().contains(srcIp))
+                    .map(b -> srcIp != null && (b.allow().isEmpty() || b.allow().contains(srcIp)))
                     .or(() -> Optional.of(false)))
         .or(() -> Optional.of(false))
         .get()) {

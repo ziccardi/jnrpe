@@ -110,13 +110,38 @@ class SimpleAuthProviderTest {
     Optional<String> authToken =
         getAuthProvider(() -> getTestConfig(withBinding("127.0.0.1", 8080, false)))
             .getAuthToken(credentials);
+
+    // If the source IP address is missing, the connection is always refused
+    assertFalse(authToken.isPresent());
+  }
+
+  @Test
+  void testGetAuthTokenWithUnauthorizedSrcIp() {
+    Map<String, Object> credentials = new HashMap<>();
+    credentials.put("BINDING", "127.0.0.1:8080");
+    credentials.put("SRC_IP", "192.168.0.2");
+
+    // Without 'allow' any IP is admitted
+    Optional<String> authToken =
+        getAuthProvider(() -> getTestConfig(withBinding("127.0.0.1", 8080, false)))
+            .getAuthToken(credentials);
     assertTrue(authToken.isPresent());
 
+    // Only IP in the admitted list are allowed
     authToken =
         getAuthProvider(() -> getTestConfig(withBinding("127.0.0.1", 8080, false, "127.0.0.1")))
             .getAuthToken(credentials);
 
     assertFalse(authToken.isPresent());
+
+    authToken =
+        getAuthProvider(
+                () ->
+                    getTestConfig(
+                        withBinding("127.0.0.1", 8080, false, "127.0.0.1", "192.168.0.2")))
+            .getAuthToken(credentials);
+
+    assertTrue(authToken.isPresent());
   }
 
   @Test
