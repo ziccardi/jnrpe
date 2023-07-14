@@ -16,7 +16,6 @@
 package it.jnrpe.server.commands;
 
 import it.jnrpe.engine.events.EventManager;
-import it.jnrpe.engine.services.config.Binding;
 import it.jnrpe.engine.services.config.IConfigProvider;
 import it.jnrpe.engine.services.config.IJNRPEConfig;
 import it.jnrpe.engine.services.network.INetworkListener;
@@ -33,7 +32,7 @@ public class StartCommand implements Callable<Void> {
 
   @CommandLine.ParentCommand private Main jnrpe;
 
-  private void bind(Binding binding) {
+  private void bind(IJNRPEConfig.Binding binding) {
     ServiceLoader.load(INetworkListener.class).stream()
         .map(ServiceLoader.Provider::get)
         .filter(l -> l.supportBinding(binding))

@@ -26,9 +26,9 @@ import org.apache.commons.text.StringTokenizer;
 import org.apache.commons.text.matcher.StringMatcherFactory;
 
 public class CommandInitializer implements ICommandInitializer {
-  private final CommandConfig commandConfig;
+  private final IJNRPEConfig.CommandConfig commandConfig;
 
-  public CommandInitializer(final CommandConfig cc) {
+  public CommandInitializer(final IJNRPEConfig.CommandConfig cc) {
     this.commandConfig = cc;
   }
 
