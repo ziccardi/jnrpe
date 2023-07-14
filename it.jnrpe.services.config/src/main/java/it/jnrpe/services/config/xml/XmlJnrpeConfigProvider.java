@@ -48,7 +48,8 @@ public class XmlJnrpeConfigProvider implements IConfigProvider {
 
     Optional<IConfigSource> optionalConfigSource = configSourceServiceLoader.findFirst();
 
-    if (optionalConfigSource.isPresent()) {
+    if (optionalConfigSource.isPresent()
+        && optionalConfigSource.get().getConfigType().equalsIgnoreCase("xml")) {
       try {
         var xmlConf = parseConf(optionalConfigSource.get().getConfigStream());
 
@@ -65,7 +66,6 @@ public class XmlJnrpeConfigProvider implements IConfigProvider {
   }
 
   XMLConfiguration parseConf(InputStream configStream) throws Exception {
-
     DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
     dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
 

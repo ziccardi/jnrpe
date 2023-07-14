@@ -107,9 +107,10 @@ public class XMLJNRPEConfigurationProxy implements IJNRPEConfig {
               .map(
                   arg ->
                       String.format(
-                          "%s%s '%s'",
+                          "%s%s %s",
                           arg.getName().length() == 1 ? "-" : "--", arg.getName(), arg.getValue()))
-              .reduce("", (acc, arg) -> String.join(" ", arg));
+              .reduce("", (acc, arg) -> String.join(" ", acc, arg))
+              .trim();
     }
 
     @Override
