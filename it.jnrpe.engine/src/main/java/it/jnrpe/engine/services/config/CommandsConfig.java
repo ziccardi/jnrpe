@@ -15,8 +15,16 @@
  *******************************************************************************/
 package it.jnrpe.engine.services.config;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public interface IServerConfig {
-  List<IBinding> getBindings();
+public record CommandsConfig(List<CommandConfig> commands) {
+  public CommandsConfig(List<CommandConfig> commands) {
+    this.commands = new ArrayList<>(commands);
+  }
+
+  public List<CommandConfig> commands() {
+    return Collections.unmodifiableList(commands);
+  }
 }

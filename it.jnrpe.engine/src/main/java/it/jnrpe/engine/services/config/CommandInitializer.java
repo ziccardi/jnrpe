@@ -26,21 +26,21 @@ import org.apache.commons.text.StringTokenizer;
 import org.apache.commons.text.matcher.StringMatcherFactory;
 
 public class CommandInitializer implements ICommandInitializer {
-  private final ICommandConfig commandConfig;
+  private final CommandConfig commandConfig;
 
-  public CommandInitializer(final ICommandConfig cc) {
+  public CommandInitializer(final CommandConfig cc) {
     this.commandConfig = cc;
   }
 
   @Override
   public String getName() {
-    return commandConfig.getName();
+    return commandConfig.name();
   }
 
   @Override
   public ICommandInstance instantiate(String... params) {
     return PluginRepository.getInstance()
-        .getPlugin(this.commandConfig.getPlugin())
+        .getPlugin(this.commandConfig.plugin())
         .<ICommandInstance>map(
             p ->
                 () -> {
@@ -48,7 +48,7 @@ public class CommandInitializer implements ICommandInitializer {
                   try {
                     cl.parseArgs(
                         new StringTokenizer(
-                                this.commandConfig.getArgs(),
+                                this.commandConfig.args(),
                                 StringMatcherFactory.INSTANCE.spaceMatcher(),
                                 StringMatcherFactory.INSTANCE.quoteMatcher())
                             .getTokenArray());
@@ -76,7 +76,7 @@ public class CommandInitializer implements ICommandInitializer {
             () -> {
               EventManager.error(
                   "Error executing command '%s': requested plugin '%s' has not been found",
-                  this.getName(), this.commandConfig.getPlugin());
+                  this.getName(), this.commandConfig.plugin());
               return () ->
                   new ExecutionResult(
                       String.format("[%s - UNKNOWN] - Error executing command", this.getName()),
@@ -91,10 +91,10 @@ public class CommandInitializer implements ICommandInitializer {
         + getName()
         + '\''
         + ", plugin='"
-        + commandConfig.getPlugin()
+        + commandConfig.plugin()
         + '\''
         + ", args='"
-        + commandConfig.getArgs()
+        + commandConfig.args()
         + '\''
         + '}';
   }

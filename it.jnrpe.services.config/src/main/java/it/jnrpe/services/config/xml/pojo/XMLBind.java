@@ -15,6 +15,7 @@
  *******************************************************************************/
 package it.jnrpe.services.config.xml.pojo;
 
+import java.net.URI;
 import org.w3c.dom.Element;
 
 public class XMLBind {
@@ -35,5 +36,21 @@ public class XMLBind {
 
   public boolean isSsl() {
     return ssl;
+  }
+
+  public int getPort() {
+    try {
+      return new URI("dummy://" + address).getPort();
+    } catch (Exception ignored) {
+    }
+    return -1;
+  }
+
+  public String getHost() {
+    try {
+      return new URI("dummy://" + address).getHost();
+    } catch (Exception ignored) {
+    }
+    return "";
   }
 }

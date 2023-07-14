@@ -15,14 +15,19 @@
  *******************************************************************************/
 package it.jnrpe.engine.services.config;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public interface IBinding {
-  int getPort();
+public record Binding(String ip, int port, boolean ssl, List<String> allow) {
+  public Binding(String ip, int port, boolean ssl, List<String> allow) {
+    this.ip = ip;
+    this.port = port;
+    this.ssl = ssl;
+    this.allow = new ArrayList<>(allow);
+  }
 
-  String getIp();
-
-  boolean isSsl();
-
-  List<String> getAllow();
+  public List<String> allow() {
+    return Collections.unmodifiableList(this.allow);
+  }
 }

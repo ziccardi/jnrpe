@@ -16,7 +16,7 @@
 package it.jnrpe.engine.services.config;
 
 public interface IJNRPEConfig {
-  public IServerConfig getServer();
+  ServerConfig getServer();
 
-  public ICommandsConfig getCommands();
+  CommandsConfig getCommands();
 }
