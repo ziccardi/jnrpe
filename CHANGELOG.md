@@ -1,3 +1,12 @@
+## [3.8.1](https://github.com/ziccardi/jnrpe/compare/3.8.0...3.8.1) (2023-07-14)
+
+
+### Bug Fixes
+
+* fix command argument parsing ([686b94d](https://github.com/ziccardi/jnrpe/commit/686b94dd86926eecece37062f9805ecfb29a6af4))
+
+
+
 # [3.8.0](https://github.com/ziccardi/jnrpe/compare/3.7.0...3.8.0) (2023-07-12)
 
 
@@ -38,15 +47,6 @@
 
 * adds ability to generate a sample skeleton configuration ([b396547](https://github.com/ziccardi/jnrpe/commit/b3965478f9df2a058db37859e7f94fd6eda9bd76))
 * adds ability to run the configured commands ([71fb6fa](https://github.com/ziccardi/jnrpe/commit/71fb6fa137371fbeff83af65e4cd0f22029f04da)), closes [#57](https://github.com/ziccardi/jnrpe/issues/57)
-
-
-
-# [3.4.0](https://github.com/ziccardi/jnrpe/compare/3.3.0...3.4.0) (2022-02-27)
-
-
-### Features
-
-* **network:** added SSL support to the TCP listener ([8d241b9](https://github.com/ziccardi/jnrpe/commit/8d241b9802aa2e49e486e7b16a628e991b4eb7d9)), closes [#115](https://github.com/ziccardi/jnrpe/issues/115)
 
 
 
