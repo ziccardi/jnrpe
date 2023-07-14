@@ -15,8 +15,37 @@
  *******************************************************************************/
 package it.jnrpe.engine.services.config;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public interface IJNRPEConfig {
   ServerConfig getServer();
 
-  CommandsConfig getCommands();
+  List<CommandConfig> getCommands();
+
+  record Binding(String ip, int port, boolean ssl, List<String> allow) {
+    public Binding(String ip, int port, boolean ssl, List<String> allow) {
+      this.ip = ip;
+      this.port = port;
+      this.ssl = ssl;
+      this.allow = new ArrayList<>(allow);
+    }
+
+    public List<String> allow() {
+      return Collections.unmodifiableList(this.allow);
+    }
+  }
+
+  record CommandConfig(String name, String plugin, String args) {}
+
+  record ServerConfig(List<Binding> bindings) {
+    public ServerConfig(List<Binding> bindings) {
+      this.bindings = new ArrayList<>(bindings);
+    }
+
+    public List<Binding> bindings() {
+      return Collections.unmodifiableList(bindings);
+    }
+  }
 }

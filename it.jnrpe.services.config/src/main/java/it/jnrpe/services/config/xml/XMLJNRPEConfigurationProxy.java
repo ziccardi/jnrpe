@@ -17,11 +17,12 @@ package it.jnrpe.services.config.xml;
 
 import it.jnrpe.engine.services.config.*;
 import it.jnrpe.services.config.xml.pojo.*;
+import java.util.Collections;
 import java.util.List;
 
 public class XMLJNRPEConfigurationProxy implements IJNRPEConfig {
   private ServerConfig serverConfig;
-  private CommandsConfig commandsConfig;
+  private List<CommandConfig> commandsConfig;
   private static final int DEFAULT_BINDING_PORT = 5667;
 
   private void loadServerConfig(XMLConfiguration conf) {
@@ -42,25 +43,24 @@ public class XMLJNRPEConfigurationProxy implements IJNRPEConfig {
 
   private void loadCommandsConfig(XMLConfiguration conf) {
     this.commandsConfig =
-        new CommandsConfig(
-            conf.getCommands().getCommandList().stream()
-                .map(
-                    c ->
-                        new CommandConfig(
-                            c.getName(),
-                            c.getPluginName(),
-                            c.getArgList().stream()
-                                .map(
-                                    arg ->
-                                        String.format(
-                                                "%s%s %s",
-                                                arg.getName().length() == 1 ? "-" : "--",
-                                                arg.getName(),
-                                                arg.getValue())
-                                            .trim())
-                                .reduce("", (acc, arg) -> String.join(" ", acc, arg))
-                                .trim()))
-                .toList());
+        conf.getCommands().getCommandList().stream()
+            .map(
+                c ->
+                    new CommandConfig(
+                        c.getName(),
+                        c.getPluginName(),
+                        c.getArgList().stream()
+                            .map(
+                                arg ->
+                                    String.format(
+                                            "%s%s %s",
+                                            arg.getName().length() == 1 ? "-" : "--",
+                                            arg.getName(),
+                                            arg.getValue())
+                                        .trim())
+                            .reduce("", (acc, arg) -> String.join(" ", acc, arg))
+                            .trim()))
+            .toList();
   }
 
   public XMLJNRPEConfigurationProxy(XMLConfiguration xmlConf) {
@@ -74,7 +74,7 @@ public class XMLJNRPEConfigurationProxy implements IJNRPEConfig {
   }
 
   @Override
-  public CommandsConfig getCommands() {
-    return commandsConfig;
+  public List<CommandConfig> getCommands() {
+    return Collections.unmodifiableList(commandsConfig);
   }
 }

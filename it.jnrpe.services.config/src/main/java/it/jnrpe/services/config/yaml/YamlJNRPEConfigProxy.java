@@ -17,11 +17,13 @@ package it.jnrpe.services.config.yaml;
 
 import it.jnrpe.engine.services.config.*;
 import it.jnrpe.services.config.yaml.internal.YAMLJNRPEConfig;
+import java.util.Collections;
+import java.util.List;
 
 public class YamlJNRPEConfigProxy implements IJNRPEConfig {
 
   private ServerConfig serverConfig;
-  private CommandsConfig commandsConfig;
+  private List<CommandConfig> commandsConfig;
 
   private void loadServerConfig(YAMLJNRPEConfig conf) {
     this.serverConfig =
@@ -33,10 +35,9 @@ public class YamlJNRPEConfigProxy implements IJNRPEConfig {
 
   private void loadCommandsConfig(YAMLJNRPEConfig conf) {
     this.commandsConfig =
-        new CommandsConfig(
-            conf.getCommands().getDefinitions().stream()
-                .map(c -> new CommandConfig(c.getName(), c.getPlugin(), c.getArgs()))
-                .toList());
+        conf.getCommands().getDefinitions().stream()
+            .map(c -> new CommandConfig(c.getName(), c.getPlugin(), c.getArgs()))
+            .toList();
   }
 
   public YamlJNRPEConfigProxy(YAMLJNRPEConfig conf) {
@@ -50,7 +51,7 @@ public class YamlJNRPEConfigProxy implements IJNRPEConfig {
   }
 
   @Override
-  public CommandsConfig getCommands() {
-    return this.commandsConfig;
+  public List<CommandConfig> getCommands() {
+    return Collections.unmodifiableList(this.commandsConfig);
   }
 }

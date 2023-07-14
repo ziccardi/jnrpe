@@ -38,7 +38,6 @@ public class ConfigCommandRepository implements ICommandRepository {
       var config = configProvider.getConfig().get();
       config
           .getCommands()
-          .commands()
           .forEach(
               commandConfig -> {
                 this.commandDefinitions.put(

@@ -19,10 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import it.jnrpe.engine.services.auth.IAction;
-import it.jnrpe.engine.services.config.Binding;
-import it.jnrpe.engine.services.config.CommandsConfig;
 import it.jnrpe.engine.services.config.IJNRPEConfig;
-import it.jnrpe.engine.services.config.ServerConfig;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -34,9 +31,9 @@ class SimpleAuthProviderTest {
     return (jnrpeConf) -> {
       var currentBindings = new ArrayList<>(jnrpeConf.getServer().bindings());
 
-      var binding = new Binding(ip, port, ssl, Arrays.asList(allow));
+      var binding = new IJNRPEConfig.Binding(ip, port, ssl, Arrays.asList(allow));
       currentBindings.add(binding);
-      var serverConf = new ServerConfig(currentBindings);
+      var serverConf = new IJNRPEConfig.ServerConfig(currentBindings);
       when(jnrpeConf.getServer()).thenReturn(serverConf);
     };
   }
@@ -45,10 +42,9 @@ class SimpleAuthProviderTest {
   private IJNRPEConfig getTestConfig(Consumer<IJNRPEConfig>... options) {
     var configMock = mock(IJNRPEConfig.class);
 
-    var serverConfigMock = new ServerConfig(new ArrayList<>());
-    var commandsConfigMock = new CommandsConfig(new ArrayList<>());
+    var serverConfigMock = new IJNRPEConfig.ServerConfig(new ArrayList<>());
     when(configMock.getServer()).thenReturn(serverConfigMock);
-    when(configMock.getCommands()).thenReturn(commandsConfigMock);
+    when(configMock.getCommands()).thenReturn(new ArrayList<>());
 
     Arrays.stream(options).forEach(o -> o.accept(configMock));
     return configMock;

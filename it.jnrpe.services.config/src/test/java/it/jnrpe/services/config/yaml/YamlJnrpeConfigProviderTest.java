@@ -62,17 +62,15 @@ public class YamlJnrpeConfigProviderTest {
       assertEquals(1, jnrpeConf.getServer().bindings().get(0).allow().size());
       assertEquals("127.0.0.1", jnrpeConf.getServer().bindings().get(0).allow().get(0));
       assertNotNull(jnrpeConf.getCommands());
-      assertEquals(2, jnrpeConf.getCommands().commands().size());
-      assertEquals("check_disk_C", jnrpeConf.getCommands().commands().get(0).name());
-      assertEquals("CHECK_DISK", jnrpeConf.getCommands().commands().get(0).plugin());
+      assertEquals(2, jnrpeConf.getCommands().size());
+      assertEquals("check_disk_C", jnrpeConf.getCommands().get(0).name());
+      assertEquals("CHECK_DISK", jnrpeConf.getCommands().get(0).plugin());
       assertEquals(
-          "--path C: --warning $ARG1$ --critical $ARG2$",
-          jnrpeConf.getCommands().commands().get(0).args());
-      assertEquals("check_disk_E", jnrpeConf.getCommands().commands().get(1).name());
-      assertEquals("CHECK_DISK", jnrpeConf.getCommands().commands().get(1).plugin());
+          "--path C: --warning $ARG1$ --critical $ARG2$", jnrpeConf.getCommands().get(0).args());
+      assertEquals("check_disk_E", jnrpeConf.getCommands().get(1).name());
+      assertEquals("CHECK_DISK", jnrpeConf.getCommands().get(1).plugin());
       assertEquals(
-          "--path E: --warning $ARG1$ --critical $ARG2$",
-          jnrpeConf.getCommands().commands().get(1).args());
+          "--path E: --warning $ARG1$ --critical $ARG2$", jnrpeConf.getCommands().get(1).args());
     }
   }
 
