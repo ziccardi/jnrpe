@@ -19,10 +19,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import it.jnrpe.engine.services.auth.IAction;
-import it.jnrpe.engine.services.config.IBinding;
-import it.jnrpe.engine.services.config.ICommandsConfig;
+import it.jnrpe.engine.services.config.Binding;
+import it.jnrpe.engine.services.config.CommandsConfig;
 import it.jnrpe.engine.services.config.IJNRPEConfig;
-import it.jnrpe.engine.services.config.IServerConfig;
+import it.jnrpe.engine.services.config.ServerConfig;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -30,44 +30,25 @@ import org.junit.jupiter.api.Test;
 
 class SimpleAuthProviderTest {
 
-  private Consumer<IJNRPEConfig> withBinding(String ip, int port, boolean ssl) {
+  private Consumer<IJNRPEConfig> withBinding(String ip, int port, boolean ssl, String... allow) {
     return (jnrpeConf) -> {
-      var currentBindings = jnrpeConf.getServer().getBindings();
+      var currentBindings = new ArrayList<>(jnrpeConf.getServer().bindings());
 
-      var binding = mock(IBinding.class);
-      when(binding.getPort()).thenReturn(port);
-      when(binding.getIp()).thenReturn(ip);
-      when(binding.isSsl()).thenReturn(ssl);
-
+      var binding = new Binding(ip, port, ssl, Arrays.asList(allow));
       currentBindings.add(binding);
-
-      when(jnrpeConf.getServer().getBindings()).thenReturn(currentBindings);
-    };
-  }
-
-  private Consumer<IJNRPEConfig> withAllowedAddress(String ip) {
-    return (jnrpeConf) -> {
-      jnrpeConf
-          .getServer()
-          .getBindings()
-          .forEach(
-              b -> {
-                var currentAllow = b.getAllow();
-                currentAllow.add(ip);
-                when(b.getAllow()).thenReturn(currentAllow);
-              });
+      var serverConf = new ServerConfig(currentBindings);
+      when(jnrpeConf.getServer()).thenReturn(serverConf);
     };
   }
 
   @SafeVarargs
   private IJNRPEConfig getTestConfig(Consumer<IJNRPEConfig>... options) {
     var configMock = mock(IJNRPEConfig.class);
-    var serverConfigMock = mock(IServerConfig.class);
-    var commandsConfigMock = mock(ICommandsConfig.class);
+
+    var serverConfigMock = new ServerConfig(new ArrayList<>());
+    var commandsConfigMock = new CommandsConfig(new ArrayList<>());
     when(configMock.getServer()).thenReturn(serverConfigMock);
     when(configMock.getCommands()).thenReturn(commandsConfigMock);
-
-    when(serverConfigMock.getBindings()).thenReturn(new ArrayList<>());
 
     Arrays.stream(options).forEach(o -> o.accept(configMock));
     return configMock;
@@ -107,10 +88,7 @@ class SimpleAuthProviderTest {
 
     // With SimpleAuthToken an invalid credential is a not allowed IP address
     Optional<String> authToken =
-        getAuthProvider(
-                () ->
-                    getTestConfig(
-                        withBinding("127.0.0.1", 8080, false), withAllowedAddress("127.0.0.1")))
+        getAuthProvider(() -> getTestConfig(withBinding("127.0.0.1", 8080, false, "127.0.0.1")))
             .getAuthToken(credentials);
     assertFalse(authToken.isPresent());
   }
@@ -139,10 +117,7 @@ class SimpleAuthProviderTest {
     assertTrue(authToken.isPresent());
 
     authToken =
-        getAuthProvider(
-                () ->
-                    getTestConfig(
-                        withBinding("127.0.0.1", 8080, false), withAllowedAddress("127.0.0.1")))
+        getAuthProvider(() -> getTestConfig(withBinding("127.0.0.1", 8080, false, "127.0.0.1")))
             .getAuthToken(credentials);
 
     assertFalse(authToken.isPresent());

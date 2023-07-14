@@ -17,142 +17,40 @@ package it.jnrpe.services.config.yaml;
 
 import it.jnrpe.engine.services.config.*;
 import it.jnrpe.services.config.yaml.internal.YAMLJNRPEConfig;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class YamlJNRPEConfigProxy implements IJNRPEConfig {
 
-  private static class ServerConfigProxy implements IServerConfig {
-    private final List<IBinding> bindings;
+  private ServerConfig serverConfig;
+  private CommandsConfig commandsConfig;
 
-    private ServerConfigProxy(YAMLJNRPEConfig.ServerConfig cfg) {
-      this.bindings =
-          cfg.bindings.stream()
-              .map(b -> new BindingConfigProxy(b))
-              .collect(Collectors.toCollection(ArrayList<IBinding>::new));
-    }
-
-    public List<IBinding> getBindings() {
-      return bindings;
-    }
-
-    @Override
-    public String toString() {
-      return "ServerConfig{" + "bindings=" + bindings + '}';
-    }
+  private void loadServerConfig(YAMLJNRPEConfig conf) {
+    this.serverConfig =
+        new ServerConfig(
+            conf.getServer().getBindings().stream()
+                .map(b -> new Binding(b.getIp(), b.getPort(), b.isSsl(), b.getAllow()))
+                .toList());
   }
 
-  public static class BindingConfigProxy implements IBinding {
-    private final YAMLJNRPEConfig.Binding binding;
-
-    public BindingConfigProxy(final YAMLJNRPEConfig.Binding binding) {
-      this.binding = binding;
-    }
-
-    public int getPort() {
-      return binding.getPort();
-    }
-
-    public String getIp() {
-      return binding.getIp();
-    }
-
-    public boolean isSsl() {
-      return binding.isSsl();
-    }
-
-    public List<String> getAllow() {
-      return binding.getAllow();
-    }
-
-    @Override
-    public String toString() {
-      return "BindingConfigProxy{"
-          + "ip='"
-          + this.binding.getIp()
-          + '\''
-          + ", port="
-          + this.binding.getPort()
-          + ", ssl="
-          + this.binding.isSsl()
-          + ", allow="
-          + this.binding.getAllow()
-          + '}';
-    }
+  private void loadCommandsConfig(YAMLJNRPEConfig conf) {
+    this.commandsConfig =
+        new CommandsConfig(
+            conf.getCommands().getDefinitions().stream()
+                .map(c -> new CommandConfig(c.getName(), c.getPlugin(), c.getArgs()))
+                .toList());
   }
 
-  private static class CommandsConfigProxy implements ICommandsConfig {
-    private final List<ICommandConfig> definitions;
-
-    private CommandsConfigProxy(YAMLJNRPEConfig.CommandsConfig commandsConfig) {
-      this.definitions =
-          commandsConfig.getDefinitions().stream()
-              .map(CommandDefinitionProxy::new)
-              .collect(Collectors.toCollection(ArrayList<ICommandConfig>::new));
-    }
-
-    public List<ICommandConfig> getDefinitions() {
-      return Collections.unmodifiableList(definitions);
-    }
-
-    @Override
-    public String toString() {
-      return "CommandsConfigProxy{" + "definitions=" + definitions + '}';
-    }
-  }
-
-  public static class CommandDefinitionProxy implements ICommandConfig {
-    private final YAMLJNRPEConfig.CommandDefinition commandDefinition;
-
-    public CommandDefinitionProxy(YAMLJNRPEConfig.CommandDefinition commandDefinition) {
-      this.commandDefinition = commandDefinition;
-    }
-
-    public String getName() {
-      return commandDefinition.getName();
-    }
-
-    public String getPlugin() {
-      return commandDefinition.getPlugin();
-    }
-
-    public String getArgs() {
-      return commandDefinition.getArgs();
-    }
-
-    @Override
-    public String toString() {
-      return "CommandInitializer{"
-          + "name='"
-          + commandDefinition.getName()
-          + '\''
-          + ", plugin='"
-          + commandDefinition.getPlugin()
-          + '\''
-          + ", args='"
-          + commandDefinition.getArgs()
-          + '\''
-          + '}';
-    }
-  }
-
-  private final IServerConfig serverConfig;
-  private final ICommandsConfig commandsConfig;
-
-  public YamlJNRPEConfigProxy(YAMLJNRPEConfig cfg) {
-    this.serverConfig = new ServerConfigProxy(cfg.getServer());
-    this.commandsConfig = new CommandsConfigProxy(cfg.getCommands());
+  public YamlJNRPEConfigProxy(YAMLJNRPEConfig conf) {
+    loadCommandsConfig(conf);
+    loadServerConfig(conf);
   }
 
   @Override
-  public IServerConfig getServer() {
+  public ServerConfig getServer() {
     return this.serverConfig;
   }
 
   @Override
-  public ICommandsConfig getCommands() {
+  public CommandsConfig getCommands() {
     return this.commandsConfig;
   }
 }

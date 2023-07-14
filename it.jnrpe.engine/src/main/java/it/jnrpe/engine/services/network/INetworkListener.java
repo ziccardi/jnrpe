@@ -15,14 +15,14 @@
  *******************************************************************************/
 package it.jnrpe.engine.services.network;
 
-import it.jnrpe.engine.services.config.IBinding;
+import it.jnrpe.engine.services.config.Binding;
 
 public interface INetworkListener {
   String getName();
 
-  void bind(IBinding binding);
+  void bind(Binding binding);
 
   void shutdown();
 
-  boolean supportBinding(IBinding binding);
+  boolean supportBinding(Binding binding);
 }

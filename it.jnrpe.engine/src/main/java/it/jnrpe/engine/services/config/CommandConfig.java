@@ -15,10 +15,4 @@
  *******************************************************************************/
 package it.jnrpe.engine.services.config;
 
-public interface ICommandConfig {
-  String getName();
-
-  String getPlugin();
-
-  String getArgs();
-}
+public record CommandConfig(String name, String plugin, String args) {}

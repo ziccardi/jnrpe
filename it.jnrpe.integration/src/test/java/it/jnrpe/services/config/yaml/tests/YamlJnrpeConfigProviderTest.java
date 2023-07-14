@@ -25,30 +25,30 @@ public class YamlJnrpeConfigProviderTest {
   @Test
   public void testValidYamlConfig() {
     var config = ConfigurationManager.getConfig().orElseThrow();
-    var bindings = config.getServer().getBindings();
+    var bindings = config.getServer().bindings();
     assertEquals(3, bindings.size());
     var binding = bindings.get(0);
-    assertEquals("127.0.0.1", binding.getIp());
-    assertEquals(5667, binding.getPort());
-    assertFalse(binding.isSsl());
+    assertEquals("127.0.0.1", binding.ip());
+    assertEquals(5667, binding.port());
+    assertFalse(binding.ssl());
 
     binding = bindings.get(1);
-    assertEquals("127.0.0.1", binding.getIp());
-    assertEquals(5668, binding.getPort());
-    assertFalse(binding.isSsl());
+    assertEquals("127.0.0.1", binding.ip());
+    assertEquals(5668, binding.port());
+    assertFalse(binding.ssl());
 
     binding = bindings.get(2);
-    assertEquals("127.0.0.1", binding.getIp());
-    assertEquals(5669, binding.getPort());
-    assertTrue(binding.isSsl());
+    assertEquals("127.0.0.1", binding.ip());
+    assertEquals(5669, binding.port());
+    assertTrue(binding.ssl());
 
     var commandsConfig = config.getCommands();
     assertNotNull(commandsConfig);
-    var commandsDefinitions = commandsConfig.getDefinitions();
+    var commandsDefinitions = commandsConfig.commands();
     assertEquals(1, commandsDefinitions.size());
     var commandDefinition = commandsDefinitions.get(0);
-    assertEquals("CMD_TEST", commandDefinition.getName());
-    assertEquals("PLUGIN_TEST", commandDefinition.getPlugin());
-    assertEquals("-a 1 -b 2 -c 3", commandDefinition.getArgs());
+    assertEquals("CMD_TEST", commandDefinition.name());
+    assertEquals("PLUGIN_TEST", commandDefinition.plugin());
+    assertEquals("-a 1 -b 2 -c 3", commandDefinition.args());
   }
 }

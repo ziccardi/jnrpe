@@ -75,10 +75,10 @@ public class SimpleAuthProvider implements IAuthService {
         .getConfiguration()
         .flatMap(
             c ->
-                c.getServer().getBindings().stream()
-                    .filter(b -> (b.getIp() + ":" + b.getPort()).equals(binding))
+                c.getServer().bindings().stream()
+                    .filter(b -> (b.ip() + ":" + b.port()).equals(binding))
                     .findFirst()
-                    .map(b -> b.getAllow().isEmpty() || b.getAllow().contains(srcIp))
+                    .map(b -> b.allow().isEmpty() || b.allow().contains(srcIp))
                     .or(() -> Optional.of(false)))
         .or(() -> Optional.of(false))
         .get()) {
