@@ -16,7 +16,6 @@
 package it.jnrpe.engine.services.config;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public interface IJNRPEConfig {
@@ -29,11 +28,7 @@ public interface IJNRPEConfig {
       this.ip = ip;
       this.port = port;
       this.ssl = ssl;
-      this.allow = new ArrayList<>(allow);
-    }
-
-    public List<String> allow() {
-      return Collections.unmodifiableList(this.allow);
+      this.allow = allow != null ? List.copyOf(allow) : List.copyOf(new ArrayList<>());
     }
   }
 
@@ -41,11 +36,7 @@ public interface IJNRPEConfig {
 
   record ServerConfig(List<Binding> bindings) {
     public ServerConfig(List<Binding> bindings) {
-      this.bindings = new ArrayList<>(bindings);
-    }
-
-    public List<Binding> bindings() {
-      return Collections.unmodifiableList(bindings);
+      this.bindings = List.copyOf(bindings);
     }
   }
 }
