@@ -29,31 +29,45 @@ public class YamlConfigSource implements IConfigSource {
   @Override
   public InputStream getConfigStream() {
     String config =
-        "--- \n"
-            + "server: \n"
-            + "  bindings: \n"
-            + "    - \n"
-            + "      ip: \"127.0.0.1\"\n"
-            + "      port: 5667\n"
-            + "      ssl: false\n"
-            + "      allow: \n"
-            + "        - \"127.0.0.2\" \n"
-            + "        - \"127.0.0.3\" \n"
-            + "        - \"127.0.0.4\" \n"
-            + "    - \n"
-            + "      ip: \"127.0.0.1\"\n"
-            + "      port: 5668\n"
-            + "      ssl: false\n"
-            + "    - \n"
-            + "      ip: \"127.0.0.1\"\n"
-            + "      port: 5669\n"
-            + "      ssl: true\n"
-            + "commands: \n"
-            + "  definitions: \n"
-            + "    - \n"
-            + "      args: \"-a 1 -b 2 -c 3\"\n"
-            + "      name: CMD_TEST\n"
-            + "      plugin: PLUGIN_TEST";
+        """
+            ---
+            server:
+              bindings:
+                -
+                  ip: "127.0.0.1"
+                  port: 5667
+                  ssl: false
+                  allow:
+                    - "127.0.0.2"
+                    - "127.0.0.3"
+                    - "127.0.0.4"
+                -
+                  ip: "127.0.0.1"
+                  port: 5668
+                  ssl: false
+                -
+                  ip: "127.0.0.1"
+                  port: 5669
+                  ssl: true
+            commands:
+              definitions:
+                -
+                  args: "-a 1 -b 2 -c 3"
+                  name: CMD_TEST
+                  plugin: PLUGIN_TEST
+                -
+                  name: CMD_TEST_SIMPLE
+                  args: "-m 'This is a test'"
+                  plugin: CHECK_TEST
+                -
+                  name: CMD_TEST_WITHARGS
+                  args: "-m $ARG1$"
+                  plugin: CHECK_TEST
+                -
+                  name: CMD_TEST_WITHARG3
+                  args: "-m $ARG3$"
+                  plugin: CHECK_TEST
+                    """;
 
     return new ByteArrayInputStream(config.getBytes(StandardCharsets.UTF_8));
   }

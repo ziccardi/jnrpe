@@ -22,13 +22,22 @@ import it.jnrpe.engine.services.commands.ICommandFactory;
 import it.jnrpe.engine.services.commands.ICommandInstance;
 import it.jnrpe.engine.services.network.Status;
 import it.jnrpe.engine.services.plugins.CommandLine;
+import it.jnrpe.engine.services.plugins.IPluginRepository;
 import org.apache.commons.text.StringTokenizer;
 import org.apache.commons.text.matcher.StringMatcherFactory;
 
-public class CommandInitializer implements ICommandFactory {
+public class CommandInstanceFactory implements ICommandFactory {
   private final IJNRPEConfig.CommandConfig commandConfig;
+  private final IPluginRepository pluginRepository;
 
-  public CommandInitializer(final IJNRPEConfig.CommandConfig cc) {
+  public CommandInstanceFactory(final IJNRPEConfig.CommandConfig cc) {
+    this.pluginRepository = PluginRepository.getInstance();
+    this.commandConfig = cc;
+  }
+
+  CommandInstanceFactory(
+      final IPluginRepository pluginRepository, final IJNRPEConfig.CommandConfig cc) {
+    this.pluginRepository = pluginRepository;
     this.commandConfig = cc;
   }
 
@@ -39,19 +48,29 @@ public class CommandInitializer implements ICommandFactory {
 
   @Override
   public ICommandInstance instantiate(String... params) {
-    return PluginRepository.getInstance()
+    return this.pluginRepository
         .getPlugin(this.commandConfig.plugin())
         .<ICommandInstance>map(
             p ->
                 () -> {
                   CommandLine cl = new CommandLine(p);
                   try {
-                    cl.parseArgs(
+                    var commandLineArgs =
                         new StringTokenizer(
                                 this.commandConfig.args(),
                                 StringMatcherFactory.INSTANCE.spaceMatcher(),
                                 StringMatcherFactory.INSTANCE.quoteMatcher())
-                            .getTokenArray());
+                            .getTokenArray();
+
+                    for (int i = 0; params != null && i < params.length; i++) {
+                      for (int k = 0; k < commandLineArgs.length; k++) {
+                        if (commandLineArgs[k].equalsIgnoreCase(String.format("$ARG%d$", i + 1))) {
+                          commandLineArgs[k] = params[i];
+                        }
+                      }
+                    }
+
+                    cl.parseArgs(commandLineArgs);
 
                     ExecutionResult res = p.execute();
                     final String label =
@@ -86,7 +105,7 @@ public class CommandInitializer implements ICommandFactory {
 
   @Override
   public String toString() {
-    return "CommandInitializer{"
+    return "CommandInstanceFactory{"
         + "name='"
         + getName()
         + '\''

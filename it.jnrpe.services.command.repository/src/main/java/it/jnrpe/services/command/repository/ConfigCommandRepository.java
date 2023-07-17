@@ -17,7 +17,7 @@ package it.jnrpe.services.command.repository;
 
 import it.jnrpe.engine.services.commands.ICommandFactory;
 import it.jnrpe.engine.services.commands.ICommandRepository;
-import it.jnrpe.engine.services.config.CommandInitializer;
+import it.jnrpe.engine.services.config.CommandInstanceFactory;
 import it.jnrpe.engine.services.config.IConfigProvider;
 import java.util.Collection;
 import java.util.HashMap;
@@ -52,7 +52,7 @@ public class ConfigCommandRepository implements ICommandRepository {
           .forEach(
               commandConfig -> {
                 this.commandDefinitions.put(
-                    commandConfig.name(), new CommandInitializer(commandConfig));
+                    commandConfig.name(), new CommandInstanceFactory(commandConfig));
               });
     }
   }

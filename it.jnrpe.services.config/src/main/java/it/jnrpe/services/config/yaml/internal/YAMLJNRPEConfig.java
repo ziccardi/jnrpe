@@ -154,7 +154,7 @@ public class YAMLJNRPEConfig {
 
     @Override
     public String toString() {
-      return "CommandInitializer{"
+      return "CommandInstanceFactory{"
           + "name='"
           + name
           + '\''

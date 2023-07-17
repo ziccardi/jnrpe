@@ -44,7 +44,7 @@ public class YamlJnrpeConfigProviderTest {
 
     var commandsConfig = config.getCommands();
     assertNotNull(commandsConfig);
-    assertEquals(1, commandsConfig.size());
+    assertEquals(4, commandsConfig.size());
     var commandDefinition = commandsConfig.get(0);
     assertEquals("CMD_TEST", commandDefinition.name());
     assertEquals("PLUGIN_TEST", commandDefinition.plugin());
