@@ -17,8 +17,24 @@ package it.jnrpe.engine.services.plugins;
 
 import it.jnrpe.engine.services.commands.ExecutionResult;
 
+/**
+ * The interface for a plugin.
+ *
+ * <p>This interface provides methods for getting the name of the plugin and executing the plugin.
+ */
 public interface IPlugin {
+
+  /**
+   * Gets the name of the plugin.
+   *
+   * @return The name of the plugin.
+   */
   String getName();
 
+  /**
+   * Executes the plugin.
+   *
+   * @return The result of executing the plugin.
+   */
   ExecutionResult execute();
 }

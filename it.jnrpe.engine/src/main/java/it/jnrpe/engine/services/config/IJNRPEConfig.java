@@ -28,6 +28,7 @@ public interface IJNRPEConfig {
       this.ip = ip;
       this.port = port;
       this.ssl = ssl;
+      // Create a defensive copy of the allow list
       this.allow = allow != null ? List.copyOf(allow) : List.copyOf(new ArrayList<>());
     }
   }
@@ -36,6 +37,7 @@ public interface IJNRPEConfig {
 
   record ServerConfig(List<Binding> bindings) {
     public ServerConfig(List<Binding> bindings) {
+      // Initialize the fields (defensive copy)
       this.bindings = List.copyOf(bindings);
     }
   }

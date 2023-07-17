@@ -34,7 +34,7 @@ public class InitCommand implements Callable<Void> {
 
   @Override
   public Void call() {
-    IConfigProvider.getInstances().stream()
+    IConfigProvider.getProviders().stream()
         .filter(p -> p.getProviderName().equalsIgnoreCase(this.format))
         .findFirst()
         .ifPresentOrElse(
@@ -43,7 +43,7 @@ public class InitCommand implements Callable<Void> {
             },
             () -> {
               String availableFormats =
-                  IConfigProvider.getInstances().stream()
+                  IConfigProvider.getProviders().stream()
                       .map(IConfigProvider::getProviderName)
                       .collect(Collectors.joining(","));
 

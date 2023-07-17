@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Test;
 
 public class SimpleAuthProviderTest {
   private final IAuthService authService =
-      IAuthService.getInstances().stream().findFirst().orElseThrow();
+      IAuthService.getProviders().stream().findFirst().orElseThrow();
 
   @Test
   public void testValidRequest() {

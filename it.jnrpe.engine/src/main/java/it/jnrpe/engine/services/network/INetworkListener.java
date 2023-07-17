@@ -17,12 +17,36 @@ package it.jnrpe.engine.services.network;
 
 import it.jnrpe.engine.services.config.IJNRPEConfig;
 
+/**
+ * The interface every netwr listener must implement.
+ *
+ * <p>This interface provides methods for getting the name of the listener, binding to a port,
+ * shutting down the listener, and checking if the listener supports a binding.
+ */
 public interface INetworkListener {
+
+  /**
+   * Gets the name of the listener.
+   *
+   * @return The name of the listener.
+   */
   String getName();
 
+  /**
+   * Binds the listener to a port.
+   *
+   * @param binding The binding to bind to.
+   */
   void bind(IJNRPEConfig.Binding binding);
 
+  /** Shuts down the listener. */
   void shutdown();
 
+  /**
+   * Checks if the listener supports a binding.
+   *
+   * @param binding The binding to check.
+   * @return True if the listener supports the binding, false otherwise.
+   */
   boolean supportBinding(IJNRPEConfig.Binding binding);
 }

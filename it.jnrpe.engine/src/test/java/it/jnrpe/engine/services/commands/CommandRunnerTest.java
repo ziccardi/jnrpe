@@ -24,8 +24,8 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class CommandExecutorTest {
-  private CommandExecutor commandExecutor;
+public class CommandRunnerTest {
+  private CommandRunner commandRunner;
   private ICommandRepository commandRepository;
   private IAuthService authService;
 
@@ -33,7 +33,7 @@ public class CommandExecutorTest {
   public void setUp() {
     commandRepository = mock(ICommandRepository.class);
     authService = mock(IAuthService.class);
-    commandExecutor = new CommandExecutor(commandRepository, authService);
+    commandRunner = new CommandRunner(commandRepository, authService);
   }
 
   @Test
@@ -42,7 +42,7 @@ public class CommandExecutorTest {
     String token = "valid_token";
     String commandName = "command1";
     String[] params = {"param1", "param2"};
-    ICommandInitializer commandDefinition = mock(ICommandInitializer.class);
+    ICommandFactory commandDefinition = mock(ICommandFactory.class);
     ICommandInstance command = mock(ICommandInstance.class);
     ExecutionResult expectedResult = new ExecutionResult("result", Status.OK);
     when(authService.authorize(token)).thenReturn(true);
@@ -50,7 +50,7 @@ public class CommandExecutorTest {
     when(commandDefinition.instantiate(params)).thenReturn(command);
     when(command.execute()).thenReturn(expectedResult);
     // Act
-    ExecutionResult actualResult = commandExecutor.execute(token, commandName, params);
+    ExecutionResult actualResult = commandRunner.execute(token, commandName, params);
     // Assert
     assertEquals(expectedResult, actualResult);
     verify(authService).authorize(token);
@@ -67,7 +67,7 @@ public class CommandExecutorTest {
     String[] params = {"param1", "param2"};
     when(authService.authorize(token)).thenReturn(false);
     // Act
-    ExecutionResult actualResult = commandExecutor.execute(token, commandName, params);
+    ExecutionResult actualResult = commandRunner.execute(token, commandName, params);
     // Assert
     assertEquals("Unauthorised [command1]", actualResult.getMessage());
     assertEquals(Status.UNKNOWN, actualResult.getStatus());
@@ -84,7 +84,7 @@ public class CommandExecutorTest {
     when(authService.authorize(token)).thenReturn(true);
     when(commandRepository.getCommand(commandName)).thenReturn(Optional.empty());
     // Act
-    ExecutionResult actualResult = commandExecutor.execute(token, commandName, params);
+    ExecutionResult actualResult = commandRunner.execute(token, commandName, params);
     // Assert
     assertEquals(
         "[unknown_command - UNKNOWN] - Error executing command", actualResult.getMessage());

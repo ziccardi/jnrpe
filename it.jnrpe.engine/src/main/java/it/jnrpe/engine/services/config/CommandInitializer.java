@@ -18,14 +18,14 @@ package it.jnrpe.engine.services.config;
 import it.jnrpe.engine.events.EventManager;
 import it.jnrpe.engine.plugins.PluginRepository;
 import it.jnrpe.engine.services.commands.ExecutionResult;
-import it.jnrpe.engine.services.commands.ICommandInitializer;
+import it.jnrpe.engine.services.commands.ICommandFactory;
 import it.jnrpe.engine.services.commands.ICommandInstance;
 import it.jnrpe.engine.services.network.Status;
 import it.jnrpe.engine.services.plugins.CommandLine;
 import org.apache.commons.text.StringTokenizer;
 import org.apache.commons.text.matcher.StringMatcherFactory;
 
-public class CommandInitializer implements ICommandInitializer {
+public class CommandInitializer implements ICommandFactory {
   private final IJNRPEConfig.CommandConfig commandConfig;
 
   public CommandInitializer(final IJNRPEConfig.CommandConfig cc) {

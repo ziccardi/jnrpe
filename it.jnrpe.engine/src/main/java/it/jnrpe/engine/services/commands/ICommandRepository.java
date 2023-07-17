@@ -17,15 +17,35 @@ package it.jnrpe.engine.services.commands;
 
 import java.util.*;
 
+/**
+ * The interface for a command repository.
+ *
+ * <p>This interface provides methods for getting commands and all commands.
+ */
 public interface ICommandRepository {
-  static List<ICommandRepository> getInstances() {
+
+  /**
+   * Gets a list of all command repositories.
+   *
+   * @return A list of all command repositories.
+   */
+  static List<ICommandRepository> getProviders() {
     ServiceLoader<ICommandRepository> services = ServiceLoader.load(ICommandRepository.class);
-    List<ICommandRepository> list = new ArrayList<>();
-    services.iterator().forEachRemaining(list::add);
-    return list;
+    return services.stream().map(ServiceLoader.Provider::get).toList();
   }
 
-  Optional<ICommandInitializer> getCommand(String commandName);
+  /**
+   * Gets a command by name.
+   *
+   * @param commandName The name of the command.
+   * @return The command, if it exists.
+   */
+  Optional<ICommandFactory> getCommand(String commandName);
 
-  Collection<ICommandInitializer> getAllCommands();
+  /**
+   * Gets all commands.
+   *
+   * @return A collection of all commands.
+   */
+  Collection<ICommandFactory> getAllCommands();
 }

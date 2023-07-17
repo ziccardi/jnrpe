@@ -27,7 +27,7 @@ public class ConfigurationManager {
       return Optional.of(CONFIG);
     }
 
-    IConfigProvider.getInstances().stream()
+    IConfigProvider.getProviders().stream()
         .map(IConfigProvider::getConfig)
         .filter(Optional::isPresent)
         .map(Optional::get)

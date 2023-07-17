@@ -15,28 +15,34 @@
  *******************************************************************************/
 package it.jnrpe.engine.provider.command;
 
-import it.jnrpe.engine.services.commands.ICommandInitializer;
+import it.jnrpe.engine.services.commands.ICommandFactory;
 import it.jnrpe.engine.services.commands.ICommandRepository;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * The built-in command repository for JNRPE.
+ *
+ * <p>This repository contains the embedded commands, such as `_NRPE_CHECK`. The embedded commands
+ * are part of the JNRPE code and, hence, is always installed with JNRPE.
+ */
 public class EmbeddedCommandsRepository implements ICommandRepository {
 
-  private final Map<String, ICommandInitializer> commands = new HashMap<>();
+  private final Map<String, ICommandFactory> commands = new HashMap<>();
 
   public EmbeddedCommandsRepository() {
     commands.put(NRPECheckCommand.NAME, new NRPECheckCommand());
   }
 
   @Override
-  public Optional<ICommandInitializer> getCommand(String commandName) {
+  public Optional<ICommandFactory> getCommand(String commandName) {
     return Optional.ofNullable(commands.get(commandName));
   }
 
   @Override
-  public Collection<ICommandInitializer> getAllCommands() {
+  public Collection<ICommandFactory> getAllCommands() {
     return commands.values();
   }
 }

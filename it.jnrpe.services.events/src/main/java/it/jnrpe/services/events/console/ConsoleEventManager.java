@@ -19,13 +19,31 @@ import it.jnrpe.engine.services.events.IEventManager;
 import it.jnrpe.engine.services.events.IEventType;
 import java.util.Date;
 
+/**
+ * The class for a console event manager.
+ *
+ * <p>This class implements the IEventManager interface and logs events to the console.
+ */
 public class ConsoleEventManager implements IEventManager {
+  /**
+   * Logs an event with an exception.
+   *
+   * @param type The type of the event.
+   * @param message The message of the event.
+   * @param exc The exception that occurred.
+   */
   @Override
   public void onEvent(IEventType type, String message, Throwable exc) {
     onEvent(type, message);
     exc.printStackTrace();
   }
 
+  /**
+   * Logs an event.
+   *
+   * @param type The type of the event.
+   * @param message The message of the event.
+   */
   @Override
   public void onEvent(IEventType type, String message) {
     final Date timestamp = new Date();

@@ -15,6 +15,12 @@
  *******************************************************************************/
 package it.jnrpe.engine.services.auth;
 
+/**
+ * The action that must be authorized.
+ *
+ * <p>This interface represents an action that must be authorized by the JNRPE server. The action ID
+ * is a unique identifier for the action.
+ */
 public interface IAction {
   String getActionId();
 }

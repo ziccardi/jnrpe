@@ -21,6 +21,11 @@ import it.jnrpe.engine.services.config.ConfigurationManager;
 import it.jnrpe.engine.services.config.IJNRPEConfig;
 import java.util.*;
 
+/**
+ * The most basic authentication provider for JNRPE. Authentication is performed by checking that
+ * the caller's IP address is included in the list of permitted IP addresses. If such list is empty,
+ * any caller is allowed.
+ */
 public class SimpleAuthProvider implements IAuthService {
   private static final Map<String, Date> OTP = Collections.synchronizedMap(new HashMap<>());
   private static final long MAX_LIFESPAN = 2 * 60 * 1000;

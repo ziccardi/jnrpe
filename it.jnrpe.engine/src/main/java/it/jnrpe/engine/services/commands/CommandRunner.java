@@ -21,27 +21,46 @@ import it.jnrpe.engine.services.auth.IAuthService;
 import it.jnrpe.engine.services.network.Status;
 import java.util.Optional;
 
-public class CommandExecutor {
+/**
+ * The class that execute a given command.
+ *
+ * <p>This class is responsible for executing commands, given a token and a command name.
+ */
+public class CommandRunner {
   private final ICommandRepository commandRepository;
 
   // TODO: implement a way to activate a different auth service
   private final IAuthService authService;
 
-  public CommandExecutor() {
+  public CommandRunner() {
     commandRepository = CommandRepository.getInstance();
-    authService = IAuthService.getInstances().stream().findFirst().orElseThrow();
+    authService = IAuthService.getProviders().stream().findFirst().orElseThrow();
   }
 
-  CommandExecutor(ICommandRepository commandRepository, IAuthService authService) {
+  /**
+   * Creates a new CommandRunner instance.
+   *
+   * @param commandRepository The command repository.
+   * @param authService The authentication service.
+   */
+  CommandRunner(ICommandRepository commandRepository, IAuthService authService) {
     this.commandRepository = commandRepository;
     this.authService = authService;
   }
 
+  /**
+   * Executes a command.
+   *
+   * @param token The token to use for authentication.
+   * @param commandName The name of the command to execute.
+   * @param params The parameters for the command.
+   * @return The result of executing the command.
+   */
   public ExecutionResult execute(String token, String commandName, String... params) {
     if (!authService.authorize(token)) {
       return new ExecutionResult(String.format("Unauthorised [%s]", commandName), Status.UNKNOWN);
     }
-    final Optional<ICommandInitializer> command = commandRepository.getCommand(commandName);
+    final Optional<ICommandFactory> command = commandRepository.getCommand(commandName);
 
     if (command.isPresent()) {
       return command.get().instantiate(params).execute();

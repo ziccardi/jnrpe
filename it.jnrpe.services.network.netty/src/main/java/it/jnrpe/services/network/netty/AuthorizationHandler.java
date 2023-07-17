@@ -27,12 +27,12 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-public class AuthorizationHandler extends AbstractRemoteAddressFilter<InetSocketAddress> {
+class AuthorizationHandler extends AbstractRemoteAddressFilter<InetSocketAddress> {
   private IAuthService auth;
 
   public AuthorizationHandler() {
     try {
-      auth = IAuthService.getInstances().stream().findFirst().orElseThrow();
+      auth = IAuthService.getProviders().stream().findFirst().orElseThrow();
     } catch (NoSuchElementException nsee) {
       // TODO: log no auth found
 

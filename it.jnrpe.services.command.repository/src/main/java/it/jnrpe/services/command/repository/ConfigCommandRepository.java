@@ -15,7 +15,7 @@
  *******************************************************************************/
 package it.jnrpe.services.command.repository;
 
-import it.jnrpe.engine.services.commands.ICommandInitializer;
+import it.jnrpe.engine.services.commands.ICommandFactory;
 import it.jnrpe.engine.services.commands.ICommandRepository;
 import it.jnrpe.engine.services.config.CommandInitializer;
 import it.jnrpe.engine.services.config.IConfigProvider;
@@ -25,12 +25,23 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+/**
+ * The class for a command repository that loads commands from the configuration.
+ *
+ * <p>This class implements the {@link ICommandRepository} interface and loads commands from the
+ * configuration.
+ */
 public class ConfigCommandRepository implements ICommandRepository {
 
-  private final Map<String, ICommandInitializer> commandDefinitions = new HashMap<>();
+  private final Map<String, ICommandFactory> commandDefinitions = new HashMap<>();
 
+  /**
+   * Creates a new command repository.
+   *
+   * <p>Loads commands from all configured command providers.
+   */
   public ConfigCommandRepository() {
-    IConfigProvider.getInstances().forEach(this::loadCommandsFromConfigProvider);
+    IConfigProvider.getProviders().forEach(this::loadCommandsFromConfigProvider);
   }
 
   private void loadCommandsFromConfigProvider(IConfigProvider configProvider) {
@@ -46,17 +57,22 @@ public class ConfigCommandRepository implements ICommandRepository {
     }
   }
 
-  ConfigCommandRepository(Consumer<Map<String, ICommandInitializer>> commandDefinitionProvider) {
+  /**
+   * Creates a new command repository with a custom command definition provider.
+   *
+   * @param commandDefinitionProvider The command definition provider.
+   */
+  ConfigCommandRepository(Consumer<Map<String, ICommandFactory>> commandDefinitionProvider) {
     commandDefinitionProvider.accept(this.commandDefinitions);
   }
 
   @Override
-  public Collection<ICommandInitializer> getAllCommands() {
+  public Collection<ICommandFactory> getAllCommands() {
     return commandDefinitions.values();
   }
 
   @Override
-  public Optional<ICommandInitializer> getCommand(String commandName) {
+  public Optional<ICommandFactory> getCommand(String commandName) {
     return Optional.ofNullable(commandDefinitions.get(commandName));
   }
 }

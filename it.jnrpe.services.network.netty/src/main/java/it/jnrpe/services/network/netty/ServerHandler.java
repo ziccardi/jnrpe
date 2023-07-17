@@ -19,14 +19,14 @@ import io.netty.channel.*;
 import io.netty.util.AttributeKey;
 import io.netty.util.ReferenceCountUtil;
 import it.jnrpe.engine.events.EventManager;
-import it.jnrpe.engine.services.commands.CommandExecutor;
+import it.jnrpe.engine.services.commands.CommandRunner;
 import it.jnrpe.engine.services.commands.ExecutionResult;
 import it.jnrpe.services.network.netty.protocol.NRPEPacket;
 import java.util.Arrays;
 
 @ChannelHandler.Sharable
 class ServerHandler extends ChannelInboundHandlerAdapter {
-  private final CommandExecutor commandExecutor = new CommandExecutor();
+  private final CommandRunner commandRunner = new CommandRunner();
 
   ServerHandler() {}
 
@@ -54,7 +54,7 @@ class ServerHandler extends ChannelInboundHandlerAdapter {
               : new String[] {};
 
       String token = ctx.channel().attr(AttributeKey.<String>valueOf("TOKEN")).get();
-      ExecutionResult res = this.commandExecutor.execute(token, commandParts[0], params);
+      ExecutionResult res = this.commandRunner.execute(token, commandParts[0], params);
 
       ChannelFuture channelFuture = ctx.writeAndFlush(res);
       channelFuture.addListener(ChannelFutureListener.CLOSE);

@@ -25,6 +25,8 @@ import java.util.*;
  * JNRPE instance. It keeps track of these plugins in the computer's memory, allowing for efficient
  * access and retrieval. The purpose of this repository is to provide a centralized location where
  * the JNRPE instance can easily manage and interact with the installed plugins.
+ *
+ * <p>Plugins are loaded from all the available {@link IPluginRepository} providers.
  */
 public class PluginRepository implements IPluginRepository {
   private static PluginRepository INSTANCE;
@@ -32,7 +34,7 @@ public class PluginRepository implements IPluginRepository {
   private final Map<String, IPlugin> plugins = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
   private PluginRepository() {
-    IPluginRepository.getInstances()
+    IPluginRepository.getProviders()
         .forEach(
             pluginRepository -> {
               pluginRepository
