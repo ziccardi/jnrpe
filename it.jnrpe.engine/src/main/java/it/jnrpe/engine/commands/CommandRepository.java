@@ -16,21 +16,30 @@
 package it.jnrpe.engine.commands;
 
 import it.jnrpe.engine.events.EventManager;
-import it.jnrpe.engine.services.commands.ICommandInitializer;
+import it.jnrpe.engine.services.commands.ICommandFactory;
 import it.jnrpe.engine.services.commands.ICommandRepository;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * The {@link CommandRepository} class is a singleton responsible for managing and storing all
+ * available commands in the application. The list of commands is obtained by querying all the
+ * available implementations provided by the installed service providers. It implements the {@link
+ * ICommandRepository} interface.
+ *
+ * <p>The {@link CommandRepository} also logs an info message when it is ready, indicating the
+ * number of commands loaded.
+ */
 public class CommandRepository implements ICommandRepository {
 
   private static CommandRepository INSTANCE;
 
-  private final Map<String, ICommandInitializer> commands = new HashMap<>();
+  private final Map<String, ICommandFactory> commands = new HashMap<>();
 
   private CommandRepository() {
-    ICommandRepository.getInstances()
+    ICommandRepository.getProviders()
         .forEach(
             commandRepository -> {
               commandRepository
@@ -41,13 +50,25 @@ public class CommandRepository implements ICommandRepository {
     EventManager.info("Command Repository ready. %d command(s) loaded", this.commands.size());
   }
 
+  /**
+   * Retrieves all command factories.
+   *
+   * @return A collection of {@link ICommandFactory} objects.
+   */
   @Override
-  public Collection<ICommandInitializer> getAllCommands() {
+  public Collection<ICommandFactory> getAllCommands() {
     return commands.values();
   }
 
+  /**
+   * Retrieves the command factory associated with the given command name.
+   *
+   * @param commandName The name of the command.
+   * @return An Optional containing the {@link ICommandFactory} for the specified command name, or
+   *     an empty {@link Optional} if the command is not found.
+   */
   @Override
-  public Optional<ICommandInitializer> getCommand(String commandName) {
+  public Optional<ICommandFactory> getCommand(String commandName) {
     return Optional.ofNullable(commands.get(commandName));
   }
 

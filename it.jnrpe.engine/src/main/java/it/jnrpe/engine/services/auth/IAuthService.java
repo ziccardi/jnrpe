@@ -18,20 +18,60 @@ package it.jnrpe.engine.services.auth;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * The interface for the authentication service.
+ *
+ * <p>This interface provides methods for getting an authentication and authorizing a token.
+ */
 public interface IAuthService {
-  static List<IAuthService> getInstances() {
+  /**
+   * Gets a list of all authentication providers.
+   *
+   * @return A list of all authentication providers.
+   */
+  static List<IAuthService> getProviders() {
     return ServiceLoader.load(IAuthService.class).stream()
         .map(ServiceLoader.Provider::get)
         .collect(Collectors.toList());
   }
 
+  /**
+   * Gets the name of the authentication service.
+   *
+   * @return The name of the authentication service.
+   */
   String getName();
 
+  /**
+   * Gets an authentication token for the given credentials.
+   *
+   * @param credentials The credentials to use for authentication. Its content depends on the
+   *     authentication provider.
+   * @return An optional authentication token, if the credentials are valid.
+   */
   Optional<String> getAuthToken(Map<String, ?> credentials);
 
+  /**
+   * Gets an authentication token for the current user.
+   *
+   * @return An optional authentication token, if the current user is authenticated.
+   */
   Optional<String> getAuthToken();
 
+  /**
+   * Authorizes the given token.
+   *
+   * @param token The token to authorize.
+   * @return True if the token is valid, false otherwise.
+   */
   boolean authorize(String token);
 
+  /**
+   * Authorizes the given token for the given action.
+   *
+   * @param token The token to authorize.
+   * @param action The action to authorize.
+   * @return True if the token is valid and the action is authorized, false otherwise.
+   */
   boolean authorize(String token, IAction action);
 }

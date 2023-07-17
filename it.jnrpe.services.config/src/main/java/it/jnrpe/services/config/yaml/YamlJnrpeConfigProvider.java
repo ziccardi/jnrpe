@@ -26,6 +26,12 @@ import java.util.ServiceLoader;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.error.YAMLException;
 
+/**
+ * The class for a YAML configuration provider.
+ *
+ * <p>This class implements the {@link IConfigProvider} interface and parses an YAML configuration
+ * file.
+ */
 public class YamlJnrpeConfigProvider implements IConfigProvider {
 
   private static Optional<IJNRPEConfig> config = Optional.empty();

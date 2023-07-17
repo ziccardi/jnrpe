@@ -20,16 +20,42 @@ import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.stream.Collectors;
 
+/**
+ * The interface for a configuration provider.
+ *
+ * <p>This interface provides methods for getting the configuration and generating a sample
+ * configuration.
+ */
 public interface IConfigProvider {
-  static List<IConfigProvider> getInstances() {
+  /**
+   * Gets a list of all configuration providers.
+   *
+   * @return A list of all configuration providers.
+   */
+  static List<IConfigProvider> getProviders() {
     return ServiceLoader.load(IConfigProvider.class).stream()
         .map(ServiceLoader.Provider::get)
         .collect(Collectors.toList());
   }
 
+  /**
+   * Gets the name of the configuration provider.
+   *
+   * @return The name of the configuration provider.
+   */
   String getProviderName();
 
+  /**
+   * Gets the configuration.
+   *
+   * @return The configuration, if it exists.
+   */
   Optional<IJNRPEConfig> getConfig();
 
+  /**
+   * Generates a sample configuration.
+   *
+   * @return A sample configuration.
+   */
   String generateSampleConfig();
 }

@@ -17,18 +17,43 @@ package it.jnrpe.engine.services.events;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.ServiceLoader;
+import java.util.stream.Collectors;
 
+/**
+ * The interface for an event manager.
+ *
+ * <p>This interface provides the methods every event manager provider has to implement.
+ */
 public interface IEventManager {
-  static Collection<IEventManager> getInstances() {
+  /**
+   * Gets a collection of all event managers.
+   *
+   * @return A collection of all event managers.
+   */
+  static Collection<IEventManager> getProviders() {
     ServiceLoader<IEventManager> services = ServiceLoader.load(IEventManager.class);
-    List<IEventManager> list = new ArrayList<>();
-    services.iterator().forEachRemaining(list::add);
-    return list;
+    return services.stream()
+        .map(ServiceLoader.Provider::get)
+        // TODO: This is to make the tests run. Tests should be refactored to not require a mutable
+        // list
+        .collect(Collectors.toCollection(ArrayList<IEventManager>::new));
   }
 
+  /**
+   * Dispatches an event.
+   *
+   * @param type The type of event.
+   * @param message The message of the event.
+   */
   void onEvent(IEventType type, String message);
 
+  /**
+   * Dispatches an event with an exception.
+   *
+   * @param type The type of event.
+   * @param message The message of the event.
+   * @param exc The exception associated with the event.
+   */
   void onEvent(IEventType type, String message, Throwable exc);
 }

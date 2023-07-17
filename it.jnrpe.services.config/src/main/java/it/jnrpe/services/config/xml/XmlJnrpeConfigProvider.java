@@ -28,6 +28,12 @@ import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 
+/**
+ * The class for an XML configuration provider.
+ *
+ * <p>This class implements the {@link IConfigProvider} interface and parses an XML configuration
+ * file.
+ */
 public class XmlJnrpeConfigProvider implements IConfigProvider {
   @Override
   public String getProviderName() {

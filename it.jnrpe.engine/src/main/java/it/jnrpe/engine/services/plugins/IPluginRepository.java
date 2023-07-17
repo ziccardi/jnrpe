@@ -17,15 +17,35 @@ package it.jnrpe.engine.services.plugins;
 
 import java.util.*;
 
+/**
+ * The interface for a plugin repository.
+ *
+ * <p>This interface provides methods for getting plugins by name and getting all plugins.
+ */
 public interface IPluginRepository {
-  static Collection<IPluginRepository> getInstances() {
+
+  /**
+   * Gets a list of all plugin repositories.
+   *
+   * @return A list of all plugin repositories.
+   */
+  static Collection<IPluginRepository> getProviders() {
     ServiceLoader<IPluginRepository> services = ServiceLoader.load(IPluginRepository.class);
-    List<IPluginRepository> list = new ArrayList<>();
-    services.iterator().forEachRemaining(list::add);
-    return list;
+    return services.stream().map(ServiceLoader.Provider::get).toList();
   }
 
+  /**
+   * Gets a plugin by name.
+   *
+   * @param pluginName The name of the plugin.
+   * @return The plugin, if it exists.
+   */
   Optional<IPlugin> getPlugin(final String pluginName);
 
+  /**
+   * Gets all plugins.
+   *
+   * @return A collection of all plugins.
+   */
   Collection<IPlugin> getAllPlugins();
 }

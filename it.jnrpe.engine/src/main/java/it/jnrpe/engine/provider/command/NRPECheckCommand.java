@@ -16,11 +16,11 @@
 package it.jnrpe.engine.provider.command;
 
 import it.jnrpe.engine.services.commands.ExecutionResult;
-import it.jnrpe.engine.services.commands.ICommandInitializer;
+import it.jnrpe.engine.services.commands.ICommandFactory;
 import it.jnrpe.engine.services.commands.ICommandInstance;
 import it.jnrpe.engine.services.network.Status;
 
-public class NRPECheckCommand implements ICommandInitializer {
+public class NRPECheckCommand implements ICommandFactory {
   public static final String NAME = "_NRPE_CHECK";
 
   private static class NRPECheckCommandInstance implements ICommandInstance {

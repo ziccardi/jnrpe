@@ -38,6 +38,14 @@ import javax.net.ssl.SSLException;
 import javax.security.auth.x500.X500Principal;
 import org.bouncycastle.x509.X509V1CertificateGenerator;
 
+/**
+ * The class for the Netty listener service.
+ *
+ * <p>This class implements the INetworkListener interface and provides a Netty server that listens
+ * for JNRPE requests.
+ *
+ * @author Massimiliano Ziccardi
+ */
 public class JnrpeNettyListenerService implements INetworkListener {
   private final ServerHandler serverHandler = new ServerHandler();
   private final EventLoopGroup bossGroup = new NioEventLoopGroup();

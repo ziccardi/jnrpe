@@ -20,6 +20,12 @@ import it.jnrpe.engine.services.plugins.IPluginRepository;
 import java.io.File;
 import java.util.*;
 
+/**
+ * The class for the Java service plugin repository.
+ *
+ * <p>This class implements the {@link IPluginRepository} interface and provides a repository for
+ * Java service plugins i.e. for plugin implemented as Java9 Services providers..
+ */
 public class JavaServicePluginRepository implements IPluginRepository {
   private final File pluginsFolder;
   private final Map<String, IPlugin> pluginsMap = new HashMap<>();
@@ -47,6 +53,7 @@ public class JavaServicePluginRepository implements IPluginRepository {
     serviceLoader.forEach(plugin -> pluginsMap.put(plugin.getName(), plugin));
   }
 
+  @Override
   public Collection<IPlugin> getAllPlugins() {
     return pluginsMap.values();
   }

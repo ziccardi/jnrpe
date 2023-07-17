@@ -15,7 +15,7 @@
  *******************************************************************************/
 package it.jnrpe.engine.services.commands;
 
-public interface ICommandInitializer {
+public interface ICommandFactory {
   String getName();
 
   ICommandInstance instantiate(String... params);

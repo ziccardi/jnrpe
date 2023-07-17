@@ -15,8 +15,23 @@
  *******************************************************************************/
 package it.jnrpe.engine.services.events;
 
+/**
+ * The interface for an event type.
+ *
+ * <p>This interface provides methods for getting the ordinal and type of an event type.
+ */
 public interface IEventType {
+  /**
+   * Gets the ordinal of the event type.
+   *
+   * @return The ordinal of the event type.
+   */
   int ordinal();
 
+  /**
+   * Gets the type of the event type.
+   *
+   * @return The type of the event type.
+   */
   String type();
 }

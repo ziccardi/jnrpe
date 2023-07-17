@@ -15,16 +15,59 @@
  *******************************************************************************/
 package it.jnrpe.engine.services.events;
 
+/**
+ * The class for a log event.
+ *
+ * <p>This class implements the IEventType interface and provides constants for the different log
+ * levels.
+ */
 public class LogEvent implements IEventType {
+
+  /** The ordinal of the TRACE log level. */
+  public static final int TRACE_ORDINAL = 0;
+
+  /** The type of the TRACE log level. */
+  public static final String TRACE_TYPE = "TRACE";
+
+  /** The ordinal of the DEBUG log level. */
+  public static final int DEBUG_ORDINAL = 1;
+
+  /** The type of the DEBUG log level. */
+  public static final String DEBUG_TYPE = "DEBUG";
+
+  /** The ordinal of the INFO log level. */
+  public static final int INFO_ORDINAL = 2;
+
+  /** The type of the INFO log level. */
+  public static final String INFO_TYPE = "INFO";
+
+  /** The ordinal of the WARN log level. */
+  public static final int WARN_ORDINAL = 3;
+
+  /** The type of the WARN log level. */
+  public static final String WARN_TYPE = "WARN";
+
+  /** The ordinal of the ERROR log level. */
+  public static final int ERROR_ORDINAL = 4;
+
+  /** The type of the ERROR log level. */
+  public static final String ERROR_TYPE = "ERROR";
+
+  /** The ordinal of the FATAL log level. */
+  public static final int FATAL_ORDINAL = 5;
+
+  /** The type of the FATAL log level. */
+  public static final String FATAL_TYPE = "FATAL";
+
   private final int ordinal;
   private final String type;
 
-  public static final LogEvent TRACE = new LogEvent(0, "TRACE");
-  public static final LogEvent DEBUG = new LogEvent(1, "DEBUG");
-  public static final LogEvent INFO = new LogEvent(2, "INFO");
-  public static final LogEvent WARN = new LogEvent(3, "WARN");
-  public static final LogEvent ERROR = new LogEvent(4, "ERROR");
-  public static final LogEvent FATAL = new LogEvent(4, "FATAL");
+  public static final LogEvent TRACE = new LogEvent(TRACE_ORDINAL, TRACE_TYPE);
+  public static final LogEvent DEBUG = new LogEvent(DEBUG_ORDINAL, DEBUG_TYPE);
+  public static final LogEvent INFO = new LogEvent(INFO_ORDINAL, INFO_TYPE);
+  public static final LogEvent WARN = new LogEvent(WARN_ORDINAL, WARN_TYPE);
+  public static final LogEvent ERROR = new LogEvent(ERROR_ORDINAL, ERROR_TYPE);
+  public static final LogEvent FATAL = new LogEvent(FATAL_ORDINAL, FATAL_TYPE);
 
   private LogEvent(int ordinal, String type) {
     this.ordinal = ordinal;

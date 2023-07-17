@@ -18,6 +18,18 @@ package it.jnrpe.engine.plugins.threshold;
 import it.jnrpe.engine.plugins.threshold.statemachine.*;
 import java.util.*;
 
+/**
+ * The {@link ThresholdParser} class is responsible for parsing a threshold string and constructing
+ * a {@link IThreshold} object based on the parsed information.
+ *
+ * <p>If an exception is thrown during the parsing process, the exception's properties are set to
+ * provide information about the error, such as the expected token, the index where the error
+ * occurred, and the original threshold string. The exception is then thrown to the caller.
+ *
+ * <p>Threshold must follow the (see <a
+ * href="https://nagios-plugins.org/doc/guidelines.html#THRESHOLDFORMAT">NAGIOS Threshold
+ * syntax</a>)
+ */
 public class ThresholdParser {
 
   public static IThreshold parse(String thr) throws ThresholdParsingException {

@@ -43,7 +43,7 @@ public class ConfigProvider implements IConfigProvider {
 
   public static ConfigProvider getInstance() {
     if (instance == null) {
-      for (var confProvider : IConfigProvider.getInstances()) {
+      for (var confProvider : IConfigProvider.getProviders()) {
         Optional<IJNRPEConfig> conf = confProvider.getConfig();
         if (conf.isPresent()) {
           instance = new ConfigProvider(conf.get());
