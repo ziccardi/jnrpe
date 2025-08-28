@@ -21,7 +21,7 @@ import java.math.BigDecimal;
 class ThresholdImpl implements IThreshold {
   private boolean negate;
   private ThresholdEdge min = new ThresholdEdge(new BigDecimal(0));
-  private ThresholdEdge max;
+  private ThresholdEdge max = new ThresholdEdge(new BigDecimal("999999999999999999999999999999"));
 
   void setMin(ThresholdEdge min) {
     this.min = min;

@@ -26,7 +26,7 @@
         <!-- External dependencies -->
         <dependency>
             <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk14</artifactId>
+            <artifactId>bcpkix-jdk18on</artifactId>
         </dependency>
         <dependency>
             <groupId>io.netty</groupId>
@@ -63,6 +63,12 @@
                     </compilerArgs>
                 </configuration>
             </plugin>
-        </plugins>
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <configuration>
+                    <excludeFilterFile>spotBugsExclude.xml</excludeFilterFile>
+                </configuration>
+            </plugin>        </plugins>
     </build>
 </project>

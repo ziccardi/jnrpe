@@ -40,15 +40,7 @@ public class SimpleAuthProvider implements IAuthService {
   public SimpleAuthProvider() {
     this.configurationProvider = ConfigurationManager::getConfig;
     Timer timer = new Timer("AUTH-OTP-EXPIRATION-TIMER");
-    timer.schedule(
-        new TimerTask() {
-          @Override
-          public void run() {
-            final var now = System.currentTimeMillis();
-            OTP.entrySet().removeIf(entry -> (entry.getValue().getTime() - now) > MAX_LIFESPAN);
-          }
-        },
-        30 * 1000L);
+    timer.schedule(new OtpExpirationTask(), 30 * 1000L);
   }
 
   SimpleAuthProvider(IAuthConfigurationProvider configurationProvider) {
@@ -108,5 +100,17 @@ public class SimpleAuthProvider implements IAuthService {
   @Override
   public boolean authorize(String token, IAction action) {
     return authorize(token);
+  }
+
+  /**
+   * Static inner class for OTP expiration task to avoid memory leaks
+   * and improve performance by not holding reference to outer class.
+   */
+  private static class OtpExpirationTask extends TimerTask {
+    @Override
+    public void run() {
+      final var now = System.currentTimeMillis();
+      OTP.entrySet().removeIf(entry -> (entry.getValue().getTime() - now) > MAX_LIFESPAN);
+    }
   }
 }

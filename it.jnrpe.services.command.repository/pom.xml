@@ -37,6 +37,12 @@
                     </compilerArgs>
                 </configuration>
             </plugin>
-        </plugins>
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <configuration>
+                    <excludeFilterFile>spotBugsExclude.xml</excludeFilterFile>
+                </configuration>
+            </plugin>        </plugins>
     </build>
 </project>

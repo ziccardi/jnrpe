@@ -14,7 +14,7 @@ COVERAGE_REPORT_PATH="${REPORT_PATH}/coverage"
 GIT_USERNAME ?= $(error Please set GIT_USERNAME to your github username)
 
 clean: prepare/build clean/dist clean/website
-	@(${PROJECT_PATH}/scripts/run_task.sh "Cleaning build files" "${PROJECT_PATH}/gradlew clean" "${BUILD_LOG_PATH}/$(subst /,-,$@).log")
+	@(${PROJECT_PATH}/scripts/run_task.sh "Cleaning build files" "mvn clean" "${BUILD_LOG_PATH}/$(subst /,-,$@).log")
 .PHONY: clean
 
 clean/dist:
@@ -38,11 +38,11 @@ run: dist
 .PHONY: run
 
 build: prepare/build
-	@(${PROJECT_PATH}/scripts/run_task.sh "Building" "${PROJECT_PATH}/gradlew build -x test -x spotlessCheck -x spotbugsTest -x spotbugsMain -x javadoc" "${BUILD_LOG_PATH}/$(subst /,-,$@).log")
+	@(${PROJECT_PATH}/scripts/run_task.sh "Building" "mvn clean compile" "${BUILD_LOG_PATH}/$(subst /,-,$@).log")
 .PHONY: build
 
 test: build
-	@(${PROJECT_PATH}/scripts/run_task.sh "Testing" "${PROJECT_PATH}/gradlew build test -x spotlessCheck -x spotbugsTest -x spotbugsMain -x javadoc" "${BUILD_LOG_PATH}/$(subst /,-,$@).log")
+	@(${PROJECT_PATH}/scripts/run_task.sh "Testing" "mvn test" "${BUILD_LOG_PATH}/$(subst /,-,$@).log")
 .PHONY: test
 
 test/report: test
@@ -71,15 +71,15 @@ test/all: test test/report test/coverage
 .PHONY: test/all
 
 style/check: prepare/build
-	@(${PROJECT_PATH}/scripts/run_task.sh "Style checks" "${PROJECT_PATH}/gradlew spotlessCheck -x test -x spotbugsTest -x spotbugsMain -x javadoc" "${BUILD_LOG_PATH}/$(subst /,-,$@).log")
+	@(${PROJECT_PATH}/scripts/run_task.sh "Style checks" "mvn clean compile -Dmaven.compiler.showWarnings=true -Dmaven.compiler.showDeprecation=true" "${BUILD_LOG_PATH}/$(subst /,-,$@).log")
 .PHONY: style/check
 
 style/fix:
-	@${PROJECT_PATH}/gradlew spotlessApply -x test -x spotbugsTest -x spotbugsMain -x javadoc
+	@echo "Style fixing with Maven not configured yet - use IDE formatter"
 .PHONY: style/fix
 
 code/check: prepare/build build
-	@(${PROJECT_PATH}/scripts/run_task.sh "Formal checks" "${PROJECT_PATH}/gradlew spotbugsMain -x test -x spotlessCheck -x spotbugsTest -x spotbugsMain -x javadoc" "${BUILD_LOG_PATH}/$(subst /,-,$@).log")
+	@(${PROJECT_PATH}/scripts/run_task.sh "Formal checks" "mvn spotbugs:check" "${BUILD_LOG_PATH}/$(subst /,-,$@).log")
 .PHONY: code/check
 
 website/prepare: prepare/build

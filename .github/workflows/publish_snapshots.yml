@@ -2,7 +2,7 @@ name: Publish Daily Snapshot
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: "0 0 * * *"
 
 jobs:
   check_snapshot:
@@ -10,32 +10,52 @@ jobs:
     outputs:
       status: ${{ steps.check_git_commits.outputs.release != 0}}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - id: check_git_commits
         name: Count commits after last tag
         run: |
-          echo "::set-output name=release::$(git rev-list `git describe --abbrev=0`..HEAD --count)"
-  build:
+          echo "release=$(git rev-list `git describe --abbrev=0`..HEAD --count)" >> $GITHUB_OUTPUT
+
+  publish_maven:
     needs: check_snapshot
     if: needs.check_snapshot.outputs.status
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: 'master'
-      - name: Set up JDK 17
-        uses: actions/setup-java@v1
+          ref: "MAVEN"
+
+      - name: Set up JDK 16
+        uses: actions/setup-java@v4
         with:
-          java-version: 17
-      - name: Build with Gradle
-        run: ./gradlew build -x test -x spotlessCheck -x spotbugsTest -x spotbugsMain
+          java-version: "16"
+          distribution: "temurin"
+          server-id: ossrh
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
+
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.ORG_GRADLE_PROJECT_signingKey }}
+          passphrase: ${{ secrets.ORG_GRADLE_PROJECT_signingPassword }}
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      - name: Build with Maven
+        run: mvn clean compile -DskipTests
+
       - name: Publish Snapshot to Central Repository
         env:
-          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
-          ORG_GRADLE_PROJECT_signingKey: ${{ secrets.PGP_KEY }}
-          ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.PGP_PASSWORD }}
-        run: ./gradlew publish
+          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.ORG_GRADLE_PROJECT_signingPassword }}
+        run: mvn clean deploy -Ppublish -DskipTests
