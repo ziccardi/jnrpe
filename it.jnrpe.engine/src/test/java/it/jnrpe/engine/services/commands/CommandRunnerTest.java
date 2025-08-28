@@ -72,7 +72,7 @@ public class CommandRunnerTest {
     assertEquals("Unauthorised [command1]", actualResult.getMessage());
     assertEquals(Status.UNKNOWN, actualResult.getStatus());
     verify(authService).authorize(token);
-    verifyZeroInteractions(commandRepository);
+    verifyNoInteractions(commandRepository);
   }
 
   @Test
