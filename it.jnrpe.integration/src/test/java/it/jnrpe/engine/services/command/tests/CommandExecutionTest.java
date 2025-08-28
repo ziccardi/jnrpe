@@ -40,7 +40,8 @@ public class CommandExecutionTest {
   private static final String HOST_ADDRESS = "host.testcontainers.internal";
 
   private static final GenericContainer container =
-      new GenericContainer(DockerImageName.parse("ziccardi/jnrpe-test:latest"));
+      new GenericContainer(DockerImageName.parse("ziccardi/jnrpe-test:latest"))
+          .withCommand("sleep", "3600"); // Keep container running for tests
 
   private static void bind(IJNRPEConfig.Binding binding) {
     ServiceLoader.load(INetworkListener.class).stream()

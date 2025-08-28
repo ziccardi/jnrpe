@@ -3,6 +3,9 @@
 .gradle
 .m2
 
+# Maven Files
+/dist
+
 # Build output directies
 /target
 */target
