@@ -1,36 +1,36 @@
 /*******************************************************************************
  * Copyright (C) 2023, Massimiliano Ziccardi
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  *******************************************************************************/
 package it.jnrpe.engine.commands;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import it.jnrpe.engine.services.commands.ICommandFactory;
-import it.jnrpe.engine.services.commands.ICommandInstance;
-import it.jnrpe.engine.services.commands.ICommandRepository;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import it.jnrpe.engine.services.commands.ICommandFactory;
+import it.jnrpe.engine.services.commands.ICommandInstance;
+import it.jnrpe.engine.services.commands.ICommandRepository;
 
-public class CommandRepositoryTest {
+class CommandRepositoryTest {
   private final ICommandRepository commandRepository = CommandRepository.getInstance();
 
   @BeforeEach
-  public void setUp() throws Exception {
+  void setUp() throws Exception {
     Field commandsField = CommandRepository.class.getDeclaredField("commands");
     commandsField.setAccessible(true);
 
@@ -51,9 +51,9 @@ public class CommandRepositoryTest {
     };
   }
 
-  private void addTestCommand(
-      final ICommandRepository commandRepository, ICommandFactory commandDefinition)
-      throws Exception {
+  @SuppressWarnings("unchecked")
+  private void addTestCommand(final ICommandRepository commandRepository,
+      ICommandFactory commandDefinition) throws Exception {
     // Access the private commandDefinition list field...
     Field commandsField = CommandRepository.class.getDeclaredField("commands");
     commandsField.setAccessible(true);
@@ -64,7 +64,7 @@ public class CommandRepositoryTest {
   }
 
   @Test
-  public void testGetAllCommands() throws Exception {
+  void testGetAllCommands() throws Exception {
     assertEquals(0, commandRepository.getAllCommands().size());
     // Add some commands to the repository
     ICommandFactory command1 = genTestCommandDefinition("command1");
@@ -75,7 +75,7 @@ public class CommandRepositoryTest {
   }
 
   @Test
-  public void testGetCommand() throws Exception {
+  void testGetCommand() throws Exception {
     // Add a command to the repository
     ICommandFactory command = genTestCommandDefinition("command");
     addTestCommand(commandRepository, command);
@@ -87,7 +87,7 @@ public class CommandRepositoryTest {
   }
 
   @Test
-  public void testGetInstance() {
+  void testGetInstance() {
     // Ensure the instance is the same every time
     assertSame(commandRepository, CommandRepository.getInstance());
   }

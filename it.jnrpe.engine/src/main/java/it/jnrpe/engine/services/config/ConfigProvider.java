@@ -18,7 +18,7 @@ package it.jnrpe.engine.services.config;
 import java.util.Optional;
 
 public class ConfigProvider implements IConfigProvider {
-  private static ConfigProvider instance;
+  private static volatile ConfigProvider instance;
 
   private IJNRPEConfig config;
 
@@ -43,15 +43,19 @@ public class ConfigProvider implements IConfigProvider {
 
   public static ConfigProvider getInstance() {
     if (instance == null) {
-      for (var confProvider : IConfigProvider.getProviders()) {
-        Optional<IJNRPEConfig> conf = confProvider.getConfig();
-        if (conf.isPresent()) {
-          instance = new ConfigProvider(conf.get());
-          break;
+      synchronized (ConfigProvider.class) {
+        if (instance == null) {
+          for (var confProvider : IConfigProvider.getProviders()) {
+            Optional<IJNRPEConfig> conf = confProvider.getConfig();
+            if (conf.isPresent()) {
+              instance = new ConfigProvider(conf.get());
+              break;
+            }
+          }
+          if (instance == null) {
+            instance = new ConfigProvider(null);
+          }
         }
-      }
-      if (instance == null) {
-        instance = new ConfigProvider(null);
       }
     }
     return instance;

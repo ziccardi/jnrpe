@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>it.jnrpe</groupId>
+        <artifactId>jnrpe</artifactId>
+        <version>3.8.2-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>it.jnrpe.integration</artifactId>
+
+    <name>JNRPE Integration Tests</name>
+    <description>Integration tests module for JNRPE</description>
+
+    <dependencies>
+        <!-- Project dependencies -->
+        <dependency>
+            <groupId>it.jnrpe</groupId>
+            <artifactId>it.jnrpe.engine</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>it.jnrpe</groupId>
+            <artifactId>it.jnrpe.services.config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>it.jnrpe</groupId>
+            <artifactId>it.jnrpe.services.command.repository</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>it.jnrpe</groupId>
+            <artifactId>it.jnrpe.services.plugins</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>it.jnrpe</groupId>
+            <artifactId>it.jnrpe.services.plugin.repository</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>it.jnrpe</groupId>
+            <artifactId>it.jnrpe.services.network.netty</artifactId>
+        </dependency>
+
+        <!-- Test dependencies - needed at compile time for module system -->
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>testcontainers</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <release>16</release>
+                    <compilerArgs>
+                        <arg>--module-version</arg>
+                        <arg>${project.version}</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <!-- Allow access to packages for testing framework compatibility -->
+                    <argLine>
+                        --add-opens it.jnrpe.integration.test/it.jnrpe.engine.services.auth.tests=ALL-UNNAMED
+                        --add-opens it.jnrpe.integration.test/it.jnrpe.engine.services.command.tests=ALL-UNNAMED
+                        --add-opens it.jnrpe.integration.test/it.jnrpe.engine.services.network.tests=ALL-UNNAMED
+                        --add-opens it.jnrpe.integration.test/it.jnrpe.services.config.yaml.tests=ALL-UNNAMED
+                    </argLine>
+                    <environmentVariables>
+                        <TESTCONTAINERS_RYUK_DISABLED>false</TESTCONTAINERS_RYUK_DISABLED>
+                        <TESTCONTAINERS_REUSE_ENABLE>true</TESTCONTAINERS_REUSE_ENABLE>
+                    </environmentVariables>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <configuration>
+                    <excludeFilterFile>spotBugsExclude.xml</excludeFilterFile>
+                </configuration>
+            </plugin>        </plugins>
+    </build>
+</project>

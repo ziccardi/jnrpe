@@ -1,19 +1,51 @@
-# Gradle Files #
-################
-.gradle
+# Maven Files #
+###############
 .m2
 
-# Build output directies
+# Build output directories
 /target
 */target
-/build
-*/build
+/dist
 
-# IntelliJ specific files/directories
+# IDE specific files/directories
 out
 .idea
 *.ipr
 *.iws
 *.iml
+.project
+.classpath
+.settings/
+.factorypath
+.cursorrules
 
+# VS Code / Cursor
+.vscode
+.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# OS Files
 .DS_Store
+Thumbs.db
+
+# Log files
+*.log
+*.out
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.bak
+
+# JaCoCo
+*.exec
+
+# SpotBugs
+**/spotbugsXml.xml
+**/spotbugs.xml
+
+# Test containers
+testcontainers-*.tmp
